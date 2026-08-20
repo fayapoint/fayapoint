@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "ganhar-dinheiro-com-ia",
+  "lastUpdated": "2026-08-19T15:34:19.508Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "ganhar-dinheiro-com-ia-q001",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "O que transforma o rascunho gerado por IA em um produto final de valor?",
+      "options": [
+        "Copiar e colar o texto sem qualquer alteração",
+        "Adicionar contexto do cliente e editar frases genéricas",
+        "Usar um prompt mais longo e bem detalhado",
+        "Pedir para a IA gerar várias versões e escolher"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 explica que o valor está em adicionar contexto do cliente e editar frases genéricas, transformando o rascunho em algo sob medida.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q002",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Qual é o erro central das ofertas de 'ganhe dinheiro com IA' que não pagam?",
+      "options": [
+        "Produzir conteúdo em massa sem comprador específico",
+        "Usar a IA para gerar muitos produtos rapidamente",
+        "Vender prompts prontos para qualquer pessoa",
+        "Não investir em anúncios para divulgar o produto"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 afirma que o erro é tratar a IA como fábrica de produtos, gerando volume sem comprador específico.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q003",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Qual ferramenta o capítulo 3 sugere para organizar a escolha do serviço?",
+      "options": [
+        "Google Planilhas para listar contatos e dores",
+        "Notion para criar um banco de dados de nichos",
+        "WhatsApp Business para validar com clientes",
+        "ChatGPT para gerar ideias de novos negócios"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 ensina a usar o Google Planilhas para listar contatos, dores e preços.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q004",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Qual é a diferença entre abordar e incomodar um contato no WhatsApp?",
+      "options": [
+        "Usar mensagem personalizada citando um problema específico",
+        "Enviar a mesma mensagem para todos os contatos da lista",
+        "Começar com 'Olá, tudo bem?' e esperar a pessoa responder",
+        "Oferecer um serviço genérico para qualquer tipo de negócio"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 destaca que abordar é personalizar a mensagem citando um problema específico da pessoa.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "media"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q005",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Como o capítulo 5 sugere calcular o preço inicial de um serviço?",
+      "options": [
+        "Multiplicar o custo do tempo gasto por dois",
+        "Aplicar 20% do impacto semanal do problema",
+        "Somar todos os custos fixos e variáveis do projeto",
+        "Perguntar ao cliente quanto ele acha justo"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 propõe usar 20% do impacto semanal do problema como preço sugerido.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q006",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Uma pessoa diz: 'Atendo pequenas clínicas de estética que precisam de posts que convertam'. Isso é um nicho bem definido?",
+      "options": [
+        "Sim, porque tem público e problema específicos",
+        "Não, porque não cita a localização geográfica",
+        "Sim, porque menciona o serviço de posts",
+        "Não, porque clínicas de estética é muito amplo"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 define nicho como público e problema específicos, e a frase contém ambos.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q007",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Um cliente pede um texto de apresentação para sua cafeteria. A IA gera um rascunho genérico. Qual ação agrega mais valor ao serviço?",
+      "options": [
+        "Entregar o rascunho com pequenos ajustes de pontuação",
+        "Reescrever com informações reais da cafeteria e do bairro",
+        "Gerar dez versões e escolher a mais bonita",
+        "Pedir para a IA melhorar o tom e enviar direto"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 mostra que o valor está em reescrever com informações reais do cliente, não em pequenos ajustes.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q008",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Um contato diz que perde R$ 2.000 por mês por não ter um bom texto de vendas. Qual preço sugerido o capítulo 5 indicaria?",
+      "options": [
+        "R$ 200 por mês, pois é 10% do impacto mensal",
+        "R$ 400 por mês, pois é 20% do impacto mensal",
+        "R$ 500 por mês, pois é 25% do impacto mensal",
+        "R$ 1.000 por mês, pois é 50% do impacto mensal"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 sugere cobrar 20% do impacto mensal, resultando em R$ 400.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q009",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Durante a validação de uma ideia, qual é a principal diferença entre pesquisa e conversa?",
+      "options": [
+        "A pesquisa entrega dados numéricos, a conversa entrega opiniões superficiais.",
+        "A conversa revela detalhes do problema, a pesquisa recebe 'sim' por educação.",
+        "A pesquisa é gratuita, a conversa exige investimento em ferramentas pagas.",
+        "A conversa é mais rápida, a pesquisa é mais confiável para decidir."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 7, a conversa pergunta como o cliente resolve o problema hoje e revela a verdade, enquanto a pesquisa recebe 'sim' por educação.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q010",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Qual dos cinco campos da planilha de oferta protege o prestador de pedidos infinitos do cliente?",
+      "options": [
+        "Promessa central, pois define o resultado principal que será entregue.",
+        "Entregável, pois lista os arquivos concretos que o cliente recebe.",
+        "Prazo, pois estabelece a data limite para a entrega do serviço.",
+        "Exclusões, pois deixa claro o que não está incluso no trabalho."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 8, a exclusão é o campo que evita o cliente pedir 'só mais uma coisinha' para sempre.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q011",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Qual é a estrutura recomendada para uma mensagem de abordagem no WhatsApp?",
+      "options": [
+        "Apresentação, lista de benefícios, preço e pedido de resposta.",
+        "Observação específica, pergunta sobre o incômodo e oferta de ajuda.",
+        "Cumprimento formal, descrição do serviço e link de portfólio.",
+        "História pessoal, elogio ao negócio e proposta comercial fechada."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 10, a mensagem deve ter três partes: observação, pergunta e oferta.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "facil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q012",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Por que um estudo de caso hipotético pode ser usado no portfólio de quem está começando?",
+      "options": [
+        "Porque o cliente compra a solução para a dor dele, não o histórico do prestador.",
+        "Porque o Canva permite criar casos fictícios com fotos profissionais grátis.",
+        "Porque o portfólio tradicional exige resultados reais que ainda não existem.",
+        "Porque o cliente prefere ver um caso fictício a um trabalho voluntário antigo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 9, o cliente compra a solução para a dor dele, não o histórico do prestador.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "media"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q013",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Qual é a relação correta entre mínimo e valor percebido na definição do preço?",
+      "options": [
+        "O mínimo é calculado pelas horas e o valor percebido define o teto aceitável.",
+        "O mínimo é o piso e o valor percebido pode elevar o preço várias vezes.",
+        "O valor percebido é o piso e o mínimo é o teto para não perder cliente.",
+        "Ambos são calculados pela planilha e o preço final é a média dos dois."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 11, o mínimo é o piso e o valor percebido pode elevar o preço final várias vezes.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "media"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q014",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Durante um diagnóstico, o cliente diz: 'Preciso de um site, mas não sei por onde começar'. Qual é a primeira pergunta mais adequada?",
+      "options": [
+        "O que você espera que o site faça pelos seus clientes e pela sua venda?",
+        "Você já tem um domínio registrado e um provedor de hospedagem?",
+        "Quanto você pretende investir em um site profissional hoje?",
+        "Posso te mostrar um portfólio de sites que eu já criei?"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 12, o diagnóstico começa pelo contexto do negócio antes de falar de solução.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q015",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Um prestador fez 8 conversas de validação e cada contato citou um problema diferente. O que esse resultado indica?",
+      "options": [
+        "Que a validação foi bem-sucedida e a solução deve atender a todos.",
+        "Que o nicho está amplo demais e é preciso voltar à definição do nicho.",
+        "Que as perguntas estavam erradas e devem ser reformuladas com urgência.",
+        "Que os contatos não são do nicho e a lista deve ser refeita do zero."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 7, se cada pessoa traz um problema diferente, o nicho está amplo demais e é preciso voltar à definição do nicho.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q016",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Qual das opções a seguir descreve uma oferta completa, com promessa, prazo e entregável?",
+      "options": [
+        "Em 15 dias, um guia com respostas prontas para avaliações do Google Maps.",
+        "Consultoria de IA para pequenos negócios com atendimento personalizado.",
+        "Aumento de vendas e mais clientes para a sua empresa em até 30 dias.",
+        "Automação de processos com IA, incluindo planilhas e relatórios sob demanda."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 8, oferta é uma promessa específica com prazo e resultado mensurável, como o guia de respostas para o Google Maps.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q017",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Qual é a melhor resposta quando um cliente pergunta o preço antes de você terminar o diagnóstico?",
+      "options": [
+        "Responder com um número seco para não perder a venda.",
+        "Devolver com uma pergunta sobre o problema dele.",
+        "Ignorar a pergunta e continuar o discurso.",
+        "Oferecer um desconto para fechar rápido."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 13 ensina que responder com número antes do diagnóstico perde a venda; o certo é devolver com pergunta sobre o problema.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q018",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "O que um e-mail com escopo, prazo e valor representa no Brasil?",
+      "options": [
+        "Um contrato válido sem necessidade de firma reconhecida.",
+        "Apenas uma formalidade sem valor jurídico no Brasil.",
+        "Uma proposta comercial que pode ser alterada depois.",
+        "Um documento que exige testemunhas e firma reconhecida para valer."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 14 afirma que um e-mail com escopo, prazo e valor tem validade legal no Brasil, sem firma.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q019",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Qual é o papel do depósito antecipado em um serviço?",
+      "options": [
+        "Garantir que o cliente é sério e comprometido.",
+        "Aumentar o lucro do profissional de forma justa.",
+        "Evitar o trabalho de cobrança depois da entrega.",
+        "Substituir o contrato formal e a proposta."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 15 define o depósito como filtro que separa cliente sério de cotador.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q020",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Por que o processo de entrega no Notion é mais eficaz do que improvisar?",
+      "options": [
+        "Porque elimina a necessidade de revisão humana.",
+        "Porque padroniza etapas e critérios de pronto.",
+        "Porque automatiza a criação de conteúdo.",
+        "Porque substitui o briefing do cliente."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 16 mostra que o processo no Notion padroniza etapas e critérios de pronto, evitando improviso.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "media"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q021",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Qual é o principal valor do profissional ao usar o ChatGPT como primeiro rascunho?",
+      "options": [
+        "Gerar o texto mais rápido possível para o cliente final.",
+        "Editar com critérios e contexto do cliente e do briefing.",
+        "Evitar o trabalho de revisão e de edição.",
+        "Copiar o texto sem alterações e entregar como se fosse seu."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 17 explica que o valor está na edição com critérios e contexto, não na geração.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "media"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q022",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Quando o Claude sugere uma mudança no texto, qual deve ser a postura do profissional?",
+      "options": [
+        "Aceitar todas as sugestões sem questionar a origem.",
+        "Aplicar apenas as que fazem sentido para o contexto.",
+        "Ignorar todas as sugestões para manter o original intacto.",
+        "Pedir para o Claude reescrever o texto inteiro."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 18 orienta filtrar as sugestões do Claude com julgamento próprio, aplicando só o que faz sentido.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q023",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Um cliente insiste no preço antes de responder à pergunta de diagnóstico. O que fazer?",
+      "options": [
+        "Dar um número alto para ele desistir da compra.",
+        "Explicar que precisa entender o escopo primeiro.",
+        "Oferecer um pacote fechado com desconto especial.",
+        "Encerrar a conversa educadamente e sem retorno."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 13 ensina a explicar que precisa entender o escopo antes de dar um número justo.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q024",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Um cliente pede uma alteração fora do escopo do contrato. Como o profissional deve agir?",
+      "options": [
+        "Fazer a alteração de graça para agradar o cliente e fidelizar.",
+        "Recusar e citar a cláusula de escopo do contrato.",
+        "Orçar a alteração separadamente e apresentar o valor.",
+        "Pedir para o cliente decidir o valor justo da mudança."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 14 mostra que alterações fora do escopo devem ser orçadas separadamente, citando o contrato.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q025",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Qual é o processo de pesquisa com o Gemini em duas etapas?",
+      "options": [
+        "Coleta com o Gemini e verificação com seus olhos.",
+        "Busca automática e entrega direta ao cliente.",
+        "Pergunta sem contexto e aceitação da primeira resposta.",
+        "Uso de fontes de blog e confiança no modelo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 define explicitamente a coleta com o Gemini e a verificação com seus olhos como o processo de duas etapas.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "facil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q026",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "O que o plano gratuito do Canva oferece?",
+      "options": [
+        "Templates, fotos básicas e exportação em PDF.",
+        "Elementos premium, remoção de fundo e animações.",
+        "Acesso a todos os recursos e suporte prioritário.",
+        "Redimensionamento para mídias e conta-gotas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 afirma que o plano gratuito dá acesso a milhares de templates, fotos básicas e exportação em PDF.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "facil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q027",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Quais são as três partes de uma mensagem de cobrança eficaz?",
+      "options": [
+        "O que foi entregue, o valor e o prazo final.",
+        "Um pedido de desculpas, o valor e a chave Pix.",
+        "Um elogio ao cliente, o valor e a data de entrega.",
+        "Uma pergunta sobre o serviço, o valor e o link."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 diz que a mensagem de cobrança precisa ter três partes: o que foi entregue, o valor e o prazo.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "facil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q028",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Como se calcula o preço justo de um serviço?",
+      "options": [
+        "Somando as horas reais e o valor percebido pelo cliente.",
+        "Dividindo as despesas mensais por 160 e multiplicando por margem.",
+        "Comparando custo por hora, valor percebido e referência de mercado.",
+        "Usando o valor máximo que o cliente aceita pagar sem negociação."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 explica que o preço justo fica entre o custo mínimo e o valor máximo, usando os três números: custo por hora, valor percebido e referência de mercado.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "media"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q029",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Qual é a diferença entre recorrência e desconto?",
+      "options": [
+        "Recorrência é um novo produto; desconto é redução de preço.",
+        "Recorrência é cobrar todo mês; desconto é dar um abatimento no valor.",
+        "Recorrência é um contrato mensal; desconto é uma cortesia ao cliente.",
+        "Recorrência é um serviço contínuo; desconto é uma promoção temporária."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 afirma que recorrência não é desconto, mas um novo produto com escopo e entregas definidas.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "media"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q030",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Um cliente pede um texto sobre um evento que aconteceu ontem. O Gemini responde com um link de um blog sem autor. O que você deve fazer?",
+      "options": [
+        "Usar a informação, pois o Gemini buscou na internet em tempo real.",
+        "Abrir o link, verificar a data e a autoridade da fonte antes de usar.",
+        "Descartar a resposta e refazer a pergunta sem contexto para melhorar.",
+        "Entregar ao cliente, pois a verificação é responsabilidade da ferramenta."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 ensina que o Gemini não distingue autoridade, então você deve abrir a fonte e verificar data e autor.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q031",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Você usou o Magic Design do Canva para gerar um design a partir do texto. O que deve fazer antes de enviar ao cliente?",
+      "options": [
+        "Revisar a hierarquia e o contexto das imagens escolhidas pela IA.",
+        "Confiar no resultado, pois a IA do Canva é especialista em design.",
+        "Enviar diretamente, pois o template já tem as regras aplicadas.",
+        "Apenas trocar as cores e exportar sem revisar o conteúdo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 alerta que a IA do Canva erra hierarquia e pode escolher imagem sem contexto, exigindo revisão.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q032",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Qual tarefa é adequada para automatizar com o n8n?",
+      "options": [
+        "Enviar um lembrete de cobrança para clientes recorrentes todo mês.",
+        "Escrever um texto criativo para um cliente novo sem revisão.",
+        "Decidir o tom de uma resposta a um cliente insatisfeito no chat.",
+        "Avaliar a qualidade de um texto revisado pelo Claude e aprovar."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 diz que automação serve para tarefas repetitivas, como lembretes, nunca para decisões que exigem julgamento.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q033",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Segundo o capítulo sobre feedback, qual é a forma correta de encarar uma reclamação de cliente?",
+      "options": [
+        "Como um ataque pessoal à sua competência profissional.",
+        "Como um dado sobre o que o mercado deseja e você não entrega.",
+        "Como uma avaliação definitiva sobre o seu valor como pessoa.",
+        "Como um sinal de que o cliente está errado e você deve se defender."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 define reclamação como informação sobre o que o mercado deseja, não como ataque pessoal.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "facil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q034",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "No sistema de captação com Notion, qual é a função da coluna \"Próximo Contato\"?",
+      "options": [
+        "Registrar a data de nascimento de cada contato.",
+        "Definir a data da próxima interação com o contato.",
+        "Anotar a última vez que o contato foi abordado.",
+        "Indicar se o contato está ativo ou inativo."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "A coluna \"Próximo Contato\" serve para agendar a próxima interação, evitando que a lista esfrie.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "facil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q035",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Na planilha de funil do Google Planilhas, o que a fórmula =CONT.SE(D:D,\"Novo\") calcula?",
+      "options": [
+        "A soma dos valores estimados dos leads na etapa \"Novo\".",
+        "A quantidade de leads que estão na etapa \"Novo\".",
+        "A média de dias que os leads ficam na etapa \"Novo\".",
+        "O total de linhas preenchidas na coluna D."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 27 explica que CONT.SE conta quantos leads estão em cada etapa.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "facil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q036",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Segundo o capítulo sobre produto digital, qual deve ser o preço de um e-book em relação ao valor do serviço?",
+      "options": [
+        "Entre 5% e 10% do valor do serviço prestado.",
+        "Entre 10% e 15% do valor do serviço prestado.",
+        "Entre 15% e 20% do valor do serviço prestado.",
+        "Entre 20% e 25% do valor do serviço prestado."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 28 recomenda que o preço do produto digital seja entre 10% e 15% do valor do serviço.",
+      "status": "active",
+      "tags": [
+        "cap28",
+        "facil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q037",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Um cliente diz que o texto entregue \"parece genérico\". Qual atitude, segundo o capítulo, transforma essa reclamação em melhoria do serviço?",
+      "options": [
+        "Explicar que o cliente não forneceu informações suficientes.",
+        "Identificar a necessidade por trás e ajustar o processo de pesquisa.",
+        "Oferecer um reescrever gratuito para compensar o erro.",
+        "Registrar como elogio, pois o cliente reconheceu o texto."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 ensina a identificar a necessidade por trás da reclamação e ajustar o processo, em vez de responder na defensiva.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q038",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Qual é a principal diferença entre uma lista de captação e uma planilha de clientes?",
+      "options": [
+        "A lista de captação inclui apenas clientes que já pagaram.",
+        "A lista de captação inclui contatos com interesse, mesmo sem comprar.",
+        "A lista de captação é exclusiva para contatos pessoais.",
+        "A lista de captação contém apenas leads de indicação."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 define lista de captação como registro de contatos com interesse, mesmo sem compra.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q039",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Por que o preço do pacote deve ser maior que o valor avulso do serviço principal?",
+      "options": [
+        "Para que o cliente perceba que está recebendo um desconto.",
+        "Para garantir que o ticket médio do negócio aumente.",
+        "Para cobrir o custo dos itens adicionais do pacote.",
+        "Para se manter competitivo no mercado de serviços."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 29 explica que o pacote deve aumentar o ticket médio, por isso o preço precisa ser maior que o serviço principal avulso.",
+      "status": "active",
+      "tags": [
+        "cap29",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ganhar-dinheiro-com-ia-q040",
+      "courseSlug": "ganhar-dinheiro-com-ia",
+      "question": "Qual é a diferença central entre uma tarefa e um ciclo, segundo o capítulo final?",
+      "options": [
+        "A tarefa é automatizada, enquanto o ciclo é manual.",
+        "A tarefa é uma ação isolada, enquanto o ciclo é um processo repetitivo.",
+        "A tarefa é para clientes atuais, enquanto o ciclo é para novos leads.",
+        "A tarefa gera pagamento, enquanto o ciclo gera apenas feedback."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:34:19.508Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 30 distingue tarefa como ação isolada e ciclo como processo repetitivo.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "dificil"
+      ]
+    }
+  ]
+}

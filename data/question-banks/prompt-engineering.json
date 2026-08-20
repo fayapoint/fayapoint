@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "prompt-engineering",
+  "lastUpdated": "2026-08-19T13:39:55.326Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "prompt-engineering-q001",
+      "courseSlug": "prompt-engineering",
+      "question": "Como o mecanismo de atenção ajuda o LLM?",
+      "options": [
+        "Ele processa o texto da esquerda para a direita em sequência.",
+        "Ele ignora palavras irrelevantes do prompt.",
+        "Ele conecta cada token a todos os outros da sequência.",
+        "Ele limita o número de tokens por resposta gerada."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 explica que o mecanismo de atenção permite que cada token observe todos os outros simultaneamente, criando conexões de relevância.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q002",
+      "courseSlug": "prompt-engineering",
+      "question": "Qual elemento do prompt define a identidade que a IA deve assumir?",
+      "options": [
+        "Task, que descreve a ação principal a executar.",
+        "Format, que determina a estrutura visual da saída.",
+        "Context, que fornece o histórico da conversa.",
+        "Role, que estabelece o papel profissional da IA."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 define Role como o elemento que estabelece quem a IA deve ser, ativando padrões de linguagem e conhecimento associados.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q003",
+      "courseSlug": "prompt-engineering",
+      "question": "O que caracteriza a técnica few-shot no prompt engineering?",
+      "options": [
+        "Não fornecer nenhum exemplo e confiar no treinamento.",
+        "Fornecer de dois a cinco exemplos de entrada e saída.",
+        "Inserir centenas de exemplos para tarefas complexas e variadas.",
+        "Usar um único exemplo para calibrar o modelo."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 descreve few-shot como o fornecimento de dois a cinco exemplos de entrada e saída para calibrar o modelo.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q004",
+      "courseSlug": "prompt-engineering",
+      "question": "Quando é mais adequado usar many-shot em vez de few-shot?",
+      "options": [
+        "Quando a tarefa exige classificação com muitas categorias.",
+        "Quando a resposta precisa ser gerada rapidamente sem exemplos.",
+        "Quando o orçamento de tokens é extremamente limitado.",
+        "Quando o modelo já conhece bem a tarefa solicitada."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 indica que many-shot é ideal para tarefas com muitas categorias ou nuances sutis, como classificação de tickets.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "media"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q005",
+      "courseSlug": "prompt-engineering",
+      "question": "Por que a temperatura alta pode aumentar o risco de alucinações?",
+      "options": [
+        "Porque ela permite escolher tokens menos prováveis.",
+        "Porque ela desativa o mecanismo de atenção.",
+        "Porque ela limita o raciocínio passo a passo.",
+        "Porque ela reduz a janela de contexto disponível para o modelo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 afirma que temperatura alta permite escolher tokens menos prováveis, aumentando criatividade e risco de alucinações.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q006",
+      "courseSlug": "prompt-engineering",
+      "question": "Um modelo com janela de contexto de 1 milhão de tokens recebe um documento extenso. Por que o mecanismo de atenção é crucial para que o modelo não 'esqueça' informações do início do documento?",
+      "options": [
+        "Permite que cada token considere todos os outros, mantendo a relevância.",
+        "Porque ele expande a janela de contexto além do limite de tokens.",
+        "Porque ele substitui a necessidade de system prompt para tarefas longas.",
+        "Porque ele armazena permanentemente todas as informações em memória de longo prazo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 explica que o mecanismo de atenção permite que cada token considere todos os outros simultaneamente, preservando a relevância em sequências longas.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q007",
+      "courseSlug": "prompt-engineering",
+      "question": "Para garantir que um relatório executivo tenha um tom formal e não inclua opiniões pessoais, quais dois elementos do prompt devem ser configurados?",
+      "options": [
+        "Tone e Restrictions, pois definem a voz e os limites da resposta.",
+        "Role e Context, pois definem a identidade e o cenário.",
+        "Task e Format, pois definem a ação e a estrutura.",
+        "Examples e Tone, pois definem o formato e a voz."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 descreve que o Tone calibra a voz e as Restrictions estabelecem limites, sendo essenciais para formalidade e ausência de opiniões.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "media"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q008",
+      "courseSlug": "prompt-engineering",
+      "question": "Em um prompt few-shot, um engenheiro colocou o exemplo mais importante no início, mas o modelo está ignorando esse padrão. Qual é a explicação mais provável?",
+      "options": [
+        "O modelo dá mais peso aos exemplos finais devido ao efeito de recência.",
+        "O modelo não foi treinado para reconhecer exemplos no início do prompt.",
+        "O exemplo no início é ignorado porque o modelo prioriza o system prompt.",
+        "O modelo considera que exemplos no início são menos relevantes para a tarefa."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 menciona o efeito de recência, em que o modelo dá mais peso aos exemplos finais do prompt.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "dificil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q009",
+      "courseSlug": "prompt-engineering",
+      "question": "Qual é a principal diferença entre CoT explícito e CoT por exemplos?",
+      "options": [
+        "O explícito é mais rápido, o por exemplos é mais lento e custoso.",
+        "O por exemplos não requer raciocínio passo a passo.",
+        "O explícito usa ordem direta, o por exemplos usa demonstrações.",
+        "O explícito funciona apenas com modelos grandes."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 distingue CoT explícito (ordem direta) e CoT por exemplos (demonstrações few-shot com raciocínio embutido).",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "media"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q010",
+      "courseSlug": "prompt-engineering",
+      "question": "Em um cenário de diagnóstico técnico, como o Tree of Thoughts evita o viés de confirmação?",
+      "options": [
+        "Confiando na primeira solução que o modelo encontra sem questionar.",
+        "Usando uma única cadeia de raciocínio linear.",
+        "Descartando todas as hipóteses que não são imediatas.",
+        "Gerando hipóteses distintas e avaliando cada uma com testes."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 mostra que o ToT gera múltiplas hipóteses e avalia cada uma com testes, evitando o viés de confirmação.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "dificil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q011",
+      "courseSlug": "prompt-engineering",
+      "question": "Como a técnica do Advogado do Diabo contribui para a tomada de decisão?",
+      "options": [
+        "Ela substitui a necessidade de dados externos.",
+        "Ela expõe falhas e riscos que a visão inicial pode ocultar.",
+        "Ela acelera o processo eliminando análises detalhadas.",
+        "Ela garante que a IA sempre concorde com o usuário e evite conflitos."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 explica que o Advogado do Diabo expõe falhas e riscos, combatendo o viés de confirmação.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q012",
+      "courseSlug": "prompt-engineering",
+      "question": "Qual é o principal benefício de usar Chain-of-Thought em problemas complexos?",
+      "options": [
+        "Reduz o custo computacional eliminando tokens intermediários.",
+        "Gera tokens intermediários de raciocínio que reduzem erros cumulativos.",
+        "Aumenta a velocidade de resposta ao ignorar etapas desnecessárias.",
+        "Substitui completamente a necessidade de exemplos no prompt."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 explica que o CoT gera tokens intermediários de raciocínio que servem de âncora e reduzem erros cumulativos.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "facil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q013",
+      "courseSlug": "prompt-engineering",
+      "question": "O que diferencia o Tree of Thoughts do Chain-of-Thought?",
+      "options": [
+        "O ToT gera múltiplos caminhos de raciocínio e avalia cada um parcialmente.",
+        "O ToT ignora a avaliação intermediária para acelerar a resposta final.",
+        "O ToT produz uma única cadeia linear de raciocínio mais detalhada.",
+        "O ToT é mais barato em tokens por não explorar ramificações."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 afirma que o ToT gera múltiplas ramificações e avalia cada caminho parcialmente, ao contrário do CoT.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "facil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q014",
+      "courseSlug": "prompt-engineering",
+      "question": "O que é a técnica do Advogado do Diabo no contexto de role-playing?",
+      "options": [
+        "Uma persona que elogia todas as ideias para manter o ambiente positivo.",
+        "Um crítico implacável que busca falhas e suposições não testadas.",
+        "Um especialista que se concentra apenas em métricas de vaidade.",
+        "Um personagem que simula a reação de um cliente conservador."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 descreve o Advogado do Diabo como um crítico implacável que expõe falhas e riscos.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "facil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q015",
+      "courseSlug": "prompt-engineering",
+      "question": "No Tree of Thoughts, qual é o papel da avaliação intermediária no processo de raciocínio?",
+      "options": [
+        "Ela descarta todos os caminhos e escolhe o primeiro gerado.",
+        "Ela atribui notas a cada ramificação para selecionar as mais promissoras.",
+        "Ela gera novos caminhos a partir de premissas distintas.",
+        "Ela sintetiza a solução final através do auto-debate."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 explica que a avaliação intermediária usa critérios objetivos para atribuir notas e selecionar as ramificações mais viáveis.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q016",
+      "courseSlug": "prompt-engineering",
+      "question": "Qual a diferença entre a Personificação Avançada e a Simulação de Público-Alvo no role-playing?",
+      "options": [
+        "Personificação cria especialista com contexto; simulação testa reações de clientes.",
+        "Personificação é usada para debates; simulação para críticas.",
+        "Personificação foca em métricas; simulação em emoções.",
+        "Personificação é mais barata; simulação é mais cara."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 mostra que a personificação define um especialista com contexto e valores, enquanto a simulação de público-alvo testa reações de diferentes perfis de clientes.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q017",
+      "courseSlug": "prompt-engineering",
+      "question": "O que é meta-prompting?",
+      "options": [
+        "Técnica de usar a IA para traduzir prompts entre diferentes idiomas.",
+        "Técnica de usar a IA para treinar novos modelos de linguagem do zero.",
+        "Técnica de usar a própria IA para projetar e otimizar seus prompts.",
+        "Técnica de usar a IA para melhorar a memória de longo prazo do modelo."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 define meta-prompting como a técnica de delegar à IA a tarefa de projetar, otimizar e refinar instruções para si mesma.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q018",
+      "courseSlug": "prompt-engineering",
+      "question": "Qual é a função dos system prompts no ecossistema OpenAI?",
+      "options": [
+        "Definir a personalidade base e as restrições permanentes.",
+        "Definir o formato de saída para cada interação individual.",
+        "Definir as âncoras de confiança para evitar alucinações.",
+        "Definir o nível de esforço de raciocínio para cada resposta."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 explica que system prompts funcionam como a personalidade base e a constituição que rege o comportamento do modelo.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q019",
+      "courseSlug": "prompt-engineering",
+      "question": "Como o uso de tags XML melhora a estruturação de prompts para o Claude?",
+      "options": [
+        "Criam fronteiras claras entre contexto, instruções e dados.",
+        "Permitem que o modelo ignore restrições de formato impostas.",
+        "Ativam o pensamento estendido sem configuração adicional.",
+        "Aumentam a janela de contexto do modelo automaticamente."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 mostra que tags XML criam fronteiras claras entre seções do prompt, eliminando ambiguidade.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "media"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q020",
+      "courseSlug": "prompt-engineering",
+      "question": "Uma equipe quer usar meta-prompting para criar um prompt de atendimento ao cliente. Qual abordagem segue o fluxo do capítulo?",
+      "options": [
+        "Pedir à IA que gere diretamente o prompt sem qualquer interação.",
+        "Pedir à IA que apenas refine a resposta final do atendente.",
+        "Pedir à IA que traduza o prompt para outro idioma automaticamente.",
+        "Pedir à IA que assuma papel de especialista e faça perguntas."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 indica que o fluxo de meta-prompting começa com a IA assumindo papel de especialista e fazendo perguntas esclarecedoras.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q021",
+      "courseSlug": "prompt-engineering",
+      "question": "Um analista quer usar o {{fact:openai-flagship}} para analisar uma planilha e gerar um gráfico. Qual prompt é mais eficaz?",
+      "options": [
+        "Usar Code Interpreter com especificação do formato de saída.",
+        "Usar DALL-E com descrição visual detalhada do gráfico.",
+        "Usar Computer Use para navegar até a planilha e clicar.",
+        "Usar Custom GPT com conhecimento base de vendas e metas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 destaca que o Code Interpreter é a ferramenta para análise de dados, e o prompt deve especificar o formato de saída.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "dificil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q022",
+      "courseSlug": "prompt-engineering",
+      "question": "Qual técnica permite que a IA crie seus próprios prompts de forma otimizada?",
+      "options": [
+        "Meta-prompting: a IA projeta seus próprios prompts",
+        "Refinamento iterativo: melhora contínua de prompts",
+        "Prompt chaining: encadeia prompts para tarefas complexas",
+        "Auto-avaliação: a IA revisa suas próprias respostas"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O meta-prompting é a técnica de usar a IA para projetar seus próprios prompts, como descrito no capítulo 7.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q023",
+      "courseSlug": "prompt-engineering",
+      "question": "Qual a diferença entre o system prompt na API e as Custom Instructions no ChatGPT?",
+      "options": [
+        "Na API usa role system; no ChatGPT usa Custom Instructions",
+        "Na API usa Custom Instructions; no ChatGPT usa role system",
+        "Ambos usam role system, mas com formatos diferentes",
+        "Ambos usam Custom Instructions, mas com restrições distintas"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 8, é explicado que na API o system prompt usa a role 'system', enquanto no ChatGPT a função é cumprida pelas Custom Instructions.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "media"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q024",
+      "courseSlug": "prompt-engineering",
+      "question": "Qual a principal razão para o Claude ser otimizado para interpretar XML tags em vez de delimitadores simples como aspas?",
+      "options": [
+        "As tags XML criam fronteiras semânticas claras no prompt",
+        "As tags XML são mais curtas e fáceis de digitar do que aspas",
+        "As tags XML permitem que o modelo ignore o contexto fornecido",
+        "As tags XML são um padrão universal para todos os modelos de IA"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 afirma que as XML tags criam fronteiras semânticas claras que eliminam ambiguidade, sendo otimizadas para o Claude.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "dificil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q025",
+      "courseSlug": "prompt-engineering",
+      "question": "O que é o contexto relacional na escrita profissional com IA?",
+      "options": [
+        "Explicar o tom de voz e a extensão máxima do texto.",
+        "Explicar o framework de persuasão a ser utilizado.",
+        "Explicar quem é o destinatário e sua relação com o remetente.",
+        "Explicar o objetivo central e a ação esperada do leitor."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 afirma que o contexto relacional exige explicar quem é o destinatário e a relação com ele para ajustar o tom.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "facil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q026",
+      "courseSlug": "prompt-engineering",
+      "question": "Qual a função do double-check no Gemini?",
+      "options": [
+        "Valida informações factuais com a busca do Google em tempo real.",
+        "Aumenta o thinking budget para tarefas complexas de raciocínio.",
+        "Converte texto em imagens usando o DALL-E integrado.",
+        "Integra o modelo com Gmail e Calendar para automação."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 descreve o double-check como recurso que valida informações factuais com a busca do Google.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q027",
+      "courseSlug": "prompt-engineering",
+      "question": "Um desenvolvedor precisa refatorar uma classe monolítica sem quebrar a API pública. Qual prompt é mais adequado?",
+      "options": [
+        "Solicitar a reescrita completa com novas funcionalidades adicionadas.",
+        "Solicitar a quebra em classes menores mantendo a mesma interface.",
+        "Solicitar a otimização de performance sem alterar a estrutura atual.",
+        "Solicitar a adição de testes unitários sem mudar o código existente."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 ensina que a refatoração deve preservar a API pública, quebrando a classe em menores sem alterar a interface.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q028",
+      "courseSlug": "prompt-engineering",
+      "question": "No Gemini, o que é o 'thinking budget' e para que serve?",
+      "options": [
+        "Limite de palavras que define o tamanho máximo da resposta final.",
+        "Orçamento de tokens para o raciocínio interno antes da resposta.",
+        "Técnica para reduzir o contexto processado pelo modelo na consulta.",
+        "Recurso que permite ao modelo consultar a busca do Google em tempo real."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 define o thinking budget como o orçamento de tokens dedicado ao raciocínio interno antes da resposta final.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "facil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q029",
+      "courseSlug": "prompt-engineering",
+      "question": "Qual é a sequência correta do framework PAS usado em textos de marketing?",
+      "options": [
+        "Atenção, Interesse, Desejo e Ação: guia o leitor do chamariz até a compra final.",
+        "Antes, Depois e Ponte: mostra o estado atual, o ideal e como chegar lá.",
+        "Problema, Agitação e Solução: apresenta a dor, agrava e oferece a resposta.",
+        "Contexto, Ação e Resultado: descreve o cenário, a ação e o efeito final."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 apresenta o PAS como Problem-Agitation-Solution, uma estrutura que conduz o leitor do problema à solução.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "facil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q030",
+      "courseSlug": "prompt-engineering",
+      "question": "Em um code review assistido por IA, além da análise de vulnerabilidades, qual outra verificação deve ser explicitamente solicitada no prompt?",
+      "options": [
+        "Sugestão de nomes de variáveis mais descritivas para todo o código.",
+        "Tradução automática de todos os comentários para o idioma do projeto.",
+        "Inclusão de logs de execução e stack trace completo para depuração.",
+        "Verificação da complexidade algorítmica e dos princípios SOLID."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 orienta que o prompt de revisão deve incluir a verificação da complexidade algorítmica e dos princípios SOLID.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "media"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q031",
+      "courseSlug": "prompt-engineering",
+      "question": "Para obter informações atualizadas sobre legislação que muda com frequência, qual recurso do Gemini é mais adequado para evitar respostas desatualizadas?",
+      "options": [
+        "O thinking budget, que aumenta o raciocínio interno do modelo antes da resposta.",
+        "O double-check, que ancora a resposta na busca do Google em tempo real.",
+        "A janela de contexto de um milhão de tokens para incluir mais dados no prompt.",
+        "As Gems, que personalizam o agente com instruções persistentes e acesso a ferramentas."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 explica que o double-check realiza grounding na busca do Google, reduzindo alucinações em temas dinâmicos.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q032",
+      "courseSlug": "prompt-engineering",
+      "question": "Ao refatorar uma classe monolítica com IA, qual instrução é essencial para não quebrar o código que já consome essa classe?",
+      "options": [
+        "Aplicar dependency injection em todos os métodos internos da classe.",
+        "Gerar testes unitários para cobrir todos os edge cases possíveis.",
+        "Manter a assinatura e o comportamento da API pública inalterados.",
+        "Usar TypeScript strict mode para garantir a tipagem rigorosa."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 destaca que a refatoração deve preservar a API pública, mantendo a assinatura e o comportamento externo.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q033",
+      "courseSlug": "prompt-engineering",
+      "question": "Qual é a principal função do Code Interpreter em uma análise de dados?",
+      "options": [
+        "Executar código Python real sobre os arquivos fornecidos.",
+        "Simular análises estatísticas baseadas em previsão de texto.",
+        "Gerar visualizações gráficas a partir de suposições do modelo.",
+        "Processar dados sem executar qualquer código computacional."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 afirma que o Code Interpreter permite que o modelo escreva e execute código Python real, garantindo processamento computacional genuíno.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q034",
+      "courseSlug": "prompt-engineering",
+      "question": "Qual é o objetivo principal da biblioteca de prompts profissionais?",
+      "options": [
+        "Fornecer templates prontos para uso imediato e adaptação.",
+        "Substituir a necessidade de conhecimento técnico em IA.",
+        "Criar prompts genéricos que funcionam para qualquer tarefa.",
+        "Eliminar a etapa de iteração e refinamento dos prompts."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 define a biblioteca como um arsenal estratégico com templates organizados por categoria, prontos para uso e adaptação.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q035",
+      "courseSlug": "prompt-engineering",
+      "question": "Qual é a primeira etapa do ciclo de iteração de prompts?",
+      "options": [
+        "Documentar as mudanças realizadas no prompt.",
+        "Executar o prompt com dados reais para testar.",
+        "Ajustar as instruções com base na avaliação.",
+        "Avaliar criticamente a resposta gerada pela IA."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 descreve o ciclo de iteração: Executar, Avaliar, Ajustar e Documentar, começando pela execução com dados reais.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q036",
+      "courseSlug": "prompt-engineering",
+      "question": "Um analista deseja prever vendas futuras com base em dados históricos. Qual prática é essencial para transformar a previsão em um instrumento de gestão de risco?",
+      "options": [
+        "Solicitar a inclusão de intervalos de confiança e explicação das limitações.",
+        "Pedir apenas a média móvel e a decomposição sazonal dos dados.",
+        "Exigir que a IA forneça um único número exato para a previsão.",
+        "Utilizar exclusivamente a análise de sentimento para validar a previsão."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 enfatiza que previsões devem incluir intervalos de confiança e explicação das limitações para serem instrumentos de gestão de risco.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q037",
+      "courseSlug": "prompt-engineering",
+      "question": "Em um template de Análise SWOT, qual é o diferencial que o prompt deve exigir para gerar ações prioritárias?",
+      "options": [
+        "Listar apenas as forças e fraquezas sem cruzar com oportunidades.",
+        "Cruzar os dados de forças, fraquezas, oportunidades e ameaças para gerar ações.",
+        "Solicitar uma análise numérica de cada fator da matriz SWOT.",
+        "Pedir a criação de um Business Model Canvas em vez da SWOT."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 destaca que o prompt de SWOT deve exigir o cruzamento estratégico dos dados para gerar ações prioritárias, não apenas listar.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q038",
+      "courseSlug": "prompt-engineering",
+      "question": "Qual é a diferença fundamental entre versionamento de prompts e documentação contextual?",
+      "options": [
+        "Versionamento é salvar versões, documentação é registrar o propósito e variáveis.",
+        "Versionamento é para prompts, documentação é para códigos.",
+        "Versionamento é automático, documentação é manual.",
+        "Versionamento é feito no GitHub, documentação é feita no Notion."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 distingue versionamento (salvar versões com nomenclatura clara) de documentação contextual (registrar propósito, variáveis, limitações).",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "dificil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q039",
+      "courseSlug": "prompt-engineering",
+      "question": "Quais são os três componentes essenciais para estruturar prompts de análise de dados?",
+      "options": [
+        "Os três componentes essenciais são dados, perguntas e saídas.",
+        "Os três componentes essenciais são dados, hipóteses e visualizações.",
+        "Os três componentes essenciais são arquivos, perguntas e relatórios.",
+        "Os três componentes essenciais são dados, técnicas e saídas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 define explicitamente que os prompts de análise de dados devem ser estruturados com dados, perguntas e saídas.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "prompt-engineering-q040",
+      "courseSlug": "prompt-engineering",
+      "question": "Considere o fluxo de execução da biblioteca de prompts e o ciclo de iteração do sistema pessoal. Qual alternativa descreve corretamente a diferença entre eles?",
+      "options": [
+        "Fluxo de execução é para templates, ciclo de iteração é para melhoria contínua.",
+        "Fluxo de execução usa templates, ciclo de iteração melhora e documenta.",
+        "Fluxo de execução é usado apenas para modelos específicos, ciclo de iteração é genérico.",
+        "Fluxo de execução inclui documentação, ciclo de iteração não inclui."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:39:55.326Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 descreve o fluxo de execução para usar templates, enquanto o capítulo 15 define o ciclo de iteração como um processo de melhoria contínua com documentação.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    }
+  ]
+}

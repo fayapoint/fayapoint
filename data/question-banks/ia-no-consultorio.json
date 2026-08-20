@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "ia-no-consultorio",
+  "lastUpdated": "2026-08-19T14:56:23.171Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "ia-no-consultorio-q001",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Qual é o mecanismo básico de um modelo de linguagem ao responder uma pergunta?",
+      "options": [
+        "Ele consulta um banco de dados com prontuários.",
+        "Ele prevê a próxima palavra mais provável.",
+        "Ele busca a resposta em sites de medicina.",
+        "Ele verifica o prontuário eletrônico."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 explica que o modelo de linguagem prevê a próxima palavra mais provável, não consulta banco de dados.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q002",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Segundo a LGPD, como é classificado o dado referente à saúde de um paciente?",
+      "options": [
+        "É dado pessoal sensível com proteção extra pela lei.",
+        "É dado pessoal comum como nome e telefone.",
+        "É dado anônimo que não precisa de autorização.",
+        "É dado público que pode ser compartilhado livremente."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 define dado referente à saúde como dado pessoal sensível com proteção extra pela LGPD.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q003",
+      "courseSlug": "ia-no-consultorio",
+      "question": "O que é proibido na publicidade médica segundo o CFM?",
+      "options": [
+        "Divulgar endereço, horário e títulos profissionais.",
+        "Prometer cura ou melhora garantida ao paciente.",
+        "Explicar indicações e contraindicações de um procedimento.",
+        "Informar a área de atuação e o local de atendimento."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 lista a promessa de cura ou melhora garantida como proibida pela Resolução CFM 2.336/2023.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q004",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Por que é necessário substituir datas e locais ao anonimizar um prontuário?",
+      "options": [
+        "Porque datas e locais são dados clínicos que a IA precisa para resumir.",
+        "Porque juntos podem identificar o paciente, mesmo sem o nome.",
+        "Porque a LGPD exige a troca de todos os dados do prontuário.",
+        "Porque a IA não consegue processar datas e locais no texto."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 mostra que datas e locais, juntos, podem identificar o paciente, por isso devem ser trocados por marcadores.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q005",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Qual ferramenta é mais adequada para transcrever uma consulta gravada e por quê?",
+      "options": [
+        "ChatGPT, porque ele escreve textos corridos com tom natural.",
+        "Claude, porque ele analisa documentos longos com contexto.",
+        "Gemini, porque ele se integra ao Google Agenda e ao Gmail.",
+        "Whisper, porque ele converte fala em texto com precisão."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 ensina que o Whisper é o transcritor de áudio, convertendo fala em texto com precisão.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q006",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Um médico cola um caso anonimizado no ChatGPT e a IA adiciona um exame que não estava no texto. O que explica isso?",
+      "options": [
+        "A IA consultou o prontuário eletrônico e encontrou o exame.",
+        "A IA preencheu a lacuna com a palavra mais provável.",
+        "A anonimização não funcionou e o exame vazou.",
+        "O médico esqueceu de incluir o exame no texto."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 explica que a IA preenche lacunas com a palavra mais provável, podendo inventar dados plausíveis.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q007",
+      "courseSlug": "ia-no-consultorio",
+      "question": "A IA gera um post sobre laser com a frase 'tecnologia revolucionária que elimina pelos para sempre'. O que o médico deve fazer?",
+      "options": [
+        "Publicar, pois a IA é confiável e o texto é bom.",
+        "Riscar termos proibidos e pedir reescrita informativa.",
+        "Deixar como está, pois é apenas uma postagem nas redes.",
+        "Apagar o texto e nunca mais usar IA para marketing."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 orienta revisar o texto gerado, riscando termos proibidos e pedindo reescrita informativa.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q008",
+      "courseSlug": "ia-no-consultorio",
+      "question": "A secretária criou um segundo calendário porque não achou o primeiro, gerando conflitos. Qual é a melhor prática para evitar isso?",
+      "options": [
+        "Criar um terceiro calendário para unificar os dados da agenda.",
+        "Usar o Gemini para sincronizar os dois calendários.",
+        "Manter apenas um calendário e renomear o existente.",
+        "Deletar os dois e começar do zero com papel."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 recomenda manter um único calendário e renomear o existente, evitando conflitos de dados.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q009",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Qual recurso do WhatsApp Business é usado para enviar confirmação automática quando o paciente chama fora do horário?",
+      "options": [
+        "Mensagem de ausência, programada para responder automaticamente.",
+        "Resposta rápida, que dispara um texto pré-definido com atalho.",
+        "Etiqueta de contato, que organiza os pacientes por status.",
+        "Lista de transmissão, que envia a mesma mensagem a vários."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 define a mensagem de ausência como o recurso que responde automaticamente quando o paciente chama fora do horário.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q010",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Qual é o primeiro passo do fluxo de remarcação descrito no capítulo 8?",
+      "options": [
+        "Registrar o cancelamento na agenda, liberando o horário.",
+        "Perguntar o motivo ao paciente, coletando contexto.",
+        "Montar o prompt no ChatGPT com o contexto do caso.",
+        "Enviar a mensagem de remarcação pelo WhatsApp Business."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 inicia o fluxo com registrar o cancelamento na agenda, que é a fonte da verdade.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q011",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Quais são as três camadas que uma confirmação eficaz deve ter, segundo o capítulo 9?",
+      "options": [
+        "Dado objetivo, preparo do paciente e consequência da falta.",
+        "Saudação, corpo do texto e despedida com contato.",
+        "Horário, endereço e nome do médico responsável.",
+        "Tom acolhedor, frases curtas e linguagem simples."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 lista as três camadas: dado objetivo, preparo e consequência.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q012",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Por que a IA pode gerar um horário errado em uma confirmação de consulta?",
+      "options": [
+        "Ela não tem acesso à agenda e apenas prevê um horário plausível.",
+        "Ela confunde o dia da semana quando o prompt é longo.",
+        "Ela usa dados de consultas anteriores, que ficam desatualizados.",
+        "Ela é programada para testar a atenção da secretária."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 explica que a IA é uma máquina de texto, sem acesso ao calendário, e chuta uma hora plausível.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q013",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Qual é o papel da IA no banco de respostas prontas para perguntas frequentes?",
+      "options": [
+        "Gerar um rascunho que a secretária revisa e personaliza.",
+        "Responder o paciente diretamente, sem intervenção humana.",
+        "Substituir a secretária em todas as conversas do WhatsApp.",
+        "Criar automaticamente novos convênios e valores de consulta."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 define a IA como rascunho inteligente, com revisão humana obrigatória.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q014",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Um paciente relata sintomas e pede opinião à IA. Qual deve ser a conduta correta?",
+      "options": [
+        "Acolher a preocupação e encaminhar para o médico, sem opinar.",
+        "Tranquilizar dizendo que é normal e que não precisa se preocupar.",
+        "Sugerir um diagnóstico provável com base nos sintomas citados.",
+        "Indicar um remédio de venda livre para aliviar o desconforto."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 proíbe a IA de dar opinião clínica ou tranquilizar sobre sintomas; deve acolher e encaminhar.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q015",
+      "courseSlug": "ia-no-consultorio",
+      "question": "A IA sugere remarcar para quinta às 16h, mas a agenda mostra conflito. O que fazer?",
+      "options": [
+        "Conferir a agenda, ajustar para um horário livre e corrigir a mensagem.",
+        "Enviar a mensagem mesmo assim, pois a IA é confiável.",
+        "Pedir à IA que verifique a agenda e envie sozinha.",
+        "Cancelar a remarcação e manter o horário original."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 manda conferir a agenda real e corrigir qualquer divergência antes de enviar.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q016",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Como a lista de espera deve ser usada após um cancelamento, considerando a IA?",
+      "options": [
+        "IA ordena por data, mas a secretária aplica preferências que ela conhece.",
+        "IA escolhe o primeiro da fila, sem considerar preferências de horário.",
+        "IA envia oferta automática para todos da lista, sem prioridade.",
+        "IA descarta a lista e usa apenas pacientes que ligaram hoje."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 diz que a IA ordena por data, mas a secretária usa critérios finos como preferência de período.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q017",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Quando um paciente faz uma pergunta clínica no chat, qual deve ser a ação da IA?",
+      "options": [
+        "Responder com base em conhecimento geral, mesmo com ressalvas.",
+        "Encaminhar para a secretária ou para o médico, sem dar orientação.",
+        "Ignorar a mensagem e aguardar o próximo contato do paciente.",
+        "Dar uma resposta genérica e sugerir uma consulta médica."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 estabelece que a IA nunca deve responder perguntas clínicas; ela deve reconhecer o limite e encaminhar para o humano.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q018",
+      "courseSlug": "ia-no-consultorio",
+      "question": "No WhatsApp Business, quando a mensagem de ausência é enviada?",
+      "options": [
+        "Quando o paciente envia a primeira mensagem, a qualquer hora.",
+        "Quando o paciente envia mensagem dentro do horário comercial.",
+        "Quando o paciente envia mensagem fora do horário definido.",
+        "Quando o paciente envia mensagem de emergência."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 explica que a mensagem de ausência dispara apenas fora do horário comercial configurado.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q019",
+      "courseSlug": "ia-no-consultorio",
+      "question": "No controle de tempo de resposta, o que deve ser medido?",
+      "options": [
+        "O tempo até a conversa ser totalmente resolvida.",
+        "O tempo até a primeira resposta útil ao paciente.",
+        "O tempo até a IA responder automaticamente.",
+        "O tempo até o paciente enviar nova mensagem."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 define que o indicador é o tempo até a primeira resposta útil, não até o fim da conversa.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q020",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Ao usar IA para gerar material de orientação, quem é responsável pela veracidade clínica?",
+      "options": [
+        "O modelo de IA que gerou o texto original.",
+        "O médico que revisa e assina o material final.",
+        "A secretária que copia e cola o texto no sistema.",
+        "O paciente que recebe a orientação impressa."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 afirma que a IA entrega um rascunho e a responsabilidade pela revisão e assinatura é do médico.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q021",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Para personalizar um material no Gemini sem expor dados, como descrever o paciente?",
+      "options": [
+        "Usar nome completo e idade para contexto.",
+        "Usar características como idade e condição, sem nome.",
+        "Incluir telefone para contato em caso de dúvida.",
+        "Fornecer histórico médico completo do paciente."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 orienta descrever o perfil (idade, condição) e nunca incluir dados identificáveis como nome ou telefone.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q022",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Qual situação deve acionar a regra de emergência (SAMU 192) no chatbot?",
+      "options": [
+        "Dor de cabeça leve que começou há uma hora.",
+        "Falta de ar intensa ou dor no peito súbita.",
+        "Dúvida sobre dose de um medicamento.",
+        "Pedido de atestado para justificar falta."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 lista sintomas graves como dor no peito e falta de ar como gatilho para a instrução de emergência, diferenciando de casos não urgentes.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q023",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Por que a mediana é preferível à média no painel de tempo de resposta?",
+      "options": [
+        "A mediana é mais fácil de calcular no Excel.",
+        "A mediana ignora casos extremos que distorcem a média.",
+        "A média sempre superestima o tempo real.",
+        "A mediana considera apenas respostas automáticas."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 explica que a mediana não é afetada por valores extremos, mostrando o tempo típico de resposta.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q024",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Ao exportar um folheto do Canva para impressão em gráfica, qual formato usar?",
+      "options": [
+        "PNG com alta resolução para manter qualidade.",
+        "PDF padrão para visualização em tela.",
+        "PDF para impressão com 300 DPI de resolução.",
+        "JPG com fundo branco para facilitar envio."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 especifica que o PDF para impressão garante 300 DPI, o mínimo exigido por gráficas.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q025",
+      "courseSlug": "ia-no-consultorio",
+      "question": "O que o CFM proíbe em publicidade médica?",
+      "options": [
+        "Prometer resultados, usar superlativos, mostrar paciente sem autorização.",
+        "Publicar conteúdo educativo sobre doenças e tratamentos.",
+        "Usar redes sociais para agendar consultas e exames.",
+        "Compartilhar notícias científicas de revistas médicas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 lista explicitamente as proibições: prometer resultado, usar 'melhor' ou 'garantia', e mostrar antes/depois sem autorização.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q026",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Por que é obrigatório anonimizar o áudio antes de transcrever com Whisper?",
+      "options": [
+        "Para proteger a identidade do paciente e evitar vazamento de dados.",
+        "Para melhorar a precisão da transcrição do áudio gravado.",
+        "Para reduzir o tamanho do arquivo e acelerar o processamento.",
+        "Para cumprir as regras de publicidade do conselho médico."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 afirma que a anonimização separa um fluxo seguro de um vazamento, pois o Whisper transcreve tudo o que ouve.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q027",
+      "courseSlug": "ia-no-consultorio",
+      "question": "O que o Copilot no Excel faz?",
+      "options": [
+        "Gera fórmulas e gráficos a partir de comandos em linguagem natural.",
+        "Limpa e organiza automaticamente qualquer planilha de dados.",
+        "Substitui a necessidade de digitação manual de dados no Excel.",
+        "Cria relatórios médicos a partir de dados de pacientes."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 explica que o Copilot entende linguagem natural e gera fórmulas e gráficos, mas não conhece o negócio.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q028",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Quais são as três camadas da revisão humana de conteúdo gerado por IA?",
+      "options": [
+        "Conteúdo clínico, conformidade com o CFM e adequação ao paciente.",
+        "Revisão gramatical, ortográfica e de pontuação do texto.",
+        "Validação de design, layout e esquema de cores do material.",
+        "Verificação de fatos, citação de fontes e revisão por pares."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 descreve as três camadas: conteúdo clínico, conformidade com o conselho e adequação ao paciente.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q029",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Quais são os três blocos do prompt de auditoria para faturamento?",
+      "options": [
+        "Tabela de procedimentos, prontuário anonimizado e instrução de comparação.",
+        "Nome do paciente, carteirinha do convênio e recibo de pagamento.",
+        "Número da fatura, data do atendimento e valor total cobrado.",
+        "Assinatura do médico, logo da clínica e carimbo do consultório."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 define o prompt com três blocos: tabela, prontuário anonimizado e instrução.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q030",
+      "courseSlug": "ia-no-consultorio",
+      "question": "A transcrição diz 'paciente relata dor no peito', mas o resumo da IA escreve 'dor em queimação'. O paciente falou 'aperto'. O que fazer?",
+      "options": [
+        "Corrigir a saída da IA para corresponder à transcrição original.",
+        "Aceitar o resumo da IA como mais preciso que a transcrição.",
+        "Apagar todo o resumo e reescrever do zero sem usar a IA.",
+        "Perguntar ao paciente na próxima consulta para confirmar o sintoma."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 instrui a corrigir qualquer divergência usando o ícone de edição, pois a IA pode inventar informações.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q031",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Um médico pede à IA um post sobre emagrecimento e ela devolve 'perca 10kg em 30 dias'. Qual a ação correta?",
+      "options": [
+        "Substituir a promessa por conteúdo educativo sobre causas do ganho de peso.",
+        "Publicar como está porque a IA gerou o texto.",
+        "Adicionar um aviso de que resultados podem variar.",
+        "Usar o post apenas em anúncios pagos para não violar a regra."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 manda substituir termos proibidos por versões educativas, como 'entenda as causas da dor'.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q032",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Um gráfico mostra queda em fevereiro, mas o médico lembra que foi um mês movimentado. Qual a causa mais provável?",
+      "options": [
+        "Faltam linhas de dados na planilha referentes àquele período.",
+        "O Copilot gerou uma fórmula incorreta para o cálculo do total.",
+        "O tipo de gráfico é enganoso e deve ser alterado para barras.",
+        "A memória do médico está errada sobre o movimento do mês."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 mostra que o gráfico refletia dados vazios, pois a secretária esqueceu de preencher linhas.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q033",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Segundo o capítulo, qual é o papel da IA no consultório?",
+      "options": [
+        "Substituir o julgamento do médico em todas as decisões.",
+        "Apoiar tarefas repetitivas e acelerar o trabalho.",
+        "Eliminar a necessidade de revisão humana.",
+        "Tomar decisões clínicas de forma autônoma."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 afirma que a IA é um apoio que amplifica a capacidade, não um substituto do julgamento.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q034",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Qual é a regra de ouro do fluxo integrado?",
+      "options": [
+        "Todo dado nasce uma única vez e flui sem redigitação.",
+        "A IA deve confirmar presença de pacientes sozinha.",
+        "O Excel deve ser a fonte de verdade do consultório.",
+        "A secretária deve digitar tudo em planilhas separadas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 define que todo dado nasce uma única vez e flui para os outros lugares sem redigitação.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q035",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Quais são as cinco partes da estrutura do prompt-base?",
+      "options": [
+        "Papel, contexto, tarefa, formato e restrições.",
+        "Nome, data, horário, local e observações.",
+        "Saudação, desenvolvimento, conclusão e assinatura.",
+        "Objetivo, histórico, exemplo, teste e revisão."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 27 lista exatamente as cinco partes: papel, contexto, tarefa, formato e restrições.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q036",
+      "courseSlug": "ia-no-consultorio",
+      "question": "O que o manual de boas práticas deve responder?",
+      "options": [
+        "Quando usar IA, como usar e o que fazer se errar.",
+        "Qual é o melhor modelo de IA disponível no mercado.",
+        "Como configurar o roteador do consultório.",
+        "Qual é o salário ideal para a secretária."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 28 afirma que o manual responde a três perguntas: quando usar IA, como usar e o que fazer quando a resposta parece errada.",
+      "status": "active",
+      "tags": [
+        "cap28",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q037",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Um relatório gerado por IA cita um estudo sobre hipertensão sem link. O que fazer?",
+      "options": [
+        "Enviar, pois a IA é confiável em referências científicas.",
+        "Conferir a fonte no artigo original antes de repassar.",
+        "Trocar o nome do paciente e enviar para o grupo.",
+        "Pedir para a IA gerar um link para a referência."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 29 alerta que a IA inventa referências e manda abrir o artigo original antes de repassar citação.",
+      "status": "active",
+      "tags": [
+        "cap29",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q038",
+      "courseSlug": "ia-no-consultorio",
+      "question": "No cenário da Dra. Carla, o que ela fez com o tempo economizado?",
+      "options": [
+        "Reduziu a jornada da secretária para meio período.",
+        "Abriu mais um horário de atendimento por dia.",
+        "Contratou outra médica para a equipe.",
+        "Passou a atender apenas pacientes particulares."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 30 mostra que a Dra. Carla abriu mais um horário por dia, sem aumentar custo fixo.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q039",
+      "courseSlug": "ia-no-consultorio",
+      "question": "Uma secretária usou o prompt-base e a IA inventou uma política de cancelamento. O que ajustar?",
+      "options": [
+        "O campo 'Formato de saída' para encurtar o texto.",
+        "O campo 'Políticas importantes' com a regra correta.",
+        "O campo 'Papel' para ser mais específico.",
+        "O campo 'Restrições' para proibir invenções."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 27 diz que, se a IA inventa política, você corrige o campo 'Políticas' no prompt-base.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-consultorio-q040",
+      "courseSlug": "ia-no-consultorio",
+      "question": "A IA sugeriu cobrar um procedimento que o convênio não cobria. O que a médica fez?",
+      "options": [
+        "Aceitou a sugestão e cobrou o procedimento.",
+        "Verificou o contexto e decidiu não cobrar.",
+        "Pediu para a IA refazer o cálculo.",
+        "Enviou a sugestão para o convênio avaliar."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:56:23.171Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 mostra que a médica usou a IA como alerta, verificou o contexto e decidiu não cobrar.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "dificil"
+      ]
+    }
+  ]
+}

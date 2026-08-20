@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "ia-producao",
+  "lastUpdated": "2026-08-19T12:41:01.891Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "ia-producao-q001",
+      "courseSlug": "ia-producao",
+      "question": "Qual é a principal diferença entre rodar um modelo no notebook e em produção?",
+      "options": [
+        "No notebook você controla entrada, momento e julgamento da saída.",
+        "Em produção o modelo é mais rápido e preciso que no notebook.",
+        "No notebook o modelo não precisa de validação de entrada.",
+        "Em produção o modelo é determinístico e tem gabarito."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 afirma que no notebook controlamos entrada, momento e julgamento da saída, e em produção perdemos esses três controles.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-producao-q002",
+      "courseSlug": "ia-producao",
+      "question": "Ao usar a API de um terceiro, o que o projeto compra?",
+      "options": [
+        "Capacidade de modelo, operação da infraestrutura e evolução contínua.",
+        "Controle total dos dados e da infraestrutura de GPU.",
+        "Custo fixo mensal e independência de decisões externas.",
+        "Modelo aberto e ausência de dependência de fornecedor."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 lista exatamente esses três benefícios ao contratar uma API de terceiro.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-producao-q003",
+      "courseSlug": "ia-producao",
+      "question": "Como a latência deve ser medida em um sistema de IA?",
+      "options": [
+        "Pela média, que representa o tempo típico de resposta.",
+        "Pelo percentil 95, que revela a experiência na cauda.",
+        "Pelo menor tempo observado, que indica o melhor caso.",
+        "Pelo maior tempo observado, que indica o pior caso."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 orienta medir em percentis, especialmente o 95, pois a média esconde a cauda que o usuário sente.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-producao-q004",
+      "courseSlug": "ia-producao",
+      "question": "Qual etapa do caminho do dado tende a falhar sem gerar erro?",
+      "options": [
+        "A recepção, quando valida a requisição do usuário.",
+        "A recuperação, devolvendo documentos menos ruins sem avisar.",
+        "A inferência, quando o modelo retorna resposta plausível.",
+        "A entrega, quando a resposta é registrada no log."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 explica que a recuperação falha em silêncio, devolvendo o menos ruim sem sinalizar erro.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-producao-q005",
+      "courseSlug": "ia-producao",
+      "question": "Um diagrama de arquitetura útil para operação deve mostrar:",
+      "options": [
+        "Caixas e setas indicando quem fala com quem no sistema.",
+        "Onde o dado pode parar, o comportamento de falha e os sinais.",
+        "A hierarquia de pastas do código e as versões de cada arquivo.",
+        "O custo de cada chamada e o percentil de latência da API."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 define que o diagrama operacional marca pontos de parada, ações de falha e alertas.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-producao-q006",
+      "courseSlug": "ia-producao",
+      "question": "Um sistema de recomendação de filmes começa a receber perguntas em inglês, apesar de ter sido treinado para português. Qual fronteira foi violada?",
+      "options": [
+        "A fronteira da entrada, pois o dado chega diferente do esperado.",
+        "A fronteira da inferência, pois o modelo não tem gabarito.",
+        "A fronteira da saída, pois a resposta não é registrada.",
+        "A fronteira do custo, pois o volume de tokens aumenta."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 define a fronteira da entrada como a perda do controle sobre o que chega, e idioma inesperado é um exemplo citado.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-producao-q007",
+      "courseSlug": "ia-producao",
+      "question": "Um assistente responde com um preço desatualizado. Após investigar, o contexto montado continha o preço antigo. Onde estava o erro?",
+      "options": [
+        "Na inferência, pois o modelo escolheu a resposta errada.",
+        "Na recuperação, pois o índice trouxe a ficha antiga do produto.",
+        "Na montagem, pois a ordem do contexto estava incorreta.",
+        "Na entrega, pois o pós-processamento alterou o valor."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 mostra que o erro estava na recuperação, que devolveu um documento desatualizado sem avisar.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-producao-q008",
+      "courseSlug": "ia-producao",
+      "question": "Um time quer garantir que o modelo produza exatamente a mesma resposta para a mesma entrada em qualquer ambiente. Isso é:",
+      "options": [
+        "Reprodutibilidade de ambiente, que é realista e necessária.",
+        "Determinismo de resposta, que é difícil de prometer em IA.",
+        "Isolamento de dependências, que resolve o problema de drivers.",
+        "Versionamento de dados, que impede mudanças no índice."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 distingue reprodutibilidade de ambiente (realista) de determinismo de resposta, que a aleatoriedade do modelo torna difícil de garantir.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-producao-q009",
+      "courseSlug": "ia-producao",
+      "question": "Qual é a pergunta que organiza a decisão do que entra na imagem de um serviço de IA?",
+      "options": [
+        "O que muda junto com o código pertence à imagem; o resto fica fora.",
+        "O que precisa estar disponível em produção deve sempre ficar na imagem.",
+        "Tudo deve entrar na imagem para garantir que o serviço funcione.",
+        "Apenas código e dependências entram; qualquer dado externo fica fora."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Capítulo 7 define que a pergunta central é 'o que muda junto', e o que muda com o código entra na imagem.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-producao-q010",
+      "courseSlug": "ia-producao",
+      "question": "Qual é a função do resumo criptográfico no manifesto de um artefato de IA?",
+      "options": [
+        "Provar que o arquivo em execução é exatamente o que foi publicado.",
+        "Acelerar o download do artefato pelo serviço em produção.",
+        "Substituir a necessidade de versionar o artefato ao longo do tempo.",
+        "Garantir que o artefato seja carregado apenas na inicialização."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Capítulo 8 afirma que o resumo criptográfico responde se o arquivo em execução é exatamente o publicado.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-producao-q011",
+      "courseSlug": "ia-producao",
+      "question": "Por que configuração que varia entre ambientes deve vir do ambiente e não do repositório?",
+      "options": [
+        "Para que a mesma imagem construída uma vez rode igual nos três ambientes.",
+        "Porque o repositório não tem espaço para guardar valores de produção.",
+        "Para que cada ambiente possa recompilar a imagem com seus próprios valores.",
+        "Porque valores no repositório são sempre menos seguros que os do ambiente."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Capítulo 9 explica que configuração vinda do ambiente permite a mesma imagem rodar nos três ambientes.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-producao-q012",
+      "courseSlug": "ia-producao",
+      "question": "Uma publicação falha silenciosamente e o serviço antigo continua respondendo. Como detectar essa falha?",
+      "options": [
+        "Conferir no endpoint de diagnóstico a imagem e os artefatos ativos.",
+        "Monitorar o tempo de resposta médio do serviço em produção atual.",
+        "Verificar se o processo do serviço está de pé e aceita conexões.",
+        "Comparar a data de build da imagem com a data do último commit feito."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Capítulo 10 mostra que o endpoint de diagnóstico revela a imagem ativa, tornando visível a publicação que falhou.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-producao-q013",
+      "courseSlug": "ia-producao",
+      "question": "Um serviço de chat gera respostas longas que estouram o limite do proxy. Qual modo de resposta resolve o problema?",
+      "options": [
+        "Streaming, pois o primeiro pedaço chega cedo e mantém a conexão viva.",
+        "Síncrono, porque a resposta completa chega de uma vez ao cliente final.",
+        "Assíncrono, porque o usuário recebe um comprovante e busca depois.",
+        "Síncrono com tempo limite maior que o do proxy na configuração."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Capítulo 11 descreve que o streaming mantém a conexão viva com o primeiro pedaço, evitando o limite do proxy.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-producao-q014",
+      "courseSlug": "ia-producao",
+      "question": "Uma imagem de IA tem camadas: sistema, dependências, código. Uma alteração no código reinstala todas as dependências. O que está errado?",
+      "options": [
+        "A ordem está invertida; dependências deveriam ficar abaixo do código.",
+        "O código deveria ser copiado antes de instalar as dependências no build.",
+        "As dependências mudam junto com o código e devem ser reinstaladas sempre.",
+        "A imagem deveria incluir também os pesos do modelo para evitar rebuild."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Capítulo 7 ensina que dependências devem ficar abaixo do código para a camada pesada ser reaproveitada.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-producao-q015",
+      "courseSlug": "ia-producao",
+      "question": "Dois ambientes usam a mesma imagem, mas um deles tem catálogo reduzido. Qual problema isso esconde?",
+      "options": [
+        "Problemas de volume, como busca lenta e timeout em pico, só vêm em produção.",
+        "Problemas de configuração, porque o ambiente reduzido usa variáveis diferentes.",
+        "Problemas de identidade, porque a imagem não é referenciada por conteúdo.",
+        "Problemas de segredo, porque o catálogo reduzido não exige chave de API."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Capítulo 10 alerta que homologação com dados reduzidos esconde problemas de volume que só aparecem em produção.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-producao-q016",
+      "courseSlug": "ia-producao",
+      "question": "Um worker morre no meio do processamento e a fila entrega o trabalho a outro worker. O que é necessário para evitar resultado duplicado?",
+      "options": [
+        "Chave de idempotência derivada do conteúdo, verificada antes de chamar o modelo.",
+        "Limite de tentativas com destino separado para trabalho que falha repetidamente.",
+        "Fila com entrega exatamente uma vez, garantida pelo provedor de fila.",
+        "Worker que grava o resultado antes de processar, para não perder o trabalho."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Capítulo 12 exige idempotência porque a entrega é ao menos uma vez, evitando inferência duplicada.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-producao-q017",
+      "courseSlug": "ia-producao",
+      "question": "Quando o gargalo é espera de rede, qual alavanca aumenta a capacidade sem adicionar máquina?",
+      "options": [
+        "Processar chamadas simultâneas na mesma máquina",
+        "Juntar várias requisições em uma única passagem",
+        "Instalar limites por usuário e por chave de acesso",
+        "Adicionar mais servidores para distribuir a carga"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 afirma que quando o tempo é gasto esperando rede, a alavanca certa é concorrência, pois esperar não consome processador.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-producao-q018",
+      "courseSlug": "ia-producao",
+      "question": "Qual é a primeira linha de defesa contra chamadas externas lentas?",
+      "options": [
+        "Definir tempo limite explícito em toda chamada",
+        "Repetir a chamada imediatamente após a falha",
+        "Abrir um disjuntor para parar de tentar",
+        "Colocar a chamada em uma fila de espera"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 diz que o tempo limite é a primeira linha de defesa e deve existir sempre.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-producao-q019",
+      "courseSlug": "ia-producao",
+      "question": "O que significa degradar com elegância em um endpoint?",
+      "options": [
+        "Entregar menos valor de forma previsível e declarada",
+        "Desligar o sistema quando ocorre qualquer falha",
+        "Aumentar a capacidade para evitar qualquer erro",
+        "Ignorar os erros e seguir com a resposta normal"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 define degradar com elegância como entregar menos valor de forma previsível e declarada, em vez de erro.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-producao-q020",
+      "courseSlug": "ia-producao",
+      "question": "Qual família de métrica responde à pergunta 'quanto isso custa e para onde está indo?'",
+      "options": [
+        "Saúde técnica: latência, erro e uso de recurso",
+        "Economia: custo por requisição e tokens gastos",
+        "Qualidade: sinais automáticos e de comportamento",
+        "Comportamento: abandono e pedido de atendente"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 define a família de economia como a que responde quanto custa e para onde o gasto está indo.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-producao-q021",
+      "courseSlug": "ia-producao",
+      "question": "Qual elemento amarra todas as etapas de uma requisição e permite rastreá-la?",
+      "options": [
+        "Identificador de correlação gerado na entrada",
+        "Log de eventos com texto livre de cada etapa",
+        "Trace com tempos aninhados de cada serviço",
+        "Cache para evitar repetir chamadas externas"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 afirma que o identificador de correlação é a peça que amarra tudo e é a primeira a implementar.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-producao-q022",
+      "courseSlug": "ia-producao",
+      "question": "Por que comparar a avaliação contra a execução anterior é melhor que contra uma meta absoluta?",
+      "options": [
+        "Metas absolutas envelhecem mal e geram discussão improdutiva",
+        "A pergunta relativa leva a decisão clara sobre a mudança",
+        "Porque o conjunto de referência é fixo e representativo",
+        "Porque o modelo como juiz precisa de critérios escritos"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 diz que a pergunta útil é sempre relativa: esta mudança melhorou ou piorou em relação ao que estava no ar.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-producao-q023",
+      "courseSlug": "ia-producao",
+      "question": "Qual tipo de erro NÃO deve ser repetido em uma nova tentativa?",
+      "options": [
+        "Erro de autenticação, pois a chave expirou",
+        "Timeout, pois o provedor pode estar lento",
+        "Erro 500, pois o servidor pode estar sobrecarregado",
+        "Erro de rede, pois a conexão pode ser instável"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 lista erro de autenticação como um dos que não melhoram na segunda tentativa.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-producao-q024",
+      "courseSlug": "ia-producao",
+      "question": "Um sistema serve o próprio modelo em GPU. Qual alavanca é a mais adequada?",
+      "options": [
+        "Agrupar requisições para processá-las em paralelo",
+        "Aumentar concorrência para mais chamadas simultâneas",
+        "Adicionar máquinas para distribuir a carga na GPU",
+        "Instalar limites por usuário para proteger o orçamento"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 afirma que quando se serve o próprio modelo, a alavanca é agrupamento, pois a GPU é eficiente em paralelo.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-producao-q025",
+      "courseSlug": "ia-producao",
+      "question": "Como deve ser calculado o custo por requisição?",
+      "options": [
+        "Somando todas as chamadas internas e usando o uso reportado pela API.",
+        "Contando caracteres do texto e dividindo por uma média de tokens.",
+        "Estimando pelos valores da fatura mensal divididos pelo volume total.",
+        "Multiplicando o preço do modelo pelo número de tokens gerados."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 afirma que o custo deve ser calculado a partir do uso real reportado pela API, somando todas as chamadas internas.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-producao-q026",
+      "courseSlug": "ia-producao",
+      "question": "Qual é o critério principal para um painel ser útil?",
+      "options": [
+        "Responder se o sistema está bem agora em dez segundos.",
+        "Exibir dezenas de gráficos com todas as métricas disponíveis.",
+        "Mostrar a maior quantidade de dados possível em uma única tela.",
+        "Permitir que o usuário personalize cada gráfico individualmente."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 define que um painel útil responde em dez segundos se o sistema está bem.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-producao-q027",
+      "courseSlug": "ia-producao",
+      "question": "Qual a diferença entre injeção direta e indireta de prompt?",
+      "options": [
+        "Direta vem do usuário; indireta vem de conteúdo recuperado pelo sistema.",
+        "Direta ataca o modelo; indireta ataca a infraestrutura de rede.",
+        "Direta é mais grave; indireta é menos grave e mais fácil de detectar.",
+        "Direta usa código malicioso; indireta usa engenharia social."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 distingue injeção direta (usuário) da indireta (conteúdo recuperado).",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-producao-q028",
+      "courseSlug": "ia-producao",
+      "question": "Qual prática operacionaliza o princípio da minimização de dados?",
+      "options": [
+        "Criar um inventário com finalidade e prazo de retenção para cada categoria.",
+        "Guardar todos os dados por tempo indeterminado para evitar perda.",
+        "Anonimizar todos os dados imediatamente após a coleta.",
+        "Solicitar consentimento explícito do usuário antes de qualquer coleta."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 apresenta o inventário com prazo como a prática que operacionaliza a minimização.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-producao-q029",
+      "courseSlug": "ia-producao",
+      "question": "O que a LGPD exige para decisões automatizadas que afetam o titular?",
+      "options": [
+        "Revisão humana possível e registro suficiente para embasar essa revisão.",
+        "Que todas as decisões sejam tomadas exclusivamente por humanos.",
+        "Que o sistema informe ao titular a decisão antes de executá-la.",
+        "Que o titular possa optar por não participar de qualquer automatização."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 exige revisão humana e registro para decisões automatizadas.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-producao-q030",
+      "courseSlug": "ia-producao",
+      "question": "Por que o custo médio por requisição pode esconder o problema real de custo?",
+      "options": [
+        "Porque a média é afetada por valores extremos e não mostra a distribuição.",
+        "Porque a média é sempre menor que o custo real de cada requisição.",
+        "Porque a média considera apenas chamadas ao modelo, ignorando infraestrutura.",
+        "Porque a média é calculada com base em estimativas, não no uso reportado."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 explica que a média esconde a distribuição desigual de custos.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-producao-q031",
+      "courseSlug": "ia-producao",
+      "question": "Qual é a mitigação mais eficaz contra injeção indireta de prompt?",
+      "options": [
+        "Reduzir as permissões do sistema ao mínimo necessário para a tarefa.",
+        "Instruir o modelo a ignorar instruções contidas em conteúdo recuperado.",
+        "Validar toda saída do modelo com regras determinísticas antes de executar.",
+        "Exigir confirmação humana para qualquer ação, mesmo as reversíveis."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 destaca que reduzir permissões é a mitigação mais eficaz.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-producao-q032",
+      "courseSlug": "ia-producao",
+      "question": "Como reordenar os filtros para reduzir custo e falso positivo em um assistente?",
+      "options": [
+        "Usar filtros determinísticos na entrada e modelo apenas em casos suspeitos.",
+        "Aplicar filtro por modelo em toda entrada para máxima segurança.",
+        "Remover todos os filtros e confiar na instrução do prompt.",
+        "Aplicar filtro de saída antes do de entrada para proteger o cliente."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 recomenda filtros determinísticos baratos na entrada e modelo apenas em casos suspeitos.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-producao-q033",
+      "courseSlug": "ia-producao",
+      "question": "O que faz um item de checklist ser verificável?",
+      "options": [
+        "Ser aprovado em reunião por quem entende do assunto",
+        "Duas pessoas chegarem à mesma conclusão sobre estar feito",
+        "Ter sido implementado e documentado no código do sistema",
+        "Estar descrito de forma clara e detalhada no plano do projeto"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 define item verificável como aquele em que duas pessoas chegam à mesma conclusão sobre estar feito.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-producao-q034",
+      "courseSlug": "ia-producao",
+      "question": "Por que o prompt deve viver no repositório, junto do código?",
+      "options": [
+        "Para que qualquer pessoa possa ajustar sem depender do time de desenvolvimento",
+        "Para que alterações tenham revisão, histórico e subam junto com o código",
+        "Para que o provedor consiga identificar a versão do prompt em produção",
+        "Para que o modelo seja atualizado automaticamente quando o prompt mudar"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 afirma que prompt é código e deve viver no repositório para ter revisão, histórico e subir junto com o código.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-producao-q035",
+      "courseSlug": "ia-producao",
+      "question": "O que caracteriza o modo sombra na publicação de mudanças?",
+      "options": [
+        "A versão nova processa tráfego real e o resultado é registrado sem ser entregue",
+        "A versão nova recebe uma fração pequena do tráfego e é comparada com a atual",
+        "A versão nova fica disponível em ambiente de teste para o time validar",
+        "A versão nova é entregue a todos e revertida se o critério for atingido"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 27 define modo sombra como exposição zero: a versão nova processa tráfego real e registra o resultado sem entregar a ninguém.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-producao-q036",
+      "courseSlug": "ia-producao",
+      "question": "Qual é a principal defesa para detectar mudança silenciosa do provedor?",
+      "options": [
+        "Avaliação periódica contra o conjunto de referência, mesmo sem mudanças suas",
+        "Revisão manual do código a cada nova versão publicada pelo provedor",
+        "Aumentar o limite de gasto para acomodar variações de preço do provedor",
+        "Contratar suporte dedicado para acompanhar os anúncios do provedor"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 28 diz que a avaliação periódica contra o conjunto de referência transforma mudança silenciosa do provedor em algo visível no mesmo dia.",
+      "status": "active",
+      "tags": [
+        "cap28",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-producao-q037",
+      "courseSlug": "ia-producao",
+      "question": "Um item do checklist diz: 'existe teto de gasto diário configurado'. Por que ele não está na forma verificável?",
+      "options": [
+        "Porque teto de gasto diário não é um risco real para sistemas de IA em produção",
+        "Porque não especifica o teste que dispara o limite e confirma o comportamento",
+        "Porque teto de gasto deve ser definido pelo financeiro e não pelo time técnico",
+        "Porque o teto de gasto diário é um número volátil e muda com o preço do provedor"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 exige que cada item tenha um teste que dispara o mecanismo; 'existe teto configurado' não especifica esse teste.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-producao-q038",
+      "courseSlug": "ia-producao",
+      "question": "Uma resposta de API traz o identificador de versão de comportamento. O que esse identificador precisa representar?",
+      "options": [
+        "A versão do código, a versão do prompt e o identificador do modelo usados juntos",
+        "A versão do modelo e a data de implantação, sem incluir o prompt ou o código",
+        "A versão do prompt e o nome do provedor, para auditoria externa do sistema",
+        "A versão do código e o hash do conjunto de referência usado na avaliação"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 define versão de comportamento como o identificador da combinação de código, prompt e modelo.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-producao-q039",
+      "courseSlug": "ia-producao",
+      "question": "Um assistente responde de formas diferentes para a mesma pergunta sobre política de troca, sem mudança de modelo ou temperatura. Qual é a causa mais provável?",
+      "options": [
+        "O índice contém documentos contraditórios e a busca recupera um ou outro conforme redação",
+        "O modelo está com temperatura alta e produz saídas diferentes por aleatoriedade",
+        "O provedor atualizou o modelo silenciosamente durante o fim de semana",
+        "O prompt foi alterado no painel administrativo sem passar por revisão"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 29 aponta a contradição entre documentos no índice como causa mais comum de inconsistência aparentemente aleatória.",
+      "status": "active",
+      "tags": [
+        "cap29",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-producao-q040",
+      "courseSlug": "ia-producao",
+      "question": "No runbook, uma entrada de incidente deve começar pelo sintoma observável. Qual entrada segue essa regra?",
+      "options": [
+        "O índice de produtos está desatualizado porque o processo noturno falhou",
+        "O assistente diz não encontrar produtos que existem no catálogo",
+        "A reindexação manual deve ser acionada quando o índice estiver fora",
+        "O provedor mudou o modelo e a qualidade caiu nas respostas"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:41:01.891Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 30 manda descrever incidentes pelo sintoma observável, e 'diz não encontrar produtos' é sintoma, não causa.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "dificil"
+      ]
+    }
+  ]
+}

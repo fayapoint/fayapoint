@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "leonardo-ai-criacao-visual",
+  "lastUpdated": "2026-08-20T00:18:57.658Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "leonardo-ai-criacao-visual-q001",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Qual é a função do AI Canvas no Leonardo AI?",
+      "options": [
+        "Edits images with AI, enabling inpainting and outpainting.",
+        "Creates video clips from text prompts with motion effects.",
+        "Upscales images to higher resolutions using artificial intelligence.",
+        "Generates real-time images as you type your prompt text."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O AI Canvas permite edição generativa com inpainting e outpainting, conforme descrito no Capítulo 1.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q002",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Qual modelo é mais adequado para gerar texto legível em imagens?",
+      "options": [
+        "FLUX models excel at rendering readable text inside images.",
+        "Phoenix models are optimized for photorealism and prompt adherence.",
+        "SDXL models have a large community of fine-tuned styles.",
+        "Community models are trained for specific visual niches."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Os modelos FLUX são destacados no Capítulo 3 por sua capacidade de gerar texto legível em imagens.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q003",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "O que o Universal Upscaler faz?",
+      "options": [
+        "Uses AI to add details and textures when enlarging images.",
+        "Converts static images into short animated video clips with motion.",
+        "Generates new images from scratch using text prompts and settings.",
+        "Edits specific parts of an image with inpainting techniques."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O Universal Upscaler usa IA para adicionar detalhes e texturas ao ampliar imagens, conforme o Capítulo 1.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q004",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Como economizar tokens ao refinar uma imagem?",
+      "options": [
+        "Use low resolution for exploration, then high res for final.",
+        "Always generate multiple images to compare variations quickly.",
+        "Use the Phoenix model for all generations to ensure consistent quality.",
+        "Rely on the free plan for unlimited professional work without cost."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O Capítulo 2 recomenda explorar com baixa resolução e produzir com alta para economizar tokens.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "media"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q005",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Qual é a principal vantagem dos modelos comunitários?",
+      "options": [
+        "They are pre-trained for specific styles like anime or architecture.",
+        "They always produce higher quality than proprietary models in all cases.",
+        "They are free to use without consuming any tokens at all.",
+        "They can generate text in multiple languages without any errors."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O Capítulo 3 explica que modelos comunitários são treinados para nichos visuais específicos.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "media"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q006",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Uma imagem estática precisa de um movimento sutil de câmera. Qual ferramenta e parâmetro usar?",
+      "options": [
+        "Use Motion with low intensity to create a subtle pan effect.",
+        "Use AI Canvas with outpainting to extend the image borders outward.",
+        "Use Universal Upscaler with 2x factor to add motion blur effects.",
+        "Use Real-time Gen to animate the image while typing your prompts."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O Capítulo 1 descreve a Intensidade de Movimento no Motion para controlar a sutileza da animação.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q007",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Um cliente precisa de um logo em alta resolução, mas você só tem um rascunho em baixa. Qual abordagem é mais econômica em tokens?",
+      "options": [
+        "Use Universal Upscaler to enhance the draft without full regen.",
+        "Regenerate the logo from scratch with a higher resolution setting.",
+        "Use AI Canvas to redraw the logo manually with brushes and layers.",
+        "Use Real-time Gen to refine the logo in real time with feedback."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O Capítulo 2 sugere usar o Upscaler para melhorar rascunhos sem regerar a imagem, economizando tokens.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "dificil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q008",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Você precisa de uma foto realista de produto com um rótulo de texto pequeno. Qual combinação de modelos?",
+      "options": [
+        "Use Phoenix for the scene, then FLUX to overlay the text label.",
+        "Use FLUX for the scene, then Phoenix to add the text label precisely.",
+        "Use SDXL community model for both scene and text without any issues.",
+        "Use Real-time Gen to generate the entire image with text in one go."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O Capítulo 3 indica Phoenix para realismo e FLUX para texto legível, combinando os dois.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "dificil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q009",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Quantos tokens diários o plano gratuito oferece?",
+      "options": [
+        "150 tokens daily, renewed every 24 hours.",
+        "100 tokens daily, renewed every 12 hours.",
+        "200 tokens daily, renewed every 48 hours.",
+        "50 tokens daily, renewed every 24 hours."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O plano gratuito oferece 150 tokens diários, renovados a cada 24 horas, como explicado no Capítulo 2.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q010",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Qual é a primeira camada na estrutura de um prompt eficaz?",
+      "options": [
+        "Sujeito principal com máxima especificidade e riqueza",
+        "Ação ou pose clara para guiar a composição espacial",
+        "Ambiente e cenário que contextualizam a cena visual",
+        "Iluminação técnica que define volume e humor da cena"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 afirma que a primeira camada é o sujeito principal, que define o 'quem' ou 'o quê' da imagem.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "facil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q011",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "No Image to Image, o que um Init Strength baixo (0.2 a 0.4) proporciona?",
+      "options": [
+        "Preserva fortemente composição, cores e estrutura",
+        "Permite total liberdade criativa ao modelo de difusão",
+        "Ignora a imagem original e usa apenas o prompt descritivo",
+        "Aplica filtros artísticos com base na referência original"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 explica que com Init Strength baixo a IA preserva fortemente composição, cores e estrutura da referência.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "facil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q012",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "O que é a técnica de inpainting no AI Canvas?",
+      "options": [
+        "Edição seletiva de regiões internas com máscara",
+        "Expansão da imagem para além de suas bordas originais",
+        "Combinação de múltiplas imagens em uma composição única",
+        "Geração de novas imagens a partir de texto descritivo"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 define inpainting como a edição seletiva de regiões internas de uma imagem existente usando máscara.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "facil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q013",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Para que serve o negative prompt no Leonardo AI?",
+      "options": [
+        "Dizer ao modelo o que evitar na imagem gerada",
+        "Aumentar a importância de termos específicos do prompt",
+        "Definir a ordem de importância das camadas do prompt",
+        "Aplicar configurações internas de scheduler do modelo"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 diz que o negative prompt é usado para dizer ao modelo o que evitar, limpando artefatos indesejados.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "facil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q014",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Como usar Image to Image para manter a paleta de cores de uma referência em um novo conteúdo?",
+      "options": [
+        "Usar strength baixo e descrever novo conteúdo no prompt",
+        "Usar strength alto e um prompt vago sobre o novo conteúdo",
+        "Aplicar guidance scale acima de 10 para fidelidade total",
+        "Desativar o negative prompt e aumentar o peso dos termos"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 indica que com strength baixo (0.2 a 0.3) e novo prompt, a IA adota a paleta da referência.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q015",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Qual a diferença entre inpainting e outpainting?",
+      "options": [
+        "Inpainting edita áreas internas; outpainting expande",
+        "Inpainting usa máscara; outpainting usa composição visual",
+        "Inpainting é para objetos; outpainting para fundos visuais",
+        "Inpainting preserva cores; outpainting muda estilo visual"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 explica que inpainting edita regiões internas e outpainting expande a imagem além das bordas.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "media"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q016",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Para gerar uma imagem de relógio de luxo com iluminação dramática e estilo cinematográfico, qual a ordem correta das camadas no prompt?",
+      "options": [
+        "Sujeito, ação, ambiente, iluminação, parâmetros",
+        "Iluminação, ambiente, sujeito, parâmetros, ação técnica",
+        "Parâmetros, iluminação, sujeito, ambiente, ação técnica",
+        "Ambiente, sujeito, iluminação, ação, parâmetros técnica"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 estabelece que a ordem deve seguir as camadas do sujeito aos parâmetros técnicos, priorizando o núcleo.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q017",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Você tem uma foto de um gato e quer transformá-la em pintura a óleo mantendo a pose exata. Quais valores de Init Strength e Guidance Scale usar?",
+      "options": [
+        "Init Strength 0.3 a 0.5 e Guidance Scale 7 a 9",
+        "Init Strength 0.7 a 0.9 e Guidance Scale 10 a 12",
+        "Init Strength 0.1 a 0.2 e Guidance Scale 5 a 6",
+        "Init Strength 0.6 a 0.8 e Guidance Scale 8 a 10"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 recomenda strength baixo a médio (0.3-0.5) para manter pose e guidance 7-9 para equilíbrio.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "dificil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q018",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Em uma imagem com defeito em uma mão (dedos extras), qual técnica e configuração de máscara são mais adequadas?",
+      "options": [
+        "Inpainting com máscara pequena e bordas suaves",
+        "Outpainting com máscara grande e bordas duras",
+        "Composição com múltiplas imagens e máscara média",
+        "Geração do zero com prompt detalhado e máscara total"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 sugere inpainting com máscara pequena e bordas suaves para corrigir defeitos localizados.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q019",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "No pipeline de produção descrito no capítulo, qual é a função do Real-time Generation antes do refinamento?",
+      "options": [
+        "Validar ideias e direções visuais rapidamente",
+        "Substituir completamente o Image Generation convencional",
+        "Gerar a versão final em alta resolução",
+        "Corrigir artefatos e imperfeições da imagem"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 7 define o Real-time Generation como a primeira etapa de exploração para validar ideias antes do refinamento.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "media"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q020",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "No módulo Motion, o que acontece com a coerência visual quando a intensidade do movimento é aumentada?",
+      "options": [
+        "A coerência melhora, pois a IA tem mais dados",
+        "A coerência permanece inalterada até o valor máximo",
+        "A coerência piora, aumentando o risco de artefatos",
+        "A coerência depende apenas da qualidade da imagem base"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 8 explica que o aumento da intensidade eleva proporcionalmente o risco de alucinação visual e artefatos.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "media"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q021",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "No Real-time Generation do Leonardo AI, qual é o trade-off estratégico descrito?",
+      "options": [
+        "Abrir mão de detalhes finos e alta resolução por interatividade",
+        "Abrir mão de velocidade por maior qualidade de imagem",
+        "Abrir mão de interatividade por maior resolução final",
+        "Abrir mão de gestos gráficos por prompts mais longos"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 7 descreve que o Real-time Generation abre mão de detalhes finos e alta resolução em troca de interatividade sem precedentes.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q022",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Qual é a faixa de intensidade de movimento recomendada para resultados profissionais no módulo Motion?",
+      "options": [
+        "Entre 1 e 3, priorizando movimentos sutis",
+        "Entre 6 e 9, para movimentos dramáticos",
+        "Entre 3 e 6, equilibrando visibilidade e integridade",
+        "Entre 7 e 10, para máxima intensidade"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 8 afirma que a faixa ideal de intensidade para resultados profissionais está entre 3 e 6.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q023",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "No fluxo de Image to Image para e-commerce, qual faixa de Strength é indicada para preservar a forma do produto?",
+      "options": [
+        "Entre 0.1 e 0.2, para maior liberdade criativa",
+        "Entre 0.6 e 0.8, para mudanças drásticas de cenário",
+        "Entre 0.9 e 1.0, para manter exatamente a imagem original",
+        "Entre 0.3 e 0.5, para equilibrar preservação e transformação"
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 9 recomenda configurar o Strength entre 0.3 e 0.5 para preservar a forma original do produto.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q024",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Em um projeto com orçamento apertado, qual abordagem melhor aproveita o Real-time Generation?",
+      "options": [
+        "Gerar imagens finais em alta resolução diretamente no modo tempo real",
+        "Usar a exploração rápida para validar direções antes da geração final",
+        "Substituir completamente o Image Generation convencional em todo fluxo",
+        "Utilizar o Real-time apenas para exportar vídeos com movimento"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 define o Real-time como primeira etapa de exploração, validando ideias antes do refinamento, economizando tokens e tempo.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q025",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Qual configuração de Motion Strength é mais adequada para animar um retrato sem causar distorções faciais?",
+      "options": [
+        "Intensidade 1, gerando um cinemagraph com movimento quase imperceptível",
+        "Intensidade 10, para um traveling dramático com deslocamento de câmera",
+        "Intensidade entre 3 e 6, equilibrando movimento visível e integridade",
+        "Intensidade 0, mantendo a imagem totalmente estática sem animação"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 recomenda a faixa 3-6 como ideal para evitar distorções em áreas como rostos, mantendo a coerência visual.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "dificil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q026",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Para manter a fidelidade de um produto físico ao transferi-lo para um cenário de estúdio, qual faixa de Strength é recomendada?",
+      "options": [
+        "Strength entre 0.3 e 0.5, preservando forma e reconstruindo ambiente",
+        "Strength entre 0.8 e 1.0, permitindo total liberdade criativa ao modelo",
+        "Strength entre 0.1 e 0.2, mantendo exatamente o fundo original da foto",
+        "Strength acima de 0.7, garantindo que o produto seja completamente redesenhado"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 orienta usar Strength 0.3-0.5 no Img2Img para manter a geometria do produto real enquanto transforma o cenário.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "dificil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q027",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Qual é o principal benefício do uso do Leonardo AI para produção de assets para redes sociais?",
+      "options": [
+        "Elimina completamente a necessidade de supervisão humana em todo o processo.",
+        "Permite produção em alto volume sem sacrificar a qualidade técnica.",
+        "Substitui todos os softwares de design tradicionais existentes.",
+        "Garante resultados perfeitos na primeira tentativa de geração."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 destaca que a produção de assets para redes sociais se torna de alta velocidade sem sacrifício de qualidade técnica ou estética.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "facil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q028",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Qual é a função recomendada dos Negative Prompts na manutenção da identidade visual?",
+      "options": [
+        "Adicionar mais detalhes à imagem gerada pelo modelo.",
+        "Excluir elementos que contradizem a marca ou o estilo.",
+        "Aumentar a resolução da imagem final automaticamente.",
+        "Alterar a paleta de cores da imagem para tons vibrantes."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 afirma que Negative Prompts são essenciais para excluir elementos que contradigam a marca.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "facil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q029",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "No fluxo de trabalho profissional, por que o formato PNG é preferido ao exportar do Leonardo?",
+      "options": [
+        "Porque arquivos PNG são menores e carregam mais rápido.",
+        "Porque PNG preserva os dados sem perda por compressão.",
+        "Porque JPEG não é suportado pelas ferramentas de design.",
+        "Porque PNG permite apenas fundos transparentes."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 explica que o uso de PNG evita a perda de dados por compressão, comum no JPEG.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "facil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q030",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Como a integração do Leonardo com o Photoshop melhora o resultado final?",
+      "options": [
+        "Substituindo as capacidades de edição do Photoshop por IA.",
+        "Usar IA para gerar e Photoshop para editar pixels.",
+        "Automatizando todas as decisões de design sem intervenção.",
+        "Convertendo imagens em vetores automaticamente."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 mostra que o Leonardo gera o conteúdo e o Photoshop oferece controle pixel a pixel para refinamento.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "media"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q031",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Qual é o propósito de usar uma seed fixa na produção em lote?",
+      "options": [
+        "Garantir que todas as imagens sejam exatamente idênticas.",
+        "Fornecer um ponto de partida comum para a coerência.",
+        "Acelerar o processo de geração das imagens.",
+        "Reduzir o custo de cada geração individual."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 explica que a seed fixa estabelece um ponto de partida matemático comum, ajudando na coerência estrutural.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "media"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q032",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Em um cenário para gerar uma série de imagens de produto com iluminação e estilo consistentes, qual técnica seria mais eficaz?",
+      "options": [
+        "Usar força alta em Image to Image com uma referência fixa.",
+        "Usar força baixa em Image to Image com uma referência.",
+        "Confiar apenas em prompts de texto muito detalhados.",
+        "Gerar cada imagem com uma seed totalmente diferente."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 recomenda usar Strength baixo (0.2 a 0.35) para que a IA absorva a iluminação e composição da referência.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q033",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Como o Leonardo AI apoia o teste A/B em anúncios pagos?",
+      "options": [
+        "Gerando apenas duas variações por campanha.",
+        "Produzindo muitas variações a baixo custo marginal.",
+        "Selecionando automaticamente a imagem de melhor desempenho.",
+        "Exigindo design manual para cada variação."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 afirma que gerar dez ou vinte variações tem custo marginal próximo de zero, permitindo testes guiados por dados.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q034",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "O que distingue o papel do Leonardo do Photoshop em um pipeline profissional?",
+      "options": [
+        "Leonardo manipula pixels, Photoshop gera imagens.",
+        "Leonardo gera assets, Photoshop refina pixel a pixel.",
+        "Ambas as ferramentas são intercambiáveis para todas as tarefas.",
+        "Photoshop é usado para geração de IA, Leonardo para layout."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 define que o Leonardo atua como gerador de assets e o Photoshop oferece o controle pixel a pixel para ajustes finos.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q035",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Qual é o erro mais comum e fatal para o iniciante ao precificar trabalhos com IA?",
+      "options": [
+        "Cobrar pelo benefício que o cliente recebe e pela economia gerada.",
+        "Cobrar pelo tempo gasto na execução do prompt e da entrega.",
+        "Cobrar um valor fixo mensal por pacotes de entregas variadas.",
+        "Cobrar com base na qualidade percebida do material final."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 afirma explicitamente que cobrar pelo tempo gasto é o erro mais comum e fatal para o iniciante.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q036",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Um pequeno lojista precisa de fotos de catálogo profissionais, mas não tem verba para estúdio. Como você deve posicionar seu serviço de fotografia virtual de produto?",
+      "options": [
+        "Cobrando por hora de trabalho, já que a IA torna o processo mais rápido e barato.",
+        "Precificando pela economia que ele terá com estúdio, modelos e fotógrafos.",
+        "Oferecendo um pacote mensal de posts para redes sociais e banners.",
+        "Focando na venda de prompts prontos para fotografia de produtos."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 mostra que a fotografia virtual de produto deve ser precificada pelo valor percebido, ou seja, pela economia do cliente em relação ao método tradicional.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q037",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Qual estratégia permite a um profissional solo manter receita previsível e estável usando a eficiência do Leonardo AI?",
+      "options": [
+        "Vender prompts e templates para gerar receita passiva recorrente.",
+        "Oferecer consultoria para empresas internalizarem processos de IA.",
+        "Criar pacotes visuais mensais com volume fixo de entregas.",
+        "Focar em projetos de staging virtual imobiliário de alto valor."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 descreve os Pacotes Visuais Escaláveis como modelo de assinatura mensal que garante receita previsível e estável.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q038",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Um profissional quer migrar de entusiasta para monetizar seu trabalho com IA. Qual é a barreira principal que ele precisa superar segundo o capítulo?",
+      "options": [
+        "Aperfeiçoar a habilidade técnica de escrita de prompts e parâmetros.",
+        "Construir uma biblioteca pessoal de recursos e workflows testados.",
+        "Adotar uma postura de mercado com pacotes e precificação por valor.",
+        "Manter-se atualizado com as atualizações da plataforma Leonardo."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 afirma que a barreira entre saber usar a ferramenta e ganhar dinheiro é a postura de mercado, não a habilidade técnica.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q039",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "O que é a prática deliberada no contexto do aprendizado do Leonardo AI?",
+      "options": [
+        "Gerar imagens aleatórias para explorar a criatividade livre.",
+        "Reservar tempo para testar parâmetros e modelos com foco técnico.",
+        "Criar projetos fictícios para simular demandas reais de mercado.",
+        "Organizar prompts testados em uma biblioteca pessoal."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 define prática deliberada como reservar tempo específico para experimentação técnica, testando modelos e parâmetros.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "leonardo-ai-criacao-visual-q040",
+      "courseSlug": "leonardo-ai-criacao-visual",
+      "question": "Qual é a utilidade da galeria comunitária do Leonardo AI para um profissional em formação?",
+      "options": [
+        "Serve como escola aberta para estudar a anatomia de imagens de sucesso.",
+        "Permite baixar prompts prontos para usar em projetos comerciais.",
+        "Funciona como canal oficial para receber notícias de atualizações.",
+        "É o meio mais rápido para prospectar clientes e fechar contratos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-20T00:18:57.658Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 descreve a galeria comunitária como uma escola aberta para analisar termos, modelos e ajustes de imagens bem-sucedidas.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    }
+  ]
+}

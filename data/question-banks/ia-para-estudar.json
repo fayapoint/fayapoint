@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "ia-para-estudar",
+  "lastUpdated": "2026-08-19T14:52:05.016Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "ia-para-estudar-q001",
+      "courseSlug": "ia-para-estudar",
+      "question": "Qual assistente de IA busca informações na internet em tempo real e mostra as fontes?",
+      "options": [
+        "ChatGPT, que responde com base no treinamento.",
+        "Gemini, que integra dados do Google automaticamente.",
+        "Perplexity, que apresenta links para verificação.",
+        "Claude, que lê documentos longos sem perder o fio."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 destaca que o Perplexity é o único que busca na internet em tempo real e exibe as fontes.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q002",
+      "courseSlug": "ia-para-estudar",
+      "question": "Qual é o primeiro passo para verificar a resposta de uma IA antes de decorá-la?",
+      "options": [
+        "Reler o texto várias vezes para fixar o conteúdo.",
+        "Separar a resposta em afirmações verificáveis.",
+        "Pedir para a IA confirmar se está correta.",
+        "Comparar com a resposta de outro assistente."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 ensina que o primeiro passo é separar a resposta em afirmações verificáveis, como números e citações.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q003",
+      "courseSlug": "ia-para-estudar",
+      "question": "Quais são os três gargalos que limitam o uso gratuito dos assistentes de IA?",
+      "options": [
+        "Tamanho de arquivo, comprimento do contexto e intensidade de uso.",
+        "Número de mensagens, velocidade de resposta e qualidade do texto.",
+        "Acesso a internet, capacidade de armazenamento e número de usuários.",
+        "Quantidade de idiomas, precisão das respostas e atualização dos dados."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 lista esses três limites como os principais pontos onde o plano gratuito trava.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q004",
+      "courseSlug": "ia-para-estudar",
+      "question": "Um estudante recebe da IA uma citação com nome de autor, ano e número de página, mas suspeita que seja falsa. Qual atitude é a mais segura?",
+      "options": [
+        "Verificar a citação na obra original ou base oficial.",
+        "Confiar porque a citação parece específica e detalhada.",
+        "Perguntar a outra IA se a citação é verdadeira.",
+        "Decorar a citação para usar na prova sem verificar."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 alerta que a IA fabrica referências plausíveis; a verificação em fonte oficial é a única forma segura.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q005",
+      "courseSlug": "ia-para-estudar",
+      "question": "Para resumir um edital de 300 páginas em tópicos, qual assistente é mais indicado e por quê?",
+      "options": [
+        "Claude, porque lê arquivos longos sem perder o contexto.",
+        "ChatGPT, porque tem a maior base de usuários do mercado.",
+        "Gemini, porque integra dados do Google automaticamente.",
+        "Perplexity, porque busca fontes em tempo real na internet."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 afirma que o Claude se destaca na leitura de documentos longos, como editais de centenas de páginas.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q006",
+      "courseSlug": "ia-para-estudar",
+      "question": "Por que a IA responde com confiança mesmo quando a resposta está errada?",
+      "options": [
+        "Porque ela consulta um banco de dados atualizado.",
+        "Porque ela prevê a próxima palavra com base em padrões.",
+        "Porque ela tem um mecanismo interno de verificação.",
+        "Porque ela busca na internet em tempo real."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 explica que a IA gera texto por probabilidade, prevendo a próxima palavra, sem consultar uma base de dados.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q007",
+      "courseSlug": "ia-para-estudar",
+      "question": "Por que a IA erra mais em números de lei e citações do que em conceitos abstratos?",
+      "options": [
+        "Porque o formato previsível facilita inventar referências plausíveis.",
+        "Porque ela não recebeu treinamento em textos jurídicos.",
+        "Porque ela não consegue ler números com precisão.",
+        "Porque ela sempre usa dados desatualizados de propósito."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 explica que o formato rígido de leis e citações dá à IA um molde para preencher com qualquer coisa.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q008",
+      "courseSlug": "ia-para-estudar",
+      "question": "Se o edital em PDF é uma imagem escaneada, qual é o procedimento correto antes de extrair o conteúdo com IA?",
+      "options": [
+        "Usar OCR para converter o PDF em texto selecionável.",
+        "Copiar e colar diretamente, pois a IA lê imagens.",
+        "Pedir para a IA ler o arquivo em formato de imagem.",
+        "Ignorar o edital e estudar por resumos prontos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 orienta usar OCR quando o PDF é escaneado, pois a IA precisa de texto selecionável.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q009",
+      "courseSlug": "ia-para-estudar",
+      "question": "Qual comando faz o ChatGPT devolver uma contagem útil das provas anteriores?",
+      "options": [
+        "Resuma as questões e diga o que é mais importante.",
+        "Conte por tópico do conteúdo programático que vou te dar.",
+        "Dê sua opinião sobre os assuntos que mais caem nas provas.",
+        "Liste os temas que você acha que são relevantes."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 mostra que pedir 'conte por tópico do conteúdo programático' gera uma tabela estruturada, enquanto 'resumo' vira opinião genérica.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q010",
+      "courseSlug": "ia-para-estudar",
+      "question": "O que o ChatGPT precisa saber para montar um plano realista?",
+      "options": [
+        "A rotina real, os pesos da banca e o prazo do estudo.",
+        "O número de horas que você gostaria de estudar por dia, mesmo que irreal.",
+        "A lista de matérias sem considerar o tempo disponível.",
+        "O conteúdo programático e a data da prova apenas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 exige alimentar o modelo com tempo real, energia e pesos da banca para gerar um plano que sobreviva ao imprevisto.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q011",
+      "courseSlug": "ia-para-estudar",
+      "question": "Qual a principal diferença do NotebookLM em relação ao ChatGPT?",
+      "options": [
+        "Ele responde apenas com base nas fontes que você carregou.",
+        "Ele busca respostas na internet para complementar o material.",
+        "Ele gera resumos automáticos sem precisar de perguntas.",
+        "Ele permite conversar com vários documentos ao mesmo tempo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 destaca que o NotebookLM só usa o material carregado e cita o trecho exato, diferente do ChatGPT que usa conhecimento geral.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q012",
+      "courseSlug": "ia-para-estudar",
+      "question": "Como calcular a prioridade de um tema segundo o capítulo 9?",
+      "options": [
+        "Multiplicando a frequência na prova pela distância até dominar.",
+        "Somando a frequência com a dificuldade estimada do tema e dividindo por dois.",
+        "Dividindo o número de questões pelo tempo de estudo disponível.",
+        "Subtraindo a distância da frequência para obter o ranking."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 define prioridade como frequência vezes distância, e não como soma ou divisão.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q013",
+      "courseSlug": "ia-para-estudar",
+      "question": "Qual a regra das 24 horas para lidar com um dia perdido de estudo?",
+      "options": [
+        "No dia seguinte, estude apenas o que estava previsto para aquele dia.",
+        "Compense dobrando a carga no dia seguinte para recuperar o tempo.",
+        "Ignore o dia perdido e continue o cronograma original sem mudanças.",
+        "Mova todo o conteúdo perdido para o fim de semana sem limite de horas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 ensina que compensar no dia seguinte quebra o ritmo; a regra é seguir o previsto e deixar o conteúdo perdido para o próximo ciclo.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q014",
+      "courseSlug": "ia-para-estudar",
+      "question": "Um concurso novo tem apenas uma edição. Como usar provas anteriores para estimar frequência?",
+      "options": [
+        "Use provas de cargos similares da mesma banca e mesmo nível.",
+        "Use provas de bancas diferentes para ampliar a amostra, mesmo com estilos distintos.",
+        "Use apenas a prova única, pois é a única referência válida.",
+        "Use provas de qualquer concurso, independente da banca."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 recomenda, para concursos novos, usar provas de cargos similares da mesma banca e mesmo nível de escolaridade.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q015",
+      "courseSlug": "ia-para-estudar",
+      "question": "Ao resumir um texto para prova, o que o prompt deve proibir explicitamente?",
+      "options": [
+        "Trocar termos técnicos por sinônimos e generalizar exceções.",
+        "Incluir datas, números e prazos para não poluir o resumo e deixá-lo mais enxuto.",
+        "Manter exemplos e condições, pois ocupam espaço desnecessário.",
+        "Usar linguagem simples e direta para facilitar a leitura."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 manda preservar datas, números, exceções e não alterar termos técnicos; proibir sinônimos e generalizações.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q016",
+      "courseSlug": "ia-para-estudar",
+      "question": "Um PDF escaneado não funciona no NotebookLM. Qual a solução indicada?",
+      "options": [
+        "Fazer OCR no PDF antes de carregar para extrair o texto.",
+        "Carregar mesmo assim, pois ele reconhece imagens automaticamente.",
+        "Converter o PDF para imagem e anexar como figura.",
+        "Usar o ChatGPT para ler o PDF escaneado diretamente."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 avisa que PDF escaneado não é lido; a solução é fazer OCR para extrair o texto antes de carregar.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q017",
+      "courseSlug": "ia-para-estudar",
+      "question": "O que diz o efeito de espaçamento sobre revisão?",
+      "options": [
+        "Revisar em intervalos crescentes fixa mais a memória.",
+        "Revisar tudo diariamente é o método mais eficaz.",
+        "Revisar só antes da prova garante retenção.",
+        "Revisar com longos intervalos sempre leva ao esquecimento."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 explica que intervalos de 1, 3, 7 e 21 dias fixam mais que revisão massiva.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q018",
+      "courseSlug": "ia-para-estudar",
+      "question": "Sua taxa de acerto está abaixo de 70%. O que fazer?",
+      "options": [
+        "Encurtar o intervalo e revisar mais vezes.",
+        "Aumentar o intervalo para dar tempo de esquecer.",
+        "Manter o intervalo e revisar várias vezes ao dia.",
+        "Parar de revisar e confiar no aprendizado inicial."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 diz que abaixo de 70% o intervalo está longo; deve-se encurtá-lo.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q019",
+      "courseSlug": "ia-para-estudar",
+      "question": "Ao usar IA para ler um artigo científico fora da sua área, qual é a principal razão para perguntar sobre o método antes de confiar na conclusão?",
+      "options": [
+        "O método revela se o estudo tem validade para generalizar os resultados.",
+        "O método mostra como os dados foram coletados e analisados pelos autores.",
+        "O método descreve a revisão de literatura e o referencial teórico usado.",
+        "O método indica o impacto da revista e o número de citações do artigo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 ensina que o método define a confiabilidade do estudo, e uma amostra pequena limita a generalização.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q020",
+      "courseSlug": "ia-para-estudar",
+      "question": "Um estudante relê o mesmo parágrafo cinco vezes e acha que sabe, mas erra na prova. Qual estratégia de IA corrige esse problema?",
+      "options": [
+        "Pedir à IA um resumo do parágrafo para reler mais rápido.",
+        "Pedir à IA que gere perguntas abertas e responder sem o texto.",
+        "Pedir à IA que explique o parágrafo com outras palavras e exemplos.",
+        "Pedir à IA que destaque as palavras-chave do parágrafo e as defina."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 explica que reler é reconhecimento, e perguntas abertas forçam a recordação que a prova exige.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q021",
+      "courseSlug": "ia-para-estudar",
+      "question": "Por que o formato TSV é preferível ao CSV na importação de flashcards gerados por IA no Anki?",
+      "options": [
+        "Porque o TSV usa tab como separador, evitando conflito com vírgulas.",
+        "Porque o CSV é um formato proprietário e o Anki não o reconhece corretamente.",
+        "Porque o TSV gera arquivos menores e mais rápidos de importar no Anki.",
+        "Porque o CSV não permite separar as colunas de frente e verso na importação."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 recomenda TSV porque o tab evita que vírgulas dentro das respostas quebrem a importação.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q022",
+      "courseSlug": "ia-para-estudar",
+      "question": "Como identificar se um PDF é escaneado?",
+      "options": [
+        "Verifique o ícone do arquivo no explorador.",
+        "Tente selecionar texto; se não selecionar, é imagem.",
+        "Abra no Google Drive e veja se há aviso.",
+        "Observe o tamanho do arquivo em megabytes."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 ensina a testar a seleção de texto para distinguir PDF escaneado de nativo.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q023",
+      "courseSlug": "ia-para-estudar",
+      "question": "Qual recurso nativo do YouTube transcreve vídeos?",
+      "options": [
+        "'Baixar transcrição' nas configurações.",
+        "'Copiar texto' no menu de compartilhar.",
+        "'Mostrar transcrição' no menu de três pontos.",
+        "'Transcrever vídeo' na descrição da aula."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 indica o menu de três pontos abaixo do vídeo para acessar a transcrição.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q024",
+      "courseSlug": "ia-para-estudar",
+      "question": "Qual formato o Anki aceita para importar flashcards?",
+      "options": [
+        "DOCX com tabela para cada cartão.",
+        "CSV com vírgulas separando os campos.",
+        "TSV com abas separando frente, verso e tags.",
+        "TXT com ponto e vírgula separando tudo."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 recomenda TSV para evitar que vírgulas quebrem a importação.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q025",
+      "courseSlug": "ia-para-estudar",
+      "question": "Qual a diferença entre reconhecimento e evocação quando se estuda com IA como examinadora?",
+      "options": [
+        "Reconhecimento é ver a resposta e reconhecer; evocação é produzir a resposta com pistas.",
+        "Reconhecimento é ver a resposta e pensar 'ah, é isso'; evocação é produzir sem pista.",
+        "Reconhecimento é reler o texto e grifar; evocação é explicar o conteúdo sem consultar nada.",
+        "Reconhecimento é produzir a resposta sem pista; evocação é ver a resposta e pensar 'ah, é isso'."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 define reconhecimento como ver a resposta e pensar 'ah, é isso' e evocação como produzir a resposta sem pista.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q026",
+      "courseSlug": "ia-para-estudar",
+      "question": "Qual é o teste para saber se um mapa mental realmente ensinou o conteúdo?",
+      "options": [
+        "Olhar o mapa e pensar 'faz sentido' depois de passar minutos organizando as cores.",
+        "Mostrar o mapa para outra pessoa e perguntar se ela consegue entender o conteúdo.",
+        "Fechar o mapa e tentar explicar o assunto em voz alta, gravando onde você trava.",
+        "Guardar o mapa na pasta e revisá-lo visualmente todos os dias antes da prova."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 diz que o teste do mapa é fechar o arquivo e explicar em voz alta; onde você trava, o mapa está incompleto.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q027",
+      "courseSlug": "ia-para-estudar",
+      "question": "Por que um modelo de linguagem erra contas grandes mesmo parecendo confiante?",
+      "options": [
+        "Ele executa a operação, mas ignora a ordem das operações matemáticas quando ela é longa.",
+        "Ele foi treinado para agradar o usuário e por isso inventa números bonitos e arredondados.",
+        "Ele usa uma calculadora interna, mas ela só funciona se a conta tiver mais de três dígitos.",
+        "Ele não executa a operação; ele prevê a próxima palavra e monta uma resposta plausível."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 explica que o modelo prevê a próxima palavra em vez de executar a operação, então contas grandes viram chute plausível.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q028",
+      "courseSlug": "ia-para-estudar",
+      "question": "Qual procedimento evita aceitar um erro de premissa em questões de estatística resolvidas por IA?",
+      "options": [
+        "Conferir o resultado com uma calculadora externa antes de confiar na resposta.",
+        "Pedir que a IA declare as premissas antes de calcular e inverter a premissa para comparar.",
+        "Pedir que a IA resolva a questão duas vezes e usar a resposta que aparecer primeiro.",
+        "Pedir que a IA mostre a fórmula usada e sempre confiar no número se a fórmula estiver certa."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 manda declarar as premissas antes de calcular e inverter a premissa para comparar os resultados.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q029",
+      "courseSlug": "ia-para-estudar",
+      "question": "Como calibrar a correção de redação feita por IA para que ela não fique generosa demais?",
+      "options": [
+        "Pedir que a IA dê uma nota única e usar essa nota como diagnóstico final do texto.",
+        "Comparar a nota da IA com a de uma redação modelo da banca e ajustar o rigor.",
+        "Pedir que a IA reescreva a redação inteira e comparar com a versão original.",
+        "Confiar na nota da IA porque ela foi treinada com milhares de redações e provas."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 propõe comparar a nota da IA com a de uma redação nota máxima da banca e ajustar o rigor do prompt.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q030",
+      "courseSlug": "ia-para-estudar",
+      "question": "Em uma redação sobre saúde mental nas escolas, o aluno cita 'Setembro Amarelo' e 'adolescentes' sem ligar ao argumento. Por que esse repertório é fraco?",
+      "options": [
+        "Porque a IA não consegue avaliar repertórios e por isso a citação perde a validade.",
+        "Porque setembro amarelo é um tema recente e ainda não entrou nos livros de referência.",
+        "Porque o repertório é usado como enfeite, sem conexão específica com o argumento.",
+        "Porque o repertório precisa ser de um autor estrangeiro para mostrar erudição na prova."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 define clichê como repertório usado como enfeite, sem conexão específica com o argumento.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q031",
+      "courseSlug": "ia-para-estudar",
+      "question": "Um aluno relê o capítulo, acha que sabe, mas trava na hora de explicar em voz alta. O que está acontecendo?",
+      "options": [
+        "O reconhecimento do texto está sendo confundido com evocação, gerando falsa confiança.",
+        "A memória de longo prazo dele foi danificada pelo excesso de leitura repetida do capítulo.",
+        "Ele está usando a IA como examinadora, mas sem pedir a correção com justificativa.",
+        "O cérebro dele superestimou o tempo de estudo e por isso a confiança aumentou sem base."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 mostra que o cérebro confunde familiaridade com conhecimento, e o teste de evocação expõe a falsa confiança.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q032",
+      "courseSlug": "ia-para-estudar",
+      "question": "Alguém passa 30 minutos colorindo um mapa gerado pela IA e sente que estudou. Por que isso é procrastinação bonita?",
+      "options": [
+        "Porque o valor do mapa está em reorganizar a informação, não em formatar o visual.",
+        "Porque o mapa pronto entrega a hierarquia pronta e você pula a decisão que ensina.",
+        "Porque a IA não consegue gerar mapas com hierarquia correta sem supervisão humana.",
+        "Porque o tempo de formatação deveria ser usado para fazer flashcards no Anki e revisar."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 afirma que o valor do mapa está no processo de reorganizar com as próprias mãos; formatar é fuga.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q033",
+      "courseSlug": "ia-para-estudar",
+      "question": "No modo de voz do ChatGPT, qual é o principal ganho para quem estuda língua estrangeira?",
+      "options": [
+        "Corrigir a pronúncia como um professor faria em uma aula individual.",
+        "Treinar a produção, recuperando palavras em tempo real na conversa.",
+        "Aprender regras gramaticais novas antes de tentar falar qualquer frase.",
+        "Substituir completamente a leitura de textos técnicos da prova."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 afirma que conversar com IA não é treinar pronúncia, mas treinar produção, ativando a recuperação de palavras em tempo real.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q034",
+      "courseSlug": "ia-para-estudar",
+      "question": "Como saber se um erro no simulado foi por desatenção e não por desconhecimento?",
+      "options": [
+        "Refazer a questão com calma e consulta; se acertar, era desatenção.",
+        "Conferir o gabarito e ver se a maioria das respostas foi correta.",
+        "Pedir à IA que explique o assunto antes de tentar responder de novo.",
+        "Comparar a nota com a média dos outros candidatos do concurso."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 27 diz que refazer sem cronômetro e com material ao lado revela se o erro era pressa ou falta de conteúdo.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q035",
+      "courseSlug": "ia-para-estudar",
+      "question": "Na última semana antes da prova, o que fazer com um tópico que nunca foi estudado?",
+      "options": [
+        "Tentar aprender o básico em videoaulas aceleradas durante a noite.",
+        "Incluir no plano de revisão, pois ainda dá tempo de ver o essencial.",
+        "Deixá-lo de lado conscientemente e focar no que já foi estudado.",
+        "Pedir à IA um resumo curto e ler uma única vez antes de dormir."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 28 orienta aceitar a perda e não abrir conteúdo novo, pois o prejuízo de esquecer o que já se sabe é maior.",
+      "status": "active",
+      "tags": [
+        "cap28",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q036",
+      "courseSlug": "ia-para-estudar",
+      "question": "Uma aluna reclama que o ChatGPT voz não aponta seu 'r' errado em inglês. Pelo capítulo, isso ocorre porque...",
+      "options": [
+        "o modelo entende o sotaque e o foco da conversa é a produção, não a pronúncia.",
+        "o modo de voz só funciona para quem já tem pronúncia perfeita e fluente.",
+        "a IA evita corrigir para não constranger o aluno durante a conversa.",
+        "a pronúncia é irrelevante e não influencia a comunicação oral de nenhuma forma."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 explica que o ChatGPT voz entende sotaque carregado e não corrige pronúncia; seu valor é treinar produção com repetição sem julgamento.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q037",
+      "courseSlug": "ia-para-estudar",
+      "question": "Após a primeira semana do ciclo de estudos, João percebe que o horário noturno não é produtivo. Qual a atitude correta segundo o capítulo 30?",
+      "options": [
+        "Manter o horário por mais duas semanas antes de ajustar.",
+        "Mudar o horário imediatamente para melhorar o rendimento.",
+        "Ajustar o ciclo apenas se o simulado indicar erro.",
+        "Abrir mão do ciclo e estudar livremente nos fins de semana."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 30 afirma que o ciclo só deve ser ajustado depois de três semanas consistentes, então João deve manter o horário por mais duas semanas antes de qualquer mudança.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q038",
+      "courseSlug": "ia-para-estudar",
+      "question": "O que torna um simulado gerado por IA próximo do nível real de uma banca?",
+      "options": [
+        "Pedir questões difíceis e avisar que o concurso é muito concorrido.",
+        "Usar as questões oficiais da banca como régua de dificuldade e estilo.",
+        "Solicitar um número grande de questões para aumentar a variedade.",
+        "Escolher um modelo de IA mais novo e com mais parâmetros."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 ensina que a calibragem vem de colar questões reais da banca e pedir para imitar aquele estilo.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q039",
+      "courseSlug": "ia-para-estudar",
+      "question": "Um concurseiro pede 'questões difíceis' sem dar referência e acerta 80%. Por que o resultado engana?",
+      "options": [
+        "A IA sem referência gera a pergunta prototípica, que é mais fácil que a da banca.",
+        "O ChatGPT sempre inventa o gabarito e nunca explica o erro das alternativas.",
+        "Questões difíceis exigem um plano de assinatura que o concurseiro não tem.",
+        "A banca usa questões de nível tão alto que nenhuma IA consegue reproduzir."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 afirma que, sem questões reais na conversa, a IA devolve o lugar-comum, e comum não é o que cai em concurso.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-estudar-q040",
+      "courseSlug": "ia-para-estudar",
+      "question": "Um aluno cola no TCC um parágrafo gerado por IA e troca algumas palavras. O maior risco, segundo o capítulo, é...",
+      "options": [
+        "o detector de plágio acusar e a universidade reprovar automaticamente.",
+        "a IA inventar dados e o aluno ser processado por falsidade ideológica.",
+        "ele não conseguir defender o texto na banca por não dominar o argumento.",
+        "a norma acadêmica proibir qualquer uso de IA em trabalhos de conclusão."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:52:05.016Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 29 diz que o pior não é o detector, é entregar um texto que não é seu e ficar sem saber defender uma linha dele na banca.",
+      "status": "active",
+      "tags": [
+        "cap29",
+        "dificil"
+      ]
+    }
+  ]
+}

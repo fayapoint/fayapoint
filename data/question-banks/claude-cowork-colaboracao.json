@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "claude-cowork-colaboracao",
+  "lastUpdated": "2026-08-19T16:10:28.750Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "claude-cowork-colaboracao-q001",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual ferramenta é apresentada como o parceiro profissional visual que vive dentro do Claude Desktop App?",
+      "options": [
+        "Claude Code, focado em edição de código no terminal",
+        "Claude Cowork, com interface gráfica para negócios",
+        "Codex da OpenAI, operando na nuvem em paralelo",
+        "OpenClaw, agente open-source com integrações"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 define o Claude Cowork como o parceiro profissional visual que reside no Claude Desktop App, com interface gráfica para tarefas de negócios.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q002",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual é o ROI do plano gratuito do Claude, segundo o capítulo?",
+      "options": [
+        "Infinito, pois o custo é zero e há ganho de tempo",
+        "Alto, mas limitado pela cota de mensagens diárias",
+        "Médio, depende do valor da hora técnica do usuário",
+        "Baixo, pois o plano gratuito é restrito e lento"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 afirma que, como o custo é zero, o ROI é literalmente infinito.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q003",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual é a diferença fundamental entre o Claude Code e o Codex em relação ao ambiente de execução?",
+      "options": [
+        "Claude Code roda localmente, Codex opera na nuvem",
+        "Claude Code roda na nuvem, Codex opera localmente",
+        "Ambos rodam localmente, mas com interfaces diferentes",
+        "Ambos rodam na nuvem, mas com propósitos distintos"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 descreve o Claude Code como ferramenta de terminal local e o Codex como agente cloud-first.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "media"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q004",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Segundo o capítulo, qual é a diferença central entre um IDE com IA e um agente de IA?",
+      "options": [
+        "IDE sugere código, agente executa tarefas completas de ponta a ponta",
+        "IDE executa tarefas, agente sugere código para edição manual",
+        "IDE é voltado a negócios, agente é voltado a programadores",
+        "IDE é para web, agente é para desktop e mobile"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 afirma que IDE com IA entende o contexto do projeto, enquanto agentes de IA são projetados para executar tarefas completas de ponta a ponta.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q005",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual é a capacidade da janela de contexto do Claude no plano gratuito?",
+      "options": [
+        "Janela de 100 mil tokens para processamento de texto",
+        "Janela de 200 mil tokens para processamento de texto",
+        "Janela de 300 mil tokens para processamento de texto",
+        "Janela de 500 mil tokens para processamento de texto"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 especifica que o plano gratuito oferece uma janela de contexto de 200.000 tokens.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q006",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual ferramenta oferece o Manager View para orquestração paralela de agentes?",
+      "options": [
+        "Google Antigravity, com suporte ao Gemini 3",
+        "Windsurf, com motor Cascade proprietário",
+        "Cursor, com tab completion avançado",
+        "Claude Code, com integração ao terminal"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 menciona que o Google Antigravity possui o Manager View, permitindo orquestração paralela de múltiplos agentes.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "media"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q007",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Um desenvolvedor precisa de uma ferramenta que entenda profundamente a codebase local e execute testes em tempo real, mas não quer enviar código para servidores externos. Qual agente do ecossistema é o mais indicado?",
+      "options": [
+        "Claude Code, pois opera no terminal e mantém os dados localmente.",
+        "Codex da OpenAI, pois é cloud-first e escala facilmente em paralelo.",
+        "OpenClaw, pois é open-source e integra-se a mensagerias populares.",
+        "Claude Cowork, pois é visual e foca em tarefas de negócios."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 descreve o Claude Code como uma ferramenta de terminal que entende a codebase e roda localmente, mantendo os dados no ambiente do usuário.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q008",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Um analista de negócios precisa processar contratos e gerar propostas, mas não tem experiência em programação. Qual ferramenta, segundo o capítulo, é a mais adequada e qual conceito a sustenta?",
+      "options": [
+        "Cursor, pois oferece tab completion e edição visual de código.",
+        "Windsurf, pois possui consciência de codebase e Cascade.",
+        "Antigravity, pois permite orquestração paralela de agentes.",
+        "Cowork, pois é um agente autônomo para tarefas de negócio."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 apresenta o Cowork como um agente autônomo para tarefas de negócio, análogo aos IDEs para código.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q009",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Um usuário do plano gratuito precisa analisar 500 páginas de documentos e gerar um resumo, mas tem apenas 20 mensagens por dia. Qual estratégia é mais eficiente para concluir a tarefa sem exceder o limite?",
+      "options": [
+        "Dividir a análise em várias conversas separadas para evitar perda de contexto.",
+        "Utilizar a janela de contexto de 200K tokens e aproveitar horários off-peak.",
+        "Subir os documentos em Projects e usar instruções personalizadas para cada um.",
+        "Solicitar que o Claude gere um Artifact em React para visualizar os dados."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 explica que a janela de contexto de 200K tokens e os horários off-peak permitem processar grandes volumes sem exceder limites.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q010",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual é o primeiro pilar do Framework de Briefing Profissional?",
+      "options": [
+        "Contexto, definindo quem você é e a situação",
+        "Objetivo, focando no que precisa ser entregue",
+        "Formato, detalhando a aparência da entrega",
+        "Restrições, delimitando o que deve ser evitado"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 lista os quatro pilares na ordem: Contexto, Objetivo, Formato e Restrições, sendo o Contexto o primeiro.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q011",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Por que marketing obtém retorno imediato com o Claude?",
+      "options": [
+        "Rotina é 80% produção de conteúdo puro",
+        "Claude substitui totalmente o profissional",
+        "Claude faz pesquisa de mercado avançada",
+        "Claude define a estratégia macro sozinho"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 explica que a rotina de marketing é 80% produção de conteúdo, e o Claude é excelente nisso, gerando sinergia instantânea.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q012",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual é a função do Brand Voice Document na Knowledge Base?",
+      "options": [
+        "Garantir consistência de marca em escala",
+        "Aumentar o engajamento orgânico das postagens",
+        "Reduzir o tempo total de produção de conteúdo",
+        "Gerar ideias ilimitadas para campanhas"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 afirma que o Brand Voice Document especifica tom, vocabulário e palavras proibidas, evitando a diluição da identidade da marca.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "media"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q013",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Para que serve a técnica 'Primeiro, analise'?",
+      "options": [
+        "Permite alinhar entendimento e identificar lacunas",
+        "Substitui a necessidade de feedback específico",
+        "Garante entrega final sem iterações adicionais",
+        "Elimina a necessidade de usar XML tags"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 descreve que essa técnica solicita que o Claude exponha sua compreensão, identifique lacunas e proponha uma abordagem, simulando um alinhamento com consultor sênior.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q014",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual formato de Artifact é ideal para cerca de 70% das tarefas cotidianas?",
+      "options": [
+        "Markdown, para documentos estruturados e legíveis",
+        "HTML, para páginas web interativas e dinâmicas",
+        "React, para aplicações complexas com estado",
+        "Mermaid, para diagramas de processo automáticos"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 afirma que Markdown é a escolha ideal para cerca de 70% das tarefas cotidianas, como relatórios e propostas.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q015",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "O que o MCP (Model Context Protocol) permite aos Artifacts?",
+      "options": [
+        "Conectar-se a serviços externos como Gmail e Slack",
+        "Exportar diretamente para PDF sem formatação",
+        "Gerar código em qualquer linguagem de programação",
+        "Criar gráficos vetoriais escaláveis sem perda"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 explica que o MCP permite que Artifacts se conectem a serviços externos, transformando-os em mini-aplicações conectadas.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q016",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Quais são os três componentes essenciais de um Project no Claude?",
+      "options": [
+        "Custom Instructions, Knowledge Base e Conversas Organizadas",
+        "Instruções Personalizadas, Base de Dados e Chats Separados",
+        "Manual de Marca, Arquivos PDF e Histórico de Conversas",
+        "Tom de Voz, Documentos Técnicos e Respostas Automáticas"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 define explicitamente esses três componentes como os pilares de um Project.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q017",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual é a principal diferença entre a técnica 'Primeiro, analise' e a Iteração Produtiva?",
+      "options": [
+        "A primeira pede um plano prévio; a segunda exige feedback específico.",
+        "A primeira serve para ajustar o tom; a segunda para corrigir a estrutura do texto.",
+        "A primeira é usada em projetos complexos; a segunda em tarefas rotineiras.",
+        "A primeira solicita uma análise prévia; a segunda pede uma reescrita completa."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 descreve a técnica 'Primeiro, analise' como uma etapa de alinhamento prévio e a Iteração Produtiva como um ciclo de feedback específico.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q018",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual é a diferença entre a Produção em Lote via Artifacts e a Adaptação Multi-canal?",
+      "options": [
+        "Lote gera várias peças; adaptação transforma uma em outras.",
+        "Lote foca em quantidade; adaptação foca em variedade de formatos.",
+        "Lote é para redes sociais; adaptação é para e-mails.",
+        "Lote gera conteúdo original; adaptação copia de outros."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 distingue a Produção em Lote via Artifacts, que gera múltiplas peças independentes, da Adaptação Multi-canal, que transforma uma peça central em outros formatos.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q019",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual é a principal diferença entre o Cowork e o Claude Code no ambiente de desenvolvimento?",
+      "options": [
+        "O Cowork opera no terminal com acesso ao sistema de arquivos.",
+        "O Claude Code utiliza a interface de Artifacts para previews.",
+        "O Cowork usa Artifacts para previews visuais instantâneos.",
+        "O Claude Code é ideal para gerar scripts isolados e documentação."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 destaca que o Cowork brilha ao usar Artifacts para previews visuais, enquanto o Claude Code opera no terminal com acesso ao sistema de arquivos.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q020",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual é a função da Knowledge Base em um Project de vendas no Claude?",
+      "options": [
+        "Armazenar apenas os dados de contato dos clientes potenciais.",
+        "Fornecer à IA a verdade da empresa, como catálogo e cases.",
+        "Substituir completamente o CRM utilizado pela equipe de vendas.",
+        "Gerar automaticamente propostas sem necessidade de revisão humana."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 explica que a Knowledge Base deve conter catálogo, preços, cases e ICP para que a IA produza propostas personalizadas e alinhadas à marca.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "media"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q021",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "O que é um Playbook de IA no contexto de equipes e processos?",
+      "options": [
+        "Um documento estático que fica arquivado sem uso prático.",
+        "Um processo repetitivo formalizado com templates e exemplos.",
+        "Uma ferramenta de automação que substitui a necessidade de humanos.",
+        "Um relatório gerado pelo Analytics para medir a produtividade da equipe."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 define Playbook como a formalização de um processo repetitivo, contendo prompt template, exemplos de input/output, checklist de revisão e quem aprova.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "media"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q022",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "No cenário do pesquisador que consolida relatórios setoriais, qual é o principal benefício do Claude?",
+      "options": [
+        "Substituir completamente a necessidade de leitura dos relatórios.",
+        "Apontar concordâncias e divergências entre os especialistas.",
+        "Criar automaticamente novos relatórios sem análise prévia.",
+        "Traduzir os relatórios para vários idiomas simultaneamente."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 mostra que o Claude lê todos os relatórios e aponta onde os especialistas concordam e divergem, destacando lacunas de informação para focar a investigação.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q023",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Em qual situação o Claude Code é mais indicado do que o Cowork, segundo o capítulo?",
+      "options": [
+        "Quando se deseja criar um dashboard visual com preview imediato.",
+        "Quando se precisa gerar um script Python isolado para automação.",
+        "Quando se trabalha em operações multi-arquivo e testes automatizados.",
+        "Quando se quer prototipar uma interface React sem configurar ambiente."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 afirma que o Claude Code é a ferramenta de trabalho pesado no codebase, lidando com operações multi-arquivo, logs, testes e controle de versão.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q024",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Como o uso de Projects compartilhados impacta o onboarding de novos funcionários?",
+      "options": [
+        "Elimina a necessidade de qualquer treinamento ou supervisão inicial.",
+        "Permite que o novo funcionário aprenda apenas com reuniões síncronas.",
+        "Reduz o tempo de rampagem ao fornecer respostas documentadas via IA.",
+        "Cria um ambiente onde o conhecimento fica restrito a poucos indivíduos."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 explica que os Projects como bases de conhecimento vivas permitem que o novo membro interaja com o Claude e receba respostas consistentes, acelerando o aprendizado.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q025",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual é a capacidade de processamento de tokens em uma única conversa do Claude, conforme descrito no capítulo?",
+      "options": [
+        "A capacidade de processar 50.000 tokens por conversação.",
+        "A capacidade de processar 100.000 tokens por conversação.",
+        "A capacidade de processar 200.000 tokens por conversação.",
+        "A capacidade de processar 500.000 tokens por conversação."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 afirma explicitamente que o Claude processa 200.000 tokens em uma única conversa, equivalente a cerca de 500 páginas de texto.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q026",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual é o custo mensal por usuário do plano Claude Team mencionado no capítulo?",
+      "options": [
+        "O plano Team custa US$ 20 por usuário ao mês.",
+        "O plano Team custa US$ 30 por usuário ao mês.",
+        "O plano Team custa US$ 40 por usuário ao mês.",
+        "O plano Team custa US$ 50 por usuário ao mês."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 especifica que o Claude Team tem um investimento de US$ 30 por usuário/mês, oferecendo infraestrutura completa para trabalho em grupo.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q027",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual é o requisito essencial para que o Dispatch execute uma tarefa?",
+      "options": [
+        "O computador precisa estar ligado com o Claude Desktop aberto e conectado.",
+        "O celular precisa estar com o aplicativo Claude em primeiro plano.",
+        "O computador precisa estar desligado para ativar o modo remoto.",
+        "O celular precisa estar conectado à mesma rede Wi-Fi do computador."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 afirma que o Dispatch exige computador ligado e Claude Desktop aberto para processar instruções localmente.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q028",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "O que o workflow pós-reunião do Dispatch gera automaticamente?",
+      "options": [
+        "Ata formatada e e-mail de follow-up com próximos passos.",
+        "Lista de tarefas para o dia seguinte e prioridades da semana.",
+        "Resumo de e-mails não lidos e briefings de reuniões futuras.",
+        "Relatório de métricas de performance e análise de bloqueios."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 descreve o workflow pós-reunião que gera atas e e-mails de follow-up automaticamente.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q029",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Quais são as três primitivas fundamentais do MCP?",
+      "options": [
+        "Ferramentas, Recursos e Prompts são as três primitivas do MCP.",
+        "APIs, SDKs e Conectores são as três primitivas do MCP.",
+        "Servidores, Clientes e Autenticação são as três primitivas.",
+        "Dados, Ações e Templates são as três primitivas do MCP."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 lista as três primitivas como Tools, Resources e Prompts.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q030",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Como Tools e Resources se complementam em uma integração MCP?",
+      "options": [
+        "Tools executam ações usando dados fornecidos pelos Resources.",
+        "Resources definem as ações que Tools podem executar no sistema.",
+        "Prompts substituem Tools e Resources em integrações simples.",
+        "Tools e Resources são mutuamente exclusivos em cada servidor."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 explica que Tools executam ações e Resources fornecem dados para elas.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "media"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q031",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual é a função do princípio de menor privilégio nos servidores MCP?",
+      "options": [
+        "Garantir que cada servidor tenha acesso apenas ao escopo autorizado.",
+        "Permitir que o Claude acesse todos os arquivos do computador.",
+        "Exigir autenticação OAuth para todas as integrações manuais.",
+        "Impedir que o Claude utilize ferramentas de busca na web."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 define o princípio de menor privilégio como escopo restrito de acesso.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "media"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q032",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Um usuário tenta usar o Dispatch para analisar um arquivo salvo apenas no celular. O que acontece?",
+      "options": [
+        "A tarefa falha porque o Dispatch só acessa arquivos do computador.",
+        "O arquivo é transferido automaticamente para o computador via nuvem.",
+        "O Dispatch consegue acessar o arquivo diretamente do celular.",
+        "O usuário precisa primeiro enviar o arquivo por e-mail para si mesmo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 indica que o Dispatch usa o computador para processamento local, sem acesso ao armazenamento do celular.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q033",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Um profissional trata o Dispatch como um chat em tempo real e espera respostas imediatas. Qual é o erro?",
+      "options": [
+        "O Dispatch é assíncrono, processa tarefas em segundo plano.",
+        "O Dispatch requer presença física do usuário durante a execução.",
+        "O Dispatch só funciona com comandos de voz, não com texto.",
+        "O Dispatch não permite tarefas complexas, apenas mensagens curtas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 define delegação assíncrona, contrastando com chat em tempo real.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q034",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Para conectar um servidor MCP personalizado que não tem conector OAuth, o que o usuário deve fazer?",
+      "options": [
+        "Editar o arquivo claude_desktop_config.json com command e args.",
+        "Utilizar o login do Google para autorizar o servidor manualmente.",
+        "Instalar um plugin no celular para sincronizar o servidor.",
+        "Solicitar à Anthropic a criação de um conector oficial."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 mostra que servidores manuais são configurados via claude_desktop_config.json.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q035",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual é a função da classe McpServer no desenvolvimento de um servidor MCP em TypeScript?",
+      "options": [
+        "Ela registra o nome, a versão e as capacidades do servidor MCP que será exposto ao Claude.",
+        "Ela estabelece a conexão de rede entre o Claude Desktop e a API externa do servidor MCP.",
+        "Ela valida os dados recebidos das ferramentas, garantindo que os argumentos sigam o esquema definido.",
+        "Ela gerencia o transporte de entrada e saída padrão para a comunicação com o Claude Desktop."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 define a classe McpServer como a fundação onde se registram nome, versão e capacidades do servidor.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q036",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Um desenvolvedor criou um servidor MCP, mas o Claude nunca invoca a ferramenta de busca de clientes. Qual é a causa mais provável desse problema?",
+      "options": [
+        "A descrição da tool está vaga, então o Claude não entende quando deve usá-la.",
+        "O servidor não foi registrado na Linux Foundation para funcionar com o Claude.",
+        "O esquema de parâmetros da tool não inclui o campo obrigatório de CPF.",
+        "O retorno da tool usa o formato text, que o Claude não processa."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 lista 'Esquecer a descrição das Tools' como erro comum, pois o Claude decide o uso pela descrição.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q037",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Um analista precisa manter um projeto de análise de mercado por vários meses, com histórico acumulado. Qual recurso do Claude resolve o problema de esquecimento do início da conversa?",
+      "options": [
+        "A Compaction, que resume automaticamente as partes anteriores da conversa.",
+        "O Agent Teams, que dispara múltiplos agentes para processar dados em paralelo.",
+        "O Tool Search, que seleciona as ferramentas mais relevantes para a tarefa.",
+        "O Programmatic Tool Calling, que gerencia integrações via MCP em escala."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 explica que a Compaction permite conversas efetivamente infinitas, resumindo o contexto antigo.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q038",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Qual é a primeira dimensão de impacto a ser medida para calcular o ROI da IA, segundo o capítulo?",
+      "options": [
+        "A dimensão de tempo, que compara a duração das tarefas antes e depois da implementação da IA.",
+        "A dimensão de custo, que divide o custo total da operação pelo volume de entregas realizadas.",
+        "A dimensão de qualidade, que mede o número de revisões e o NPS interno das entregas.",
+        "A dimensão de volume, que verifica o aumento da produção sem novas contratações."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 apresenta o tempo como a métrica mais fácil de medir e a primeira das quatro dimensões do ROI.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q039",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Um gestor quer justificar o investimento no Claude para a diretoria. Como ele deve estruturar a apresentação do ROI para ser convincente?",
+      "options": [
+        "Apresentando uma tabela comparativa com horas salvas, valor monetário e custo da ferramenta.",
+        "Destacando apenas o aumento de volume de entregas da equipe após a adoção da IA.",
+        "Mostrando o NPS interno e a taxa de aprovação das propostas comerciais.",
+        "Explicando que a IA reduz o tempo das tarefas e melhora a qualidade dos textos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 orienta converter horas em valor e apresentar relatório com tabela comparativa de custo versus produtividade.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-cowork-colaboracao-q040",
+      "courseSlug": "claude-cowork-colaboracao",
+      "question": "Um time de atendimento ao cliente usa o Claude para responder e-mails. Eles notaram que cada e-mail agora leva 5 minutos em vez de 15, e que conseguem atender 30% mais clientes por dia. Qual é a interpretação correta dessas métricas segundo o capítulo?",
+      "options": [
+        "Tempo economizado = métrica de Tempo; aumento de clientes = Volume; ambos contam para ROI.",
+        "Tempo economizado é a única métrica válida, pois aumento de clientes é consequência.",
+        "Aumento de clientes é métrica de Qualidade, pois reflete satisfação.",
+        "Essas métricas são redundantes, pois ambas medem a mesma dimensão de produtividade."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:10:28.750Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 define Tempo como a redução de horas em tarefas e Volume como o aumento de entregas com a mesma equipe; ambas são dimensões distintas do ROI.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    }
+  ]
+}

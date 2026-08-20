@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "make-integracao-total",
+  "lastUpdated": "2026-08-19T15:48:25.977Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "make-integracao-total-q001",
+      "courseSlug": "make-integracao-total",
+      "question": "Qual é a principal característica do fluxo de automação no Zapier?",
+      "options": [
+        "Uma interface visual com canvas infinito e ramificações paralelas.",
+        "Um fluxo linear com trigger e ações executadas em sequência.",
+        "Um sistema de código aberto com auto-hospedagem e controle total.",
+        "Uma plataforma que usa apenas JavaScript para criar automações."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 afirma que a filosofia central do Zapier é a linearidade, baseada em um trigger que dispara ações em sequência.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q002",
+      "courseSlug": "make-integracao-total",
+      "question": "Qual módulo é obrigatório para iniciar um cenário no Make?",
+      "options": [
+        "Um módulo de ação que executa o trabalho pesado de transformar dados.",
+        "Um módulo de busca que localiza informações existentes em aplicativos.",
+        "Um módulo transformador que manipula dados sem consultar apps externos.",
+        "Um módulo trigger que detecta eventos e inicia o fluxo da automação."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 afirma que todo cenário começa com um trigger, que é o ponto de interrogação inicial que dispara o fluxo.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q003",
+      "courseSlug": "make-integracao-total",
+      "question": "No Make, o que são os 'bundles' transportados pelas conexões?",
+      "options": [
+        "Pacotes de informação estruturada que viajam entre os módulos.",
+        "Círculos com ícones de aplicativos que representam os módulos.",
+        "Caminhos paralelos criados pelos routers para fluxos simultâneos.",
+        "Ferramentas de monitoramento que mostram o consumo de operações."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 define bundles como pacotes de informação estruturada que as conexões transportam entre módulos.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q004",
+      "courseSlug": "make-integracao-total",
+      "question": "Por que um cenário complexo no Make tende a ser mais econômico que no Zapier?",
+      "options": [
+        "Porque o Make não cobra por operações, apenas por assinatura fixa.",
+        "Porque o Make usa o conceito de tasks, que são mais baratas que operações.",
+        "Porque um único cenário no Make pode substituir vários Zaps encadeados.",
+        "Porque o Zapier cobra por módulo, enquanto o Make cobra por execução."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 explica que um cenário no Make pode substituir diversos Zaps encadeados, gerando economia de 3x a 5x em cenários complexos.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "media"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q005",
+      "courseSlug": "make-integracao-total",
+      "question": "Uma equipe precisa processar pedidos com verificação de estoque, cálculo de impostos por estado e notificação simultânea de cliente e fornecedor. Qual recurso do Make é essencial para isso?",
+      "options": [
+        "O módulo de busca para localizar produtos no sistema de estoque.",
+        "O router para dividir o fluxo em caminhos paralelos simultâneos.",
+        "O filtro para barrar pedidos que não atendem aos critérios mínimos.",
+        "O agendamento para executar o cenário em intervalos regulares."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 apresenta o router como o recurso distintivo do Make para dividir um fluxo em múltiplos caminhos paralelos, essencial em cenários com múltiplas ações simultâneas.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "dificil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q006",
+      "courseSlug": "make-integracao-total",
+      "question": "Uma empresa precisa manter os dados de clientes em servidores próprios por exigência de compliance e ainda quer liberdade para escrever código nos fluxos. Qual ferramenta atende melhor?",
+      "options": [
+        "Zapier, pois oferece interface simples e integrações prontas.",
+        "Make, pois permite tratamento de erros em cada módulo.",
+        "n8n, pois é auto-hospedável e permite JavaScript nos nós.",
+        "Zapier com Paths, pois suporta lógica condicional avançada."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 destaca o n8n como auto-hospedável, permitindo controle total sobre dados e infraestrutura, além de permitir escrita de JavaScript nos nós.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q007",
+      "courseSlug": "make-integracao-total",
+      "question": "No Make, qual é a função dos filtros dentro de um cenário?",
+      "options": [
+        "Conectar módulos de diferentes aplicativos para transportar dados.",
+        "Executar ações como criar ou deletar registros em sistemas externos.",
+        "Aplicar condições que determinam se um bundle deve prosseguir no fluxo.",
+        "Autenticar aplicativos via OAuth, API key ou login direto."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 descreve filtros como 'porteiros' que aplicam condições para decidir se um dado segue para o próximo módulo.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q008",
+      "courseSlug": "make-integracao-total",
+      "question": "Qual é a finalidade do comando 'Run once' antes de ativar um cenário?",
+      "options": [
+        "Testar a execução do fluxo e validar o processamento dos dados.",
+        "Estabelecer a autenticação OAuth com os aplicativos externos.",
+        "Definir a frequência com que o trigger verifica novos eventos.",
+        "Excluir bundles indesejados que foram capturados pelo trigger."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 orienta usar 'Run once' para testar manualmente o cenário e verificar se cada etapa processa os dados como esperado.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "media"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q009",
+      "courseSlug": "make-integracao-total",
+      "question": "Após configurar um cenário que extrai dados de e-mails para uma planilha, o Make gravou uma sequência longa de números na coluna de datas. Qual é a causa provável?",
+      "options": [
+        "O campo de data foi mapeado sem formatação, gerando timestamp Unix.",
+        "A conexão OAuth não tinha permissão para escrever na planilha.",
+        "O trigger do Gmail capturou o e-mail errado durante a execução.",
+        "O módulo de ação usou a função errada, como 'Update a Row'."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 menciona que datas podem aparecer como timestamp Unix se o campo não for formatado corretamente durante o mapeamento.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "dificil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q010",
+      "courseSlug": "make-integracao-total",
+      "question": "Em um cenário de e-commerce com Shopify, qual integração é necessária para processar pagamentos no Brasil?",
+      "options": [
+        "Usar módulo HTTP/Webhook para gateways como Asaas ou PagSeguro.",
+        "Utilizar o módulo nativo do Shopify para pagamentos internacionais.",
+        "Configurar o PayPal como único gateway de pagamento aceito.",
+        "Depender do Google Sheets para registrar pagamentos manualmente."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 menciona que gateways brasileiros são integrados via módulo HTTP/Webhook.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q011",
+      "courseSlug": "make-integracao-total",
+      "question": "Qual é o papel do Google Drive nas integrações do Make?",
+      "options": [
+        "Repositório central para upload, download e conversão de arquivos.",
+        "Ferramenta de comunicação para envio de mensagens em canais.",
+        "Sistema de CRM para gerenciamento de contatos e negócios.",
+        "Plataforma de e-commerce para criação de produtos e pedidos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 descreve o Google Drive como repositório central com upload, download, pastas, permissões e conversão de formatos.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "facil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q012",
+      "courseSlug": "make-integracao-total",
+      "question": "O que faz um Iterator no Make?",
+      "options": [
+        "Desmembra listas em bundles individuais para processamento separado.",
+        "Agrupa múltiplos bundles em um único bundle consolidado.",
+        "Divide o fluxo em caminhos paralelos para processamento simultâneo.",
+        "Avalia condições e descarta bundles que não atendem aos critérios."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 explica que o Iterator desmembra arrays em bundles individuais.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "facil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q013",
+      "courseSlug": "make-integracao-total",
+      "question": "Qual é a função do módulo HTTP: Make a Request?",
+      "options": [
+        "Enviar requisições manuais para qualquer URL de destino de forma visual.",
+        "Receber requisições externas e disparar o cenário instantaneamente.",
+        "Autenticar automaticamente com OAuth 2.0 para APIs complexas.",
+        "Armazenar bundles com erro em uma fila para reprocessamento."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 define o módulo HTTP como envio de requisições manuais para qualquer URL, de forma visual.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "facil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q014",
+      "courseSlug": "make-integracao-total",
+      "question": "Qual ferramenta do Google Workspace permite buscar linhas por critérios específicos?",
+      "options": [
+        "Gmail, que organiza e-mails por filtros personalizados e etiquetas.",
+        "Google Sheets, que busca linhas conforme critérios definidos.",
+        "Google Drive, que armazena arquivos em pastas compartilhadas.",
+        "Google Calendar, que agenda eventos e compromissos com lembretes."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 afirma que o Google Sheets permite buscar linhas por critérios específicos, indo além do básico.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "facil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q015",
+      "courseSlug": "make-integracao-total",
+      "question": "Em um cenário com múltiplos anexos de e-mail, qual módulo deve ser usado para processar cada anexo individualmente antes de aplicar filtros?",
+      "options": [
+        "Router, que divide o fluxo em caminhos paralelos e simultâneos.",
+        "Iterator, que desmembra a lista em bundles individuais.",
+        "Aggregator, que agrupa bundles em um único item consolidado.",
+        "Filtro, que descarta bundles que não atendem condições."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 explica que o Iterator resolve o problema das listas, desmembrando arrays em bundles individuais.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q016",
+      "courseSlug": "make-integracao-total",
+      "question": "Para receber confirmação de pagamento de um gateway sem módulo nativo, qual recurso do Make é mais adequado?",
+      "options": [
+        "Módulo HTTP: Make a Request com método GET para buscar dados.",
+        "Módulo HTTP: Make a Request com método POST para criar recursos.",
+        "Webhook, que gera uma URL única para receber eventos externos.",
+        "Parse Response, que transforma JSON em campos mapeáveis."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 destaca que o Webhook é o receptor, gerando uma URL única que dispara o cenário quando um sistema externo envia dados.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "media"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q017",
+      "courseSlug": "make-integracao-total",
+      "question": "Um pedido internacional precisa de cálculo de impostos e conversão de moeda. Como estruturar o fluxo no Make?",
+      "options": [
+        "Usar um Router com filtros para separar pedidos nacionais e internacionais.",
+        "Usar um Iterator para processar cada item do pedido individualmente e em paralelo.",
+        "Usar um Aggregator para consolidar todos os pedidos em um relatório.",
+        "Usar um Filtro para descartar pedidos que não tenham conversão."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 mostra um cenário com Router criando caminhos distintos, incluindo um para pedidos internacionais com módulos específicos.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "dificil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q018",
+      "courseSlug": "make-integracao-total",
+      "question": "Uma API interna exige autenticação OAuth 2.0 com refresh automático. Qual módulo do Make atende a esse requisito?",
+      "options": [
+        "HTTP: Make a Request com API Key no header para autenticação simples.",
+        "HTTP: Make an OAuth 2.0 Request, que gerencia tokens.",
+        "Webhook, que recebe eventos via URL única e dispara o cenário.",
+        "Parse Response, que analisa o retorno da API e mapeia campos."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 menciona o módulo HTTP: Make an OAuth 2.0 Request como salva-vidas, gerenciando obtenção, armazenamento e refresh de tokens.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q019",
+      "courseSlug": "make-integracao-total",
+      "question": "No módulo OpenAI do Make, qual é a função do prompt de sistema?",
+      "options": [
+        "Definir a personalidade e as regras de comportamento do modelo",
+        "Armazenar o lead e aguarda ação manual da equipe de vendas",
+        "Controlar o nível de criatividade ou determinismo da resposta gerada",
+        "Limitar o tamanho da resposta para controlar custos"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 define o prompt de sistema como o que estabelece a personalidade e as regras de comportamento do modelo.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q020",
+      "courseSlug": "make-integracao-total",
+      "question": "No Make, o que acontece quando um lead é capturado via Facebook Lead Ads?",
+      "options": [
+        "Armazena o lead e aguarda ação manual da equipe de vendas",
+        "Envia um e-mail automático após 24 horas",
+        "Dispara o cenário imediatamente para processar o lead",
+        "Ignora o lead até que o usuário abra o sistema"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 afirma que o cenário é acionado imediatamente quando um lead é capturado, garantindo resposta instantânea.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q021",
+      "courseSlug": "make-integracao-total",
+      "question": "No faturamento automatizado, qual é o papel do Make?",
+      "options": [
+        "Conecta ERPs e emissores de nota fiscal via API",
+        "Digita manualmente os dados do cliente no sistema de faturamento",
+        "Envia e-mails promocionais para os clientes",
+        "Gera relatórios de vendas para a diretoria"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 explica que o Make conecta ERPs e emissores de nota fiscal via API para automatizar o faturamento.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q022",
+      "courseSlug": "make-integracao-total",
+      "question": "Como a temperatura e o max tokens são usados no módulo de IA?",
+      "options": [
+        "Temperatura baixa para precisão e max tokens controla custo",
+        "Temperatura alta para precisão e max tokens ilimitado na resposta",
+        "Temperatura controla custo e max tokens define criatividade",
+        "Ambos controlam o modelo selecionado pelo usuário"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 indica que temperatura baixa é usada para dados exatos e max tokens limita a resposta para controlar custos.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "media"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q023",
+      "courseSlug": "make-integracao-total",
+      "question": "No contexto brasileiro, qual é a finalidade da consulta de CNPJ via API?",
+      "options": [
+        "Emitir nota fiscal para o lead automaticamente no sistema",
+        "Enviar e-mail de boas-vindas personalizado",
+        "Criar anúncios direcionados para o lead",
+        "Saber dados da empresa antes do primeiro contato"
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 destaca que a consulta de CNPJ permite saber exatamente com quem está falando antes do primeiro contato.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "media"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q024",
+      "courseSlug": "make-integracao-total",
+      "question": "Para extrair dados estruturados de um contrato não estruturado, qual configuração é mais adequada?",
+      "options": [
+        "Temperatura próxima de 0 e prompt de sistema específico",
+        "Temperatura 0.7 e max tokens mínimo para resposta curta",
+        "Usar análise de sentimento para interpretar o texto do contrato",
+        "Usar geração de conteúdo para criar o contrato"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 recomenda temperatura próxima de 0 para extração de dados precisos e um prompt de sistema que defina o papel.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q025",
+      "courseSlug": "make-integracao-total",
+      "question": "No router de qualificação de leads, como são tratados os leads de score alto e baixo?",
+      "options": [
+        "Alto score vai para nurturing, baixo para atendimento humano",
+        "Alto score vai para atendimento humano, baixo para nurturing",
+        "Ambos seguem o mesmo fluxo de comunicação",
+        "Alto score vai para remarketing, baixo para atendimento humano"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 afirma que leads com score alto são direcionados para atendimento humano e os de score baixo para nurturing.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "dificil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q026",
+      "courseSlug": "make-integracao-total",
+      "question": "Qual a diferença entre processamento de pedidos e sincronização de dados nas operações?",
+      "options": [
+        "Processamento coordena ações, sincronização propaga mudanças",
+        "Processamento envia e-mails, sincronização gera notas fiscais",
+        "Processamento gera relatórios, sincronização envia alertas",
+        "Ambos são idênticos e executam a mesma função"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 descreve o processamento como coordenação de uma cascata de ações e a sincronização como propagação de alterações entre sistemas.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "dificil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q027",
+      "courseSlug": "make-integracao-total",
+      "question": "O que representa um Blueprint no Make?",
+      "options": [
+        "Arquivo JSON com toda a estrutura do cenário",
+        "Um diagrama visual dos módulos e conexões",
+        "Uma lista de conexões e webhooks ativos",
+        "Um backup dos dados armazenados nos Data Stores"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 define Blueprint como a representação técnica do cenário em formato JSON, contendo módulos, conexões, filtros e mapeamentos.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "facil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q028",
+      "courseSlug": "make-integracao-total",
+      "question": "Quais são as duas formas de comunicação entre sub-cenários?",
+      "options": [
+        "Webhooks internos e Data Stores compartilhados",
+        "E-mail e notificações push automáticas do sistema",
+        "API externa e FTP para transferência de arquivos",
+        "Variáveis globais e filtros de execução condicional"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 menciona que a comunicação entre cenários se dá por webhooks internos ou Data Stores compartilhados.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q029",
+      "courseSlug": "make-integracao-total",
+      "question": "Como é contabilizada uma operação no Make?",
+      "options": [
+        "Número de módulos multiplicado pelos bundles processados",
+        "Total de execuções do cenário no período mensal",
+        "Quantidade de dados transferidos entre os módulos",
+        "Soma dos tempos de execução de cada módulo"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 explica que cada módulo que processa um bundle conta uma operação, ou seja, módulos vezes bundles.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "facil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q030",
+      "courseSlug": "make-integracao-total",
+      "question": "Qual é o método de precificação recomendado para serviços de automação?",
+      "options": [
+        "Precificação baseada no valor gerado para o cliente",
+        "Cobrança por hora trabalhada no projeto",
+        "Preço fixo por módulo utilizado na automação",
+        "Custo mais margem sobre as ferramentas usadas"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 defende a precificação baseada em valor, pois cobrar por hora penaliza a eficiência do consultor.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "facil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q031",
+      "courseSlug": "make-integracao-total",
+      "question": "Qual é o plano mínimo para executar um cenário a cada 2 minutos com 3 cenários ativos?",
+      "options": [
+        "Plano Core, pois oferece intervalo de 1 minuto e cenários ilimitados",
+        "Plano Free, pois permite dois cenários e polling de 15 minutos",
+        "Plano Pro, pois inclui prioridade na fila de execução",
+        "Plano Teams, pois possui ambientes de staging e produção"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 mostra que o Core tem polling de 1 minuto e cenários ilimitados, atendendo aos requisitos.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "media"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q032",
+      "courseSlug": "make-integracao-total",
+      "question": "Em um cenário principal, você precisa que um sub-cenário processe dados e retorne o resultado, mas também precisa armazenar um estado que persista entre execuções. Qual combinação de recursos atende a ambos os requisitos?",
+      "options": [
+        "Usar webhook interno para chamada e Data Store para estado.",
+        "Usar apenas webhook response e variáveis globais para estado.",
+        "Usar blueprint e importar o cenário como sub-cenário.",
+        "Usar agendamento avançado e variáveis locais para estado."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 mostra que a comunicação entre cenários pode ser via webhooks internos, e a persistência entre execuções é feita por Data Stores compartilhados.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q033",
+      "courseSlug": "make-integracao-total",
+      "question": "Uma empresa tem um cenário que processa 200 leads por dia, com 5 módulos. Eles querem reduzir o consumo de operações sem perder dados. Qual estratégia é mais eficaz segundo o capítulo?",
+      "options": [
+        "Usar filtros para descartar dados irrelevantes antes dos módulos.",
+        "Usar batch processing para processar múltiplos registros por vez.",
+        "Usar ambos: filtros e processamento em lote no gatilho.",
+        "Usar apenas variáveis globais para reduzir chamadas de API."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 recomenda tanto filtros estratégicos quanto agrupamento de operações para economizar consumo.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q034",
+      "courseSlug": "make-integracao-total",
+      "question": "Um consultor calcula que sua automação economiza 30 horas mensais de um funcionário que custa R$ 40/hora. Qual deve ser o preço do projeto para ter payback em 4 meses, segundo o capítulo?",
+      "options": [
+        "R$ 4.800,00, pois a economia anual é de R$ 14.400,00.",
+        "R$ 3.600,00, pois a economia mensal é de R$ 1.200,00.",
+        "R$ 2.400,00, pois a economia mensal é de R$ 1.200,00.",
+        "R$ 6.000,00, pois a economia anual é de R$ 18.000,00."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 mostra que o preço deve ser justificado pelo payback, e 4 meses de economia mensal de R$ 1.200,00 resultam em R$ 4.800,00.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q035",
+      "courseSlug": "make-integracao-total",
+      "question": "Qual é o primeiro estágio da evolução no Make, segundo o roadmap?",
+      "options": [
+        "Fluência Básica, com triggers, ações, filtros e routers.",
+        "Domínio Técnico, com módulos HTTP e tratamento de erros.",
+        "Visão Arquitetural, com data stores e sub-cenários.",
+        "Especialização de Domínio, com foco em um setor específico."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 descreve a Fluência Básica como o estágio inicial, envolvendo triggers, ações, filtros e routers.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q036",
+      "courseSlug": "make-integracao-total",
+      "question": "Para processar dados de clientes brasileiros, qual prática garante conformidade com a LGPD?",
+      "options": [
+        "Definir base legal e finalidade antes de construir o fluxo.",
+        "Usar criptografia AES-256 para todos os dados em repouso.",
+        "Configurar conexões com tokens OAuth e revisar periodicamente.",
+        "Exportar blueprints para backup e controle de versão."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 destaca que a LGPD exige base legal e finalidade clara antes do processamento de dados pessoais.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q037",
+      "courseSlug": "make-integracao-total",
+      "question": "Um profissional cria um cenário com data stores e sub-cenários para sincronizar estoque entre plataformas. Qual estágio ele demonstra?",
+      "options": [
+        "Fluência Básica, pois está usando triggers e ações simples.",
+        "Domínio Técnico, pois domina módulos HTTP e iterators.",
+        "Visão Arquitetural, pois usa data stores e sub-cenários.",
+        "Especialização de Domínio, pois foca em e-commerce."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 associa a Visão Arquitetural ao uso de data stores compartilhados e sub-cenários reutilizáveis.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q038",
+      "courseSlug": "make-integracao-total",
+      "question": "Ao usar módulos HTTP para integrar uma API não suportada, qual estágio o profissional está atingindo?",
+      "options": [
+        "Fluência Básica, pois ainda está aprendendo a interface.",
+        "Domínio Técnico, pois está ampliando as capacidades via API.",
+        "Visão Arquitetural, pois está projetando um sistema completo.",
+        "Especialização de Domínio, pois está aplicando a um setor."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 afirma que no Domínio Técnico o profissional usa módulos HTTP para se comunicar com qualquer API.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q039",
+      "courseSlug": "make-integracao-total",
+      "question": "Qual criptografia o Make utiliza para proteger dados em repouso?",
+      "options": [
+        "Os dados usam TLS em trânsito e AES-256 em repouso.",
+        "Os dados usam RSA em trânsito e AES-256 em repouso.",
+        "Os dados usam TLS em trânsito e AES-128 em repouso.",
+        "Os dados usam SSL em trânsito e AES-256 em repouso."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 afirma explicitamente que os dados em trânsito usam TLS e os armazenados usam AES-256.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "make-integracao-total-q040",
+      "courseSlug": "make-integracao-total",
+      "question": "Como restringir o acesso à conexão do gateway de pagamento a um gestor específico?",
+      "options": [
+        "Uso de pastas por área e permissões granulares do plano Teams.",
+        "Criptografia TLS em trânsito e AES-256 em repouso.",
+        "Exportação de Blueprints para versionamento externo.",
+        "Monitoramento centralizado com alertas de falha."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:48:25.977Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 menciona que o plano Teams permite permissões granulares, aplicando o princípio do menor privilégio.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "crie-agentes-de-ia-autonomos",
+  "lastUpdated": "2026-08-19T13:46:42.278Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "crie-agentes-de-ia-autonomos-q001",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Na arquitetura de agentes, qual é o papel do LLM em relação às ferramentas e à memória?",
+      "options": [
+        "O LLM atua como o cérebro que orquestra as operações e decide quais ferramentas usar",
+        "O LLM executa diretamente as ferramentas e armazena dados na memória de longo prazo",
+        "O LLM substitui as ferramentas ao gerar respostas com base apenas em conhecimento interno",
+        "O LLM atua como memória de longo prazo, dispensando bancos vetoriais e histórico"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 define o LLM como o cérebro que orquestra as operações, enquanto as ferramentas são as mãos e a memória fornece contexto.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q002",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Uma ferramenta de busca de clientes retorna 'Cliente não encontrado para o email X'. Segundo o capítulo 3, como o agente deve proceder?",
+      "options": [
+        "Encerrar a tarefa imediatamente e reportar falha total ao usuário",
+        "Tentar outra estratégia ou pedir um novo email ao usuário",
+        "Ignorar o erro e executar a mesma chamada com parâmetros diferentes",
+        "Substituir a ferramenta por uma versão mais ampla sem validação"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 afirma que erros claros e acionáveis permitem que o modelo decida se deve pedir um novo email ao usuário ou tentar outra estratégia.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "dificil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q003",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Quais são os três tipos fundamentais de memória apresentados no capítulo 1?",
+      "options": [
+        "Memória cache, memória RAM e memória persistente",
+        "Memória de curto prazo, memória de longo prazo e memória episódica",
+        "Memória semântica, memória procedural e memória sensorial",
+        "Memória vetorial, memória relacional e memória distribuída"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 descreve exatamente esses três tipos de memória: curto prazo, longo prazo e episódica.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q004",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "No fluxo de execução de um agente, o que acontece após executar a ferramenta selecionada?",
+      "options": [
+        "O agente encerra a tarefa e retorna a resposta final ao usuário",
+        "O agente interpreta o resultado obtido e avalia se a sub-tarefa foi resolvida",
+        "O agente substitui o LLM por um modelo mais rápido para economizar custos",
+        "O agente apaga a memória de curto prazo para evitar viés na próxima ação"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 lista o fluxo: executar a ferramenta, interpretar o resultado e avaliar a conclusão do objetivo.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q005",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Quais são os quatro pilares do ciclo ReAct descritos no capítulo 2?",
+      "options": [
+        "Pensar, agir, observar e repetir o ciclo até concluir o objetivo",
+        "Planejar, executar, testar e implantar a solução em produção",
+        "Ler, processar, responder e armazenar na memória de longo prazo",
+        "Analisar, decidir, agir e registrar tudo em um log de auditoria"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 define o ciclo ReAct como Thought, Action, Observation e Repeat.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q006",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Um agente de suporte técnico precisa lembrar de interações anteriores com um cliente e também de qual solução resolveu um problema semelhante no passado. Quais tipos de memória são necessários para essa tarefa?",
+      "options": [
+        "Memória de curto prazo e memória episódica",
+        "Memória de longo prazo e memória episódica",
+        "Memória de curto prazo e memória de longo prazo",
+        "Memória episódica e memória de trabalho"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O Capítulo 1 define memória de longo prazo como persistência entre sessões e memória episódica como registro de experiências passadas, ambas essenciais para recuperar histórico e soluções.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "media"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q007",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Qual é a diferença fundamental entre as extensões ReAct com Reflexão e ReAct com Backtracking?",
+      "options": [
+        "Reflexão avalia o resultado final; Backtracking volta a um estado anterior.",
+        "Reflexão é usada antes da ação; Backtracking é usada depois.",
+        "Reflexão corrige erros de raciocínio; Backtracking corrige erros de execução.",
+        "Reflexão é para tarefas longas; Backtracking é para tarefas curtas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O Capítulo 2 descreve Reflexão como avaliação crítica do trabalho final e Backtracking como retorno a um estado anterior para tentar outra rota.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "dificil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q008",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Qual é a relação entre a descrição de uma ferramenta e sua granularidade para o sucesso do function calling?",
+      "options": [
+        "Descrições vagas funcionam bem com ferramentas granulares.",
+        "Descrições ricas são necessárias para ferramentas amplas.",
+        "Descrições ricas e granularidade atômica são ideais.",
+        "Granularidade ampla dispensa descrições detalhadas."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O Capítulo 3 afirma que descrições ricas em contexto e ferramentas com ação atômica bem definida são o ponto ideal para o function calling.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "media"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q009",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Qual é a diferença entre function calling e tool use no contexto de agentes?",
+      "options": [
+        "Function calling é específico da OpenAI; tool use é da Anthropic.",
+        "Tool use inclui computer use e code execution, além do function calling.",
+        "Function calling é para texto; tool use é para áudio.",
+        "Não há diferença; são termos equivalentes e intercambiáveis."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O Capítulo 3 explica que tool use expande o function calling para capacidades como computer use, code execution e web browsing.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "dificil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q010",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "No LangGraph, quais são os três elementos vitais de um grafo de agente?",
+      "options": [
+        "Nós, arestas e estado compartilhado",
+        "Modelos, prompts e output parsers",
+        "Chains, retrievers e embeddings",
+        "Text splitters, chunks e vector stores"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 lista nós, arestas e estado compartilhado como os três elementos vitais do grafo.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "facil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q011",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Como o OpenAI Agents SDK garante que um agente de Vendas assuma o contexto completo de uma conversa iniciada com um agente de Triagem?",
+      "options": [
+        "Usando o sistema de handoffs para transferir o contexto",
+        "Compartilhando o mesmo vector_store_id entre os agentes",
+        "Executando um GuardrailResult que valida a transferência",
+        "Gerando traces detalhados de cada chamada de ferramenta"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 descreve handoffs como transferências estruturadas que passam o contexto integral para outro agente.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q012",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Uma empresa quer que um agente consulte um manual técnico privado e execute cálculos matemáticos complexos antes de responder. Quais recursos do OpenAI Agents SDK combinam essas capacidades?",
+      "options": [
+        "File Search com vector_store_id e Code Interpreter",
+        "Handoffs entre agentes e guardrails de validação",
+        "Function calling com JSON Schema e traces de execução",
+        "Assistants API e Codex em sandbox de produção"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 descreve File Search para buscas semânticas e Code Interpreter para cálculos em sandbox.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "dificil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q013",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Quais são os três elementos principais que compõem um Agent no Claude Agent SDK?",
+      "options": [
+        "Modelo, instruções em linguagem natural e ferramentas",
+        "Prompts, JSON Schema e um loop de execução",
+        "Memória, guardrails e um modelo coordenador",
+        "Embeddings, vector store e um output parser"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 define explicitamente o Agent como composto por modelo, instruções e ferramentas.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "facil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q014",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Qual é a função do sistema de guardrails no OpenAI Agents SDK?",
+      "options": [
+        "Interceptar chamadas de ferramentas antes da execução",
+        "Gerar logs estruturados de cada execução",
+        "Transferir contexto entre agentes de forma fluida",
+        "Executar código Python em um sandbox seguro"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 afirma que os guardrails interceptam chamadas de ferramentas e bloqueiam ações que violem políticas.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "facil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q015",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "O que o decorador @tool faz no Claude Agent SDK?",
+      "options": [
+        "Converte uma função Python padrão em uma ferramenta",
+        "Cria um agente especialista para uma tarefa",
+        "Define o modelo coordenador de um time",
+        "Configura a persistência de memória de longo prazo"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 explica que o decorador @tool converte funções Python comuns em ferramentas via introspecção.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "facil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q016",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "No Claude Agent SDK, como o decorador @tool transforma uma função comum em uma ferramenta para o agente?",
+      "options": [
+        "Ele exige que o desenvolvedor escreva um esquema JSON manualmente para cada parâmetro.",
+        "Ele usa a docstring e os type hints para gerar o esquema de parâmetros.",
+        "Ele compila a função em código de máquina para melhorar a performance do agente.",
+        "Ele substitui a função por uma chamada de API externa para evitar erros de sintaxe."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O decorador @tool realiza introspecção no código, usando docstring e type hints para gerar o esquema de parâmetros automaticamente, como descrito no capítulo 4.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "media"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q017",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "No OpenAI Agents SDK, qual é a diferença fundamental entre o uso de function calling e o uso de handoffs para a comunicação entre agentes?",
+      "options": [
+        "Function calling executa código local, enquanto handoffs transferem controle total.",
+        "Function calling invoca ferramentas, enquanto handoffs transferem contexto.",
+        "Function calling é para chamadas de API, enquanto handoffs são para troca de dados.",
+        "Function calling é usado apenas para matemática, enquanto handoffs são para texto."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 5, function calling permite invocar ferramentas externas, enquanto handoffs transferem o contexto para outro agente, diferenciando os dois mecanismos.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "dificil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q018",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Em um agente LangGraph, se uma ferramenta retornar um erro, como o grafo pode ser configurado para tratar esse erro e continuar o fluxo?",
+      "options": [
+        "Adicionar um nó de erro e usar arestas condicionais para redirecionar.",
+        "Reiniciar o grafo do zero sempre que um erro ocorrer durante a execução.",
+        "Ignorar o erro e seguir para o próximo nó sem qualquer ação corretiva.",
+        "Usar o LangSmith para reescrever automaticamente o código do agente."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 explica que o LangGraph permite configurar nós de tratamento de erro e arestas condicionais para redirecionar o fluxo em caso de falha.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q019",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Quais são os três elementos que definem um agente no CrewAI?",
+      "options": [
+        "Role, Goal e Backstory são os três elementos",
+        "Role, Task e Crew são os três elementos",
+        "Goal, Backstory e Memory são os três",
+        "Task, Context e Output são os três"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 define que um agente é composto por Role, Goal e Backstory.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q020",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Qual é o componente central do AutoGen que permite envio e recebimento de mensagens?",
+      "options": [
+        "ConversableAgent é o bloco fundamental",
+        "UserProxyAgent é o bloco fundamental",
+        "GroupChatManager é o bloco fundamental",
+        "system_message é o bloco fundamental"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 afirma que o ConversableAgent é o bloco de construção fundamental.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q021",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Quais são os três pilares fundamentais da arquitetura do OpenClaw?",
+      "options": [
+        "Skills, Integrations e Agent são os pilares",
+        "Skills, Triggers e MCP são os pilares",
+        "Agent, YAML e Dashboard são os pilares",
+        "Integrations, MCP e Python são os pilares"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 lista Skills, Integrations e Agent como os três pilares.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q022",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "No CrewAI, qual a diferença prática entre os processos sequential e hierarchical?",
+      "options": [
+        "Sequential exige gerente; hierarchical executa tarefas em ordem fixa.",
+        "Sequential segue ordem fixa; hierarchical usa gerente que decide dinamicamente.",
+        "Sequential é para fluxos complexos; hierarchical é para fluxos lineares simples.",
+        "Sequential não permite delegação; hierarchical permite apenas memória de longo prazo."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 define o processo Sequential como execução na ordem exata das tarefas e o Hierarchical como coordenação dinâmica por um agente gerente.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "media"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q023",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "No AutoGen, como o GroupChatManager atua quando o speaker_selection_method está configurado como auto?",
+      "options": [
+        "Ele delega a um LLM gerente a decisão de quem fala a cada turno.",
+        "Ele faz todos os agentes falarem ao mesmo tempo em cada rodada.",
+        "Ele exige que o usuário aprove manualmente cada fala do grupo.",
+        "Ele mantém o primeiro agente falando até a tarefa ser concluída."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 explica que o GroupChatManager, com speaker_selection_method auto, delega a um LLM gerente a decisão de quem deve falar a seguir.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "media"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q024",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Em uma aplicação CrewAI, um agente precisa recordar, em execuções futuras, fatos específicos sobre clientes mencionados em projetos anteriores. Qual camada de memória é responsável por isso?",
+      "options": [
+        "Short-term memory, que guarda o contexto imediato da execução atual.",
+        "Long-term memory, que persiste entre execuções usando embeddings.",
+        "Entity memory, que armazena fatos específicos sobre entidades mencionadas.",
+        "Flows, que encadeiam múltiplas Crews em pipelines com lógica condicional."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 define Entity memory como a camada que armazena fatos específicos sobre entidades mencionadas, distinguindo-a da memória de longo prazo.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q025",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Um desenvolvedor quer que o AutoGen execute código gerado por um agente programador dentro de um contêiner, sem qualquer aprovação humana. Quais configurações ele deve usar?",
+      "options": [
+        "UserProxyAgent com Docker e human_input_mode definido como NEVER.",
+        "ConversableAgent com Docker e human_input_mode definido como ALWAYS.",
+        "GroupChatManager com Docker e human_input_mode definido como TERMINATE.",
+        "UserProxyAgent sem Docker e human_input_mode definido como TERMINATE."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 recomenda Docker para isolar a execução de código e define human_input_mode NEVER como totalmente autônomo, sem intervenção humana.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "dificil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q026",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Uma equipe quer que um agente OpenClaw monitore uma caixa de entrada a cada cinco minutos e classifique mensagens como suporte, vendas ou urgente. Qual combinação de elementos do framework atende a esse caso?",
+      "options": [
+        "Skill email/classify com trigger de cron agendado para cinco minutos.",
+        "Integração com PostgreSQL e skill crm/create_deal para cada mensagem.",
+        "Skill customizada em Python e trigger de webhook para eventos externos.",
+        "Skill email/classify com trigger de email monitorando a cada cinco minutos."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 mostra a skill email/classify para categorizar mensagens e os triggers de email, que monitoram a caixa em intervalos como a cada cinco minutos.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "dificil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q027",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Qual é o princípio de segurança que usa múltiplas camadas independentes?",
+      "options": [
+        "Defense in depth (defesa em profundidade).",
+        "Human-in-the-loop para ações de alto risco.",
+        "Sanitização de inputs para prevenir injeção.",
+        "Validação de parâmetros para bloquear SQL."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 descreve o princípio de defense in depth como a base da segurança, com múltiplas camadas independentes.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "facil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q028",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Como o resumo progressivo ajuda a gerenciar a janela de contexto?",
+      "options": [
+        "Descarta mensagens antigas para dar lugar às novas.",
+        "Condensa o histórico em um parágrafo essencial.",
+        "Mantém âncoras permanentes no topo do contexto.",
+        "Aumenta o limite de tokens do modelo de linguagem."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 explica que o resumo progressivo condensa o histórico em um parágrafo essencial, preservando decisões e preferências.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q029",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Qual é a função do Agente de Dados em relação a perguntas em linguagem natural?",
+      "options": [
+        "Executar testes unitários em scripts Python.",
+        "Transformar perguntas em queries SQL otimizadas.",
+        "Classificar emails em categorias como suporte.",
+        "Verificar disponibilidade em agendas de participantes."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 afirma que o Agente de Dados transforma perguntas em linguagem natural em queries SQL otimizadas.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "media"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q030",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Um agente de CRM precisa garantir que cada interação com cliente seja registrada sem erro humano. Qual característica do agente de CRM é destacada?",
+      "options": [
+        "Uso de vectorstore para buscar respostas padrão.",
+        "Eliminação do erro humano e do esquecimento.",
+        "Negociação de melhores janelas entre participantes.",
+        "Execução de queries SQL otimizadas para dados."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 destaca que o Agente de CRM elimina o erro humano e o esquecimento, garantindo registros precisos.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q031",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "O que é a memória de curto prazo em um agente de IA?",
+      "options": [
+        "É a janela de contexto do LLM que contém a interação atual.",
+        "É um banco de dados vetorial para fatos persistentes.",
+        "É a memória episódica de tarefas passadas.",
+        "É o cache de respostas geradas pelo modelo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 define a memória de curto prazo como a janela de contexto do LLM, onde reside toda a interação presente.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "facil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q032",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Qual é o papel do protocolo MCP no agente de calendário?",
+      "options": [
+        "Conectar o agente a APIs de agenda como Google Calendar.",
+        "Gerar embeddings para busca semântica de textos.",
+        "Executar código em sandbox seguro para testes.",
+        "Validar parâmetros contra SQL injection."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 afirma que o agente de calendário usa o MCP para interagir com APIs de agenda, como o Google Calendar.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "facil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q033",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Em um cenário onde o agente precisa recordar uma falha ocorrida em uma tarefa anterior para evitar repeti-la, qual tipo de memória é acionado?",
+      "options": [
+        "Memória de curto prazo via janela de contexto.",
+        "Memória episódica que armazena episódios completos.",
+        "Memória de longo prazo via vector store.",
+        "Memória de trabalho via resumo progressivo."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 define a memória episódica como o armazenamento de episódios completos com lições aprendidas, permitindo evitar erros passados.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q034",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Um agente de automação de e-mail usa RAG para buscar respostas padrão e memória de longo prazo via Vector Store. Em produção, ele recebe e-mails com conteúdo malicioso. Qual estratégia integra corretamente memória, automação e segurança?",
+      "options": [
+        "Usar resumo progressivo para manter histórico e reduzir tokens na janela.",
+        "Sanitizar entradas e validar saídas, separando instruções de sistema dos dados.",
+        "Configurar agente de calendário via MCP para verificar disponibilidade antes.",
+        "Utilizar cache de respostas e escolher modelo menor por tarefa para reduzir custos."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "A sanitização de entradas e validação de saídas, separando instruções de sistema dos dados do e-mail, é a defesa contra prompt injection descrita no capítulo 12, integrando-se ao uso de RAG e automação dos capítulos 10 e 11.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q035",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Qual paradigma de orquestração multi-agente funciona como uma linha de montagem industrial?",
+      "options": [
+        "Paradigma hierárquico, com um agente gerente coordenando tarefas",
+        "Paradigma sequencial, com output de um virando input do próximo",
+        "Paradigma conversacional, onde a solução emerge do diálogo entre agentes",
+        "Paradigma híbrido, combinando coordenador hierárquico com sub-equipes"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 define o paradigma sequencial como uma linha de montagem industrial, com ordem fixa e output de um agente servindo de input para o próximo.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q036",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Um agente de atendimento ao cliente recebe uma pergunta fora da base de conhecimento. Qual comportamento está alinhado com o conceito de escalabilidade assistida?",
+      "options": [
+        "Inventar uma resposta plausível para não deixar o cliente sem resposta",
+        "Encerrar o atendimento e orientar o cliente a buscar em outro canal",
+        "Solicitar que o cliente reformule a pergunta até que ela se encaixe na base",
+        "Registrar um ticket e escalar para um humano, mantendo o cliente informado"
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 explica que a escalabilidade assistida inclui registrar tickets e escalar para humanos quando a informação é insuficiente, garantindo resposta ao cliente.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q037",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Durante um code review automatizado, o agente identifica uma query SQL que busca dados dentro de um loop. Qual problema ele deve apontar?",
+      "options": [
+        "Falha de segurança clássica do tipo SQL injection",
+        "Problema de performance conhecido como query N+1",
+        "Falta de legibilidade devido a nomes de variáveis",
+        "Erro de lógica na condição de um if simples"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 cita queries N+1 como um problema de performance que o code review automatizado deve identificar.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q038",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Qual técnica é usada pelo agente de atendimento para basear respostas em documentos oficiais?",
+      "options": [
+        "Fine-tuning com dados proprietários da empresa",
+        "Prompt engineering com contexto fixo e limitado",
+        "RAG (Retrieval-Augmented Generation) com busca vetorial",
+        "Aprendizado por reforço com feedback humano direto"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 descreve que o agente de atendimento utiliza RAG para garantir respostas baseadas exclusivamente em documentos oficiais.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q039",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Em um sistema multi-agente, um coordenador central decide dinamicamente quais agentes acionar e monitora o progresso. Esse design corresponde a qual paradigma?",
+      "options": [
+        "Paradigma sequencial, com fluxo linear e previsível de tarefas",
+        "Paradigma conversacional, com emergência de soluções via diálogo",
+        "Paradigma hierárquico, com ponto único de falha e alto consumo de tokens",
+        "Paradigma híbrido, combinando sub-equipes sequenciais e conversacionais"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 descreve o paradigma hierárquico com um agente gerente que decide dinamicamente quais agentes acionar e monitora o progresso, citando ponto único de falha e alto consumo de tokens.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "crie-agentes-de-ia-autonomos-q040",
+      "courseSlug": "crie-agentes-de-ia-autonomos",
+      "question": "Em um time de agentes autônomos, dois especialistas entram em um ciclo de concordância mútua, gerando respostas cada vez mais longas sem concluir a tarefa. Esse fenômeno é classificado como:",
+      "options": [
+        "Comportamento emergente, pois surge da interação não prevista.",
+        "Custo de coordenação, pois gasta tokens em comunicação.",
+        "Janela de contexto estourada, pois o histórico cresce sem limite.",
+        "Ponto único de falha, pois um agente falhou e travou o time."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:46:42.278Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 define comportamento emergente como padrões não previstos, incluindo loops infinitos de concordância mútua entre agentes.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    }
+  ]
+}

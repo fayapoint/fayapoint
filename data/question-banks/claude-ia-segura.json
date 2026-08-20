@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "claude-ia-segura",
+  "lastUpdated": "2026-08-19T14:33:38.895Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "claude-ia-segura-q001",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual é a principal característica do Claude Opus em relação à janela de contexto?",
+      "options": [
+        "Janela de contexto de 500 mil tokens, suficiente para livros completos.",
+        "Janela de contexto de 1 milhão de tokens, equivalente a dez livros.",
+        "Janela de contexto de 2 milhões de tokens, superando todos os concorrentes.",
+        "Janela de contexto de 128 mil tokens, focada em respostas rápidas."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 afirma que o Opus possui janela de contexto de 1 milhão de tokens, equivalente a dez livros completos.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q002",
+      "courseSlug": "claude-ia-segura",
+      "question": "O que são os Artifacts na interface do Claude?",
+      "options": [
+        "Objetos interativos exibidos em painel lateral para edição e download.",
+        "Documentos permanentes que alimentam a base de conhecimento do projeto.",
+        "Instruções persistentes que definem o tom de voz do assistente.",
+        "Espaços de trabalho isolados para organizar conversas por tema."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 define Artifacts como objetos interativos gerados pelo Claude, exibidos em painel lateral para edição e download.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q003",
+      "courseSlug": "claude-ia-segura",
+      "question": "Em qual cenário o uso do Claude Opus com Agent Teams é mais adequado?",
+      "options": [
+        "Auditoria de segurança com múltiplos agentes coordenados.",
+        "Triagem de e-mails de suporte com respostas automáticas em segundos.",
+        "Geração de código boilerplate para um CRUD simples em produção.",
+        "Classificação de mensagens em categorias predefinidas em alto volume."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 menciona que o Agent Teams é usado para auditorias de segurança com múltiplos agentes coordenados.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q004",
+      "courseSlug": "claude-ia-segura",
+      "question": "Uma equipe precisa analisar contratos complexos com raciocínio de múltiplas etapas, mas tem orçamento limitado. Qual modelo oferece o melhor equilíbrio entre capacidade e custo?",
+      "options": [
+        "Claude Opus, pois possui a maior capacidade de raciocínio do mercado.",
+        "Claude Sonnet, pois entrega 98% da capacidade do Opus por 1/5 do custo.",
+        "Claude Haiku 4.5, pois é o mais rápido e econômico para grandes volumes.",
+        "Claude Opus com Agent Teams, pois coordena múltiplos agentes em paralelo."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 afirma que o Sonnet entrega aproximadamente 98% da capacidade intelectual do Opus a um quinto do custo, tornando-o o equilíbrio ideal para tarefas complexas com restrição orçamentária.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "media"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q005",
+      "courseSlug": "claude-ia-segura",
+      "question": "Um desenvolvedor quer integrar o Claude em um sistema interno que processa milhões de interações diárias, com custo variável conforme o uso. Qual opção de acesso é a mais adequada?",
+      "options": [
+        "Plano Pro, pois oferece acesso ilimitado a todos os modelos por mensalidade fixa.",
+        "Plano Team, pois permite compartilhar projetos e bases de conhecimento entre equipes.",
+        "API, pois cobra por tokens consumidos, ideal para integrações de alto volume.",
+        "Plano Max, pois oferece Dispatch para tarefas assíncronas em segundo plano."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 explica que a API tem preços baseados em tokens e é voltada para quem constrói integrações, cobrando estritamente pelo consumo efetivo, o que se adequa a um sistema de alto volume e custo variável.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q006",
+      "courseSlug": "claude-ia-segura",
+      "question": "Como garantir que o Claude tenha acesso permanente a um documento sem reenviá-lo a cada conversa em um projeto?",
+      "options": [
+        "Utilizando os Artifacts, que permitem visualizar e editar o documento gerado.",
+        "Adicionando o documento à Knowledge Base do Project, que o indexa sempre.",
+        "Configurando Custom Instructions para que o Claude sempre peça o documento.",
+        "Criando um novo Project para cada conversa, com o documento anexado."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 descreve que a Knowledge Base associa documentos permanentemente ao contexto de um projeto, indexando o conteúdo para uso automático em todas as interações futuras.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "media"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q007",
+      "courseSlug": "claude-ia-segura",
+      "question": "Uma empresa quer que todos os membros da equipe tenham acesso aos mesmos documentos e regras de formatação, mas cada membro deve manter suas conversas privadas com o Claude. Qual configuração atende a esse requisito?",
+      "options": [
+        "Compartilhar um Project, pois isso dá acesso a documentos e regras a todos.",
+        "Criar um Project separado para cada membro, duplicando os documentos e regras.",
+        "Utilizar a API com autenticação individual, garantindo privacidade por usuário.",
+        "Não é possível, pois o compartilhamento de Projetos inclui as conversas."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 afirma que compartilhar Projects torna todo o histórico de conversas um ativo coletivo, portanto não há como ter conversas privadas dentro de um projeto compartilhado.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q008",
+      "courseSlug": "claude-ia-segura",
+      "question": "No plano Pro, qual é o valor mensal e o que ele desbloqueia?",
+      "options": [
+        "Custa $20 mensais e libera Opus, Haiku e limites generosos.",
+        "Custa $30 mensais e libera Sonnet, Haiku, mas não o Opus.",
+        "Custa $100 mensais e libera todos os modelos e o Dispatch.",
+        "Custa $15 mensais e libera apenas o Sonnet sem Knowledge."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 especifica que o plano Pro custa $20 por mês e desbloqueia o acesso ao Opus e Haiku.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q009",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual técnica de prompting ajuda o Claude a minimizar erros lógicos em tarefas complexas?",
+      "options": [
+        "Uso de tags XML para separar contexto, documentos e tarefa de forma clara.",
+        "Chain-of-thought pede raciocínio passo a passo antes da resposta.",
+        "Few-shot prompting, fornecendo exemplos de entradas e saídas desejadas.",
+        "Definição de persona via System Prompt para moldar o vocabulário técnico."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 explica que o chain-of-thought melhora a qualidade da resposta ao minimizar erros lógicos com raciocínio passo a passo.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "media"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q010",
+      "courseSlug": "claude-ia-segura",
+      "question": "Por que a técnica do 'Sanduíche de Contexto' é recomendada na análise de documentos complexos?",
+      "options": [
+        "Porque põe documentos críticos no início e instruções no final.",
+        "Porque alterna documentos longos e curtos para equilibrar a atenção do modelo.",
+        "Porque coloca todos os documentos no meio para evitar dispersão da análise.",
+        "Porque separa documentos por tipo para facilitar a referência cruzada."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 recomenda o sanduíche de contexto posicionando documentos críticos no início e instruções no final para melhor atenção.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q011",
+      "courseSlug": "claude-ia-segura",
+      "question": "Em um cenário de debugging de erro intermitente, qual abordagem o Claude pode usar para identificar a causa raiz?",
+      "options": [
+        "Analisar logs e stack trace junto com código relacionado para achar a causa.",
+        "Gerar testes unitários para todos os caminhos felizes e alguns casos de borda.",
+        "Reescrever o código inteiro do zero seguindo os padrões da equipe.",
+        "Documentar a arquitetura do sistema em diagramas Mermaid."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 descreve a análise de causa raiz usando logs e stack trace junto com código relacionado.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q012",
+      "courseSlug": "claude-ia-segura",
+      "question": "Um desenvolvedor quer usar o Claude para gerar um prompt melhor para uma tarefa complexa. Qual técnica ele deve empregar?",
+      "options": [
+        "Metaprompting: usar o próprio Claude para escrever prompts melhores.",
+        "Chain-of-thought, pedindo raciocínio passo a passo na resposta final.",
+        "Few-shot prompting, fornecendo exemplos de saídas desejadas e formato.",
+        "Restrições explícitas, listando o que o modelo não deve fazer em hipótese."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 define metaprompting como o uso do próprio Claude para escrever prompts melhores.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q013",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual a principal função das tags XML no prompting com Claude?",
+      "options": [
+        "Tornar o prompt mais longo e detalhado para o modelo de IA.",
+        "Separar instruções do conteúdo para evitar ambiguidade.",
+        "Substituir o system prompt na definição de persona do Claude.",
+        "Aumentar a velocidade de processamento do modelo de linguagem."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "As tags XML criam fronteiras lógicas que separam instruções do conteúdo, evitando ambiguidade, conforme o capítulo 4.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q014",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual é a capacidade da janela de contexto do Claude mencionada no capítulo?",
+      "options": [
+        "500 mil tokens, suficiente para documentos médios.",
+        "2 milhões de tokens, ideal para grandes repositórios.",
+        "1 milhão de tokens, permitindo analisar um livro.",
+        "100 mil tokens, limitado a artigos curtos."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 afirma que a janela de contexto do Claude atinge 1 milhão de tokens, permitindo processar um livro inteiro.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q015",
+      "courseSlug": "claude-ia-segura",
+      "question": "No contexto de programação com Claude, o que é a 'Qualidade do Contexto'?",
+      "options": [
+        "O tamanho do código gerado pelo modelo em linhas de código.",
+        "A quantidade de testes que o modelo consegue criar automaticamente.",
+        "Riqueza das informações no prompt para gerar código.",
+        "A velocidade da conexão com a API do Claude na nuvem."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 explica que a qualidade do contexto é a riqueza das informações fornecidas, que determina a eficácia do código gerado.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q016",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual a diferença entre a distribuição de atenção e o sanduíche de contexto?",
+      "options": [
+        "A distribuição é sobre o modelo; o sanduíche é sobre o usuário.",
+        "A distribuição afeta a memória; o sanduíche afeta a velocidade.",
+        "Distribuição é fenômeno; sanduíche é estratégia.",
+        "A distribuição é para documentos; o sanduíche é para código."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 descreve a distribuição de atenção como um fenômeno do modelo, enquanto o sanduíche de contexto é a estratégia de posicionamento dos documentos.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q017",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual é a tríade fundamental para usar o Claude na escrita profissional?",
+      "options": [
+        "Contexto, objetivo e tom para guiar a IA na escrita",
+        "Clareza, concisão e persuasão no texto final",
+        "Formalidade, registro e estilo da mensagem corporativa",
+        "Estrutura, dados e revisão do conteúdo produzido"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 define a tríade Contexto, Objetivo e Tom como base para orientar a IA na escrita profissional.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q018",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual é a principal característica do Claude Code no terminal?",
+      "options": [
+        "Agente autônomo que mapeia todo o codebase do projeto",
+        "Assistente passivo que sugere trechos de código na IDE",
+        "Chatbot que responde perguntas isoladas de programação",
+        "Gerador de código aleatório sem contexto do projeto"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 destaca que o Claude Code atua como um desenvolvedor autônomo com consciência do codebase.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q019",
+      "courseSlug": "claude-ia-segura",
+      "question": "No mercado brasileiro, qual é a distinção entre Formalidade e Formalismo na comunicação empresarial?",
+      "options": [
+        "Formalidade é o uso de pronomes de tratamento; Formalismo é o excesso de jargões.",
+        "Formalidade é a adequação ao contexto; Formalismo é a rigidez desnecessária.",
+        "Formalidade é o uso de linguagem técnica; Formalismo é a ausência de emoção.",
+        "Formalidade é o tom relacional; Formalismo é o uso de anglicismos corporativos."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 explica que Formalidade é a adequação ao contexto, enquanto Formalismo é a rigidez desnecessária, diferenciando os conceitos no mercado brasileiro.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "media"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q020",
+      "courseSlug": "claude-ia-segura",
+      "question": "Quais operações de Git o Claude Code pode realizar diretamente do terminal?",
+      "options": [
+        "Criar branches, fazer commits e abrir pull requests.",
+        "Apenas fazer commits e push para o repositório remoto.",
+        "Somente clonar repositórios e criar tags de versão.",
+        "Excluir branches e reescrever o histórico do projeto."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 afirma que o Claude Code pode criar branches, fazer commits e abrir pull requests diretamente do terminal, conforme descrito na seção de Integração Nativa com Git.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "media"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q021",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual é a diferença entre a Janela de Contexto Expandida e a Compaction API no Claude Code?",
+      "options": [
+        "A Janela expande a memória; a Compaction resume o histórico da conversa.",
+        "A Janela é para código; a Compaction é para texto e documentação.",
+        "A Janela é uma API de acesso; a Compaction é um comando do terminal.",
+        "A Janela é um recurso do Git; a Compaction é um plugin de edição de código."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 descreve a Janela de Contexto Expandida como capacidade de processar até 1 milhão de tokens e a Compaction API como sumarização do histórico, sendo funções distintas.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q022",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual é a principal vantagem do Claude Cowork em relação à interface web tradicional?",
+      "options": [
+        "Acesso ao sistema de arquivos e interação com outras aplicações.",
+        "Velocidade de processamento e maior número de tokens por requisição.",
+        "Integração com redes sociais e ferramentas de e-mail marketing.",
+        "Capacidade de gerar imagens, vídeos e conteúdo multimídia."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 destaca que o Cowork tem acesso ao sistema de arquivos e interage com outras aplicações, diferentemente da interface web tradicional.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q023",
+      "courseSlug": "claude-ia-segura",
+      "question": "O que é o Dispatch no Claude Cowork?",
+      "options": [
+        "Recurso que permite processamento assíncrono de tarefas em segundo plano",
+        "Ferramenta que sincroniza e-mails com o calendário automaticamente",
+        "Aplicativo que organiza arquivos locais em pastas inteligentes",
+        "Extensão que adiciona atalhos de teclado para o sistema operacional"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 explica que o Dispatch é o motor de operação assíncrona, processando tarefas em segundo plano.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q024",
+      "courseSlug": "claude-ia-segura",
+      "question": "Em uma sessão de refatoração que dura horas, o Claude Code mantém um histórico extenso de comandos. Mesmo com a Janela de Contexto Expandida, por que a Compaction API é essencial?",
+      "options": [
+        "Porque ela aumenta a capacidade de tokens da janela de contexto.",
+        "Porque ela sumariza o histórico, preservando decisões críticas.",
+        "Porque ela define padrões de código que garantem consistência.",
+        "Porque ela permite criar branches e commits automáticos na refatoração."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "A Compaction API é essencial porque sumariza o histórico da conversa, descartando redundâncias e preservando decisões críticas, evitando que a IA atinja limites de memória, conforme descrito no capítulo 8.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q025",
+      "courseSlug": "claude-ia-segura",
+      "question": "Em que situação o MCP exige confirmação humana explícita?",
+      "options": [
+        "Para ações sensíveis como envio de e-mail ou mensagem no Slack",
+        "Para leitura de dados em bancos de dados PostgreSQL ou MySQL",
+        "Para consulta de repositórios Git e listagem de arquivos do projeto",
+        "Para criação de eventos no Google Calendar sem verificação"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 menciona que ações sensíveis, como envio de e-mail ou Slack, exigem confirmação humana.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q026",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual é a função principal dos servidores MCP no ecossistema do Claude?",
+      "options": [
+        "Substituir completamente a necessidade de usar a API da Anthropic",
+        "Criar novas linguagens de programação para o desenvolvimento de IAs",
+        "Atuar como tradutores entre ferramentas externas e o Claude",
+        "Armazenar os dados de treinamento do modelo em nuvem privada"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 define servidores MCP como tradutores que expõem as capacidades de ferramentas externas ao Claude.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q027",
+      "courseSlug": "claude-ia-segura",
+      "question": "Um usuário pede ao Claude para gerar uma justificativa convincente para um comportamento antiético. Segundo o capítulo, qual deve ser a resposta do Claude?",
+      "options": [
+        "Ele deve fornecer a justificativa, mas com um aviso sobre as consequências.",
+        "Ele deve recusar e explicar os riscos, sugerindo alternativas seguras.",
+        "Ele deve ignorar a solicitação e mudar de assunto imediatamente.",
+        "Ele deve fornecer a justificativa, pois a autonomia do usuário é absoluta."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 descreve a Recusa Informada, onde o Claude explica os riscos e sugere alternativas seguras em vez de simplesmente recusar.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q028",
+      "courseSlug": "claude-ia-segura",
+      "question": "Como o MCP resolve o problema da data de corte do treinamento?",
+      "options": [
+        "Permite acesso a dados em tempo real através de servidores conectados",
+        "Atualiza o modelo com novos dados de treinamento automaticamente",
+        "Utiliza um banco de dados interno com informações recentes",
+        "Restringe o acesso a informações anteriores à data de corte"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 afirma que o MCP dá acesso a dados em tempo real, superando a data de corte do treinamento.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q029",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual a função do system prompt na API do Claude?",
+      "options": [
+        "Define o comportamento base do modelo de forma fixa e invisível ao usuário",
+        "Armazena o histórico de conversas para melhorar respostas futuras",
+        "Controla o número máximo de tokens na resposta gerada pelo modelo",
+        "Configura a autenticação da API usando a chave de segurança do usuário"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 explica que o system prompt define a personalidade e o manual de conduta do modelo.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "media"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q030",
+      "courseSlug": "claude-ia-segura",
+      "question": "Como a Constitutional AI difere do treinamento por feedback humano?",
+      "options": [
+        "Usa princípios éticos predefinidos para guiar o comportamento do modelo",
+        "Depende exclusivamente de avaliações humanas para ajustar respostas",
+        "Aplica técnicas de aprendizado por reforço para maximizar recompensas",
+        "Elimina a necessidade de supervisão durante o treinamento do modelo"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 descreve a Constitutional AI como orientada por uma constituição de princípios éticos.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q031",
+      "courseSlug": "claude-ia-segura",
+      "question": "Quais linguagens a Anthropic oferece oficialmente para criar servidores MCP e integrar via SDK?",
+      "options": [
+        "Go e Rust, com suporte oficial para criação de servidores MCP",
+        "Python e TypeScript, com suporte oficial para servidores MCP e API",
+        "Java e C#, com suporte oficial para servidores MCP e API",
+        "Ruby e PHP, com suporte oficial para criação de servidores MCP"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 cita TypeScript e Python para servidores MCP, e o capítulo 11 os lista como SDK oficial da API.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q032",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual pilar do Claude garante que ele admita não saber em vez de inventar uma resposta?",
+      "options": [
+        "Constitutional AI, que treina o modelo com princípios éticos",
+        "Recusa informada, que explica o motivo de uma negativa",
+        "Honestidade epistêmica, que distingue o que sabe do que desconhece",
+        "Resistência a jailbreaks, que mantém o comportamento ético"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 define a honestidade epistêmica como distinguir o que se sabe do que se desconhece, evitando inventar respostas.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q033",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual é a função do agente orquestrador em um Agent Team?",
+      "options": [
+        "Executa todas as subtarefas sozinho e sem auxílio",
+        "Coordena e consolida os resultados parciais",
+        "Realiza apenas verificações de segurança dos sistemas",
+        "Substitui todos os agentes especialistas da equipe"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O orquestrador coordena e consolida os resultados parciais, como descrito no capítulo 13.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q034",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual é o propósito do metaprompt pessoal?",
+      "options": [
+        "Descrever perfil profissional e preferências do usuário",
+        "Armazenar templates de documentos e políticas internas da empresa",
+        "Automatizar o envio de e-mails para clientes",
+        "Definir as legislações que o Claude deve consultar"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O metaprompt pessoal descreve o perfil profissional e preferências do usuário, conforme o capítulo 14.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q035",
+      "courseSlug": "claude-ia-segura",
+      "question": "O que é o conceito de 'Profissional Augmented'?",
+      "options": [
+        "Um profissional que usa IA para amplificar capacidades",
+        "Um profissional que substitui humanos por IA em todas as tarefas",
+        "Um profissional que trabalha apenas com IA",
+        "Um profissional que evita completamente o uso de IA"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O Profissional Augmented usa IA para amplificar suas capacidades, como explicado no capítulo 15.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q036",
+      "courseSlug": "claude-ia-segura",
+      "question": "Em um cenário de due diligence, qual agente é responsável por detectar contradições entre fontes?",
+      "options": [
+        "O agente orquestrador consolida os dados e gera relatório",
+        "Um agente especialista em análise de contradições",
+        "O agente de segurança busca vulnerabilidades",
+        "O agente de performance identifica ineficiências"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 menciona um agente dedicado a analisar contradições entre fontes.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q037",
+      "courseSlug": "claude-ia-segura",
+      "question": "Um consultor quer criar um sistema de diagnóstico de clientes. O que deve ser colocado na Knowledge Base do Project?",
+      "options": [
+        "O metaprompt pessoal e as preferências de comunicação",
+        "Modelos de planilhas e manual de compliance da empresa",
+        "A lista de triggers e integrações com a API",
+        "A cadeia de valor informacional e os fluxos de trabalho"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 indica que a Knowledge Base deve conter modelos de planilhas e manuais de compliance.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q038",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual é a principal diferença entre IA reativa e IA agêntica?",
+      "options": [
+        "IA reativa é mais rápida em processamento",
+        "IA agêntica age autônoma e proativamente",
+        "IA reativa possui melhor raciocínio lógico",
+        "IA agêntica requer supervisão constante"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 afirma que a IA agêntica age de forma autônoma e proativa, enquanto a reativa apenas responde.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "dificil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q039",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual é a função principal do metaprompt pessoal no sistema de produtividade com Claude?",
+      "options": [
+        "Descrever o perfil profissional e preferências do usuário para guiar a IA.",
+        "Armazenar documentos de referência permanente para consulta da IA.",
+        "Automatizar tarefas recorrentes via triggers externos como, por exemplo, Zapier.",
+        "Conectar Projects entre si para criar um fluxo contínuo de trabalho."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 define o metaprompt pessoal como um documento mestre que descreve quem você é profissionalmente, incluindo preferências e prioridades.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "claude-ia-segura-q040",
+      "courseSlug": "claude-ia-segura",
+      "question": "Qual é a diferença fundamental entre 'Integração Ubíqua' e 'Agência' no contexto do futuro do Claude?",
+      "options": [
+        "Integração ubíqua é a IA em todos os sistemas; agência é agir de forma independente.",
+        "Integração ubíqua é sobre conectividade, agência é sobre velocidade de processamento.",
+        "Integração ubíqua é um conceito técnico, agência é um conceito ético.",
+        "Integração ubíqua é para empresas, agência é para indivíduos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:33:38.895Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 distingue integração ubíqua como a presença da IA em todo o ambiente digital e agência como a capacidade de executar tarefas de forma autônoma.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "dificil"
+      ]
+    }
+  ]
+}

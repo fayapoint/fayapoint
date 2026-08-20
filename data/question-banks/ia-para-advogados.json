@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "ia-para-advogados",
+  "lastUpdated": "2026-08-19T14:48:40.540Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "ia-para-advogados-q001",
+      "courseSlug": "ia-para-advogados",
+      "question": "O que é alucinação em um modelo de linguagem como o ChatGPT?",
+      "options": [
+        "Erro que ocorre quando o modelo consulta um banco de dados desatualizado.",
+        "Resposta plausível inventada por padrões estatísticos do treinamento.",
+        "Falha de conexão que impede o modelo de acessar a internet em tempo real.",
+        "Mecanismo de segurança que bloqueia informações jurídicas não verificadas."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 define alucinação como a geração de texto plausível baseada em probabilidades, não em consulta a dados.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q002",
+      "courseSlug": "ia-para-advogados",
+      "question": "Qual é a primeira medida de privacidade a tomar ao usar o ChatGPT para trabalho jurídico?",
+      "options": [
+        "Desativar o treinamento do modelo com seus dados nas configurações.",
+        "Usar o plano pago para garantir criptografia de ponta a ponta.",
+        "Criar uma conta separada para cada cliente atendido no escritório.",
+        "Sempre colar o documento inteiro para dar contexto completo ao modelo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 orienta desativar o treinamento como primeira barreira ética antes de usar a ferramenta.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q003",
+      "courseSlug": "ia-para-advogados",
+      "question": "Qual assistente de IA é mais indicado para pesquisa de jurisprudência com citação de fontes?",
+      "options": [
+        "ChatGPT, por ter o melhor raciocínio argumentativo para petições.",
+        "Claude, por conseguir ler acórdãos de até duzentas páginas de uma vez.",
+        "Perplexity, por buscar na web e mostrar a fonte de cada afirmação.",
+        "Gemini, por integrar diretamente com o Google Drive do escritório."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 afirma que pesquisa é Perplexity, pois ele cita as fontes de cada resposta.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q004",
+      "courseSlug": "ia-para-advogados",
+      "question": "Por que conferir apenas o número do processo não é suficiente ao validar uma jurisprudência?",
+      "options": [
+        "Porque o número pode ser real, mas a ementa ser de outro caso.",
+        "Porque o número sempre muda quando o processo é reformado pelo tribunal.",
+        "Porque o número é o dado menos confiável que a IA costuma inventar.",
+        "Porque o número precisa ser conferido no Google, não no site do tribunal."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 ensina a tríade de verificação: número, ementa e fonte, pois o número sozinho não garante a procedência.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q005",
+      "courseSlug": "ia-para-advogados",
+      "question": "O que ocorre quando o limite de tokens de contexto é ultrapassado em uma conversa com IA?",
+      "options": [
+        "O modelo interrompe a resposta e pede que você encurte o texto imediatamente.",
+        "O modelo esquece o início da conversa e passa a responder sem esse contexto.",
+        "O modelo salva a conversa em modo temporário e não a usa para treinamento.",
+        "O modelo cobra uma taxa extra para processar documentos além do limite."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 explica que o modelo 'esquece' o início quando o limite de tokens estoura.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q006",
+      "courseSlug": "ia-para-advogados",
+      "question": "No fluxo de verificação com Perplexity, o que caracteriza uma fonte verificada?",
+      "options": [
+        "A fonte aparece listada com link clicável na resposta do Perplexity.",
+        "A fonte é aberta e conferida no site oficial do tribunal, como stj.jus.br.",
+        "A fonte tem domínio .com.br e texto bem escrito, indicando credibilidade.",
+        "A fonte é citada pelo Perplexity e confirmada por outros sites de advocacia."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 distingue fonte citada de verificada, exigindo abertura e confirmação no site oficial.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q007",
+      "courseSlug": "ia-para-advogados",
+      "question": "Um cliente envia áudio com dados sensíveis de um acordo extrajudicial. Qual é a conduta correta?",
+      "options": [
+        "Transcrever o áudio no ChatGPT, pois o modo temporário garante privacidade total.",
+        "Ouvir o áudio, anotar pontos principais e resumir em termos genéricos no chat.",
+        "Pedir ao ChatGPT para resumir o áudio, já que o histórico está desativado.",
+        "Colar o áudio no Gemini, que tem integração com o Google Drive e é mais seguro."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 traz o cenário do áudio e recomenda resumir sem expor dados sensíveis.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q008",
+      "courseSlug": "ia-para-advogados",
+      "question": "Por que um modelo de linguagem pode criar uma colagem de trechos reais e inventados?",
+      "options": [
+        "Porque ele não tem banco de dados e gera texto por probabilidade.",
+        "Porque ele busca na internet e mistura resultados sem citar as fontes usadas.",
+        "Porque ele é programado para combinar decisões de tribunais diferentes.",
+        "Porque ele sofre interferência de outros usuários que usam o mesmo serviço."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 explica que o modelo prevê a próxima palavra, podendo combinar trechos plausíveis sem base real.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q009",
+      "courseSlug": "ia-para-advogados",
+      "question": "Qual é a principal função do NotebookLM segundo o capítulo?",
+      "options": [
+        "Ler PDFs e responder perguntas citando trechos exatos.",
+        "Interpretar a lei e dar opiniões jurídicas completas.",
+        "Substituir a leitura crítica do advogado nos casos.",
+        "Escrever petições jurídicas automaticamente sem revisão."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 explica que o NotebookLM lê os arquivos e responde com citações exatas, organizando sem interpretar a lei.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q010",
+      "courseSlug": "ia-para-advogados",
+      "question": "Por que usar o Google Scholar para verificar autores indicados pelo ChatGPT?",
+      "options": [
+        "Porque o Scholar indexa apenas obras acadêmicas revisadas.",
+        "Porque o ChatGPT frequentemente inventa artigos inexistentes.",
+        "Porque o Scholar mostra o número de citações de cada obra.",
+        "Porque o ChatGPT não conhece autores de doutrina."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 mostra que o Scholar indexa produção acadêmica revisada, enquanto o ChatGPT pode inventar títulos.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q011",
+      "courseSlug": "ia-para-advogados",
+      "question": "Qual é o site oficial para conferir a vigência de leis federais?",
+      "options": [
+        "planalto.gov.br é o domínio oficial do Planalto.",
+        "planalto.com é o site correto para consultas.",
+        "congresso.gov.br é onde se verifica a vigência.",
+        "senado.gov.br é a fonte primária de leis."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 indica que o site oficial do Planalto é planalto.gov.br para conferir vigência de leis federais.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q012",
+      "courseSlug": "ia-para-advogados",
+      "question": "Como a combinação de Claude e Excel ajuda a criar um mapa de jurisprudência?",
+      "options": [
+        "Claude extrai teses; Excel organiza em tabelas.",
+        "Claude lê PDFs; Excel escreve petições finais.",
+        "Claude filtra decisões; Excel verifica citações.",
+        "Claude cria o mapa; Excel imprime relatórios."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 descreve que Claude extrai teses e Excel estrutura os dados em tabelas para criar o mapa.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q013",
+      "courseSlug": "ia-para-advogados",
+      "question": "Qual a diferença entre juridiquês e linguagem formal?",
+      "options": [
+        "Juridiquês é jargão; formal é claro e respeitoso.",
+        "Juridiquês é usado em contratos; formal em petições.",
+        "Linguagem formal é mais complexa que juridiquês.",
+        "São termos sinônimos que significam a mesma coisa."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 diferencia juridiquês como ruído e formal como clareza, orientando o tom no prompt.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q014",
+      "courseSlug": "ia-para-advogados",
+      "question": "Por que o NotebookLM não responde bem a 'o que a lei diz sobre dano moral'?",
+      "options": [
+        "Ele responde só com base nos arquivos, não na lei geral.",
+        "Ele não consegue ler PDFs com texto escaneado ou imagens.",
+        "Ele exige que o usuário envie pelo menos 500 arquivos.",
+        "Ele não suporta perguntas sobre danos morais."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 afirma que o NotebookLM responde apenas com base nos arquivos enviados, não com conhecimento geral.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q015",
+      "courseSlug": "ia-para-advogados",
+      "question": "Uma advogada precisa verificar uma lei estadual sobre pensão alimentícia. O que ela deve fazer?",
+      "options": [
+        "Buscar no site da Assembleia, não no Planalto.",
+        "Usar o ChatGPT para confirmar o texto da lei estadual.",
+        "Consultar o Planalto federal, que publica todas as leis.",
+        "Confiar no resumo do ChatGPT sem verificar a fonte."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 ensina que leis estaduais devem ser verificadas no site da assembleia, não no Planalto federal.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q016",
+      "courseSlug": "ia-para-advogados",
+      "question": "Um advogado usa o ChatGPT para redigir uma petição sem fornecer contexto sobre o cliente. Qual o provável resultado?",
+      "options": [
+        "Rascunho genérico com possíveis fatos inventados.",
+        "O rascunho será perfeito porque a IA conhece o direito.",
+        "O rascunho será muito longo e exigirá apenas cortes.",
+        "O rascunho citará automaticamente as leis corretas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 alerta que sem contexto o rascunho fica genérico e pode inventar fatos, exigindo revisão.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q017",
+      "courseSlug": "ia-para-advogados",
+      "question": "Segundo o capítulo, qual é o papel do advogado ao usar IA para redigir contratos?",
+      "options": [
+        "Redigir tudo do zero, sem usar o rascunho gerado pela IA.",
+        "Transformar o rascunho em documento juridicamente válido.",
+        "Aceitar o texto da IA sem revisão, pois ela é precisa.",
+        "Usar a IA apenas para pesquisar jurisprudência aplicável."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 afirma que o papel do advogado é transformar o rascunho da IA em um documento juridicamente válido, conferindo definições e prazos.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q018",
+      "courseSlug": "ia-para-advogados",
+      "question": "Qual ferramenta do Word o capítulo recomenda para rastrear cada termo crítico em um documento?",
+      "options": [
+        "O corretor ortográfico, que identifica erros de digitação.",
+        "O recurso de revisão automática de gramática.",
+        "A função Localizar, usada com o Controle de Alterações.",
+        "O salvamento automático em nuvem do documento."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 ensina a usar a função Localizar do Word (Ctrl+L) para rastrear cada termo crítico no documento.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q019",
+      "courseSlug": "ia-para-advogados",
+      "question": "No capítulo 15, o que significa tradução jurídica feita com IA?",
+      "options": [
+        "Substituir palavras de um idioma por equivalentes diretos.",
+        "Transferir efeito legal entre sistemas jurídicos distintos.",
+        "Usar um dicionário bilíngue para conferir cada termo.",
+        "Traduzir literalmente, sem adaptar ao direito brasileiro."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 define tradução jurídica como transferência de efeito legal entre sistemas jurídicos diferentes, não troca de palavras.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q020",
+      "courseSlug": "ia-para-advogados",
+      "question": "Ao pedir um resumo de contrato para a IA, o que o capítulo 16 orienta fazer para evitar lacunas?",
+      "options": [
+        "Pedir apenas 'resuma este contrato' e confiar no resultado.",
+        "Usar o resumo como substituto da leitura do contrato original.",
+        "Especificar formato, seções e pedir trechos literais das cláusulas.",
+        "Solicitar que a IA ignore cláusulas de renovação automática."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 orienta pedir resumo estruturado em seções e exigir trechos literais das cláusulas de risco, conferindo com o original.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q021",
+      "courseSlug": "ia-para-advogados",
+      "question": "No fluxo de comparação de versões de contrato, qual é a função do Claude?",
+      "options": [
+        "Substituir o Word na comparação mecânica dos arquivos.",
+        "Decidir quais alterações são relevantes para o cliente.",
+        "Agrupar e classificar as mudanças apontadas pelo Word.",
+        "Gerar automaticamente uma nova versão do contrato."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 mostra que o Word marca as diferenças e o Claude transforma a lista em resumo legível, agrupando e classificando as mudanças.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q022",
+      "courseSlug": "ia-para-advogados",
+      "question": "Uma cláusula prevê multa de 50% em contrato de consumo. Como usar a IA no capítulo 18 sem cometer erro?",
+      "options": [
+        "Aceitar a resposta da IA como parecer final sobre a abusividade.",
+        "Pedir análise sob o CDC, conferir o artigo citado e a jurisprudência.",
+        "Usar a IA para decidir se a multa é abusiva no caso concreto.",
+        "Ignorar a cláusula, pois a IA não trata de multas."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 orienta pedir análise com base no CDC, conferir cada fonte citada e registrar conclusões, pois a IA é alerta, não sentença.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q023",
+      "courseSlug": "ia-para-advogados",
+      "question": "Um contrato americano usa 'consideration'. Qual o procedimento correto segundo o capítulo 15?",
+      "options": [
+        "Traduzir como 'consideração' por ser a palavra mais comum.",
+        "Pedir contexto à IA e conferir o equivalente jurídico em português.",
+        "Manter o termo em inglês sem qualquer explicação no contrato.",
+        "Substituir por 'causa' sem verificar o sentido no direito brasileiro."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 ensina a dar contexto à IA e conferir termos técnicos, pois 'consideration' significa contraprestação, não consideração.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q024",
+      "courseSlug": "ia-para-advogados",
+      "question": "A IA citou a 'Súmula 456 do TST' em uma contestação. Qual atitude segue o método do capítulo 14?",
+      "options": [
+        "Manter a citação, pois a IA nunca inventa jurisprudência.",
+        "Conferir no Google se a súmula existe e se o tribunal está correto.",
+        "Remover a citação sem verificar, pois toda súmula é falsa.",
+        "Trocar o número da súmula para 455, que parece mais plausível."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 manda verificar cada citação no Google, item por item, antes de enviar a peça, pois a IA gera números plausíveis.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q025",
+      "courseSlug": "ia-para-advogados",
+      "question": "No processo de extração de dados de contratos com IA, o que é um schema?",
+      "options": [
+        "Uma lista exata de campos a preencher, com nomes e formatos definidos.",
+        "Um resumo livre das informações que o advogado considera relevantes.",
+        "Uma tabela com os valores encontrados em cada cláusula do contrato.",
+        "Um prompt genérico pedindo à IA que destaque as informações importantes."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 define schema como a lista exata de campos com nomes e formatos, essencial para extração consistente.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q026",
+      "courseSlug": "ia-para-advogados",
+      "question": "No fluxo de conferência de contratos antes da assinatura, qual é a função do checklist?",
+      "options": [
+        "Substituir a leitura integral do contrato pela resposta da IA.",
+        "Listar o que conferir em cada tipo de contrato, de forma específica.",
+        "Garantir que a IA leia todas as cláusulas sem precisar de supervisão.",
+        "Apontar quais cláusulas devem ser excluídas do contrato antes da assinatura."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 afirma que o checklist é específico para cada tipo de contrato e lista exatamente o que conferir.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q027",
+      "courseSlug": "ia-para-advogados",
+      "question": "No NotebookLM, qual é a função das citações nas respostas da IA?",
+      "options": [
+        "Permitir conferir o trecho original no documento-fonte.",
+        "Indicar o número de páginas que a IA analisou em cada documento.",
+        "Substituir a leitura do documento original pela resposta gerada.",
+        "Mostrar quais fontes foram ignoradas pela IA durante a triagem."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 diz que a citação é o controle de qualidade, permitindo clicar e ler o trecho original.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q028",
+      "courseSlug": "ia-para-advogados",
+      "question": "No fluxo de automação de e-mails com IA, qual a diferença entre triagem e resposta?",
+      "options": [
+        "A triagem classifica a urgência; a resposta gera o texto.",
+        "A triagem define o tom; a resposta decide se o e-mail é urgente.",
+        "A triagem envia o e-mail; a resposta apenas arquiva a mensagem.",
+        "A triagem sugere horários; a resposta classifica os contatos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 descreve a triagem como classificação de urgência e a resposta como geração do texto do e-mail.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q029",
+      "courseSlug": "ia-para-advogados",
+      "question": "Qual é o papel do ChatGPT no planejamento semanal?",
+      "options": [
+        "Decidir as prioridades e o que deve ser feito primeiro na semana.",
+        "Organizar as tarefas existentes, deixando as decisões ao advogado.",
+        "Substituir completamente a necessidade de revisão humana no plano.",
+        "Exportar o plano para o Excel sem exigir nenhuma adaptação do usuário."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 ensina que a IA organiza e estrutura, mas a decisão sobre prioridades é do advogado.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q030",
+      "courseSlug": "ia-para-advogados",
+      "question": "Um advogado pede ao Claude um parecer completo e recebe um texto com relatório, fundamentação e conclusão. Qual deve ser sua conduta?",
+      "options": [
+        "Revisar a ortografia e entregar o parecer ao cliente sem alterações.",
+        "Conferir os fatos e fundamentos e escrever a conclusão você mesmo.",
+        "Aceitar a conclusão da IA, pois ela analisou todos os documentos.",
+        "Deletar o texto gerado e escrever o parecer do zero, sem usar IA."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 orienta que a conclusão do parecer é do advogado e que ele deve conferir fatos e fundamentos.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q031",
+      "courseSlug": "ia-para-advogados",
+      "question": "Um advogado precisa identificar, em 200 ementas, quais tratam de dano moral em relação de consumo. Qual a melhor abordagem?",
+      "options": [
+        "Usar o NotebookLM com critérios objetivos e validar uma amostra.",
+        "Pedir ao ChatGPT um resumo geral de todas as ementas de uma vez.",
+        "Carregar as ementas no NotebookLM e perguntar 'resuma tudo'.",
+        "Copiar todas as ementas para o ChatGPT e pedir uma lista priorizada."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 recomenda critérios objetivos no NotebookLM e validação de amostra antes de usar os resultados.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q032",
+      "courseSlug": "ia-para-advogados",
+      "question": "Um contrato de 10 páginas menciona 'salário a combinar'. Ao extrair dados com IA, o que o schema deve prever?",
+      "options": [
+        "Que o campo salário seja preenchido com o valor estimado pelo advogado.",
+        "Que a IA use o valor de mercado para preencher o campo automaticamente.",
+        "Que o campo seja marcado como 'N/A' quando o dado não existir no contrato.",
+        "Que o campo seja ignorado, pois a IA não deve lidar com cláusulas ambíguas."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 manda prever o campo 'N/A' no schema para cláusulas ambíguas, evitando invenção de valores.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q033",
+      "courseSlug": "ia-para-advogados",
+      "question": "Qual é o papel da IA na qualificação de leads, segundo o capítulo 25?",
+      "options": [
+        "Aconselhar juridicamente cada lead que procura o escritório",
+        "Triar informações e padronizar respostas frequentes",
+        "Substituir o advogado na análise de viabilidade",
+        "Opinar sobre o mérito das causas recebidas"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 define a IA como recepcionista que tria informações e padroniza respostas, sem aconselhar.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q034",
+      "courseSlug": "ia-para-advogados",
+      "question": "O que compõe um prompt padronizado para peças jurídicas?",
+      "options": [
+        "Instruções fixas e campos variáveis separados",
+        "Apenas um texto genérico sem campos específicos",
+        "Somente os dados do cliente e do processo",
+        "Um modelo pronto da internet sem adaptação"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 explica que o prompt padrão tem instruções fixas e campos variáveis separados.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q035",
+      "courseSlug": "ia-para-advogados",
+      "question": "Qual a característica central do NotebookLM para base de conhecimento?",
+      "options": [
+        "Busca na internet informações atualizadas",
+        "Responde com base apenas nas fontes adicionadas",
+        "Substitui o sistema de gestão do escritório",
+        "Gera conteúdo novo independente das fontes"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 27 afirma que o NotebookLM responde apenas com base nas fontes adicionadas.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q036",
+      "courseSlug": "ia-para-advogados",
+      "question": "No fluxo de integração com Word e Drive, qual a ordem correta?",
+      "options": [
+        "Gerar rascunho, colar sem formatação, salvar com padrão",
+        "Salvar no Drive, gerar rascunho, colar formatado",
+        "Colar formatado, gerar rascunho, salvar sem padrão",
+        "Gerar rascunho, salvar na raiz, colar formatado"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 28 descreve a ordem: gerar rascunho, colar sem formatação e salvar com padrão.",
+      "status": "active",
+      "tags": [
+        "cap28",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q037",
+      "courseSlug": "ia-para-advogados",
+      "question": "Um advogado precisa analisar um caso com dados sensíveis de cliente. Segundo o capítulo 29, qual a conduta correta?",
+      "options": [
+        "Usar ferramenta gratuita para agilizar a análise",
+        "Anonimizar os dados antes de inserir no prompt",
+        "Colar o processo inteiro para melhor contexto",
+        "Confiar na IA para calcular prazos processuais"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 29 recomenda anonimizar dados antes de inserir no prompt para proteger o sigilo.",
+      "status": "active",
+      "tags": [
+        "cap29",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q038",
+      "courseSlug": "ia-para-advogados",
+      "question": "No sistema completo, qual etapa é indispensável antes de gerar o rascunho final?",
+      "options": [
+        "Conferir cada citação da pesquisa na fonte original",
+        "Copiar diretamente a pesquisa para o Word",
+        "Pular a triagem inicial para casos simples",
+        "Usar a mesma base de conhecimento para todos os casos"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 30 exige conferir cada citação da pesquisa na fonte original antes de avançar.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q039",
+      "courseSlug": "ia-para-advogados",
+      "question": "Uma lead pergunta se tem direito a pensão. Qual a resposta adequada usando IA?",
+      "options": [
+        "A IA deve responder com base no caso específico",
+        "A IA deve dar informação geral e convidar para consulta",
+        "A IA deve opinar sobre o valor da pensão",
+        "A IA deve prometer um resultado favorável"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Os capítulos 25 e 26 indicam que a IA deve dar informação geral e convidar para consulta, sem aconselhar.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-advogados-q040",
+      "courseSlug": "ia-para-advogados",
+      "question": "Qual erro comum pode comprometer a base de conhecimento no NotebookLM?",
+      "options": [
+        "Subir documentos sem revisar o seu conteúdo",
+        "Confiar na resposta sem clicar na citação",
+        "Misturar bases de áreas jurídicas diferentes",
+        "Não atualizar as fontes regularmente na base"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:48:40.540Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 27 destaca que confiar na resposta sem clicar na citação é erro comum que compromete a base.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "dificil"
+      ]
+    }
+  ]
+}

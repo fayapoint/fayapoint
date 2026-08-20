@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "autoresearch-singularity",
+  "lastUpdated": "2026-08-19T13:29:49.439Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "autoresearch-singularity-q001",
+      "courseSlug": "autoresearch-singularity",
+      "question": "No loop básico de autoresearch, quando uma iteração produz um score inferior ao recorde anterior, qual é a ação correta?",
+      "options": [
+        "Manter a alteração e registrar como novo recorde.",
+        "Descartar a alteração e retornar ao estado anterior estável.",
+        "Aumentar a temperatura da mutação para tentar de novo.",
+        "Salvar o resultado no histórico e continuar a partir dele."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 define a decisão binária: se o score é inferior ou igual, ocorre Discard, retornando ao estado anterior.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q002",
+      "courseSlug": "autoresearch-singularity",
+      "question": "No modelo de busca local estocástica usado pelo autoresearch, o que representa a 'altitude' do terreno?",
+      "options": [
+        "O número de parâmetros que o sistema possui em cada estado.",
+        "A métrica de qualidade que orienta a direção das mutações.",
+        "A velocidade de processamento do modelo durante a geração.",
+        "A quantidade de iterações bem-sucedidas acumuladas no loop."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 explica que a altitude representa a métrica de qualidade, como val_bpb ou score.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q003",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Qual é a função principal da rubrica no paradigma LLM-as-Judge?",
+      "options": [
+        "Fornecer critérios objetivos e âncoras para a avaliação automatizada.",
+        "Aumentar a temperatura do modelo avaliador para gerar notas variadas.",
+        "Substituir completamente a necessidade de um modelo gerador no sistema.",
+        "Armazenar o histórico de todas as mutações propostas pelo sistema."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 descreve a rubrica como o documento mestre com dimensões, escalas, âncoras e pesos.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q004",
+      "courseSlug": "autoresearch-singularity",
+      "question": "De que forma o arquivo de histórico (results.tsv) auxilia o processo de evolução no autoresearch?",
+      "options": [
+        "Ele registra os scores e permite que o sistema evite repetir erros passados.",
+        "Ele armazena os parâmetros de todas as mutações já testadas com sucesso.",
+        "Ele define a métrica de avaliação usada para julgar cada nova geração.",
+        "Ele controla a temperatura da mutação para equilibrar exploração e explotação."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 menciona o histórico como memória institucional; o capítulo 2 mostra que ele ajuda a ajustar rota e evitar ótimos locais.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "media"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q005",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Qual a principal diferença entre a mutação proposta por um LLM e a perturbação cega do hill climbing clássico?",
+      "options": [
+        "A mutação do LLM é baseada em conhecimento semântico, enquanto a cega é aleatória.",
+        "A mutação do LLM é sempre mais lenta, mas produz resultados mais precisos.",
+        "A mutação cega é mais eficaz para escapar de platôs de qualidade estagnados.",
+        "A mutação do LLM não requer avaliação, enquanto a cega precisa de métricas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 destaca que o LLM propõe mudanças semânticas informadas, enquanto o hill climbing usa perturbações cegas e minúsculas.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "media"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q006",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Um sistema de autoresearch otimiza e-mails de marketing. Após uma mutação, o score de engajamento caiu de 7.2 para 6.9. Qual deve ser o próximo passo do sistema?",
+      "options": [
+        "Manter a alteração, pois houve uma pequena variação no score obtido.",
+        "Descartar a alteração e retornar ao estado anterior com score 7.2.",
+        "Aumentar a temperatura da mutação para tentar uma mudança mais radical.",
+        "Registrar a alteração no histórico e continuar a partir do novo estado."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 define a decisão binária: se o score é inferior, ocorre Discard, retornando ao estado anterior.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q007",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Em um sistema de autoresearch que está estagnado em um platô de qualidade, qual estratégia é mais adequada para escapar dessa região?",
+      "options": [
+        "Reduzir a temperatura da mutação para fazer ajustes mais incrementais e seguros.",
+        "Aumentar a temperatura da mutação para forçar mudanças disruptivas e exploratórias.",
+        "Manter a temperatura atual e aumentar o número de iterações para refinar o resultado.",
+        "Substituir a métrica de avaliação por uma mais rigorosa para filtrar variações."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 explica que mutações de alta temperatura são disruptivas e ajudam a explorar novas regiões, essencial para sair de ótimos locais.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "dificil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q008",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Para mitigar o viés de auto-preferência quando o mesmo modelo gera e avalia seu próprio texto, qual técnica é recomendada?",
+      "options": [
+        "Utilizar múltiplas personas com instruções conflitantes para obter perspectivas distintas.",
+        "Aumentar a temperatura do avaliador para gerar notas mais variadas e imprevisíveis.",
+        "Reduzir o número de dimensões da rubrica para simplificar o processo de avaliação.",
+        "Empregar escalas de 1 a 100 para obter uma resolução mais fina nas notas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 sugere o sistema de múltiplas personas para combater o viés circular, com instruções conflitantes.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "dificil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q009",
+      "courseSlug": "autoresearch-singularity",
+      "question": "No autoresearch, como a mutação difere dos algoritmos evolutivos clássicos?",
+      "options": [
+        "Usa perturbação aleatória de bits e números",
+        "Aplica gradiente matemático para direção",
+        "Proposta por LLM com compreensão semântica",
+        "Depende de sorte estatística e tentativa"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 afirma que a mutação semântica é proposta por um LLM que compreende o significado, enquanto algoritmos clássicos usam perturbação aleatória.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "facil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q010",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Qual é a função do arquivo config.json no sistema?",
+      "options": [
+        "Armazenar os parâmetros de geração e tom",
+        "Registrar os resultados de cada tentativa",
+        "Definir a rubrica de avaliação qualitativa",
+        "Guardar o melhor texto já produzido"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 descreve config.json como o DNA do sistema, armazenando parâmetros de geração, tom, profundidade e estrutura.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "facil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q011",
+      "courseSlug": "autoresearch-singularity",
+      "question": "No Projeto TCH, o que significa a taxa de keep de aproximadamente 12%?",
+      "options": [
+        "Percentual de experimentos que melhoram o score",
+        "Quantidade de iterações que foram descartadas",
+        "Proporção de textos que atingiram nota máxima",
+        "Fração de tentativas que falharam por erro"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 explica que a taxa de keep de 12% indica que apenas 12% dos experimentos foram mantidos por melhorarem o score.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "facil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q012",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Para melhorar a empatia em um assistente de suporte, qual estratégia de mutação é mais eficaz?",
+      "options": [
+        "Ajustar a temperatura do modelo para 0.85",
+        "Alterar a ordem dos tópicos na resposta",
+        "Mudar a abordagem para validar sentimentos",
+        "Incrementar o parâmetro de frequência penal"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 mostra que a mutação conceitual, que muda a abordagem para validar sentimentos, resolve o problema de empatia.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "media"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q013",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Por que usar um modelo menor para mutação e um maior para avaliação?",
+      "options": [
+        "Para reduzir custos e manter a qualidade crítica",
+        "Porque a mutação exige mais precisão numérica",
+        "Para acelerar o loop e diminuir latência",
+        "Porque a avaliação precisa de menos contexto"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 menciona a hibridização de modelos para otimizar custo e performance, usando modelos potentes na avaliação e menores na mutação.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q014",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Qual a diferença entre a temperatura do modelo e a temperatura da mutação?",
+      "options": [
+        "A do modelo controla criatividade, a da mutação ousadia",
+        "A do modelo ajusta aleatoriedade, a da mutação foco",
+        "A do modelo define tom, a da mutação define estrutura",
+        "A do modelo regula repetição, a da mutação exploração"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 distingue que a temperatura do modelo equilibra criatividade e previsibilidade, enquanto a da mutação controla o nível de ousadia das propostas.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q015",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Em um sistema de materiais educativos com baixa retenção, qual mutação é mais adequada?",
+      "options": [
+        "Aumentar a temperatura do modelo para 0.9",
+        "Alterar a perspectiva para segunda pessoa",
+        "Reorganizar o texto com listas e exemplos",
+        "Trocar a narrativa técnica por uma histórica"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 apresenta a mutação estrutural como solução para baixa retenção, quebrando parágrafos longos e inserindo listas e exemplos.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q016",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Por que os primeiros keeps no TCH são saltos grandes e depois ficam pequenos?",
+      "options": [
+        "Porque o sistema aprende e satura após ganhos iniciais",
+        "Porque a rubrica muda a cada iteração do processo",
+        "Porque o modelo avaliador se torna mais rigoroso",
+        "Porque os parâmetros ficam fixos após o primeiro keep"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 explica os ganhos incrementais: os primeiros keeps são saltos largos, mas depois as melhorias diminuem, gerando o efeito composto.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q017",
+      "courseSlug": "autoresearch-singularity",
+      "question": "No autoresearch para código, qual é o primeiro filtro de avaliação aplicado a uma mutação?",
+      "options": [
+        "A métrica de correção, que verifica se os testes passam ou falham.",
+        "A métrica de performance, que mede tempo de execução e memória RAM.",
+        "A métrica de complexidade, que analisa o aninhamento e linhas de código.",
+        "A métrica de cobertura, que calcula o percentual de linhas testadas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 afirma que a correção é o primeiro filtro porque os testes passam ou falham de forma binária.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q018",
+      "courseSlug": "autoresearch-singularity",
+      "question": "No autoresearch para prompts, o que é avaliado para medir a eficácia de um prompt?",
+      "options": [
+        "A qualidade do texto final gerado pelo modelo para um único exemplo.",
+        "A eficácia do prompt quando testado contra um conjunto de test cases.",
+        "A velocidade de execução do prompt em diferentes hardwares disponíveis.",
+        "A quantidade de tokens economizada durante a geração das respostas."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 define que o output avaliado é a eficácia do prompt testado contra um conjunto diversificado de test cases.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q019",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Em um agente de IA, qual camada define sua identidade, capacidades e restrições?",
+      "options": [
+        "O formato de memória, que estrutura o contexto e as informações passadas.",
+        "A estratégia de planejamento, que decide a ordem das sub-tarefas.",
+        "O system prompt, que atua como o caráter e as regras fundamentais.",
+        "A seleção de ferramentas, que escolhe quais recursos serão utilizados."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 descreve o system prompt como a camada que estabelece a identidade, capacidades e restrições do agente.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q020",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Após validar a correção e medir os ganhos de uma mutação de código, o que o fluxo de autoresearch faz?",
+      "options": [
+        "Descarta a mutação se a complexidade ciclomática aumentar de valor.",
+        "Integra a mutação se o score composto for superior ao estado anterior.",
+        "Executa a mutação novamente em um ambiente de sandbox isolado.",
+        "Envia o código para um revisor humano antes de qualquer decisão."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 estabelece que a mutação é integrada via git commit quando o score composto supera o estado anterior.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "media"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q021",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Por que o autoresearch para prompts avalia o prompt contra múltiplos test cases?",
+      "options": [
+        "Para garantir a generalização do prompt em diversos cenários de uso.",
+        "Para reduzir o custo computacional de cada iteração de otimização.",
+        "Para eliminar a necessidade de rubricas de score na avaliação.",
+        "Para permitir que o prompt seja otimizado para um exemplo específico."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 explica que avaliar múltiplos casos garante a generalização e evita overfitting em um único exemplo.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "media"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q022",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Durante uma iteração de autoresearch para código, a mutação proposta causa falha em um teste, mas o objetivo declarado da iteração é corrigir um bug pré-existente. O que o sistema deve fazer?",
+      "options": [
+        "Descartar a mutação imediatamente, pois qualquer falha invalida a mudança.",
+        "Manter a mutação, pois a falha pode ser aceita nesse contexto específico.",
+        "Executar a mutação em produção para verificar o comportamento real.",
+        "Aumentar a cobertura de testes antes de aceitar a mutação."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 permite aceitar falhas quando o objetivo da iteração é justamente corrigir um bug pré-existente.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q023",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Qual alternativa descreve corretamente a diferença entre subespecificação e sobreespecificação irrelevante em prompts?",
+      "options": [
+        "Subespecificação é usar exemplos negativos; sobreespecificação é usar exemplos positivos.",
+        "Subespecificação omite contexto; sobreespecificação inclui detalhes que poluem a atenção.",
+        "Subespecificação detalha demais; sobreespecificação não fornece contexto algum.",
+        "Subespecificação é um viés de path dependence; sobreespecificação é um viés de ancoragem."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 distingue subespecificação como omissão de contexto e sobreespecificação como excesso de detalhes que poluem a atenção.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "dificil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q024",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Um agente de IA está refinando excessivamente respostas já satisfatórias, desperdiçando recursos. Qual camada o autoresearch deve ajustar para resolver esse sintoma?",
+      "options": [
+        "O formato de memória, para armazenar mais histórico de conversas.",
+        "A estratégia de planejamento, para aumentar a profundidade do plano.",
+        "Os critérios de parada, para definir quando a tarefa está concluída.",
+        "A seleção de ferramentas, para restringir o acesso a APIs externas."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 associa o desperdício de recursos por refino excessivo à falta de critérios de parada adequados.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "dificil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q025",
+      "courseSlug": "autoresearch-singularity",
+      "question": "O que caracteriza o mode collapse no autoresearch?",
+      "options": [
+        "Convergência para um estilo repetitivo que pontua bem na rubric, mas fica monótono.",
+        "Divergência para conteúdos aleatórios que ignoram completamente a rubric de avaliação.",
+        "Colapso técnico do sistema que exige reinicialização manual para voltar a funcionar.",
+        "Otimização excessiva dos custos, reduzindo gastos com tokens de API a zero."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 define mode collapse como a convergência para um estilo repetitivo que pontua bem na rubric, mas se torna monótono para leitores humanos.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "facil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q026",
+      "courseSlug": "autoresearch-singularity",
+      "question": "O que é auto-aperfeiçoamento recursivo no contexto do autoresearch?",
+      "options": [
+        "Sistema de IA melhora seus outputs de forma iterativa, incluindo código e prompts.",
+        "Sistema de IA melhora apenas dados de treinamento, sem alterar parâmetros internos.",
+        "Sistema de IA melhora a interface do usuário, tornando-a mais intuitiva e responsiva.",
+        "Sistema de IA melhora a velocidade de processamento, sem modificar o conteúdo gerado."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 explica que o auto-aperfeiçoamento recursivo é quando a IA melhora seus próprios outputs, incluindo código, prompts ou estratégias, de forma iterativa.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "facil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q027",
+      "courseSlug": "autoresearch-singularity",
+      "question": "No projeto They Can Hear, qual foi a principal melhoria obtida pelo Autoresearch?",
+      "options": [
+        "Inclusão de detalhes acústicos específicos, como sons de reverberação e tubulações.",
+        "Aumento do número de cenas geradas por minuto, otimizando o tempo de produção.",
+        "Redução do custo de API usando modelos locais como Qwen3 8B via LM Studio.",
+        "Criação de um novo gênero de ficção sonora com narrativa não linear."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 destaca que a melhoria mais impactante no projeto TCH foi a inclusão de detalhes acústicos específicos, como sons de reverberação e tubulações.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "facil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q028",
+      "courseSlug": "autoresearch-singularity",
+      "question": "O que limita a melhoria contínua do autoresearch após muitas iterações?",
+      "options": [
+        "Os tetos do modelo, da rubric e da diversidade impedem novos ganhos de score.",
+        "A falta de dados de treinamento impede que o sistema aprenda novas estratégias.",
+        "O custo crescente das chamadas de API inviabiliza a continuidade do processo.",
+        "A ausência de revisão humana faz o sistema perder qualidade em cada iteração."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 menciona três tetos que limitam a convergência: o teto do modelo, o teto da rubric e o teto da diversidade.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "media"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q029",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Como o Autoresearch se diferencia de linters e formatters na otimização de código?",
+      "options": [
+        "Foca em mudanças semânticas, propondo refatorações reais, não apenas estética.",
+        "Automatiza a correção de erros de sintaxe e formatação de forma instantânea.",
+        "Substitui completamente a revisão humana, garantindo código perfeito sem falhas.",
+        "Utiliza apenas análise estática, sem considerar cobertura de testes ou profiling."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 explica que o code improvement pipeline foca em mudanças semânticas, enquanto linters e formatters cuidam apenas da estética do código.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "media"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q030",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Um sistema de autoresearch para gerar respostas de suporte ao cliente passou a produzir respostas idênticas com a mesma saudação e final. Qual é o problema?",
+      "options": [
+        "O sistema sofreu mode collapse, convergindo para um estilo repetitivo e monótono.",
+        "O sistema sofreu overfitting ao juiz, explorando viéses do avaliador artificial.",
+        "O sistema atingiu o teto do modelo, não conseguindo melhorar além do nível atual.",
+        "O sistema perdeu o acesso à API, gerando respostas padrão de erro."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 descreve o mode collapse como a convergência para um estilo repetitivo que pontua bem na rubric, mas se torna monótono, exatamente como no cenário.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q031",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Qual característica é necessária para a singularidade tecnológica, mas ausente no autoresearch atual?",
+      "options": [
+        "Capacidade de modificar a própria arquitetura e inventar novas métricas de avaliação.",
+        "Capacidade de gerar textos criativos e emocionantes sem intervenção humana alguma.",
+        "Capacidade de processar grandes volumes de dados em paralelo com alta eficiência.",
+        "Capacidade de aprender com feedback humano e melhorar ao longo do tempo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 afirma que a singularidade exigiria auto-modificação profunda, avaliação meta-recursiva e aquisição autônoma de recursos, capacidades inexistentes hoje.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q032",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Em uma campanha de e-mail marketing, como o Autoresearch pode ser usado para otimizar o orçamento?",
+      "options": [
+        "Avaliando variações de copy com LLM-as-Judge antes de gastar tráfego real.",
+        "Enviando todas as variações para teste A/B e escolhendo a melhor após os dados.",
+        "Reduzindo o número de e-mails enviados para economizar custos de infraestrutura.",
+        "Automatizando o envio de e-mails em horários de maior taxa de abertura."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 mostra que o Autoresearch usa LLM-as-Judge para pré-filtrar variações de copy, evitando gastar tráfego real em ideias ruins.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q033",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Qual é a principal vantagem de usar modelos locais para a tarefa de mutação?",
+      "options": [
+        "Custo zero para gerar centenas de variações de parâmetros.",
+        "Melhor qualidade de raciocínio complexo do que a nuvem.",
+        "Acesso a modelos com 70B de parâmetros sem quantização.",
+        "Integração nativa com a API da OpenAI para maior compatibilidade."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 afirma que modelos locais aproveitam o custo zero para gerar centenas de ideias na mutação.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q034",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Qual arquivo armazena os critérios de qualidade no template autoresearch?",
+      "options": [
+        "config.json, que contém os parâmetros atuais da pesquisa.",
+        "results.tsv, que registra o histórico de experimentos.",
+        "rubric.md, que define a rubrica de avaliação do sistema.",
+        "best_output.md, que guarda o estado da arte atual."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 define rubric.md como o arquivo que contém a rubrica de avaliação.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q035",
+      "courseSlug": "autoresearch-singularity",
+      "question": "O que distingue o autoresearch em tempo real do A/B testing tradicional?",
+      "options": [
+        "O teste A/B usa variantes fixas, o autoresearch evolui as variantes.",
+        "O autoresearch roda em lotes, o A/B test opera continuamente.",
+        "O A/B test é mais rápido, o autoresearch é mais barato.",
+        "O autoresearch não requer métricas, o A/B test exige rubricas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 afirma que o A/B testa variantes fixas, enquanto o autoresearch evolui as variantes com base nos dados.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q036",
+      "courseSlug": "autoresearch-singularity",
+      "question": "No autoresearch hierárquico, qual nível de otimização itera em minutos?",
+      "options": [
+        "O nível de templates estruturais para segmentos de clientes.",
+        "O nível de outputs individuais, como um parágrafo específico.",
+        "O nível de estratégia, decidindo abordagens e momentos.",
+        "O nível de rubricas, que definem os critérios de avaliação."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 diz que o nível baixo (outputs individuais) itera em minutos.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q037",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Um pesquisador possui uma GPU com 8GB de VRAM e precisa executar mutações em um loop de autoresearch. Qual a melhor estratégia?",
+      "options": [
+        "Usar um modelo local de 7B, pois a VRAM é suficiente para ele.",
+        "Utilizar um provedor cloud para a mutação, dada a VRAM insuficiente.",
+        "Rodar um modelo de 32B com quantização de 4 bits para economizar VRAM.",
+        "Executar mutações apenas quando a GPU estiver ociosa, sem custo."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 indica que 12-16GB são necessários para modelos 7-9B; com 8GB, a nuvem é a opção viável.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q038",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Em um sistema de autoresearch para otimizar e-mails, o avaliador aponta baixa taxa de cliques, mas alta taxa de abertura. Qual dimensão o mutator deve priorizar?",
+      "options": [
+        "A taxa de abertura, pois é a mais alta e precisa ser mantida.",
+        "A taxa de cliques, por ser a dimensão mais fraca identificada.",
+        "O comprimento do assunto, que é um parâmetro fixo do config.",
+        "A personalização do remetente, que não afeta a taxa de abertura."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 diz que o mutator foca na dimensão mais fraca identificada pelo avaliador.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q039",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Em um sistema de autoresearch colaborativo, como uma empresa pode se beneficiar da experiência de outra sem expor seus dados?",
+      "options": [
+        "Compartilhando os prompts originais e as respostas dos clientes.",
+        "Enviando os logs completos de interação para a outra empresa.",
+        "Testando mutações sugeridas por outras, mantendo os dados privados.",
+        "Utilizando o mesmo modelo cloud para todas as empresas envolvidas."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 menciona que cada participante mantém dados privados, mas todos se beneficiam de gradientes de sucesso compartilhados.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "dificil"
+      ]
+    },
+    {
+      "id": "autoresearch-singularity-q040",
+      "courseSlug": "autoresearch-singularity",
+      "question": "Um chatbot de suporte usa autoresearch em tempo real. Se o CSAT cai em um turno, qual ação o sistema deve tomar?",
+      "options": [
+        "Reiniciar o modelo local para evitar overfitting nos dados.",
+        "Ajustar automaticamente o tom de voz ou a objetividade das respostas.",
+        "Interromper o loop e solicitar revisão humana imediata.",
+        "Aumentar o número de iterações para melhorar a precisão."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:29:49.439Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 descreve que o sistema ajusta sua abordagem para o próximo turno, refinando empatia ou objetividade.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "dificil"
+      ]
+    }
+  ]
+}

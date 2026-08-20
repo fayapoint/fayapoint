@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "openclaw-ia-open-source",
+  "lastUpdated": "2026-08-19T13:09:36.595Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "openclaw-ia-open-source-q001",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Qual é a principal característica do OpenClaw em relação aos modelos de IA?",
+      "options": [
+        "Ele possui um modelo próprio de alta performance.",
+        "Ele atua como orquestrador usando modelos configurados.",
+        "Ele é um serviço de nuvem com modelo exclusivo.",
+        "Ele usa exclusivamente modelos locais da Anthropic."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 afirma que o OpenClaw não tem modelo próprio, atuando como orquestrador que usa qualquer modelo configurado.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q002",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Qual comando inicializa a estrutura de pastas do OpenClaw?",
+      "options": [
+        "O comando openclaw init cria a estrutura do projeto.",
+        "O comando openclaw start inicia o serviço web.",
+        "O comando npm install -g instala o pacote.",
+        "O comando openclaw chat executa no terminal."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 explica que o comando openclaw init é responsável por criar a arquitetura de pastas e o arquivo de configuração.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q003",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Qual estratégia de autenticação é usada no WhatsApp para evitar escanear QR toda vez?",
+      "options": [
+        "A estratégia local salva a sessão no dispositivo.",
+        "A estratégia remota usa um servidor externo.",
+        "A estratégia padrão exige login por senha.",
+        "A estratégia web usa o navegador do usuário."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 menciona que a auth_strategy 'local' salva a sessão para evitar escanear o código a cada reinício.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q004",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Qual é a vantagem de custo do OpenClaw em relação ao ChatGPT Plus?",
+      "options": [
+        "O OpenClaw é gratuito, mas exige assinatura anual.",
+        "O OpenClaw usa modelos locais sem custo algum.",
+        "O OpenClaw cobra apenas pelos tokens consumidos.",
+        "O OpenClaw tem preço fixo de vinte dólares."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 compara os custos e afirma que, ao usar APIs na nuvem, o OpenClaw cobra apenas o consumo real de tokens.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "media"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q005",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Qual é a função do arquivo .env na configuração do OpenClaw?",
+      "options": [
+        "Armazenar as chaves de API de forma segura.",
+        "Definir o idioma padrão das respostas.",
+        "Configurar os provedores de modelo locais.",
+        "Especificar os contatos permitidos no WhatsApp."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 orienta a usar arquivos .env para proteger credenciais, evitando hardcoding de chaves de API.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "media"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q006",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Um escritório de advocacia precisa analisar processos com sigilo absoluto. Qual configuração é mais adequada?",
+      "options": [
+        "Usar OpenClaw com modelos locais via Ollama.",
+        "Usar ChatGPT Plus com criptografia em trânsito.",
+        "Usar Claude Cowork com políticas de privacidade.",
+        "Usar OpenClaw com API da OpenAI em nuvem."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 descreve exatamente esse cenário, recomendando OpenClaw com Ollama para manter os dados na rede interna.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q007",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Um desenvolvedor quer automatizar um resumo diário via script. Qual abordagem é mais adequada?",
+      "options": [
+        "Usar a interface web na porta 3000 para interagir.",
+        "Usar o modo CLI com o comando openclaw chat.",
+        "Usar o painel central para monitorar conversas.",
+        "Usar o armazenamento JSON para exportar dados."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 mostra a automação via CLI integrando o comando openclaw chat em scripts, como no cenário de relatórios.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "dificil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q008",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Uma empresa quer atender clientes no WhatsApp e Telegram simultaneamente, com um único agente. Qual recurso permite isso?",
+      "options": [
+        "O uso de adaptadores modulares para cada canal.",
+        "A configuração de allowed_contacts por plataforma.",
+        "A criação de skills específicos para cada canal.",
+        "A utilização de webhooks para cada mensageiro."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 explica que o padrão de adaptadores modulares permite que o mesmo skill funcione em múltiplos canais.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "dificil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q009",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "No OpenClaw, as Skills são definidas como:",
+      "options": [
+        "unidades atômicas de capacidade para tarefas específicas",
+        "scripts estáticos com regras rígidas de execução",
+        "interfaces gráficas para automação de navegador",
+        "modelos de linguagem pré-treinados para diálogo"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 define Skills como unidades atômicas de capacidade, projetadas para executar uma tarefa específica.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "facil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q010",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Qual a função do ModelAdapter no OpenClaw?",
+      "options": [
+        "traduzir intenções do agente para formatos de cada API",
+        "substituir todos os modelos por um único padrão",
+        "gerenciar as chaves de API dos provedores",
+        "otimizar o custo por token automaticamente"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 descreve o ModelAdapter como tradutor universal entre o agente e as APIs.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "facil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q011",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "No contexto de modelos locais, o Ollama é:",
+      "options": [
+        "uma ferramenta que simplifica a gestão de LLMs locais",
+        "um modelo de linguagem específico da OpenAI",
+        "um provedor de API na nuvem para IA generativa",
+        "um tipo de quantização de pesos de modelos"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 afirma que o Ollama é o padrão de mercado para simplificar a gestão de LLMs.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "facil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q012",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Enquanto o skill de Shell executa comandos no terminal, o skill de Filesystem:",
+      "options": [
+        "lê, escreve e organiza arquivos com inteligência contextual",
+        "controla o navegador headless para extrair dados web",
+        "envia e recebe e-mails via protocolos IMAP e SMTP",
+        "consome APIs REST ou GraphQL com autenticação"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 descreve o skill de Filesystem como leitura, escrita e organização de arquivos com inteligência contextual.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "media"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q013",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Com quantização Q4, um modelo de 14B parâmetros exigirá aproximadamente:",
+      "options": [
+        "entre 7 e 14 GB de RAM para funcionamento",
+        "entre 4 e 8 GB de RAM para funcionamento",
+        "entre 35 e 45 GB de RAM para funcionamento",
+        "entre 1 e 2 GB de RAM para funcionamento"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 estabelece que cada bilhão de parâmetros consome 0,5 a 1 GB, então 14B consome 7-14 GB.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "media"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q014",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Um usuário pede para monitorar o log do servidor e, se houver erro crítico, enviar alerta por e-mail. O OpenClaw acionará:",
+      "options": [
+        "os skills de Shell e Email em sequência orquestrada",
+        "os skills de Filesystem e HTTP em paralelo",
+        "os skills de Web Automation e Shell em cadeia",
+        "os skills de Email e Filesystem simultaneamente"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 mostra a combinação de skills, como Shell para grep e Email para alerta.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q015",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Em um assistente com roteamento inteligente, uma pergunta simples sobre horário de funcionamento será direcionada para:",
+      "options": [
+        "um modelo mini de baixo custo para triagem",
+        "o modelo Claude Opus para alta precisão",
+        "um modelo local via Ollama para privacidade",
+        "o modelo Gemini Flash para tarefas de código"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 exemplifica que perguntas simples são roteadas para o modelo mini.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "dificil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q016",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "No modo híbrido do OpenClaw, dados ultra-sensíveis devem ser processados:",
+      "options": [
+        "localmente, garantindo privacidade total da informação",
+        "na nuvem, para maior potência de processamento",
+        "em ambos os ambientes simultaneamente para redundância",
+        "apenas em modelos de ponta da nuvem comercial"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 afirma que dados ultra-sensíveis são processados localmente para privacidade.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q017",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Qual formato de arquivo é otimizado para inferência em hardware comum?",
+      "options": [
+        "GGUF é formato otimizado para inferência em hardware comum.",
+        "Transformers é o formato exclusivo para execução em nuvem.",
+        "Safetensors é o formato padrão para treinamento distribuído.",
+        "ONNX é o formato usado apenas para modelos de visão."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 7, o GGUF é definido como um formato de arquivo otimizado especificamente para inferência em hardware comum.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q018",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "O que são embeddings no contexto de busca semântica?",
+      "options": [
+        "Vetores de alta dimensão que capturam o sentido do texto.",
+        "São bancos de dados especializados em armazenar documentos.",
+        "São técnicas de compressão para reduzir o tamanho do modelo.",
+        "São divisões de documentos em pedaços com sobreposição."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 8, embeddings são representações numéricas em vetores de alta dimensão que capturam o significado semântico do texto.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q019",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "O que caracteriza um cron job no OpenClaw?",
+      "options": [
+        "É uma tarefa agendada que usa sintaxe cron e prompt.",
+        "É um endpoint HTTP POST que recebe dados externos.",
+        "É uma condição booleana que monitora o estado interno.",
+        "É uma sequência de passos com variáveis armazenadas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 9, cron jobs são tarefas agendadas que usam a sintaxe cron associada a um prompt em linguagem natural.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q020",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Por que o LoRA permite realizar fine-tuning em GPUs de consumo?",
+      "options": [
+        "Porque ajusta uma fração dos parâmetros e gera um adaptador leve.",
+        "Porque exige treinar todos os bilhões de parâmetros do modelo base.",
+        "Porque dispensa o uso de GPUs e roda apenas em CPUs comuns.",
+        "Porque substitui completamente o modelo base por um adaptador pequeno."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 7, o LoRA ajusta apenas uma pequena fração dos parâmetros e gera um adaptador leve, viabilizando o treinamento em GPUs de consumo.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "media"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q021",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Por que o chunk_overlap é necessário mesmo com busca semântica?",
+      "options": [
+        "Porque mantém o contexto nas fronteiras entre pedaços para a busca.",
+        "Aumentar o tamanho máximo de contexto do modelo grande de linguagem.",
+        "Reduzir a quantidade de vetores armazenados no banco vetorial.",
+        "Substituir a necessidade de escolher um modelo de embedding."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 8, o chunk_overlap mantém a continuidade do contexto nas fronteiras entre pedaços, essencial para a busca semântica recuperar trechos íntegros.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "media"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q022",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Um usuário quer rodar um modelo localmente em um notebook sem GPU. Qual quantização é a mais adequada e por quê?",
+      "options": [
+        "Q4_K_M é menor, mais rápido e tem leve perda de precisão.",
+        "Q8, porque tem maior precisão e exige menos memória VRAM.",
+        "Q5_K_M, porque é o único formato compatível com CPUs comuns.",
+        "Q4, porque elimina totalmente a perda de precisão do modelo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 7, Q4_K_M é uma variante recomendada por ser menor e mais rápida, com leve perda de precisão, ideal para hardware limitado.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q023",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Uma empresa precisa que a IA responda sobre um contrato assinado ontem. Qual componente do RAG resolve esse problema?",
+      "options": [
+        "O retrieval busca o trecho relevante nos documentos indexados.",
+        "O fine-tuning, que ajusta o modelo com os dados do contrato.",
+        "O vector store, que substitui o modelo de linguagem na resposta.",
+        "O chunking, que aumenta o contexto do modelo para caber o contrato."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 8, a etapa de retrieval varre os documentos em busca dos trechos mais relevantes, permitindo respostas sobre informações recentes.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "dificil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q024",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Qual a diferença entre um webhook e um trigger no OpenClaw?",
+      "options": [
+        "Webhook responde a eventos externos; trigger monitora condições internas.",
+        "Webhook é agendado por cron; trigger é acionado por um prompt manual.",
+        "Webhook usa variáveis de payload; trigger usa campos de store em workflows.",
+        "Webhook exige confirmação humana; trigger executa sem nenhuma segurança."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "No capítulo 9, webhooks recebem eventos externos via HTTP, enquanto triggers monitoram continuamente condições internas do sistema.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "dificil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q025",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Quais arquivos são estritamente obrigatórios para um skill do OpenClaw ser reconhecido?",
+      "options": [
+        "README.md e manifest.yaml, sendo o código opcional.",
+        "package.json e index.ts, com manifesto opcional.",
+        "O manifesto YAML e o código TypeScript de execução.",
+        "index.ts e README.md, sem necessidade de manifesto."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 define manifest.yaml e index.ts como os dois arquivos estritamente obrigatórios de um skill.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "facil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q026",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "O que faz o parâmetro auto_reply: false no assistente jurídico?",
+      "options": [
+        "Faz o agente responder automaticamente todas as mensagens recebidas dos clientes.",
+        "Faz o agente apenas rascunhar e classificar, com humano no controle.",
+        "Impede o agente de acessar qualquer documento da base jurídica.",
+        "Faz o agente ignorar completamente as mensagens dos clientes."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 mostra que auto_reply: false faz o agente apenas rascunhar e classificar, mantendo o humano no controle.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "facil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q027",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Qual é a função do Nginx no deploy do OpenClaw em produção?",
+      "options": [
+        "Atua como banco de dados vetorial para as buscas do RAG.",
+        "Compila o código TypeScript dos skills em JavaScript puro.",
+        "Gera certificados SSL automáticos para o domínio do servidor.",
+        "Faz o proxy reverso encaminhar requisições para o container."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 descreve o Nginx como reverse proxy que encaminha requisições para o container do OpenClaw.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "facil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q028",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Por que a descrição no manifest.yaml é crucial para o funcionamento do skill?",
+      "options": [
+        "Porque define as permissões de rede que o skill terá em execução.",
+        "Porque armazena o histórico de execuções do skill no sistema.",
+        "Porque é o texto que a IA usa para decidir quando acionar.",
+        "Porque determina a versão do TypeScript usada na compilação."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 explica que a descrição do manifest é o texto que o modelo de IA processa para decidir o acionamento.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q029",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Por que o HTTPS é obrigatório no deploy do OpenClaw?",
+      "options": [
+        "Porque o Docker Compose só funciona com certificados válidos.",
+        "Porque webhooks de mensageria exigem criptografia obrigatória.",
+        "Porque o Nginx bloqueia qualquer tráfego que não seja seguro.",
+        "Porque o Prometheus só coleta métricas quando a conexão é HTTPS."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 afirma que o HTTPS é obrigatório para o funcionamento de webhooks de plataformas de mensageria.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "media"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q030",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Um skill precisa consultar uma API externa e depois usar o resultado para gerar um texto. Como fazer isso no SDK?",
+      "options": [
+        "Criar um segundo skill apenas para a geração do texto final desejado.",
+        "Executar a consulta no manifest.yaml e gerar o texto no index.ts.",
+        "Declarar a API como parâmetro obrigatório na função execute do skill.",
+        "Permitir rede no manifesto e usar o contexto para gerar o texto."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 combina permissions de rede no manifesto com o SkillContext, que dá acesso ao modelo para gerar texto.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q031",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Uma empresa quer que o agente execute comandos de diagnóstico no servidor, mas sem risco de ações destrutivas. Qual configuração atende?",
+      "options": [
+        "Manter o sandbox ativo e liberar todos os comandos do sistema.",
+        "Desativar o sandbox e restringir os comandos permitidos.",
+        "Usar auto_reply: false e webhooks para diagnóstico manual.",
+        "Configurar o RAG com manuais e deixar o modelo decidir tudo."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 ensina que desativar o sandbox exige restringir a lista de comandos permitidos para garantir segurança.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q032",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Uma VPS com 8 GB de RAM precisa rodar o OpenClaw com modelos locais. O que fazer para evitar travamentos?",
+      "options": [
+        "Desativar o Docker Compose e rodar o modelo diretamente no host.",
+        "Reduzir o número de skills e usar apenas modelos na nuvem.",
+        "Configurar 4 GB de swap e priorizar o container do Ollama.",
+        "Instalar o ChromaDB fora do Docker para liberar memória."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 recomenda swap de 4 GB e priorização do container do Ollama para rodar modelos locais sem travamentos.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q033",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Qual ferramenta é especialista em conectar modelos de IA com fontes externas de informação?",
+      "options": [
+        "Hugging Face, que fornece modelos pré-treinados para download.",
+        "Ollama, que executa modelos localmente no seu computador.",
+        "LangChain, que orquestra chains e agents para automação.",
+        "LlamaIndex, que integra modelos com dados externos via RAG."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 descreve o LlamaIndex como o especialista em conectar modelos de IA com fontes externas de informação, essencial para RAG.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q034",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Qual framework introduz o paradigma de equipes de agentes com papéis especializados?",
+      "options": [
+        "LangChain, com abstrações de baixo nível para desenvolvedores.",
+        "CrewAI, que permite colaboração entre agentes com funções distintas.",
+        "AutoGen, focado em conversas entre agentes para deliberação.",
+        "Semantic Kernel, integrado ao ecossistema Microsoft enterprise."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 afirma que o CrewAI introduz o paradigma de equipes de agentes com papéis especializados.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q035",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Qual princípio de segurança determina conceder ao agente apenas as permissões estritamente necessárias?",
+      "options": [
+        "Defesa em profundidade, com múltiplas camadas de proteção.",
+        "Superfície de ataque mínima, reduzindo pontos de entrada.",
+        "Confiança zero, verificando toda requisição como hostil.",
+        "Princípio do Menor Privilégio, limitando permissões ao essencial."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 define o Princípio do Menor Privilégio como conceder apenas as permissões estritamente necessárias.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q036",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Qual é a mudança mais significativa na computação pessoal mencionada no capítulo?",
+      "options": [
+        "De chatbots passivos para agentes ativos que executam ações.",
+        "De modelos genéricos para modelos especializados por domínio.",
+        "De APIs proprietárias para modelos open-source locais.",
+        "De assistentes que apenas sugerem para agentes que executam."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 destaca a transição do assistente que sugere para o agente que executa como a mudança mais significativa.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q037",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Em um sistema de atendimento empresarial que precisa indexar milhares de manuais técnicos e executar ações no ERP, qual combinação é mais adequada?",
+      "options": [
+        "OpenClaw com LlamaIndex para RAG e CrewAI para análise.",
+        "OpenClaw com LangChain apenas para orquestração de chains.",
+        "OpenClaw com AutoGen para conversas e Semantic Kernel.",
+        "OpenClaw com Hugging Face e LM Studio para modelos locais."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 mostra o LlamaIndex para RAG e o CrewAI para análise em equipe, integrados ao OpenClaw.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q038",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Para evitar que um usuário mal-intencionado execute comandos no servidor via chat, qual configuração é essencial?",
+      "options": [
+        "Limitação de ações por canal, desabilitando skills de shell.",
+        "Uso de modelos locais via Ollama para processamento.",
+        "Ajuste de temperature para zero para respostas previsíveis.",
+        "Ativação de sandbox para todos os módulos do sistema."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 descreve a limitação de ações por canal como bloqueio a comandos remotos via chat.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q039",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Qual a diferença entre o System Prompt Hardened e a sanitização de inputs no combate ao prompt injection?",
+      "options": [
+        "O primeiro prioriza instruções do sistema; o segundo remove padrões suspeitos.",
+        "O primeiro remove padrões suspeitos; o segundo prioriza instruções.",
+        "Ambos são idênticos e podem ser usados indistintamente.",
+        "O primeiro é usado apenas em canais de texto; o segundo em voz."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 explica que o System Prompt Hardened prioriza instruções do sistema e a sanitização remove padrões suspeitos.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "openclaw-ia-open-source-q040",
+      "courseSlug": "openclaw-ia-open-source",
+      "question": "Como um desenvolvedor pode criar um agente especializado para o mercado imobiliário brasileiro usando OpenClaw?",
+      "options": [
+        "Desenvolvendo skills verticais e fazendo fine-tuning com datasets em português.",
+        "Usando apenas modelos da OpenAI para garantir qualidade.",
+        "Configurando AutoGen para conversas entre múltiplos agentes.",
+        "Utilizando Semantic Kernel para integração com Azure."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:09:36.595Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 sugere skills verticais e fine-tuning em português para nichos como o imobiliário.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "dificil"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+  "lastUpdated": "2026-08-19T12:52:33.391Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q001",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual é a característica padrão de um assistente de IA no início de uma conversa?",
+      "options": [
+        "Ele já conhece sua rotina e seus gostos pessoais",
+        "Ele sabe escrever bem, mas não sabe nada sobre você",
+        "Ele consulta seus arquivos e histórico para responder",
+        "Ele tem acesso a todos os seus contatos e agenda"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 afirma que a IA parte de um estado quase zerado, sabendo escrever e raciocinar, mas sem contexto sobre sua vida até que você o forneça.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q002",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "O que deve ser configurado na memória permanente do assistente?",
+      "options": [
+        "Detalhes específicos de um problema pontual da semana",
+        "Fatos estáveis como profissão, cidade e composição familiar",
+        "O prazo exato de uma entrega que muda toda semana",
+        "O humor de uma pessoa com quem você vai conversar hoje"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 diz que a memória permanente deve conter informações estáveis que valem para toda conversa, não dados variáveis ou pontuais.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q003",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual é a principal diferença entre organização e produtividade real segundo o capítulo?",
+      "options": [
+        "Organização é estruturar o que existe; produtividade é fazer as coisas certas",
+        "Organização é fazer mais tarefas; produtividade é fazer tarefas mais rápido",
+        "Organização é usar IA; produtividade é usar um planner físico",
+        "Organização é priorizar; produtividade é executar sem pensar"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 define organização como estruturar o que já existe e produtividade real como fazer menos coisas, mas as certas.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "facil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q004",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Por que é recomendado abrir um fio de conversa novo por assunto ao longo do dia?",
+      "options": [
+        "Porque a ferramenta cobra por conversa, então é mais econômico",
+        "Porque evita acumular contexto irrelevante para a pergunta atual",
+        "Porque o assistente só responde bem a perguntas curtas e isoladas",
+        "Porque isso impede que a IA aprenda com seus hábitos diários"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 explica que manter um único fio mistura contextos e carrega informação desnecessária, por isso um fio por assunto funciona melhor.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "media"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q005",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "O que caracteriza a 'verificação de fachada' mencionada no capítulo 4?",
+      "options": [
+        "Pedir a uma fonte independente que confirme a resposta da IA",
+        "Perguntar à própria IA se ela tem certeza e aceitar o sim",
+        "Verificar apenas respostas de baixo risco e ignorar as de alto",
+        "Usar a IA para revisar um documento antes de enviar"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 define verificação de fachada como pedir ao próprio assistente para confirmar a resposta, o que não é validação real.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "media"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q006",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Um usuário criou seu manual pessoal de IA, mas percebe que continua decidindo do zero, toda vez, se pode confiar na resposta antes de agir. Qual parte do manual ele provavelmente deixou de fazer?",
+      "options": [
+        "Escrever uma régua pessoal de risco em uma frase clara",
+        "Copiar prompts-modelo prontos de outras pessoas sem adaptar para sua voz",
+        "Manter uma lista extensa de regras rígidas no manual",
+        "Revisar a configuração de contexto apenas uma única vez"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O Capítulo 5 aponta como erro comum não definir uma régua de risco clara, deixando essa decisão para ser reinventada toda vez.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "dificil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q007",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Depois de pedir ao assistente para revisar o tom de um e-mail importante, uma pessoa pergunta 'tem certeza de que está adequado?' e recebe 'sim, pode enviar'. Ela envia. Qual é o erro central dessa conduta?",
+      "options": [
+        "Tratar a confirmação do próprio assistente como validação independente",
+        "Confiar no tom do e-mail sem pedir uma segunda opinião humana",
+        "Usar o assistente para revisar um e-mail, algo que ele não foi projetado para fazer",
+        "Acreditar que a resposta do assistente veio de uma base de dados confiável"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O Capítulo 4 explica que pedir para o próprio assistente confirmar a resposta e tratar o 'sim' como validação real não é verificação, pois é só mais uma geração de texto.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q008",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Um estudante pede à IA para organizar sua rotina de estudos da semana e recebe uma lista priorizada. Em que situação isso representa produtividade real, e não apenas organização?",
+      "options": [
+        "Quando ele usa a lista para eliminar o que não precisa fazer",
+        "Quando ele segue a ordem da lista sem pular nenhum item",
+        "Quando a IA aplica um framework de priorização que o estudante escolheu",
+        "Quando a lista separa os estudos por matéria e por prazo"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O Capítulo 6 afirma que a IA organiza bem uma lista, mas a produtividade real exige usar a lista para descartar o que não importa.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q009",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual é o primeiro elemento a preparar no contexto de produtividade pessoal?",
+      "options": [
+        "Registrar os compromissos fixos que ocupam hora certa toda semana",
+        "Listar todas as tarefas pendentes da semana em ordem de importância",
+        "Descrever o padrão de energia ao longo do dia e da semana",
+        "Escolher um framework de priorização para reaplicar toda semana"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 afirma que o primeiro elemento é o mapa de compromissos fixos, pois isso evita reexplicar a rotina toda semana.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q010",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual é o critério central para decidir o quanto a IA deve participar da redação de uma mensagem?",
+      "options": [
+        "O peso relacional, não a urgência ou complexidade do assunto",
+        "O tamanho do texto e a quantidade de parágrafos a escrever",
+        "O nível de formalidade exigido pelo destinatário da mensagem",
+        "A familiaridade do remetente com ferramentas de escrita por IA"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 estabelece que o peso relacional da mensagem é o critério central, não a urgência ou complexidade.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "facil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q011",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Quais são os três componentes de um sistema de planejamento semanal?",
+      "options": [
+        "Horário fixo, prompt-modelo com contexto e critério de revisão",
+        "Lista de tarefas, mapa de energia e framework de priorização",
+        "Despejo de cabeça, distribuição e revisão crítica do plano",
+        "Contexto persistente, prompt-modelo e versão reduzida do ritual"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 diz que o sistema tem três componentes: horário fixo, prompt-modelo com contexto e critério de revisão.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "facil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q012",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Por que o planejamento guiado deve ser feito em sequência de trocas curtas com o assistente?",
+      "options": [
+        "Porque um único pedido genérico produz um plano vago e sem detalhes",
+        "Porque a IA precisa de várias tentativas para entender o contexto",
+        "Porque cada etapa refina o plano e reflete a semana real",
+        "Porque o usuário precisa aprovar cada etapa antes de continuar"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 explica que cada troca refina a anterior, produzindo um plano que reflete a semana real.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "media"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q013",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Por que o perfil de voz deve ser construído a partir de exemplos reais de escrita?",
+      "options": [
+        "Exemplos reais revelam padrões que a autodescrição não",
+        "A autodescrição é sempre vaga e genérica demais para usar",
+        "O assistente só aprende com dados concretos, não com adjetivos",
+        "Exemplos reais garantem que o tom fique formal e profissional"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 afirma que exemplos reais produzem resultado muito mais próximo da voz real do que autodescrição abstrata.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "media"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q014",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Uma pessoa aceita um plano sem folga e na terça o filho fica doente. Qual é a causa real do fracasso?",
+      "options": [
+        "O plano era rígido e sem folga para imprevistos",
+        "A pessoa não replanejou a semana depois do imprevisto",
+        "O imprevisto era inevitável e não poderia ser evitado",
+        "A IA deveria ter previsto a doença do filho na semana"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 explica que o problema é a rigidez do plano, não a interrupção em si.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "dificil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q015",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Uma pessoa rende mais de manhã, mas o plano coloca a tarefa mais pesada na sexta à tarde. Qual é a causa provável?",
+      "options": [
+        "O plano ignorou o padrão de energia do contexto",
+        "O contexto de compromissos fixos estava desatualizado",
+        "O framework de priorização foi trocado naquela semana",
+        "O prompt-modelo não foi testado em semana real"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 diz que um plano que ignora o padrão de energia falha na prática, mesmo parecendo correto no papel.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q016",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual situação é um exemplo de alto peso relacional em comunicação?",
+      "options": [
+        "Confirmar horário de reunião remarcada com colega de trabalho",
+        "Pedir informação sobre um produto para o suporte técnico",
+        "Escrever pêsames para um amigo que perdeu um familiar",
+        "Solicitar um prazo maior para entrega de um relatório"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 cita pêsames como exemplo de mensagem de alto peso relacional, onde a presença real importa.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q017",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual é o primeiro passo recomendado para escrever uma mensagem difícil?",
+      "options": [
+        "Listar os fatos necessários sem se preocupar com o tom",
+        "Escrever o rascunho completo de uma só vez",
+        "Pedir para a IA gerar o texto final diretamente",
+        "Ligar para o cliente antes de qualquer texto"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 orienta listar os fatos que precisam estar na mensagem antes de considerar o tom.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q018",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "O que caracteriza o tom genérico reconhecível em mensagens geradas por IA?",
+      "options": [
+        "Uso de uma única palavra incomum em todo o texto",
+        "Combinação de construções que soam a template",
+        "Erro de digitação no nome do destinatário",
+        "Falta de pontuação correta no parágrafo"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 define o tom genérico como um conjunto de construções que, juntas, criam uma assinatura de texto não editado.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q019",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual é a principal característica de uma checklist de pré-envio eficaz?",
+      "options": [
+        "Ter no máximo cinco itens para ser rápida",
+        "Ser detalhada e extensa para cobrir tudo",
+        "Incluir todos os erros possíveis de revisão",
+        "Ser usada apenas em mensagens importantes"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 afirma que a força da checklist está na brevidade, com quatro ou cinco itens para virar hábito.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q020",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Para que tipo de informação é essencial usar uma ferramenta com busca ativa na internet?",
+      "options": [
+        "Conceitos estáveis de matemática e gramática",
+        "Preços atuais e alterações recentes em leis",
+        "Princípios de lógica formal e silogismos",
+        "Regras de ortografia e pontuação padrão"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 explica que busca ativa é confiável para preços, notícias e qualquer coisa que mude com frequência.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "media"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q021",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "O que acontece se você pedir para a IA explicar um documento sem fornecer o texto?",
+      "options": [
+        "Ela responde com base no conteúdo exato do documento",
+        "Ela responde com base no que é típico para aquele tipo",
+        "Ela se recusa a responder sem o documento",
+        "Ela pede mais informações sobre o documento"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 diz que, sem o texto, o modelo responde com base no que é típico, não no documento específico.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "media"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q022",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Em qual situação a mensagem escrita deve ser usada apenas para agendar uma conversa?",
+      "options": [
+        "Quando o cliente é novo e não há histórico de conflito",
+        "Quando o cliente está muito irritado e há conflito significativo",
+        "Quando o assunto é simples e rápido de resolver",
+        "Quando o prazo é curto e o cliente pediu urgência"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 indica que cliente irritado ou conflito significativo pedem ligação, com o texto só para agendar.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q023",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual é a causa mais comum do descompasso de registro em mensagens geradas por IA?",
+      "options": [
+        "Falta de revisão em voz alta antes do envio",
+        "Uso de template sem conferir nomes e datas",
+        "Mapa de relações desatualizado ou nunca configurado",
+        "Excesso de detalhes específicos no texto"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 atribui o descompasso de registro ao mapa de relações desatualizado ou não configurado.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q024",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Por que é melhor praticar com a estrutura real do seu problema, mesmo usando dados fictícios?",
+      "options": [
+        "Porque os dados fictícios são mais fáceis de entender",
+        "Porque a estrutura real traz irregularidades que exemplos genéricos não têm",
+        "Porque a IA só funciona com dados reais do usuário",
+        "Porque evita expor dados sensíveis do cliente e ainda treina"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 mostra que a estrutura real inclui irregularidades que os exemplos genéricos não preveem.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q025",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Por que uma citação gerada por IA pode não ser confiável?",
+      "options": [
+        "O modelo pode inventar referências com aparência impecável, mesmo sem existirem.",
+        "O modelo sempre erra o ano de todas as publicações reais.",
+        "O modelo só cita fontes que ele memorizou integralmente.",
+        "O modelo não sabe formatar citações corretamente, então evita fazê-lo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 explica que o modelo aprendeu o formato de citações, não um banco de referências reais, e pode gerar referências plausíveis para obras inexistentes.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "facil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q026",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Um estudante pede ao modelo para confirmar uma informação duas vezes e recebe a mesma resposta. Por que isso não é uma validação independente?",
+      "options": [
+        "O modelo repete o mesmo padrão aprendido, sem checar a fonte.",
+        "O modelo pode mudar de opinião se a pergunta for reformulada.",
+        "O modelo sempre tem razão quando repete a mesma resposta.",
+        "O modelo precisa de mais contexto para dar uma resposta confiável."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 afirma que pedir confirmação ao mesmo modelo não é verificação independente, é a mesma origem repetindo o mesmo padrão.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "dificil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q027",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual é o papel do teste final sem consulta em uma trilha de estudo?",
+      "options": [
+        "Revela se o aprendizado foi real de fato.",
+        "Serve para o aluno revisar todo o conteúdo novamente.",
+        "Permite que a IA avalie o desempenho do estudante.",
+        "Substitui a necessidade de revisão espaçada durante o curso."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 diz que o teste final sem consulta revela se o aprendizado foi real ou apenas sessões agradáveis.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "facil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q028",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Por que a revisão espaçada é mais eficaz do que revisar tudo uma única vez no fim?",
+      "options": [
+        "Reativar a memória em intervalos crescentes retém mais.",
+        "Revisar tudo no fim é mais rápido e prático, mas não fixa.",
+        "A memória decai mais rápido quando revisada uma vez, então evita-se.",
+        "Revisão espaçada exige menos tempo total de estudo, por isso é melhor."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 explica que a memória decai mais devagar quando reativada em intervalos crescentes, ao contrário de uma revisão única.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "dificil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q029",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual a principal responsabilidade de quem assina um texto gerado com ajuda de IA?",
+      "options": [
+        "Garantir fatos, decisões e voz próprios no texto.",
+        "Pedir ao modelo para revisar a ortografia e a gramática.",
+        "Usar o rascunho exatamente como foi gerado, sem alterações.",
+        "Escolher o tom mais neutro possível para agradar a todos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 afirma que a responsabilidade pelo conteúdo, fatos e consequências continua sendo de quem assina, e o texto precisa de especificidade e voz própria.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "facil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q030",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual a vantagem de gerar o documento principal antes das peças derivadas?",
+      "options": [
+        "Garante consistência de números e argumentos entre os textos.",
+        "Permite que o modelo escreva mais rápido cada texto, sem perder qualidade.",
+        "Evita a necessidade de revisar cada peça individualmente, pois já vem pronto.",
+        "Reduz o número total de palavras geradas pelo modelo, economizando tempo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 mostra que derivar as peças do documento principal evita inconsistência de números e argumentos entre os textos.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "media"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q031",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Como identificar se um texto gerado por IA é genérico demais?",
+      "options": [
+        "Verificar se qualquer pessoa na mesma posição escreveria igual.",
+        "Contar quantas palavras ele usa em comparação com outros textos.",
+        "Observar se ele contém muitos números e estatísticas.",
+        "Pedir ao modelo para reescrever o texto com outro tom."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 sugere perguntar se o texto poderia ter sido escrito por qualquer pessoa na mesma posição, indicando falta de especificidade.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "dificil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q032",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual é o principal motivo para montar um briefing antes de pedir um texto à IA?",
+      "options": [
+        "Evita respostas genéricas ao fornecer contexto essencial.",
+        "Garante que o texto saia perfeito e sem necessidade de revisão.",
+        "Substitui a necessidade de revisar o texto antes de publicar.",
+        "Elimina a necessidade de amostras de estilo ou fatos da empresa."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 mostra que um briefing com objetivo, público, tom, formato e chamada para ação evita que o modelo preencha lacunas com suposições genéricas.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "media"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q033",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual é a fonte de verdade que garante consistência num pacote de conteúdo?",
+      "options": [
+        "O briefing montado no capítulo 22 do curso",
+        "O documento principal revisado com dados reais",
+        "A revisão de qualidade aplicada a cada peça",
+        "A checagem cruzada feita pelo próprio modelo"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 afirma que um pacote coerente nasce de uma única fonte de verdade, o briefing do capítulo 22.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "facil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q034",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual pergunta prática substitui uma lista infinita de regras de segurança?",
+      "options": [
+        "O que de pior acontece se este texto vazar do jeito que está?",
+        "Isso é seguro para compartilhar com a IA?",
+        "Devo confiar plenamente na IA para esta tarefa?",
+        "Qual é o risco real de usar IA para isso?"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 ensina a pergunta concreta 'o que de pior acontece se este texto vazar' como critério prático.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "facil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q035",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "O que impede o descuido no momento de decisão rápida, segundo o capítulo?",
+      "options": [
+        "Uma lista escrita e específica de dados proibidos",
+        "Uma boa intenção genérica de ter cuidado",
+        "Uma configuração de privacidade já ativada",
+        "Uma revisão periódica das configurações de conta"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 27 diz que uma lista escrita e específica de dados proibidos é o que funciona na hora da pressa.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "facil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q036",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual das seguintes atitudes fere o princípio de pacote de conteúdo coerente descrito no capítulo?",
+      "options": [
+        "Derivar cada peça do documento principal revisado",
+        "Gerar cada peça do zero a partir do mesmo tema",
+        "Usar o mesmo briefing para todas as peças",
+        "Revisar todas as peças antes de entregar"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 lista como erro gerar cada peça do zero em vez de derivar da fonte principal.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "dificil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q037",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Para impedir que conversas sejam usadas no treinamento de modelos futuros, o que é necessário?",
+      "options": [
+        "Apagar o histórico de conversas da conta",
+        "Desativar a opção de uso para treinamento",
+        "Usar conversa temporária em todas as sessões",
+        "Encerrar sessão em todos os dispositivos"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 explica que o uso para treinamento depende de uma configuração específica que pode ser desativada.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "dificil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q038",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual das seguintes atitudes é um erro comum segundo o capítulo?",
+      "options": [
+        "Colar um trecho específico de um contrato",
+        "Tratar a resposta da IA como decisão final em saúde",
+        "Usar valores aproximados para planejamento financeiro",
+        "Encerrar sessão em dispositivos compartilhados"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 29 cita tratar a resposta da IA como decisão final em saúde como erro comum.",
+      "status": "active",
+      "tags": [
+        "cap29",
+        "dificil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q039",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual das seguintes atitudes vai contra o que o capítulo recomenda para um protocolo pessoal?",
+      "options": [
+        "Revisar o protocolo a cada dois ou três meses",
+        "Manter o protocolo apenas na memória de cabeça",
+        "Escrever regras específicas para cada categoria de uso",
+        "Definir uma data fixa para revisão do protocolo"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 30 afirma que manter o protocolo só na memória é um erro, pois ele deve ser escrito e acessível.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "dificil"
+      ]
+    },
+    {
+      "id": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia-q040",
+      "courseSlug": "aprenda-a-usar-inteligencia-artificial-no-seu-dia-a-dia",
+      "question": "Qual técnica o capítulo 28 ensina para proteger dados de terceiros ao usar IA?",
+      "options": [
+        "Substituir identificadores reais por marcadores genéricos",
+        "Usar valores aproximados em vez dos números exatos das contas",
+        "Pedir para o modelo reinserir os dados reais",
+        "Colar o documento inteiro para contexto completo"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T12:52:33.391Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 28 define a substituição de identificadores reais por marcadores genéricos como a técnica central para anonimizar dados antes de colar no chat.",
+      "status": "active",
+      "tags": [
+        "cap28",
+        "facil"
+      ]
+    }
+  ]
+}

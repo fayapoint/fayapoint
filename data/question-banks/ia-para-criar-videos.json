@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "ia-para-criar-videos",
+  "lastUpdated": "2026-08-19T13:47:55.418Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "ia-para-criar-videos-q001",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Qual é a diferença central entre edição assistida e geração de vídeo por IA?",
+      "options": [
+        "Edição corta e legenda; geração cria pixels novos.",
+        "Edição cria cenas novas; geração organiza o material.",
+        "Edição usa texto; geração usa vídeo.",
+        "Edição é paga; geração é gratuita."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 define edição como ação sobre o que existe e geração como produção de pixels novos.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q002",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "O que significa, na prática, o plano gratuito de uma ferramenta de IA de vídeo?",
+      "options": [
+        "Acesso total sem limite de tempo ou uso de créditos.",
+        "Uma amostra limitada com restrições e créditos.",
+        "Um teste pago com reembolso garantido.",
+        "Um plano sem marca d'água e sem fila."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 explica que grátis é amostra limitada, com créditos e restrições como marca d'água.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q003",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Quais são os quatro caminhos de geração de vídeo com IA?",
+      "options": [
+        "Texto, imagem, vídeo e avatar para gerar.",
+        "Texto, áudio, foto e desenho para gerar cenas novas.",
+        "Vídeo, edição, legenda e corte automático.",
+        "Realismo, controle, estilo e efeito visual."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 lista exatamente os quatro caminhos: texto→vídeo, imagem→vídeo, vídeo→vídeo e avatar.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q004",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Segundo a estrutura de 5 batidas, qual é a função do gancho em um roteiro para vídeo?",
+      "options": [
+        "Apresentar o contexto e o assunto principal.",
+        "Capturar a atenção nos primeiros segundos.",
+        "Mostrar o problema e o caminho de solução.",
+        "Entregar a conclusão e a chamada para ação."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 diz que o gancho segura a pessoa nos primeiros 3 segundos.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q005",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Em qual situação a ferramenta Pika é mais indicada do que a Sora?",
+      "options": [
+        "Quando a cena exige realismo e física de água e cabelo.",
+        "Quando o vídeo precisa de efeitos de transformação.",
+        "Quando o movimento da câmera é complexo.",
+        "Quando o prompt descreve uma pessoa falando."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 afirma que Pika se destaca em estilo e efeitos, como transformações.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q006",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Um prompt de vídeo sem a peça 'duração' tende a produzir qual problema?",
+      "options": [
+        "Movimentos aleatórios e sem continuidade lógica.",
+        "Ação curta esticada com física errada.",
+        "Luz genérica e sem clima definido na cena.",
+        "Sujeito sem detalhes visíveis específicos."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 explica que sem duração, a ação curta é esticada, expondo física errada.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q007",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Um cliente quer um vídeo institucional com uma apresentadora dizendo um texto exato. Qual caminho é o mais adequado?",
+      "options": [
+        "Texto para vídeo, pois gera a cena completa.",
+        "Imagem para vídeo, pois mantém a composição.",
+        "Vídeo para vídeo, pois transforma o material.",
+        "Avatar, pois controla fala e expressão."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 diz que avatar é o único com controle sobre a fala exata.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q008",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Qual é a diferença prática entre Runway e Luma na geração de vídeo?",
+      "options": [
+        "Runway é melhor para controle; Luma para estilo.",
+        "Runway é melhor para realismo; Luma para física.",
+        "Runway é gratuita; Luma é paga e limitada.",
+        "Runway gera áudio; Luma gera imagem."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 classifica Runway como controle e Luma como estilo e efeitos.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q009",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Qual é a principal vantagem do Sora em relação a outros geradores de vídeo?",
+      "options": [
+        "Ele permite controle numérico de câmera e edição de frames",
+        "Ele gera o vídeo inteiro de uma vez, mantendo a cena coerente",
+        "Ele é gratuito e não exige assinatura paga para uso",
+        "Ele aceita imagem de referência para manter o rosto do personagem"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 afirma que o Sora gera o vídeo inteiro de uma vez, o que garante coerência em cenas longas.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q010",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Qual é o principal diferencial do Veo em relação a outras ferramentas de geração?",
+      "options": [
+        "Ele permite exportar direto para o YouTube e o Google Drive",
+        "Ele oferece controle de câmera por sliders numéricos",
+        "Ele não tem limite de gerações no plano gratuito",
+        "Ele gera o vídeo frame a frame, garantindo consistência"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 destaca que o principal diferencial do Veo é a integração com o ecossistema Google, como Drive e YouTube.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q011",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "No Runway, o que diferencia o controle de câmera em relação a outras ferramentas?",
+      "options": [
+        "Ele usa sliders para definir movimento de câmera numericamente",
+        "Ele gera o vídeo inteiro de uma vez, sem necessidade de edição",
+        "Ele aceita imagem de referência para manter a identidade do personagem",
+        "Ele é integrado ao Google Drive e ao YouTube para exportação"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 explica que o Runway usa sliders para controle numérico de câmera, algo que outras ferramentas não oferecem.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q012",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Para uma cena de dança com giros e saltos, qual ferramenta é mais indicada e por quê?",
+      "options": [
+        "Kling, porque tem mecanismo de motion prior e física realista",
+        "Luma, porque tem atenção temporal forte para expressões faciais",
+        "Runway, porque permite controle de câmera por sliders numéricos",
+        "Veo, porque integra com YouTube e Drive para facilitar o fluxo"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 indica que o Kling é melhor para física e movimento de câmera, essencial para coreografias com giros.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q013",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Qual técnica é mais eficaz para manter o mesmo rosto em clipes diferentes?",
+      "options": [
+        "Usar uma imagem de referência como âncora visual",
+        "Escrever descrições detalhadas do rosto em cada prompt",
+        "Gerar todos os clipes na mesma ferramenta sem variar nada",
+        "Aplicar troca de rosto na pós-produção em cada clipe"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 afirma que a técnica mais eficaz é usar uma imagem de referência como âncora visual.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q014",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Em qual cenário o Sora é a ferramenta menos recomendada?",
+      "options": [
+        "Cena longa com múltiplos elementos interagindo",
+        "Clipe curto com ação simples e sem movimento de câmera",
+        "Vídeo que exige movimento de câmera preciso e controlado",
+        "Vídeo com personagem recorrente que precisa de consistência"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 mostra que o Sora não tem controle fino de câmera, então é inadequado para movimentos precisos.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q015",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Um profissional que edita no Premiere e publica no Vimeo. Qual a desvantagem de usar o Veo?",
+      "options": [
+        "Ele não aproveita a integração com Drive e YouTube",
+        "Ele não permite controle de câmera por sliders numéricos",
+        "Ele gera vídeo com marca d'água no plano gratuito",
+        "Ele exige prompt em inglês para obter bons resultados"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 ressalta que o valor do Veo está na integração; sem usá-la, perde-se a principal vantagem.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q016",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Qual é o principal risco ao pedir um movimento grande a partir de uma imagem estática?",
+      "options": [
+        "O modelo inventa informação ausente, causando distorções",
+        "O modelo mantém a imagem parada, sem animação",
+        "O modelo altera a identidade do personagem principal",
+        "O modelo perde a iluminação original da imagem"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 explica que movimento grande exige que o modelo invente informação, gerando distorções.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q017",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "No Leonardo, qual recurso permite excluir elementos indesejados da imagem gerada?",
+      "options": [
+        "O botão Generate, que cria quatro variações da imagem a partir do prompt.",
+        "O campo Negative Prompt, onde se escreve o que não se quer na imagem.",
+        "A opção de proporção, que define o formato vertical ou horizontal da imagem.",
+        "O seletor de modelo, que escolhe o estilo artístico usado na geração."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 apresenta o Negative Prompt como o recurso para excluir elementos indesejados, como 'borrado, distorcido'.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q018",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "No ElevenLabs, o que controla o quanto a voz varia de tom durante a fala?",
+      "options": [
+        "O parâmetro Estabilidade, que em excesso deixa a voz com tom monótono.",
+        "O parâmetro Similaridade, que aproxima a voz gerada da voz de referência.",
+        "O seletor Estilo, que aproxima a fala de um sotaque ou forma de falar.",
+        "A escolha da voz na biblioteca, que define o timbre e a entonação base."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 define Estabilidade como o controle da variação de tom; alta demais deixa a voz robótica.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q019",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Por que uma trilha gerada no Suno evita problemas de direito autoral?",
+      "options": [
+        "Porque o Suno compra os direitos das músicas e os repassa ao usuário.",
+        "Porque a plataforma usa apenas músicas de bibliotecas com licença livre.",
+        "Porque cada faixa é uma composição original criada na hora para você.",
+        "Porque o plano gratuito limita o uso comercial das músicas geradas."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 explica que a música é original e gerada na hora, portanto não há direito autoral de terceiros.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q020",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Uma cafeteria quer um vídeo para recepcionar um cliente novo com acolhimento. Qual a melhor decisão?",
+      "options": [
+        "Usar avatar do Synthesia, pois a plataforma tem renderização mais estável.",
+        "Usar avatar personalizado no HeyGen para parecer mais próximo do dono.",
+        "Gravar com o celular, porque vínculo exige emoção que avatar não entrega.",
+        "Usar avatar de catálogo com voz calma para transmitir profissionalismo."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 ensina que avatar é ferramenta de treinamento, não de vínculo; para acolher, use a câmera do celular.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q021",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Qual é a estrutura de retenção que o CapCut ajuda a montar em vídeos curtos?",
+      "options": [
+        "Gancho nos primeiros dois segundos, variação no meio e chamada para ação.",
+        "Transições chamativas, cortes rápidos e exportação em alta resolução.",
+        "Clipe mais bonito no início, velocidade lenta e legenda automática.",
+        "Trilha sonora alta, texto grande e corte de todos os momentos de pausa."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 define a estrutura de retenção com gancho nos primeiros dois segundos, variação no meio e CTA no final.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q022",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Um vídeo de 45 segundos começa com 'Olá pessoal, tudo bem?' e legenda só aos 5 segundos. O que está errado?",
+      "options": [
+        "A legenda deve aparecer junto com o primeiro frame e conter o gancho da promessa.",
+        "O gancho deve ser dito pela voz e repetido pela legenda nos primeiros cinco segundos.",
+        "A regra dos três segundos exige que a primeira legenda fique na tela por três segundos.",
+        "A legenda automática precisa ser revisada antes de ajustar o timing dos blocos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 diz que a primeira legenda deve aparecer junto com o primeiro frame e conter o gancho, não uma saudação.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q023",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Você precisa gerar imagens para uma marca que exige consistência de estilo e tem orçamento. Qual ferramenta escolher?",
+      "options": [
+        "ComfyUI, porque roda localmente e oferece controle total dos parâmetros.",
+        "Leonardo, porque o plano gratuito permite gerar imagens sem custo.",
+        "Midjourney, porque o resultado é bonito e o prompt fixo garante consistência.",
+        "Qualquer editor de imagem, pois o foco deve ser a edição posterior."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 indica a Midjourney para projetos de marca com estilo consistente, usando um prompt fixo.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q024",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Um vídeo de treinamento usa avatar que fala com entonação plana e olhar fixo. Por que isso não impede o objetivo?",
+      "options": [
+        "Porque a linha do desconforto só aparece quando o avatar parece humano demais.",
+        "Porque treinamento tolera a linha do desconforto, pois o foco é informação.",
+        "Porque a entonação plana é natural em vídeos institucionais de qualidade.",
+        "Porque o espectador de treinamento não percebe falhas no movimento dos olhos."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 afirma que treinamento tolera a linha do desconforto, pois o objetivo é informação, não emoção.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q025",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "No Descript, o que acontece quando você apaga uma palavra no texto?",
+      "options": [
+        "Remove o trecho correspondente no áudio e vídeo, juntando as bordas.",
+        "Apenas esconde a palavra, mantendo o áudio e o vídeo intactos.",
+        "Substitui a palavra por um silêncio, mas mantém o vídeo original.",
+        "Apaga o texto e deixa o áudio, exigindo corte manual na timeline."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 explica que apagar uma palavra remove o trecho correspondente no áudio e vídeo, juntando as bordas.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q026",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Qual é a ordem correta dos consertos para um clipe gerado?",
+      "options": [
+        "Fundo, quadros e resolução, pois cada passo amplia o anterior.",
+        "Resolução, fundo e quadros, pois o upscale melhora o recorte.",
+        "Quadros, resolução e fundo, pois o movimento é o mais crítico.",
+        "Fundo, resolução e quadros, pois a resolução é a base."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 afirma que a ordem é fundo primeiro, quadros depois, resolução por último, porque cada conserto amplia o anterior.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q027",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Qual é o critério para um corte em emenda de clipes?",
+      "options": [
+        "O corte deve acontecer no fim de uma ação, não no meio dela.",
+        "O corte deve ser no meio de um movimento para criar dinamismo.",
+        "O corte deve ocorrer quando a cena está parada para evitar saltos.",
+        "O corte deve ser feito em qualquer ponto, desde que o áudio continue."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 diz que o corte certo é no fim de uma ação, não no meio, para evitar que o clipe seguinte pareça um salto.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q028",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Por que produzir em lote é mais eficiente do que produzir um vídeo por vez?",
+      "options": [
+        "Porque separa os estágios e evita o custo de trocar de contexto.",
+        "Porque permite usar a mesma ferramenta para todos os vídeos.",
+        "Porque elimina a necessidade de revisão, já que tudo é igual.",
+        "Porque acelera a geração de clipes, que é o estágio mais lento."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 explica que o lote evita o custo de troca de contexto e separa os estágios, tornando o processo mais rápido.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q029",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "O que o algoritmo do TikTok mede para decidir o alcance de um vídeo?",
+      "options": [
+        "Métricas como retenção, curtidas, comentários e compartilhamentos.",
+        "A qualidade da imagem e a resolução do vídeo publicado.",
+        "O número de seguidores do perfil e a frequência de postagem.",
+        "A duração do vídeo e a quantidade de legendas automáticas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 afirma que o algoritmo mede métricas como retenção, curtidas, comentários e compartilhamentos para decidir o alcance.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q030",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Você tem clipes de uma pessoa andando e parando. Onde deve cortar para emendar sem parecer emendado?",
+      "options": [
+        "No fim do movimento, quando o pé toca o chão, para uma transição suave.",
+        "No meio do passo, para criar um ritmo acelerado e dinâmico.",
+        "Quando a pessoa está parada, pois o corte fica imperceptível.",
+        "Em qualquer ponto, desde que o áudio ambiente seja contínuo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 ensina que o corte deve ser no fim da ação, como quando o pé toca o chão, para criar continuidade.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q031",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Se você perde um dia de geração por um imprevisto, como o fluxo repetível ajuda?",
+      "options": [
+        "Permite reordenar os estágios, pois cada um é independente.",
+        "Exige que você refaça todo o lote do zero, sem atalhos.",
+        "Faz com que a geração seja automática, sem intervenção humana.",
+        "Reduz o tempo de revisão, eliminando a necessidade de checagem."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 mostra que o pipeline é independente, então você pode reordenar os dias sem perder a semana.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q032",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Por que um roteiro de vídeo longo não pode ser uma série de vídeos curtos emendados?",
+      "options": [
+        "Porque a promessa precisa ser paga em camadas, não de uma vez.",
+        "Porque o espectador perde o interesse se a recompensa é imediata.",
+        "Porque o algoritmo do YouTube penaliza vídeos com muitos cortes.",
+        "Porque a edição fica mais complexa e o ritmo fica cansativo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 explica que no longo a promessa é um contrato que se paga em camadas; se entregar tudo no começo, o resto vira enrolação.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q033",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Qual é a função principal de um vídeo de produto?",
+      "options": [
+        "Remover a dúvida que trava a compra e mostrar escala e uso.",
+        "Mostrar o produto em movimento e com um fundo bonito e limpo.",
+        "Exibir o produto com música e luz de estúdio para encantar.",
+        "Apresentar o produto de forma artística e criativa para vender."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 define que o vídeo de produto existe para remover a dúvida que trava a compra, não para ser bonito.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q034",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Por que o avatar é melhor que gravação real em vídeos institucionais?",
+      "options": [
+        "Porque o avatar transmite mais emoção que um ator real e improvisa muito bem.",
+        "Porque o avatar é mais barato e não precisa de roteiro complexo.",
+        "Porque o avatar garante consistência, escala e baixo custo de produção.",
+        "Porque o avatar tem mais carisma e improvisa bem em qualquer cena."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 explica que o avatar vence em institucional por oferecer consistência, escala e custo baixo, não emoção.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q035",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "O que acontece se você não declarar conteúdo gerado por IA em uma plataforma?",
+      "options": [
+        "O vídeo é removido imediatamente e sua conta é banida.",
+        "A plataforma aplica uma restrição silenciosa de alcance.",
+        "O vídeo continua normal, mas perde a monetização.",
+        "A plataforma envia um aviso por e-mail explicando o motivo."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 27 mostra que a punição por não declarar IA é silenciosa, como redução de alcance, e não um e-mail de aviso.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q036",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Qual é o modelo de monetização mais rápido para quem está começando?",
+      "options": [
+        "Audiência, porque gera renda passiva com anúncios.",
+        "Serviço, porque paga rápido e valida sua habilidade.",
+        "Produto, porque vende infinitamente sem esforço.",
+        "Recorrência, porque garante receita previsível todo mês."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 28 afirma que o serviço é a porta de entrada mais rápida para quem começa, pois paga rápido e valida a habilidade.",
+      "status": "active",
+      "tags": [
+        "cap28",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q037",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Um cliente pede 'só mais uma revisão' depois das duas incluídas. O que fazer?",
+      "options": [
+        "Fazer a revisão sem cobrar para manter o cliente feliz.",
+        "Cobrar uma taxa extra e documentar a mudança no escopo.",
+        "Recusar a revisão e encerrar o contrato imediatamente.",
+        "Ignorar o pedido e entregar o vídeo como está."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 29 orienta cobrar por revisões extras e documentar a mudança, protegendo o escopo e o preço.",
+      "status": "active",
+      "tags": [
+        "cap29",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q038",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Uma ferramenta nova promete mais gerações gratuitas, mas qualidade inferior. O que fazer segundo o método?",
+      "options": [
+        "Adotar a nova ferramenta por causa do custo menor e da velocidade.",
+        "Testar com prompt padrão e comparar qualidade, velocidade e custo.",
+        "Ignorar a novidade porque a atual é suficiente para tudo.",
+        "Usar as duas ferramentas em todos os projetos diferentes para comparar."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 30 ensina a testar com prompt padrão e comparar qualidade, velocidade e custo antes de decidir adotar ou ignorar.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q039",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Um cliente tem só uma foto do produto e quer um vídeo. O que o CapCut pode fazer?",
+      "options": [
+        "Gerar um vídeo completo do produto em vários ângulos.",
+        "Animar a foto com efeito zoom ou pan, sem criar cenas novas.",
+        "Criar um vídeo com o produto em uso em um ambiente real.",
+        "Substituir a foto por um vídeo gerado por IA automaticamente."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 diz que o CapCut pode animar a foto com zoom ou pan, mas não cria um produto que não existe.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-criar-videos-q040",
+      "courseSlug": "ia-para-criar-videos",
+      "question": "Um vídeo de treinamento precisa ser atualizado toda semana. Qual abordagem é mais eficiente?",
+      "options": [
+        "Regravar com ator real para manter a emoção a cada mudança.",
+        "Usar avatar e reescrever o roteiro para gerar uma nova versão.",
+        "Editar manualmente o vídeo antigo para corrigir as informações.",
+        "Criar um vídeo novo do zero com celular e luz profissional."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:47:55.418Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 mostra que o avatar transforma a manutenção do conteúdo em edição de texto, ideal para atualizações frequentes.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "dificil"
+      ]
+    }
+  ]
+}

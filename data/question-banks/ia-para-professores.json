@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "ia-para-professores",
+  "lastUpdated": "2026-08-19T16:03:52.484Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "ia-para-professores-q001",
+      "courseSlug": "ia-para-professores",
+      "question": "Quais são os quatro elementos essenciais de um prompt eficaz para gerar material didático?",
+      "options": [
+        "Papel, contexto, tarefa e formato da resposta.",
+        "Título, introdução, desenvolvimento e conclusão.",
+        "Objetivo, metodologia, avaliação e recursos.",
+        "Série, disciplina, duração e quantidade de alunos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 define os quatro elementos do prompt eficaz: papel, contexto, tarefa e formato.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q002",
+      "courseSlug": "ia-para-professores",
+      "question": "Por que um detector de IA pode classificar erroneamente um texto humano escrito em português simples como sendo de máquina?",
+      "options": [
+        "Porque o detector foi treinado apenas em inglês e não entende português.",
+        "Porque textos simples têm baixa variação de ritmo, similar à IA.",
+        "Porque o detector analisa o conteúdo semântico, não o estilo.",
+        "Porque textos curtos sempre são considerados gerados por IA."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 explica que textos simples têm baixa variação de ritmo, similar à IA, causando falsos positivos.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q003",
+      "courseSlug": "ia-para-professores",
+      "question": "Por que um assistente de IA pode responder com segurança sobre algo que não sabe?",
+      "options": [
+        "Porque ele consulta um banco de dados atualizado em tempo real.",
+        "Porque ele prevê a próxima palavra com base em padrões estatísticos.",
+        "Porque ele tem acesso a todas as informações da internet.",
+        "Porque ele foi programado para nunca admitir ignorância."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 explica que o modelo prevê a próxima palavra, não consulta fatos, gerando confiança por fluência estatística.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q004",
+      "courseSlug": "ia-para-professores",
+      "question": "Qual ferramenta de IA é mais adequada para extrair informações de um PDF citando o trecho exato?",
+      "options": [
+        "ChatGPT, por sua versatilidade em responder perguntas gerais.",
+        "Gemini, por sua integração com o Google Drive e Gmail.",
+        "Claude, por seu raciocínio cuidadoso em textos longos.",
+        "NotebookLM, por trabalhar com fontes carregadas pelo usuário."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 destaca que o NotebookLM é o único que cita a fonte exata ao trabalhar com PDFs carregados.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q005",
+      "courseSlug": "ia-para-professores",
+      "question": "Qual é a principal limitação do plano gratuito do ChatGPT para um professor que precisa corrigir muitas redações?",
+      "options": [
+        "Não aceita arquivos de texto, apenas imagens.",
+        "Limita o número de mensagens por janela de tempo.",
+        "Não permite gerar respostas em português.",
+        "Exige cartão de crédito para ativar a conta."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 explica que o ChatGPT gratuito tem limite de mensagens por janela de tempo, o que atrapalha correções em massa.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q006",
+      "courseSlug": "ia-para-professores",
+      "question": "Ao usar o ChatGPT para gerar um plano de aula, qual prática garante um material mais adaptado à sua turma?",
+      "options": [
+        "Aceitar a primeira resposta como pronta e copiar sem revisar o texto.",
+        "Usar um prompt genérico sem mencionar série, duração ou nível da turma.",
+        "Fornecer contexto sobre a turma e pedir ajustes na mesma conversa.",
+        "Pedir o plano em uma nova conversa a cada ajuste necessário."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 mostra que o prompt eficaz inclui contexto e que o ciclo escrever-revisar-ajustar na mesma conversa produz material adaptado.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q007",
+      "courseSlug": "ia-para-professores",
+      "question": "Um professor usou um detector de IA e obteve 90% de probabilidade de texto gerado por máquina em uma redação curta de um aluno com escrita simples. Qual a ação mais adequada?",
+      "options": [
+        "Considerar o resultado como prova definitiva e atribuir nota zero ao aluno.",
+        "Usar o número como hipótese e conversar com o aluno sobre o processo.",
+        "Desconsiderar o detector e confiar na impressão pessoal do professor.",
+        "Aplicar outro detector e, se confirmar, acusar o aluno formalmente."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 afirma que o detector é um sinal, não prova, e que a conversa com o aluno é a melhor investigação.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q008",
+      "courseSlug": "ia-para-professores",
+      "question": "Um professor pediu à IA uma referência bibliográfica e ela gerou um autor inexistente. Por que isso ocorre?",
+      "options": [
+        "O modelo confunde fatos reais com invenções por falta de acesso à internet.",
+        "O modelo prevê palavras prováveis, não consulta um banco de dados de fatos.",
+        "O modelo foi programado para inventar referências quando não sabe a resposta.",
+        "O modelo não foi treinado com textos acadêmicos suficientes em português."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 explica que o modelo gera texto por previsão de próxima palavra, sem distinguir fato de invenção plausível.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q009",
+      "courseSlug": "ia-para-professores",
+      "question": "Uma professora tem alunos que dominam equações e outros que ainda não. Qual adaptação mantém o mesmo objetivo da atividade?",
+      "options": [
+        "Reduzir o número de questões para quem tem dificuldade e aumentar para os rápidos.",
+        "Manter a mesma habilidade, mudando o número de passos e o apoio oferecido.",
+        "Dar um texto mais curto para os fracos e um mais longo para os fortes.",
+        "Ensinar um conteúdo novo para quem termina cedo e revisar para os demais."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 afirma que diferenciação ajusta o ponto de entrada e o processo, mas todos devem chegar ao mesmo objetivo, sem adiantar conteúdo.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q010",
+      "courseSlug": "ia-para-professores",
+      "question": "Quais elementos tornam uma atividade resistente ao texto pronto?",
+      "options": [
+        "Etapas intermediárias, reflexão pessoal e aplicação contextual.",
+        "Mais páginas, vocabulário difícil e pesquisa na internet.",
+        "Redação longa, letra caprichada e uso de sinônimos.",
+        "Detector de IA, prova surpresa e punição severa."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 afirma que etapas intermediárias, reflexão pessoal e aplicação contextual são os três elementos que blindam a atividade.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q011",
+      "courseSlug": "ia-para-professores",
+      "question": "O que é uma rubrica, segundo o capítulo 8?",
+      "options": [
+        "Tabela que descreve o esperado em cada critério, com níveis de desempenho.",
+        "Lista de notas que o professor dá para cada texto produzido.",
+        "Conjunto de critérios vagos para avaliar a criatividade do aluno.",
+        "Modo de dar nota com base na impressão pessoal do professor."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 define rubrica como uma tabela que descreve o esperado em cada critério, com níveis do fraco ao excelente.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q012",
+      "courseSlug": "ia-para-professores",
+      "question": "Qual é a principal característica de um feedback específico?",
+      "options": [
+        "Dizer exatamente o que mudar, com a frase e o problema localizados.",
+        "Elogiar o aluno para que ele se sinta motivado a continuar.",
+        "Usar palavras como 'bom', 'ruim' e 'precisa melhorar'.",
+        "Apontar todos os erros do texto de uma só vez."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 explica que feedback específico é acionável e indica onde, como e por que mudar, com a frase exata do problema.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q013",
+      "courseSlug": "ia-para-professores",
+      "question": "Qual procedimento de conferência manual é recomendado ao usar IA para corrigir redações?",
+      "options": [
+        "Conferir todas as redações de todas as turmas para garantir precisão total.",
+        "Conferir apenas os extremos, melhor e pior, para economizar tempo.",
+        "Conferir amostra de 5 a 10 por turma, com extremos e médios.",
+        "Confiar na nota da IA sem revisão, pois ela é consistente."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 recomenda conferir uma amostra de 5 a 10 itens por turma, incluindo extremos e médios, para identificar padrões de erro da IA.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q014",
+      "courseSlug": "ia-para-professores",
+      "question": "Como se deve usar a BNCC ao pedir um plano de aula para o ChatGPT?",
+      "options": [
+        "Pedir o plano sem colar a habilidade, pois a IA escolhe a melhor.",
+        "Colar apenas o código da habilidade, sem a descrição completa.",
+        "Colar a habilidade completa com código e descrição no prompt.",
+        "Confiar no código que a IA menciona, sem verificar no site."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 orienta colar a habilidade completa, com código e descrição, para que a IA trabalhe com um alvo claro.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q015",
+      "courseSlug": "ia-para-professores",
+      "question": "Qual cenário exemplifica corretamente o uso de etapas intermediárias para evitar cola de IA?",
+      "options": [
+        "Pedir apenas o texto final, mas com mais páginas para dificultar a cópia.",
+        "Pedir rascunho, plano, versão final e justificativa das mudanças.",
+        "Pedir \"com suas palavras\" para evitar que o aluno copie da IA.",
+        "Aumentar o número de questões de múltipla escolha sobre o tema."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 mostra que quebrar a entrega em etapas intermediárias, como rascunho e justificativa, torna o texto pronto inútil.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q016",
+      "courseSlug": "ia-para-professores",
+      "question": "Qual prática é recomendada ao gerar atividades diferenciadas com IA para diferentes níveis?",
+      "options": [
+        "Pedir três versões sem contexto, pois a IA adapta sozinha.",
+        "Usar a versão de desafio para adiantar conteúdo novo.",
+        "Descrever a turma e o objetivo antes de pedir as variações.",
+        "Aceitar a versão de apoio como veio, sem revisão."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 ensina que descrever a turma e o objetivo antes de pedir as variações é essencial para a diferenciação.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q017",
+      "courseSlug": "ia-para-professores",
+      "question": "O que é preciso configurar no Google Forms para que ele corrija automaticamente as questões?",
+      "options": [
+        "Ativar o modo quiz e definir o gabarito de cada pergunta.",
+        "Usar o plano pago e importar uma planilha com as respostas.",
+        "Enviar o formulário por e-mail e coletar as notas manualmente.",
+        "Criar um formulário comum e depois exportar para o Excel."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 explica que ativar o modo quiz e definir o gabarito são passos obrigatórios para a correção automática.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q018",
+      "courseSlug": "ia-para-professores",
+      "question": "Qual é a diferença entre simplificar um texto e encurtar um texto?",
+      "options": [
+        "Simplificar reduz a complexidade sem perder o conteúdo central.",
+        "Encurtar é sempre melhor para alunos com dificuldade de leitura.",
+        "Simplificar é apenas diminuir o número de palavras do texto.",
+        "Encurtar mantém o vocabulário técnico e as frases longas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 diferencia simplificar de encurtar, afirmando que simplificar reduz complexidade sem perder conteúdo.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q019",
+      "courseSlug": "ia-para-professores",
+      "question": "Por que a IA pode gerar distratores que não são plausíveis em questões de múltipla escolha?",
+      "options": [
+        "Porque ela não conhece os erros típicos que os alunos cometem.",
+        "Porque ela sempre copia distratores de outras provas prontas.",
+        "Porque ela não consegue criar alternativas com tamanhos iguais.",
+        "Porque ela prefere distratores absurdos para facilitar a eliminação."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 afirma que a IA não conhece os erros comuns dos alunos e por isso pode gerar distratores não plausíveis.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q020",
+      "courseSlug": "ia-para-professores",
+      "question": "Quais são os três tipos de erro que a IA consegue revisar em uma prova?",
+      "options": [
+        "Digitação, gabarito e coerência entre enunciado e alternativas.",
+        "Ortografia, pontuação e concordância verbal e nominal.",
+        "Formatação, numeração e alinhamento do texto na página.",
+        "Clareza, objetividade e adequação ao nível da turma e do conteúdo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 lista os três tipos de erro que a IA consegue revisar: digitação, gabarito e coerência.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q021",
+      "courseSlug": "ia-para-professores",
+      "question": "Um professor tem um texto longo e quer usar o Magic Design do Canva para criar slides. Qual é o procedimento correto?",
+      "options": [
+        "Colar o texto integral e deixar a IA dividir em slides automaticamente, sem revisão.",
+        "Resumir o conteúdo em tópicos antes, colar e revisar cada slide.",
+        "Escolher um template e substituir apenas o título de cada slide.",
+        "Usar o Magic Write para gerar um texto novo e colar direto."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 orienta resumir o conteúdo em tópicos antes de usar o Magic Design e revisar cada slide.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q022",
+      "courseSlug": "ia-para-professores",
+      "question": "Após a IA sugerir uma correção de digitação em uma prova, o que o professor deve fazer antes de aceitar?",
+      "options": [
+        "Aceitar imediatamente, pois a IA raramente erra em digitação e revisão.",
+        "Comparar com o original e verificar se a mudança altera o sentido.",
+        "Aplicar a correção em todas as questões sem revisar.",
+        "Pedir para a IA reescrever toda a prova novamente."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 recomenda comparar a sugestão da IA com o original e verificar se não altera o sentido.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q023",
+      "courseSlug": "ia-para-professores",
+      "question": "Qual é o princípio central para criar apresentações eficazes com Canva e IA?",
+      "options": [
+        "Usar o máximo de texto para aproveitar cada espaço do slide.",
+        "Aplicar o princípio do \"menos é mais\" com poucas palavras por linha.",
+        "Deixar a IA decidir todo o conteúdo e layout automaticamente.",
+        "Copiar o texto integral da IA para não perder nenhuma informação."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 define o princípio do 'menos é mais' como central para apresentações.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q024",
+      "courseSlug": "ia-para-professores",
+      "question": "Uma aluna escreveu uma redação irônica e a IA deu nota baixa por \"não desenvolver a ideia\". O que o professor deve fazer?",
+      "options": [
+        "Aceitar a nota da IA, pois ela é objetiva e sem viés.",
+        "Conferir manualmente, reconhecer a ironia e ajustar a nota.",
+        "Pedir para a IA reescrever a redação em tom sério.",
+        "Descartar a redação e pedir que a aluna refaça sem ironia."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 alerta que a IA não entende ironia e exige conferência manual e ajuste da nota.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q025",
+      "courseSlug": "ia-para-professores",
+      "question": "Quais são as três camadas de uma mensagem para a família?",
+      "options": [
+        "Informação objetiva, tom adequado e chamado à ação.",
+        "Fato, empatia e uma pergunta aberta no final.",
+        "Abertura, desenvolvimento e encerramento com saudação.",
+        "Contexto da família, nota do aluno e data da reunião."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 apresenta as três camadas da mensagem: informação, tom e chamado à ação.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q026",
+      "courseSlug": "ia-para-professores",
+      "question": "Qual é a diferença entre pauta e script em uma reunião de pais?",
+      "options": [
+        "Pauta é lista de convidados; script é o texto do convite.",
+        "Pauta é roteiro de tópicos; script é frase por frase.",
+        "Pauta é o relatório individual; script é a ata da reunião.",
+        "Pauta é o calendário de provas; script é a lista de notas."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 distingue pauta, roteiro de tópicos com tempo, de script, que engessa a conversa frase por frase.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q027",
+      "courseSlug": "ia-para-professores",
+      "question": "Em uma planilha de notas, qual é a função da primeira linha ao criar uma tabela dinâmica?",
+      "options": [
+        "Armazenar as fórmulas de média de cada aluno.",
+        "Servir de cabeçalho para o Excel entender os nomes das colunas.",
+        "Guardar a nota final de cada estudante da turma.",
+        "Indicar onde a IA deve colocar a fórmula gerada."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "A primeira linha serve de cabeçalho, e o capítulo 19 ensina que sem cabeçalho a tabela dinâmica não entende os nomes das colunas.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q028",
+      "courseSlug": "ia-para-professores",
+      "question": "No fluxo de correção com o Google Sala de Aula, qual é o papel da plataforma?",
+      "options": [
+        "Corrigir as redações e gerar feedback automático para o professor.",
+        "Registrar entregas, organizar prazos e guardar os trabalhos dos alunos.",
+        "Substituir a IA na produção de comentários personalizados.",
+        "Calcular as médias finais e montar o boletim da turma."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 define o Google Sala de Aula como o lugar que registra entregas e organiza o fluxo, enquanto a IA cuida do conteúdo do feedback.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q029",
+      "courseSlug": "ia-para-professores",
+      "question": "Por que adaptar um texto para aluno com dificuldade não é apenas reduzir o vocabulário?",
+      "options": [
+        "Porque é preciso manter o objetivo de aprendizagem e mudar a forma.",
+        "Porque o aluno precisa decorar palavras difíceis da disciplina.",
+        "Porque a IA deve substituir a mediação pedagógica do professor.",
+        "Porque o texto adaptado deve ser igual ao original em tudo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 explica que simplificar é trocar a forma sem perder a essência, mantendo o objetivo de aprendizagem.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q030",
+      "courseSlug": "ia-para-professores",
+      "question": "Um aluno entrega uma redação com vocabulário sofisticado e estrutura impecável, mas nas aulas sempre escreve com erros simples. Qual a abordagem mais adequada?",
+      "options": [
+        "Confrontar o aluno com detector de IA na frente da turma para coibir a prática.",
+        "Perguntar como o aluno escreveu o texto, sem acusar, e analisar o processo.",
+        "Dar nota máxima pela qualidade do texto, independente da autoria.",
+        "Reduzir a nota por suspeita de uso de IA, sem pedir explicação ao aluno."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 orienta conversar com o aluno sobre o processo de escrita, sem acusar, para entender o que ele precisava.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q031",
+      "courseSlug": "ia-para-professores",
+      "question": "Um professor usa IA para gerar feedback em lote para redações, mas os alunos dizem que os comentários são genéricos. Qual é a causa mais provável?",
+      "options": [
+        "A IA não é capaz de gerar feedback personalizado para textos longos e complexos.",
+        "O professor não incluiu o trecho específico do texto do aluno no prompt.",
+        "Os alunos não leem feedback porque preferem apenas notas numéricas.",
+        "O professor usou um modelo de IA gratuito, que é limitado em recursos."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 ensina que feedback personalizado exige incluir um trecho específico do texto do aluno no prompt, para que a IA gere algo único.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q032",
+      "courseSlug": "ia-para-professores",
+      "question": "Um professor usa IA para gerar mensagens para famílias, mas percebe que elas soam robóticas e distantes. Qual é a causa mais provável?",
+      "options": [
+        "A IA não é capaz de escrever com empatia, apenas com formalidade e distância.",
+        "O professor não forneceu contexto sobre o aluno e a família no prompt.",
+        "As famílias preferem mensagens curtas e diretas, sem rodeios.",
+        "O professor não revisou o texto gerado antes de enviar."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 explica que mensagens robóticas surgem quando falta contexto sobre o aluno e a família no prompt, pois a IA precisa de informações para calibrar o tom.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q033",
+      "courseSlug": "ia-para-professores",
+      "question": "No NotebookLM, a resposta do modelo é baseada em:",
+      "options": [
+        "Conhecimento geral que o modelo aprendeu na internet",
+        "Apenas nas fontes que o usuário adiciona ao caderno",
+        "No histórico de conversas anteriores do usuário",
+        "Em um banco de atividades pré-definido pela plataforma"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 afirma que o NotebookLM responde a partir das fontes enviadas, não do conhecimento geral.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q034",
+      "courseSlug": "ia-para-professores",
+      "question": "No sistema de planejamento semanal, a planilha serve para:",
+      "options": [
+        "Substituir completamente o uso do ChatGPT na rotina semanal",
+        "Registrar o planejado, o executado e o que funcionou",
+        "Armazenar todas as atividades prontas da internet e dos colegas",
+        "Enviar automaticamente os planos para os alunos da turma"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 diz que a planilha registra o que foi planejado, executado e o que funcionou.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q035",
+      "courseSlug": "ia-para-professores",
+      "question": "Segundo o capítulo 27, na avaliação, a IA pode:",
+      "options": [
+        "Dar a nota final com base em critérios definidos pelo sistema",
+        "Gerar feedback personalizado, mas não decidir a nota",
+        "Comparar alunos entre si para ranking da turma",
+        "Substituir a rubrica criada pelo professor"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 27 estabelece que a IA pode dar feedback, mas a nota é decisão do professor.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q036",
+      "courseSlug": "ia-para-professores",
+      "question": "Quais são as quatro partes de um plano de aula segundo o capítulo 28?",
+      "options": [
+        "Objetivo, atividade, avaliação e feedback ao aluno",
+        "BNCC, plano, atividade e correção automática da turma",
+        "Tema, turma, metodologia e recursos digitais da escola",
+        "Introdução, desenvolvimento, conclusão e tarefa de casa"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 28 define que um plano de aula tem objetivo, atividade, avaliação e feedback.",
+      "status": "active",
+      "tags": [
+        "cap28",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q037",
+      "courseSlug": "ia-para-professores",
+      "question": "Para avaliar se uma fonte de IA educacional é confiável, o critério principal é:",
+      "options": [
+        "O número de seguidores do canal que a produz",
+        "Se o autor tem experiência real com sala de aula",
+        "A frequência de postagens sobre novas ferramentas",
+        "O uso de termos técnicos avançados nos textos"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 29 afirma que o critério é se quem escreve tem experiência real com sala de aula.",
+      "status": "active",
+      "tags": [
+        "cap29",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q038",
+      "courseSlug": "ia-para-professores",
+      "question": "Qual consequência o capítulo 30 atribui ao uso de IA sem revisão crítica?",
+      "options": [
+        "Economia de tempo que permite mais atividades para a turma",
+        "Criação de uma dívida pedagógica com os alunos",
+        "Aumento da criatividade nas propostas geradas pela IA",
+        "Maior autonomia dos alunos na resolução de problemas"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 30 alerta que usar IA sem revisar cria dívida pedagógica.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q039",
+      "courseSlug": "ia-para-professores",
+      "question": "No NotebookLM, o que acontece se você adicionar fontes demais de uma vez?",
+      "options": [
+        "As respostas ficam mais precisas e detalhadas",
+        "O caderno fica confuso e as respostas genéricas",
+        "O modelo passa a ignorar as fontes enviadas",
+        "A ferramenta exclui automaticamente as mais antigas"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 diz que subir fontes demais deixa o caderno confuso e as respostas genéricas.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-professores-q040",
+      "courseSlug": "ia-para-professores",
+      "question": "Em uma semana atípica, como o sistema de planejamento ajuda o professor?",
+      "options": [
+        "Elimina a necessidade de planejar a aula da semana",
+        "Absorve o imprevisto pois o planejamento já está pronto",
+        "Gera automaticamente relatórios individuais para famílias",
+        "Substitui a reunião de pais por um e-mail padrão"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T16:03:52.484Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 explica que o sistema absorve imprevistos porque o planejamento já está feito.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "dificil"
+      ]
+    }
+  ]
+}

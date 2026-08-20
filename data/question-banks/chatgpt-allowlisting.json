@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "chatgpt-allowlisting",
+  "lastUpdated": "2026-08-19T14:25:14.949Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "chatgpt-allowlisting-q001",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Qual é a principal vantagem do allowlisting em comparação ao bloqueio binário de ferramentas de IA?",
+      "options": [
+        "Permite que a TI monitore e controle o uso de IAs aprovadas.",
+        "Impede totalmente o acesso a qualquer IA não autorizada.",
+        "Elimina a necessidade de políticas de segurança da informação.",
+        "Garante que todos os funcionários usem a mesma ferramenta."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 mostra que o allowlisting permite controle técnico e visibilidade, enquanto o bloqueio gera Shadow IT.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q002",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "O que deve conter a declaração de posicionamento de uma política de uso de IA?",
+      "options": [
+        "Lista de ferramentas aprovadas com seus planos específicos.",
+        "Consequências disciplinares para cada tipo de violação.",
+        "Visão positiva sobre IA e incentivo ao uso responsável.",
+        "Processo detalhado de exceções com formulários padrão."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 afirma que a declaração deve comunicar valor e incentivo, antes de listar restrições.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q003",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Na política de uso, qual é o papel do funcionário em relação aos dados?",
+      "options": [
+        "Verificar a classificação dos dados antes de usar IA.",
+        "Aprovar casos de uso que envolvem dados confidenciais.",
+        "Manter os controles técnicos de monitoramento ativos.",
+        "Atualizar a política trimestralmente com novas regras."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 define que o funcionário é responsável por verificar a classificação dos dados.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q004",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Por que o bloqueio de IA pode aumentar o risco de segurança em vez de reduzi-lo?",
+      "options": [
+        "Porque usuários migram para alternativas não monitoradas.",
+        "Porque a TI perde visibilidade sobre o tráfego de rede.",
+        "Porque os funcionários ficam insatisfeitos e menos produtivos.",
+        "Porque as ferramentas de IA se tornam mais vulneráveis."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 relata que após bloquear o ChatGPT, o tráfego para IAs alternativas subiu 40%, criando pontos cegos.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "media"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q005",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Um CISO bloqueou o ChatGPT e notou aumento no tráfego para IAs alternativas. Qual estratégia ele deveria adotar?",
+      "options": [
+        "Reforçar o bloqueio com firewalls e proxies mais rígidos.",
+        "Implementar allowlisting com controles técnicos e DLP.",
+        "Proibir o uso de VPNs pessoais e smartphones no 4G.",
+        "Monitorar apenas os domínios aprovados pela TI."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 propõe allowlisting como alternativa ao bloqueio, com controles e monitoramento.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q006",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Um funcionário precisa usar uma IA para processar dados de clientes do setor financeiro. Segundo a política, o que ele deve fazer?",
+      "options": [
+        "Usar a versão gratuita da ferramenta aprovada.",
+        "Solicitar exceção ao comitê de IA com justificativa.",
+        "Anonimizar os dados e usar a ferramenta enterprise.",
+        "Evitar o uso de IA e fazer manualmente."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 proíbe explicitamente o processamento de dados pessoais de clientes do setor financeiro em IA.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q007",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Qual é a diferença entre uma política de IA eficaz e uma ineficaz, segundo o capítulo?",
+      "options": [
+        "A eficaz é escrita por advogados com jargão jurídico.",
+        "A eficaz é clara, prática e executável por todos.",
+        "A eficaz é longa e detalhada com todos os cenários.",
+        "A eficaz foca apenas em proibições e punições."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 destaca que uma política eficaz tem clareza, praticidade e executabilidade.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q008",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Segundo o capítulo, qual é a primeira etapa para mapear riscos na adoção de IA?",
+      "options": [
+        "Entrevistar lideranças para mapear fluxos de trabalho.",
+        "Classificar os dados conforme seu nível de sensibilidade.",
+        "Implementar ferramentas de DLP em toda a rede.",
+        "Contratar um seguro cibernético para a empresa."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 inicia o fluxo de execução com a classificação granular dos ativos de dados.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q009",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "O que caracteriza o risco de composição no uso de IA?",
+      "options": [
+        "Quando prompts individuais juntos revelam informação sensível.",
+        "Quando um prompt contém dados pessoais de clientes.",
+        "Quando a IA gera respostas com informações erradas.",
+        "Quando o servidor do provedor retém dados para treinamento."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 define risco de composição como a soma de prompts aparentemente inofensivos que revelam dados confidenciais.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "media"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q010",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Uma empresa quer permitir que o jurídico use IA para revisar contratos. Qual classificação de dados exige controles rigorosos?",
+      "options": [
+        "Dados públicos, como comunicados de imprensa.",
+        "Dados internos, como procedimentos operacionais.",
+        "Dados confidenciais, como estratégias de negócio.",
+        "Dados restritos, como segredos comerciais."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 afirma que dados confidenciais exigem controles rigorosos, enquanto restritos podem ser proibidos.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q011",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Qual framework orienta o comportamento do modelo Claude da Anthropic?",
+      "options": [
+        "O modelo é treinado com base em princípios explícitos de Constitutional AI.",
+        "O modelo utiliza aprendizado por reforço com feedback humano exclusivamente.",
+        "O modelo segue regras de segurança definidas por uma rede neural separada.",
+        "O modelo é ajustado com base em dados de conversas de usuários anônimos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 define Constitutional AI como o framework central que orienta o comportamento do Claude.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q012",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Em que cenário o Claude Enterprise supera o ChatGPT Enterprise?",
+      "options": [
+        "Quando a empresa precisa de integração nativa com o Microsoft 365.",
+        "Quando a equipe analisa contratos extensos em uma única sessão.",
+        "Quando a organização exige suporte a múltiplos idiomas simultâneos.",
+        "Quando o time de TI prefere APIs com documentação mais robusta."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 destaca a janela de contexto expandida do Claude, ideal para processar documentos longos.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q013",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Qual é a função do DLP (Data Loss Prevention) em plataformas de IA?",
+      "options": [
+        "Impedir que dados sensíveis sejam enviados em prompts para IA.",
+        "Acelerar o processamento de grandes volumes de dados na nuvem.",
+        "Fornecer autenticação multifator para acesso aos sistemas de IA.",
+        "Criar relatórios de uso de IA por departamento da empresa."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 explica que o DLP monitora e bloqueia o envio de dados sensíveis para plataformas de IA.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "media"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q014",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Qual é a principal garantia contratual do ChatGPT Enterprise em relação aos dados dos usuários?",
+      "options": [
+        "Os dados são excluídos automaticamente após 30 dias de uso.",
+        "Os dados dos usuários não são usados para treinar os modelos.",
+        "Os dados são compartilhados apenas com parceiros autorizados.",
+        "Os dados são criptografados apenas durante a transmissão."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 afirma explicitamente que a garantia central é que os dados não treinam os modelos.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q015",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Qual certificação de segurança atesta que o ChatGPT Enterprise passou por auditoria independente?",
+      "options": [
+        "ISO 27001 é uma certificação internacional de segurança da informação.",
+        "SOC 2 Type II valida a eficácia dos controles de segurança ao longo do tempo.",
+        "PCI DSS é obrigatório para empresas que processam pagamentos com cartão.",
+        "HIPAA é uma norma de privacidade específica para o setor de saúde."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 menciona a certificação SOC 2 Type II como uma auditoria independente dos controles de segurança.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q016",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Qual é a primeira camada de controle técnico para liberar apenas IA aprovadas?",
+      "options": [
+        "Configurar um firewall com allowlisting de domínios de IA permitidos.",
+        "Instalar um antivírus que bloqueia sites de IA não autorizados.",
+        "Criar uma política de senhas fortes para todos os colaboradores.",
+        "Utilizar um proxy que criptografa todas as comunicações da empresa."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 descreve o allowlisting de domínios como a primeira camada fundamental de controle.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q017",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Qual diferença entre ChatGPT Team e Enterprise impacta diretamente a conformidade com a LGPD?",
+      "options": [
+        "O Team não oferece criptografia em repouso, apenas em trânsito.",
+        "O Enterprise permite escolher a região de armazenamento dos dados.",
+        "O Team limita o número de usuários a no máximo 50 pessoas.",
+        "O Enterprise inclui acesso ilimitado ao modelo GPT-4o."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 menciona o Data Residency, que permite escolher a região geográfica, essencial para a LGPD.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q018",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Uma empresa brasileira precisa garantir que dados de clientes processados pelo ChatGPT Enterprise fiquem armazenados no Brasil. Qual recurso atende a esse requisito?",
+      "options": [
+        "Ativar o Data Residency para escolher a região de armazenamento dos dados.",
+        "Configurar o SSO para que o acesso seja feito com credenciais corporativas.",
+        "Criar um Custom GPT com a base de conhecimento exclusiva da empresa.",
+        "Exportar logs de auditoria para investigar possíveis incidentes de segurança."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 define o Data Residency como a configuração que permite escolher a região de processamento e armazenamento dos dados, garantindo conformidade com a LGPD.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q019",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Uma empresa de engenharia quer usar o Claude para analisar uma base de código inteira, mas o time de segurança exige controle de acesso via identidade corporativa. Qual conjunto de recursos do Claude Enterprise atende a esses requisitos?",
+      "options": [
+        "Janela de contexto expandida e SSO com o provedor de identidade da empresa.",
+        "Projects para organizar documentos e Constitutional AI para respostas éticas.",
+        "Console de administração para governança e logs de auditoria para monitoramento.",
+        "Planos empresariais customizados e APIs bem documentadas para desenvolvedores."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 destaca a janela de contexto expandida para processar documentos extensos e o SSO como requisito padrão de identidade corporativa.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q020",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Uma organização quer bloquear o envio de CPFs em prompts e, ao mesmo tempo, restringir o acesso à IA apenas a dispositivos gerenciados. Quais controles técnicos atendem, respectivamente, a esses requisitos?",
+      "options": [
+        "DLP para conteúdo sensível e CASB para políticas contextuais de acesso.",
+        "Allowlisting de domínios e firewall para bloquear sites não autorizados.",
+        "SSO com SAML e MFA para autenticação centralizada dos usuários.",
+        "API Gateway com rate limiting e SIEM para monitoramento centralizado."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 descreve o DLP como o controle que bloqueia dados sensíveis em prompts e o CASB como o que aplica políticas contextuais por dispositivo.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q021",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Quais métricas o Dashboard de Governança de IA consolida para o comitê?",
+      "options": [
+        "Adoção, segurança, produtividade e compliance de uso das ferramentas",
+        "Número de usuários, alertas de DLP, horas economizadas e treinamentos",
+        "Volume de interações, incidentes, satisfação e percentual de conclusão",
+        "Acessos, bloqueios, economia de tempo e conformidade com políticas"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 descreve que o dashboard reúne métricas de adoção, segurança, produtividade e compliance.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "media"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q022",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Quais são os três pilares do treinamento para uso seguro de IA?",
+      "options": [
+        "Consciência de segurança, competência operacional e responsabilidade individual",
+        "Consciência tecnológica, habilidade prática e responsabilidade coletiva",
+        "Conhecimento técnico, eficiência operacional e responsabilidade legal",
+        "Percepção de risco, competência técnica e responsabilidade hierárquica"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 define explicitamente os três eixos: consciência de segurança, competência operacional e responsabilidade individual.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q023",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "O que é o Semáforo de Dados na metodologia de treinamento?",
+      "options": [
+        "Um sistema que classifica cenários em uso permitido, com cuidados ou proibido",
+        "Uma ferramenta que sinaliza dados verdes, amarelos e vermelhos para acesso",
+        "Um método que define cores para indicar a criticidade dos dados corporativos",
+        "Um processo que categoriza informações em públicas, internas e confidenciais"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 descreve o Semáforo de Dados como classificação em Verde, Amarelo e Vermelho para uso de dados.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q024",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Quais áreas devem compor o Comitê de IA para garantir visão multidisciplinar?",
+      "options": [
+        "TI, Jurídico, RH, Operações, DPO e Alta Liderança",
+        "TI, Marketing, RH, Finanças, DPO e Diretoria",
+        "TI, Jurídico, RH, Vendas, DPO e Gerência",
+        "TI, Jurídico, RH, Operações, DPO e Conselho"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 lista explicitamente os seis membros do comitê: TI, Jurídico, RH, Operações, DPO e Alta Liderança.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q025",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "O que determina o princípio da finalidade na LGPD?",
+      "options": [
+        "Que o tratamento deve ter propósitos legítimos, específicos, explícitos e informados",
+        "Que os dados devem ser usados apenas para fins genéricos de produtividade",
+        "Que o tratamento deve ser comunicado ao titular após a coleta dos dados",
+        "Que a finalidade pode ser alterada sem aviso se houver interesse da empresa"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 define o princípio da finalidade como tratamento para propósitos legítimos, específicos, explícitos e informados.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q026",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Para classificar corretamente um dado como 'Amarelo' no Semáforo de Dados, o funcionário precisa desenvolver, principalmente, os pilares de:",
+      "options": [
+        "Consciência de Segurança e Competência Operacional",
+        "Competência Operacional e Responsabilidade Individual",
+        "Consciência de Segurança e Responsabilidade Individual",
+        "Responsabilidade Individual e Embaixadores de IA"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "A classificação no semáforo exige entender os riscos (consciência de segurança) e assumir o papel de guardião dos dados (responsabilidade individual), conforme descrito no capítulo 7.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "media"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q027",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Um analista de marketing quer usar o ChatGPT para gerar variações de um texto promocional, mas precisa incluir o nome de um cliente VIP e seu histórico de compras. Segundo a metodologia do capítulo, essa ação deve ser classificada como:",
+      "options": [
+        "Verde, pois é um uso interno e sem riscos",
+        "Amarelo, pois exige anonimização dos dados",
+        "Vermelho, pois envolve dados pessoais sensíveis",
+        "Amarelo, pois depende de autorização do embaixador"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 orienta a não expor dados sensíveis e a usar o semáforo: dados pessoais de clientes são classificados como vermelho (uso proibido), pois não são necessários para a tarefa.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q028",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Após uma atualização do ChatGPT Enterprise, um novo recurso de análise de imagens ficou disponível, mas não estava previsto nas políticas internas. Qual mecanismo de governança deveria ter sido ativado para evitar a defasagem entre a ferramenta e as regras?",
+      "options": [
+        "Auditoria trimestral de conformidade com DLP",
+        "Gestão de Mudanças para IA, avaliando impactos e atualizando políticas",
+        "Reunião extraordinária do comitê de IA para discutir o caso",
+        "Reciclagem trimestral de treinamento dos funcionários"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 define a Gestão de Mudanças para IA como o fluxo formal para avaliar atualizações de fornecedores e ajustar políticas, evitando que as regras fiquem defasadas.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q029",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Uma empresa brasileira contrata um serviço de IA cujos servidores ficam nos Estados Unidos. Para transferir dados pessoais de clientes a esse provedor, a empresa deve, segundo a LGPD:",
+      "options": [
+        "Obter consentimento explícito de cada cliente afetado",
+        "Verificar se o contrato inclui cláusulas padrão contratuais",
+        "Anonimizar todos os dados antes do envio ao exterior",
+        "Solicitar autorização prévia da ANPD para a transferência"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 afirma que a transferência internacional é permitida se houver garantias contratuais como as cláusulas padrão contratuais, e não apenas consentimento ou anonimização.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q030",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Em um sistema de IA que analisa pedidos de crédito e decide automaticamente pela aprovação ou recusa, além do RIPD, a empresa deve garantir ao titular o direito de:",
+      "options": [
+        "Solicitar a exclusão imediata de seus dados pessoais",
+        "Revisão humana das decisões automatizadas tomadas pela IA",
+        "Receber uma compensação financeira por decisão automatizada",
+        "Acessar gratuitamente o algoritmo utilizado pela IA"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 menciona explicitamente o direito de revisão de decisões automatizadas, permitindo que o titular peça a análise por um humano, conforme a LGPD.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q031",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "O que é o Projeto de Lei 2338/2023 no contexto brasileiro?",
+      "options": [
+        "O marco regulatório da IA, inspirado no AI Act europeu.",
+        "Uma lei que proíbe o uso de IA no setor público.",
+        "Uma regulamentação que se aplica apenas a instituições financeiras.",
+        "Uma emenda à LGPD para tratamento de dados pessoais."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 apresenta o PL 2338/2023 como o 'Marco Regulatório da IA' no Brasil, fortemente inspirado no AI Act europeu.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q032",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Como os bancos brasileiros mantêm conformidade ao usar IA para análise de crédito?",
+      "options": [
+        "Utilizando modelos on-premises para processar todos os dados de crédito.",
+        "Removendo dados sensíveis via DLP e anonimizando os prompts.",
+        "Contratando planos enterprise com garantia de não treinamento.",
+        "Centralizando a governança em um único departamento de TI."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 descreve o cenário financeiro: o gateway de API remove dados bancários via DLP e envia solicitação anonimizada, mantendo conformidade com o Banco Central.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q033",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Por que a prova de conceito (PoC) é essencial antes da implementação em larga escala?",
+      "options": [
+        "Para testar integrações como SSO e ajustar permissões de forma granular.",
+        "Para treinar todos os funcionários nas novas ferramentas de IA.",
+        "Para calcular o custo total de propriedade e o retorno sobre investimento.",
+        "Para obter patrocínio executivo e aprovação do orçamento."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 menciona que pular a PoC resulta em problemas técnicos de integração, como falhas no SSO, e que o piloto permite ajustar permissões granulares.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "media"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q034",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Um sistema de IA que automatiza decisões de contratação. Como ele é classificado na proposta de regulação brasileira?",
+      "options": [
+        "Risco limitado, exigindo apenas avisos de transparência.",
+        "Alto risco, exigindo avaliação de impacto algorítmico.",
+        "Risco mínimo, sem obrigações adicionais.",
+        "Risco inaceitável, proibido completamente."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 afirma que IA em decisões de crédito ou contratação é considerada de alto risco, exigindo avaliação de impacto algorítmico e supervisão humana.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q035",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Qual é a função de um gateway de API com filtros de DLP na implementação segura de IA?",
+      "options": [
+        "Interceptar interações para aplicar filtros de prevenção de perda de dados.",
+        "Substituir o modelo de IA por uma versão local para todos os usuários.",
+        "Bloquear todo o tráfego externo para aumentar a segurança da rede.",
+        "Armazenar todos os prompts em um banco central para auditoria."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 afirma que os gateways de API interceptam as interações para aplicar filtros de DLP, detectando dados sensíveis antes de saírem do perímetro.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q036",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "O que a anonimização sistemática garante no processamento de dados pessoais por IA?",
+      "options": [
+        "Que os dados pessoais sejam descaracterizados antes da interação com o modelo.",
+        "Que todos os dados sejam criptografados com um algoritmo forte.",
+        "Que apenas dados agregados sejam usados para treinar os modelos.",
+        "Que o consentimento do usuário seja obtido para cada uso de dados."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 define a anonimização sistemática como a descaracterização de dados pessoais antes de qualquer interação com o modelo, conectando-se à LGPD.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q037",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Qual é o primeiro passo do plano de 90 dias para implementação segura de IA?",
+      "options": [
+        "Executar um piloto com um grupo selecionado de usuários.",
+        "Formalizar políticas de uso e arquitetura de rede.",
+        "Realizar o diagnóstico inicial e alinhamento com a diretoria.",
+        "Selecionar ferramentas enterprise e avaliar riscos."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O fluxo de execução do capítulo 11 começa com o diagnóstico inicial e alinhamento executivo, mapeando o shadow AI e garantindo patrocínio.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "facil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q038",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Um hospital deseja usar IA para diagnósticos clínicos protegendo dados de pacientes. Qual abordagem o capítulo recomenda?",
+      "options": [
+        "Usar uma única IA externa com filtros DLP rigorosos.",
+        "Processar dados sensíveis on-premises e externos para tarefas administrativas.",
+        "Anonimizar todos os dados e usar qualquer ferramenta pública de IA.",
+        "Contar com embaixadores para revisar manualmente todas as saídas."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 destaca o processamento on-premises ou em camadas para dados clínicos sensíveis, reservando ferramentas externas para tarefas administrativas.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q039",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Um hospital quer usar IA generativa para sumarizar prontuários. Qual estratégia adota explicitamente as duas camadas de proteção citadas no capítulo?",
+      "options": [
+        "Processar tudo em nuvem pública com criptografia em repouso e em trânsito.",
+        "Usar modelo on-premises para dados clínicos e nuvem para tarefas administrativas.",
+        "Anonimizar os prontuários antes do envio e usar gateway de API com DLP.",
+        "Proibir totalmente o uso de IA no setor de saúde para evitar vazamentos."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 mostra que casos de sucesso combinam anonimização sistemática com gateways de API equipados com DLP para proteger dados sensíveis.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "chatgpt-allowlisting-q040",
+      "courseSlug": "chatgpt-allowlisting",
+      "question": "Uma empresa está concluindo o plano de 90 dias e quer se preparar para o PL 2338/2023. Um caso de uso envolve análise de crédito. Qual classificação e controle são exigidos?",
+      "options": [
+        "Risco inaceitável, pois decisões de crédito jamais podem ser automatizadas.",
+        "Risco limitado, pois a IA apenas auxilia e o analista decide o contrato.",
+        "Risco mínimo, pois a supervisão humana elimina qualquer viés algorítmico.",
+        "Alto risco, pois auxilia decisões de crédito e exige supervisão humana."
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:25:14.949Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 classifica IAs que auxiliam decisões de crédito como alto risco, exigindo supervisão humana, e o capítulo 11 reforça a avaliação de risco por caso de uso.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    }
+  ]
+}

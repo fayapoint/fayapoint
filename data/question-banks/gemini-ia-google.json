@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "gemini-ia-google",
+  "lastUpdated": "2026-08-19T13:56:04.217Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "gemini-ia-google-q001",
+      "courseSlug": "gemini-ia-google",
+      "question": "Qual modelo se destaca pela integração profunda com o Android Studio para programação?",
+      "options": [
+        "Gemini, com Gemini Code Assist e agent mode",
+        "ChatGPT, com Code Interpreter em sandbox",
+        "Claude, com Claude Code para multi-arquivos",
+        "Todos oferecem suporte igual para programação"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 menciona que o Gemini 2.5 Pro possui integração profunda com o Gemini Code Assist dentro do Android Studio.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "dificil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q002",
+      "courseSlug": "gemini-ia-google",
+      "question": "Qual modelo Gemini é o carro-chefe para raciocínio complexo?",
+      "options": [
+        "Gemini 2.5 Pro, com janela de 1 milhão de tokens",
+        "Gemini 2.5 Flash, otimizado para alta velocidade",
+        "Gemini 2.5 Flash-Lite, focado em eficiência",
+        "Gemini 3.1 Pro, com Deep Think mode avançado"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 define o Gemini 2.5 Pro como o flagship para tarefas que exigem raciocínio complexo, com janela de contexto de 1 milhão de tokens.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q003",
+      "courseSlug": "gemini-ia-google",
+      "question": "Qual interface web é gratuita para acessar o Gemini?",
+      "options": [
+        "gemini.google.com, com acesso ao Gemini 2.5 Flash",
+        "Google AI Pro, com integração ao Workspace",
+        "Google AI Ultra, com Veo 3.1 e Deep Think",
+        "Vertex AI, com SLA e compliance empresarial"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 menciona gemini.google.com como a interface web gratuita que oferece acesso ao Gemini 2.5 Flash.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q004",
+      "courseSlug": "gemini-ia-google",
+      "question": "Qual é o diferencial estrutural do Gemini em relação aos concorrentes?",
+      "options": [
+        "Multimodalidade nativa para texto, imagem, áudio e vídeo",
+        "Geração de imagens fotorrealistas com Imagen 3",
+        "Verificação factual com o recurso double-check",
+        "Integração nativa com o Google Workspace"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 destaca a multimodalidade nativa como o grande diferencial estrutural do Gemini, processando vários tipos de mídia desde o treinamento base.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q005",
+      "courseSlug": "gemini-ia-google",
+      "question": "Para que serve o recurso double-check no Gemini?",
+      "options": [
+        "Confirmar fatos com busca do Google, colorindo afirmações",
+        "Gerar imagens a partir de descrições textuais",
+        "Traduzir textos entre diferentes idiomas",
+        "Configurar parâmetros como temperatura e top-p"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 explica que o double-check cruza afirmações com o Google Search e as colore conforme a confirmação.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "facil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q006",
+      "courseSlug": "gemini-ia-google",
+      "question": "Uma consultoria precisa analisar contratos de centenas de páginas para achar cláusulas contraditórias, sem urgência. Qual configuração é a mais adequada?",
+      "options": [
+        "Usar o Gemini 2.5 Flash com thinking budget máximo para obter resposta ágil",
+        "Empregar o Gemini 2.5 Pro com thinking budget alto e contexto de 1 milhão de tokens",
+        "Selecionar o Gemini 2.5 Flash-Lite com orçamento de pensamento zerado para economizar",
+        "Aplicar o Gemini 3.1 Pro com Deep Think para foco em raciocínio matemático e científico"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 posiciona o Gemini 2.5 Pro como o modelo com janela de 1 milhão de tokens para análise profunda de documentos extensos, e o thinking budget elevado para raciocínio complexo.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q007",
+      "courseSlug": "gemini-ia-google",
+      "question": "Um desenvolvedor quer prototipar um prompt com ajuste fino de temperatura e já receber o código de integração, sem custo inicial. Qual porta de acesso atende a esse cenário?",
+      "options": [
+        "O site gemini.google.com, que oferece busca web e criação de Gems",
+        "Google AI Studio, que permite ajustar temperatura e gerar código de integração",
+        "Vertex AI no Google Cloud, que garante SLA e conformidade com HIPAA e GDPR",
+        "Google AI Pro, que integra Gemini ao Gmail, Docs e Sheets por assinatura mensal"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 descreve o Google AI Studio como a ferramenta gratuita de prototipagem que permite ajustar parâmetros como temperatura e gerar código de integração.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "media"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q008",
+      "courseSlug": "gemini-ia-google",
+      "question": "Um pesquisador precisa confirmar visualmente se as afirmações geradas pela IA são verdadeiras, com verificação em tempo real na web. Qual recurso oferece isso?",
+      "options": [
+        "O double-check do Gemini, que cruza afirmações com o Google Search em tempo real",
+        "O Extended Thinking do Claude, que dedica até 128K tokens ao raciocínio interno",
+        "O Code Interpreter do ChatGPT, que executa código em ambiente sandbox em tempo real",
+        "O Computer Use do ChatGPT, que interage com a interface do sistema operacional"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 apresenta o double-check como o recurso do Gemini que cruza afirmações com o Google Search, colorindo o texto para confirmar fatos.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "media"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q009",
+      "courseSlug": "gemini-ia-google",
+      "question": "Um chatbot de suporte precisa emitir respostas padronizadas e previsíveis, evitando variações criativas entre atendimentos. Qual ajuste de parâmetros no AI Studio é o mais indicado?",
+      "options": [
+        "Temperatura 0 e thinking budget reduzido, priorizando determinismo e previsibilidade",
+        "Temperatura 1.0 e top-k alto, incentivando maior diversidade lexical nas respostas",
+        "Temperatura 0.5 e top-p baixo, equilibrando criatividade e restrição de vocabulário",
+        "Thinking budget máximo e temperatura 1.0, permitindo respostas mais criativas e longas"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 explica que a temperatura 0 define determinismo, sendo ideal para respostas padronizadas e previsíveis em um chatbot de suporte.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q010",
+      "courseSlug": "gemini-ia-google",
+      "question": "Uma equipe de engenharia precisa otimizar rotas logísticas com muitas variáveis conflitantes, avaliando várias hipóteses ao mesmo tempo. Qual modelo e recurso são mais adequados?",
+      "options": [
+        "Gemini 2.5 Flash com thinking budget zero, priorizando velocidade e baixo custo",
+        "Gemini 2.5 Pro com janela de 1 milhão de tokens, processando todo o contexto",
+        "Gemini 3 Pro com Deep Research, automatizando investigações complexas na web",
+        "Gemini 3.1 Pro com Deep Think, considerando múltiplas hipóteses simultaneamente"
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 define o Gemini 3.1 Pro com Deep Think como o modelo para raciocínio de engenharia que considera múltiplas hipóteses simultaneamente.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q011",
+      "courseSlug": "gemini-ia-google",
+      "question": "Qual é a função das System Instructions no Gemini?",
+      "options": [
+        "Define o DNA do comportamento do modelo antes da interação.",
+        "Aumenta a velocidade de resposta do modelo em tarefas simples.",
+        "Reduz o custo de processamento de tokens por palavra gerada.",
+        "Fornece exemplos de saída para o modelo seguir em tarefas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 afirma que as System Instructions estabelecem o DNA do comportamento do modelo, definindo identidade, comportamento, formato e restrições.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "facil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q012",
+      "courseSlug": "gemini-ia-google",
+      "question": "O que caracteriza a multimodalidade nativa do Gemini?",
+      "options": [
+        "Processa texto, imagem, áudio, vídeo e código integrado.",
+        "Utiliza um pipeline separado para cada tipo de mídia recebida.",
+        "Converte todas as entradas em texto antes de processá-las.",
+        "Depende de extensões externas para entender imagens e áudios."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 explica que o Gemini foi concebido com um pipeline de treinamento unificado, processando múltiplas mídias de forma integrada e simultânea.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "facil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q013",
+      "courseSlug": "gemini-ia-google",
+      "question": "O que são os Gems no ecossistema Gemini?",
+      "options": [
+        "Customizações do Gemini com instruções persistentes.",
+        "Extensões que adicionam funções de busca ao Gemini.",
+        "Modelos de IA treinados exclusivamente para tarefas de texto.",
+        "Ferramentas de edição de imagem integradas ao Gemini."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 define Gems como versões customizadas do Gemini com instruções persistentes que definem personalidade, expertise e formato de resposta.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q014",
+      "courseSlug": "gemini-ia-google",
+      "question": "Qual é a principal característica do Deep Research?",
+      "options": [
+        "Executa pesquisa autônoma e iterativa em vários sites.",
+        "Gera respostas rápidas baseadas no treinamento do modelo.",
+        "Traduz documentos para vários idiomas automaticamente.",
+        "Cria imagens a partir de descrições textuais complexas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 descreve o Deep Research como uma funcionalidade agêntica que navega por centenas de sites de forma iterativa e autônoma.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q015",
+      "courseSlug": "gemini-ia-google",
+      "question": "Como o Thinking Budget deve ser ajustado em relação à tarefa?",
+      "options": [
+        "Tarefas triviais exigem orçamento alto para garantir precisão.",
+        "Tarefas complexas exigem orçamento baixo para reduzir custos.",
+        "O orçamento deve ser proporcional à complexidade da tarefa.",
+        "O orçamento é definido automaticamente pelo modelo, sem controle."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 explica que tarefas triviais usam orçamento baixo ou zero, enquanto problemas densos exigem orçamento alto, ou seja, proporcional à complexidade.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q016",
+      "courseSlug": "gemini-ia-google",
+      "question": "Como os Gems podem potencializar o Deep Research?",
+      "options": [
+        "Fornecem instruções persistentes e dados privados.",
+        "Substituem completamente a necessidade de pesquisas autônomas.",
+        "Limitam o acesso a fontes externas para evitar viés.",
+        "Geram relatórios sem necessidade de validação do usuário."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 mostra que Gems com instruções persistentes e arquivos de referência podem ser integrados ao Deep Research, que no capítulo 8 acessa dados privados.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "media"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q017",
+      "courseSlug": "gemini-ia-google",
+      "question": "Em qual situação o uso de Chain-of-Thought é mais adequado?",
+      "options": [
+        "Para traduzir um texto simples do português para o inglês.",
+        "Para resolver um problema de lógica com múltiplas etapas.",
+        "Para gerar uma imagem fotorrealista a partir de um prompt.",
+        "Para resumir um artigo longo sem perder informações."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 indica que Chain-of-Thought encadeia o raciocínio passo a passo, sendo ideal para problemas de lógica matemática ou planejamento estratégico.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "dificil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q018",
+      "courseSlug": "gemini-ia-google",
+      "question": "Por que um Gem específico como 'Analista de Marketing Digital para E-commerce de Moda Feminina no Brasil' é mais eficaz que um genérico?",
+      "options": [
+        "Recebe instruções menos detalhadas, permitindo maior criatividade.",
+        "Possui contexto específico que reduz a variabilidade.",
+        "Utiliza um modelo de IA mais avançado que o Gemini padrão.",
+        "Tem acesso automático a todos os dados do Google Workspace."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 explica que a especialização com contexto detalhado reduz a variabilidade das respostas, tornando o assistente mais consistente e útil.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q019",
+      "courseSlug": "gemini-ia-google",
+      "question": "Qual é a principal vantagem do Deep Research em relação a uma pesquisa manual?",
+      "options": [
+        "É imune ao viés de confirmação e não pula etapas por cansaço.",
+        "Ele sempre encontra informações confidenciais de empresas privadas.",
+        "Ele gera relatórios sem citar fontes, economizando tempo.",
+        "Ele substitui completamente a necessidade de análise humana."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 destaca que o Deep Research é imune ao viés de confirmação e não pula etapas por cansaço, garantindo uma pesquisa abrangente e imparcial.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "dificil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q020",
+      "courseSlug": "gemini-ia-google",
+      "question": "Como o Gemini 2.5 Flash Image se diferencia do Imagen 3?",
+      "options": [
+        "O Flash Image gera imagens a partir de texto, enquanto o Imagen 3 edita.",
+        "O Imagen 3 gera imagens, enquanto o Flash Image apenas as analisa.",
+        "O Flash Image permite edição por linguagem natural em imagens existentes.",
+        "O Imagen 3 é especializado em vídeo, enquanto o Flash Image em foto."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 afirma que o Imagen 3 é o motor de geração de imagens, enquanto o Gemini 2.5 Flash Image introduz edição por linguagem natural em imagens existentes.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "dificil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q021",
+      "courseSlug": "gemini-ia-google",
+      "question": "Qual é a função principal do NotebookLM em relação aos documentos do usuário?",
+      "options": [
+        "Gerar respostas baseadas em conhecimento geral da internet",
+        "Responder perguntas usando exclusivamente as fontes fornecidas",
+        "Criar podcasts com hosts de IA que discutem qualquer tema",
+        "Traduzir documentos para mais de oitenta idiomas diferentes"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 afirma que o NotebookLM opera em sistema fechado, usando apenas as fontes carregadas, e cita a Fundamentação como garantia de respostas ancoradas nos documentos.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q022",
+      "courseSlug": "gemini-ia-google",
+      "question": "No Gmail, qual recurso do Gemini resume longas conversas em pontos-chave?",
+      "options": [
+        "Help me write, que gera rascunhos com tom ajustado",
+        "Resumo de threads, que condensa e-mails em ações",
+        "Busca por linguagem natural, que localiza arquivos",
+        "Match writing style, que uniformiza o estilo do texto"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 descreve o resumo de threads como a funcionalidade que condensa conversas longas em pontos-chave acionáveis.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "facil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q023",
+      "courseSlug": "gemini-ia-google",
+      "question": "Qual é a principal vantagem da janela de contexto de 1 milhão de tokens do Gemini 2.5 Pro?",
+      "options": [
+        "Permite processar um codebase inteiro de uma só vez",
+        "Gera imagens a partir de descrições textuais complexas",
+        "Traduz código entre várias linguagens de programação",
+        "Executa testes unitários sem necessidade de configuração"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 menciona que a janela de contexto massiva permite alimentar o modelo com um codebase inteiro para análises de arquitetura.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "facil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q024",
+      "courseSlug": "gemini-ia-google",
+      "question": "No Google AI Studio, qual modo é ideal para testar conversas com múltiplos turnos e instruções persistentes?",
+      "options": [
+        "Modo Freeform, que permite prompts livres e ajustes",
+        "Modo Chat, que simula diálogos com system instructions",
+        "Modo Structured Prompt, que define exemplos de entrada",
+        "Modo Live, que testa voz e vídeo em tempo real"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 descreve o Modo Chat como projetado para simular conversas multi-turn com System Instructions persistentes.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "facil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q025",
+      "courseSlug": "gemini-ia-google",
+      "question": "Um pesquisador quer cruzar informações de 50 papers e identificar lacunas. Qual funcionalidade do NotebookLM atende melhor?",
+      "options": [
+        "Audio Overview no formato Deep Dive, que aprofunda o tema",
+        "Modo Interativo, que permite perguntar aos hosts em tempo real",
+        "Fundamentação com citações clicáveis em cada resposta",
+        "Carregar múltiplas fontes e usar o chat para síntese cruzada"
+      ],
+      "correctAnswer": 3,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 mostra que o NotebookLM cruza informações entre arquivos e permite meta-análises via chat, como no cenário de revisão de literatura.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "media"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q026",
+      "courseSlug": "gemini-ia-google",
+      "question": "Qual novidade de 2026 permite criar automações multi-step entre apps sem código?",
+      "options": [
+        "Workspace Studio, que descreve fluxos em linguagem natural",
+        "Gemini no Meet, que transcreve e resume reuniões",
+        "Fill with Gemini, que popula tabelas com dados da web",
+        "Imagen 3 integrado, que gera imagens nos slides"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 apresenta o Workspace Studio como a novidade que cria automações multi-step em linguagem natural, sem código.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q027",
+      "courseSlug": "gemini-ia-google",
+      "question": "Um advogado precisa validar se uma cláusula contratual existe em um dos 300 documentos. Qual abordagem ele deve usar?",
+      "options": [
+        "Gerar um Audio Overview no formato Debate e ouvir os contrapontos",
+        "Perguntar no chat e verificar a citação clicável da resposta",
+        "Usar o Modo Interativo para interromper os hosts durante a discussão",
+        "Criar um novo notebook para cada contrato e comparar as respostas"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 destaca as citações clicáveis como garantia de rastreabilidade, permitindo validar a origem exata da informação nos documentos.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "dificil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q028",
+      "courseSlug": "gemini-ia-google",
+      "question": "Um gerente quer que cinco relatórios de autores diferentes tenham a mesma voz. Qual recurso do Docs ele deve usar?",
+      "options": [
+        "Reescrita seletiva para ajustar trechos específicos de cada texto",
+        "Match doc format para aplicar cabeçalhos e fontes padronizados",
+        "Match writing style para uniformizar o estilo com base em um modelo",
+        "Help me create para gerar novos documentos a partir de descrições"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 explica que Match writing style analisa um documento de referência e uniformiza o estilo, garantindo voz única.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q029",
+      "courseSlug": "gemini-ia-google",
+      "question": "Ao depurar uma condição de corrida em um sistema distribuído, qual configuração do Thinking Budget é mais adequada?",
+      "options": [
+        "Budget zero para priorizar velocidade e baixo custo de processamento",
+        "Budget máximo para permitir raciocínio profundo antes da resposta",
+        "Budget médio para equilibrar velocidade e qualidade da saída",
+        "Budget dinâmico que se ajusta automaticamente à complexidade"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 indica que um orçamento de pensamento maior é essencial para problemas lógicos complexos, como condições de corrida.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q030",
+      "courseSlug": "gemini-ia-google",
+      "question": "Para reduzir custos em uma aplicação que envia longas instruções de sistema repetidamente, qual estratégia é mais eficaz?",
+      "options": [
+        "Usar o modelo Flash-Lite para todas as requisições e aumentar o Top-K",
+        "Reduzir a temperatura para zero para obter respostas determinísticas",
+        "Implementar caching de contexto para evitar reprocessar a entrada",
+        "Aumentar o Thinking Budget para melhorar a qualidade das respostas"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 menciona o caching de contexto como estratégia para armazenar instruções longas e evitar cobranças repetidas de processamento de entrada.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q031",
+      "courseSlug": "gemini-ia-google",
+      "question": "Qual recurso do Vertex AI impede que dados sensíveis saiam do perímetro controlado?",
+      "options": [
+        "DLP identifica e bloqueia dados sensíveis antes de saírem.",
+        "Logs de auditoria registram cada requisição para rastreabilidade.",
+        "Fine-tuning adapta o modelo ao jargão interno e formatos.",
+        "Integração com BigQuery permite consultas via linguagem natural."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 descreve que políticas de DLP podem ser aplicadas para identificar e bloquear o vazamento de informações sensíveis antes que saiam do perímetro controlado.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q032",
+      "courseSlug": "gemini-ia-google",
+      "question": "Um consultor cria um relatório em 30 minutos usando Gemini. Como ele deve precificar esse trabalho?",
+      "options": [
+        "Com base no valor que entrega, não no tempo gasto.",
+        "Com base na taxa horária multiplicada pelo tempo economizado.",
+        "Com base no custo dos tokens usados para gerar o relatório.",
+        "Com base na média de mercado para relatórios similares."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 afirma que a precificação baseada em valor foca no benefício gerado para o cliente, independentemente do tempo de execução, e que manter a cobrança por hora reduziria a receita.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "dificil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q033",
+      "courseSlug": "gemini-ia-google",
+      "question": "O que o recurso de double-check faz no Gemini?",
+      "options": [
+        "Verifica afirmações factuais contra dados atuais da web.",
+        "Traduz conteúdo com nuances culturais e unidades locais.",
+        "Gera esboços de apresentações a partir de planilhas.",
+        "Identifica cláusulas ambíguas em contratos jurídicos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 explica que o double-check permite verificar afirmações factuais automaticamente, garantindo que o relatório seja fundamentado em dados reais.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q034",
+      "courseSlug": "gemini-ia-google",
+      "question": "Segundo o capítulo, qual é a chave para monetizar com IA?",
+      "options": [
+        "Oferecer produtividade como serviço com precificação baseada em valor.",
+        "Usar o modelo mais caro para garantir alta qualidade de saída.",
+        "Cobrar por hora para refletir o tempo economizado pela IA.",
+        "Manter o uso da IA em segredo para obter vantagem competitiva."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 afirma que a estratégia de precificação baseada em valor é o conceito que amarra todas as oportunidades, focando no benefício gerado para o cliente.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q035",
+      "courseSlug": "gemini-ia-google",
+      "question": "O que o Project Mariner permite que o Gemini faça?",
+      "options": [
+        "Operar um navegador web como humano, clicando e digitando.",
+        "Gerar vídeos de alta qualidade a partir de descrições.",
+        "Criar e editar imagens com ferramentas avançadas.",
+        "Interagir com usuários por voz e visão em tempo real."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 descreve que o Project Mariner introduz o uso do computador, permitindo que o Gemini opere o navegador de forma humana.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "facil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q036",
+      "courseSlug": "gemini-ia-google",
+      "question": "Como o fine-tuning no Vertex AI melhora as respostas do modelo para um setor específico?",
+      "options": [
+        "Adapta o modelo ao jargão e aos formatos de documentos do setor.",
+        "Reduz o custo por token usando um modelo menor.",
+        "Garante conformidade com HIPAA e GDPR.",
+        "Integra-se ao BigQuery para consultar data warehouses."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 explica que o fine-tuning adapta o Gemini ao jargão específico do setor, aos formatos de documentos internos e às nuances de um domínio particular, elevando a precisão.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "media"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q037",
+      "courseSlug": "gemini-ia-google",
+      "question": "Qual característica do Vertex AI garante que os dados da empresa não sejam usados para treinar os modelos globais do Google?",
+      "options": [
+        "Logs de auditoria completos de cada requisição e acesso.",
+        "Políticas de DLP que bloqueiam vazamento de CPFs.",
+        "Isolamento dos dados processados dos modelos globais.",
+        "Certificações SOC 2, HIPAA e ISO 27001 exigidas."
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 afirma que os dados processados não são utilizados para treinar os modelos globais, garantindo a soberania da informação.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "media"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q038",
+      "courseSlug": "gemini-ia-google",
+      "question": "Uma empresa de e-commerce recebeu 5.000 avaliações de clientes em um arquivo CSV. Para identificar padrões de insatisfação que não seriam percebidos em leitura individual, qual abordagem o Gemini deve receber?",
+      "options": [
+        "Carregar o CSV e pedir uma síntese dos comentários mais frequentes.",
+        "Solicitar a distribuição de sentimento e extração de correlações ocultas.",
+        "Pedir uma tradução das avaliações para o inglês para análise.",
+        "Realizar uma busca ativa com double-check nas avaliações."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 descreve a análise de feedback em lote, identificando distribuição de sentimento e insights inesperados.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q039",
+      "courseSlug": "gemini-ia-google",
+      "question": "Um freelancer usa o Gemini para produzir um relatório de pesquisa de mercado em 2 horas, quando antes levaria 16 horas. Qual estratégia de precificação é mais alinhada ao capítulo?",
+      "options": [
+        "Cobrar por hora, pois o trabalho foi mais rápido e o cliente economiza.",
+        "Cobrar o mesmo valor que cobraria pelo trabalho manual, baseado no benefício gerado.",
+        "Cobrar um valor menor para atrair mais clientes, já que o custo é baixo.",
+        "Cobrar apenas o custo dos tokens consumidos, mais uma taxa fixa."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 recomenda precificar pelo valor entregue, não pelo tempo, pois a cobrança por hora reduziria a receita.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "dificil"
+      ]
+    },
+    {
+      "id": "gemini-ia-google-q040",
+      "courseSlug": "gemini-ia-google",
+      "question": "Um profissional deseja que a IA preencha formulários e agende reuniões diretamente no navegador. Qual tecnologia do ecossistema Gemini possibilita isso?",
+      "options": [
+        "Gemini Live, que permite interações por voz e visão em tempo real.",
+        "Project Mariner, que permite o uso do computador pelo navegador.",
+        "Deep Research, que planeja pesquisas e cruza fontes de dados.",
+        "NotebookLM, que cria uma base de conhecimento privada e interativa."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T13:56:04.217Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 apresenta o Project Mariner, que permite o uso do computador pelo navegador.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "dificil"
+      ]
+    }
+  ]
+}

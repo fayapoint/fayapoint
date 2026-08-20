@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "ia-no-whatsapp",
+  "lastUpdated": "2026-08-19T14:04:52.341Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "ia-no-whatsapp-q001",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Qual a principal diferença entre o WhatsApp Business e a API oficial?",
+      "options": [
+        "O Business é grátis, a API cobra por conversa.",
+        "O Business é um app, a API é um serviço pago.",
+        "O Business permite robôs, a API não permite.",
+        "O Business integra sistemas, a API não integra."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 explica que o Business é um app melhorado, enquanto a API é um serviço pago por conversa.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q002",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "O que a Meta considera automação ilegítima no WhatsApp?",
+      "options": [
+        "Enviar mensagem para quem não pediu, mesmo sem robô.",
+        "Usar biblioteca não oficial para responder automaticamente.",
+        "Disparar ofertas para todos os contatos da agenda.",
+        "Responder a perguntas com um robô treinado."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 afirma que mensagens não solicitadas são tratadas como spam e derrubam a reputação.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q003",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "O que a mensagem de saudação do WhatsApp Business deve fazer?",
+      "options": [
+        "Apresentar a empresa e dizer o horário de atendimento.",
+        "Responder automaticamente todas as perguntas do cliente.",
+        "Enviar um catálogo de produtos para todo novo contato.",
+        "Substituir o atendimento humano em todos os horários."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 diz que a saudação deve apresentar quem você é, o que faz e o horário de atendimento.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q004",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Por que usar uma biblioteca não oficial coloca seu número em risco?",
+      "options": [
+        "Porque a Meta detecta o padrão e pode bloquear a conta.",
+        "Porque a biblioteca é paga e exige manutenção constante.",
+        "Porque a biblioteca não funciona com o WhatsApp Business.",
+        "Porque a Meta proíbe qualquer automação, mesmo oficial."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 explica que a Meta detecta o padrão de uso e pode bloquear a conta, como visto no capítulo 2.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q005",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Como calcular o custo real do atendimento no WhatsApp?",
+      "options": [
+        "Somando mensalidade da ferramenta e horas gastas pelo time.",
+        "Multiplicar conversas por valor e comparar com o tempo.",
+        "Considerando apenas o preço do plano do construtor.",
+        "Usando o custo por mensagem enviada, sem contar o tempo."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 ensina a multiplicar conversas pelo valor por conversa e comparar com o custo do tempo.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q006",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Uma cliente pede para não receber mais ofertas. O que a LGPD exige que você faça?",
+      "options": [
+        "Anotar mentalmente e parar de enviar ofertas para ela para sempre.",
+        "Aplicar etiqueta de opt-out e excluir de futuras listas.",
+        "Apagar todo o histórico da conversa imediatamente.",
+        "Enviar uma mensagem pedindo confirmação por escrito."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 determina aplicar a etiqueta de opt-out e excluir a cliente das listas futuras.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q007",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Se uma loja gasta 15 horas por mês respondendo e a hora vale R$ 30, qual o custo mensal do atendimento?",
+      "options": [
+        "R$ 450,00, porque 15 horas multiplicadas por R$ 30.",
+        "R$ 300,00, porque 15 horas multiplicadas por R$ 20.",
+        "R$ 600,00, porque 15 horas multiplicadas por R$ 40.",
+        "R$ 150,00, porque 15 horas multiplicadas por R$ 10."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 mostra que o custo do app gratuito é horas vezes valor da hora, resultando em R$ 450.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q008",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Um cliente comprou uma vez e você quer mandar ofertas de novos produtos. O que a LGPD exige?",
+      "options": [
+        "Enviar a oferta, pois a compra autoriza o marketing sem exceção.",
+        "Pedir consentimento antes de enviar qualquer oferta.",
+        "Enviar a oferta, mas com opção de descadastro.",
+        "Pedir consentimento apenas se o cliente reclamar."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 afirma que marketing exige consentimento, mesmo para quem já comprou.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q009",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Qual a principal função do catálogo no WhatsApp Business?",
+      "options": [
+        "Cliente vê produtos com preço e escolhe sozinho antes de conversar.",
+        "Controlar o estoque de produtos disponíveis para venda no dia a dia.",
+        "Enviar mensagens em massa para todos os contatos da lista de transmissão.",
+        "Substituir completamente o atendimento humano em todas as conversas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 7 define o catálogo como vitrine com preço que o cliente consulta sozinho, eliminando a pergunta 'quanto custa?'.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q010",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "O que é uma resposta rápida no WhatsApp Business?",
+      "options": [
+        "Atalho que expande um texto completo digitado com barra no início.",
+        "Uma mensagem automática que dispara sozinha quando o cliente escreve.",
+        "Uma etiqueta que organiza as conversas por status de atendimento.",
+        "Um bot que responde perguntas frequentes sem precisar de configuração."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 8 define resposta rápida como atalho que expande um texto completo a partir de uma barra no início.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q011",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Qual a principal limitação da Meta AI para atender clientes?",
+      "options": [
+        "Ela não conhece os dados do seu negócio, como catálogo e prazos.",
+        "Ela cobra por mensagem e só funciona em horário comercial.",
+        "Ela não consegue escrever textos nem resumir conversas longas.",
+        "Ela atende sozinha se você configurar as respostas rápidas antes."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 9 afirma que a Meta AI não conhece o seu negócio, como catálogo e prazos, e por isso não deve atender.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q012",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Para decidir se o negócio deve migrar do app para a API, o diagnóstico deve considerar:",
+      "options": [
+        "Volume de conversas, quantidade de atendentes e necessidade de disparo em massa.",
+        "Preço da assinatura, número de produtos no catálogo e avaliação dos clientes.",
+        "Quantidade de etiquetas, respostas rápidas criadas e mensagens de ausência ativas.",
+        "Tempo de uso do app, versão do WhatsApp e quantidade de contatos salvos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 lista volume, equipe e disparo como os três sinais objetivos do diagnóstico de teto do app.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q013",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "No ManyChat, o que é um gatilho e qual o mais comum para iniciar um fluxo?",
+      "options": [
+        "É o evento que inicia o fluxo; o mais comum é a primeira mensagem do cliente.",
+        "É o bloco que envia mensagem; o mais comum é o bloco de mensagem de texto.",
+        "É o botão que transfere para humano; o mais comum é o botão 'Falar com humano'.",
+        "É o teste que valida o fluxo; o mais comum é o modo de teste do editor."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 define gatilho como o evento que inicia o fluxo e aponta a primeira mensagem como o gatilho mais comum.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q014",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Um colega diz que Botconversa é melhor que ManyChat porque é brasileiro. Qual a postura correta?",
+      "options": [
+        "Concordar, pois a nacionalidade garante preço menor e suporte em português.",
+        "Comparar preço em real, tempo de configuração e risco de bloqueio.",
+        "Escolher o ManyChat, pois ferramenta internacional é sempre mais confiável.",
+        "Usar o ManyChat e o Botconversa juntos para nunca ficar sem atendimento."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 12 ensina a comparar preço em real, tempo de configuração e risco de bloqueio antes de escolher um construtor.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q015",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Uma loja teve um pico de 90 mensagens num dia de promoção e respondeu metade. No dia seguinte, tudo voltou ao normal. Qual a decisão correta?",
+      "options": [
+        "Contratar a API imediatamente para não perder mais clientes em novos picos.",
+        "Continuar no app e refazer o diagnóstico: pico isolado não é teto.",
+        "Migrar para o ManyChat, pois ele resolve qualquer problema de volume.",
+        "Criar mais etiquetas e respostas rápidas para dar conta do pico sozinha."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 10 diz que pico de promoção não é teto e que, com um sinal ou nenhum, deve-se continuar no app e refazer o diagnóstico.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q016",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Um fluxo de boas-vindas no ManyChat responde ao menu, mas o cliente que clica em 'Preço' recebe a tabela e depois o bot pergunta de novo 'Escolha uma opção', sem parar. Qual o erro?",
+      "options": [
+        "Falta do bloco 'End' para encerrar o fluxo após a resposta ao botão.",
+        "Falta do gatilho de primeira mensagem para iniciar o fluxo corretamente.",
+        "Uso de resposta rápida em vez de bloco de mensagem no fluxo.",
+        "Conexão do número pessoal em vez do número comercial no ManyChat."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 11 lista o fluxo infinito como erro comum e orienta usar o bloco 'End' para encerrar após a resposta.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q017",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Qual é o número máximo de opções recomendado para um menu principal no WhatsApp?",
+      "options": [
+        "Três opções, ou quatro se uma delas for 'falar com humano'.",
+        "Cinco opções, desde que todas sejam categorias de produtos diferentes.",
+        "Sete opções, porque o cliente pode rolar a tela e ler tudo.",
+        "Dez opções, para oferecer todos os serviços de uma vez."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 afirma que três opções é o máximo, e quatro se uma for 'falar com humano'.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q018",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "O que faz o bloco 'Handoff to a human' no ManyChat?",
+      "options": [
+        "Envia uma notificação e pausa a automação daquele contato.",
+        "Transfere a conversa para outro número que não seja o conectado.",
+        "Abre um chat separado no WhatsApp Business para o atendente.",
+        "Responde automaticamente com um menu de opções para o cliente."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 explica que o handoff envia notificação e pausa a automação.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q019",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Para que serve o número de teste na WhatsApp Cloud API?",
+      "options": [
+        "Testar o envio de mensagens sem custo e sem verificação.",
+        "Enviar mensagens para clientes reais com o nome da sua empresa.",
+        "Substituir o número comercial após a verificação do negócio.",
+        "Acessar recursos avançados como templates e janela de 24 horas."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 diz que o número de teste serve para experimentar sem custo e sem verificação.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q020",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Por que testar apenas no editor do Botconversa não garante que o bot funcione no WhatsApp real?",
+      "options": [
+        "O editor não simula mensagens fora do script nem erros de digitação.",
+        "O editor mostra o fluxo perfeito, mas não envia mensagens ao celular.",
+        "O editor não permite configurar palavras-chave para cada bloco.",
+        "O editor usa um número de teste que expira e impede a visualização."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 explica que o editor não mostra o comportamento com mensagens fora do script e erros de digitação.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q021",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "O que acontece quando a janela de 24 horas expira e você tenta enviar uma mensagem de texto livre?",
+      "options": [
+        "A mensagem é entregue, mas o cliente não recebe a notificação.",
+        "A API retorna erro, e você precisa usar um template aprovado.",
+        "O WhatsApp bloqueia seu número por 24 horas como punição.",
+        "A mensagem é convertida automaticamente em um template padrão."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 mostra que fora da janela a API retorna erro e só template aprovado funciona.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q022",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Uma empresa tem CNPJ ativo, site com nome fantasia e e-mail Gmail. Por que a verificação de negócio na Meta falha?",
+      "options": [
+        "O site precisa ter o nome exato do CNPJ e um e-mail no domínio.",
+        "O CNPJ ativo não basta, é preciso ter um site com qualquer nome.",
+        "O e-mail Gmail é aceito, mas o site precisa ser profissional.",
+        "A verificação exige um CNPJ de MEI e um site de redes sociais ativo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 exige correspondência exata do nome do CNPJ e e-mail corporativo no domínio.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q023",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Um cliente te chamou às 10h, você respondeu, ele não respondeu. No dia seguinte às 11h, você quer enviar um lembrete. Qual é a ação correta?",
+      "options": [
+        "Usar um template aprovado, pois a janela de 24 horas já expirou.",
+        "Enviar mensagem de texto livre, pois a janela reinicia a cada resposta.",
+        "Aguardar o cliente chamar de novo, pois não há outra forma de contato.",
+        "Enviar um áudio, pois a janela só se aplica a mensagens de texto."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 explica que fora da janela só template aprovado permite contato.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q024",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Depois de configurar o handoff, o bot continua respondendo após a transferência. Qual é a causa provável?",
+      "options": [
+        "O handoff não está no final do fluxo ou há fluxos concorrentes.",
+        "O cliente enviou uma mensagem que disparou outro fluxo automático.",
+        "O número de teste não está autorizado para receber transferências.",
+        "A variável de contexto não foi preenchida no campo de notificação."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 diz que o handoff deve ser o último bloco e não pode haver fluxos concorrentes.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q025",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Qual é o principal motivo de um template ser reprovado pela Meta?",
+      "options": [
+        "Usar mais de 30 variáveis no corpo da mensagem.",
+        "Ausência de contexto, que dá cheiro de promoção não solicitada.",
+        "Não incluir link de descadastro no rodapé.",
+        "Escrever o texto todo em letras maiúsculas."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 afirma que o que denuncia um template como spam é a ausência de contexto, como em 'Aproveite nossa promoção!'.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q026",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Como a Meta cobra pelo uso da API do WhatsApp?",
+      "options": [
+        "Por mensagem enviada, independente da conversa.",
+        "Por conversa iniciada, independente do número de mensagens.",
+        "Por cada mensagem recebida e respondida pelo bot.",
+        "Por hora de uso do servidor de hospedagem."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 explica que a Meta não cobra por mensagem, mas por conversa iniciada, que dura 24 horas.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q027",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Quais são os três nós essenciais de um fluxo mínimo no n8n para atender no WhatsApp?",
+      "options": [
+        "Webhook, modelo de linguagem e nó de envio.",
+        "Webhook, banco de dados e nó de resposta.",
+        "Modelo de linguagem, template e nó de envio.",
+        "Webhook, nó de memória persistente e nó de envio."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 descreve o fluxo mínimo: um webhook recebe a mensagem, um modelo pensa e um nó de envio responde.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q028",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Em que situação o Make é mais vantajoso que o n8n para um fluxo de WhatsApp?",
+      "options": [
+        "Quando você tem um VPS e sabe administrar servidores.",
+        "Quando você prefere pagar por operação a administrar servidor.",
+        "Quando você quer controle total sobre o ambiente de execução.",
+        "Quando você precisa de um plano gratuito com operações ilimitadas."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 diz que o Make ganha quando você não quer administrar servidor, pagando por operação em vez de infraestrutura.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q029",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Por que resumir o histórico da conversa reduz o custo do modelo de linguagem?",
+      "options": [
+        "Porque o modelo cobra menos por respostas curtas.",
+        "Porque reduz o tamanho da entrada, que é cobrada por token.",
+        "Porque o modelo ignora o histórico quando ele é resumido.",
+        "Porque o resumo elimina a necessidade de enviar a pergunta."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 explica que o preço escala com o tamanho da entrada, então resumir corta o custo pela metade.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q030",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Um cliente pergunta sobre um produto que não está na base de conhecimento. O que o bot deve fazer para evitar alucinação?",
+      "options": [
+        "Responder com base no conhecimento geral do modelo.",
+        "Dizer que vai transferir para um humano, evitando inventar.",
+        "Buscar no histórico da conversa por uma resposta similar.",
+        "Enviar uma mensagem genérica pedindo para reformular a pergunta."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 instrui que, se não souber, o bot deve dizer que vai transferir para um humano, como rede de segurança.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q031",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Uma cafeteria usou a categoria marketing para avisar que o pedido estava pronto. Por que o template foi reprovado?",
+      "options": [
+        "Porque marketing exige link de descadastro, que faltou.",
+        "Porque a categoria marketing não é adequada para informar uma transação.",
+        "Porque o texto usava verbo imperativo de venda, como 'aproveite'.",
+        "Porque o template não tinha variáveis de exemplo preenchidas."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 mostra que marketing é para venda, e utilitário é para transação; usar marketing para aviso de entrega causa reprovação.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q032",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Se o resumo da conversa for muito curto, o que pode acontecer na resposta do modelo?",
+      "options": [
+        "O modelo pode ignorar o resumo e usar conhecimento geral.",
+        "O modelo pode perder informações essenciais, como produto ou prazo.",
+        "O modelo pode responder com base apenas na última mensagem.",
+        "O modelo pode inventar um preço ou prazo que não foi combinado."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 alerta que um resumo muito curto perde informação, afetando a coerência da resposta.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q033",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Quais são as três partes que um bom prompt de sistema deve ter, segundo o capítulo?",
+      "options": [
+        "Persona, regras e exemplos de diálogo reais do negócio.",
+        "Objetivos, métricas e relatórios de desempenho do funil.",
+        "Persona, exemplos e regras de comportamento em frases curtas.",
+        "Regras, persona e exemplos de frases que o cliente usa."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 25 define que um bom prompt de sistema tem três partes: persona, regras e exemplos.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q034",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "No capítulo, o que caracteriza uma regra dura (guardrail) implementada no fluxo?",
+      "options": [
+        "Uma instrução escrita no prompt que o modelo deve seguir com atenção.",
+        "Uma regra que vive no código do fluxo e não pode ser ultrapassada pelo modelo.",
+        "Um aviso no painel que sugere ao operador revisar a conversa manualmente.",
+        "Uma palavra-chave que bloqueia a mensagem apenas quando aparece no texto."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 26 diferencia instrução no prompt de regra dura, que vive no código e não pode ser ultrapassada.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q035",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "No fluxo de pagamento pelo WhatsApp, qual é o papel da IA?",
+      "options": [
+        "Processar o pagamento e repassar o dinheiro para a conta do vendedor.",
+        "Conduzir a conversa, gerar a cobrança e confirmar, mas quem processa é o provedor.",
+        "Enviar o link externo do provedor e aguardar o cliente pagar no site.",
+        "Definir o valor do desconto e autorizar o pagamento sem consultar o dono."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 28 explica que a IA conduz a conversa e gera a cobrança, mas o processamento é do provedor.",
+      "status": "active",
+      "tags": [
+        "cap28",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q036",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Quais são as quatro métricas que o capítulo define como essenciais para medir a automação?",
+      "options": [
+        "Mensagens respondidas, tempo de resposta, handoff e custo por conversa.",
+        "Tempo até a primeira resposta, taxa de handoff, conversão e custo por conversa.",
+        "Tempo de resposta, satisfação do cliente, ticket médio e receita total.",
+        "Número de conversas, handoff, custo do plano e tempo de configuração."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 29 lista exatamente essas quatro métricas como as essenciais para saber se a automação paga a conta.",
+      "status": "active",
+      "tags": [
+        "cap29",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q037",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Um atendente automático responde com 'Agradecemos seu contato! Desejamos um ótimo dia!' e o cliente sente que fala com um robô. Segundo o capítulo, qual é a causa e a correção?",
+      "options": [
+        "O modelo é antigo; trocar por um de topo de linha resolve o tom sozinho.",
+        "Faltam exemplos de frases do dono no prompt; adjetivos como 'seja amigável' não ensinam o tom.",
+        "O prompt tem regras demais; o modelo fica confuso e repete o tom padrão.",
+        "O cliente não entendeu a proposta; a correção é enviar mais informações sobre o produto."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 25 mostra que o tom genérico vem da falta de exemplos reais; adjetivos como 'seja amigável' não ensinam a voz.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q038",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Qual é a diferença prática entre escrever 'desconto máximo 10%' no prompt e implementar uma regra dura no fluxo?",
+      "options": [
+        "No prompt o modelo entende o contexto; no fluxo ele aplica com mais criatividade.",
+        "Instrução no prompt pode ser contornada; regra dura é verificada no código antes e depois.",
+        "No fluxo a regra depende do humor do modelo; no prompt ela é sempre obedecida.",
+        "A regra no prompt é mais barata; a regra no fluxo exige um modelo de topo de linha."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 26 afirma que instrução no prompt é probabilística e pode ser contornada, enquanto a regra dura é determinística no código.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q039",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Uma loja percebe que 70% dos contatos somem depois de perguntar o preço. Segundo o capítulo, qual é o diagnóstico mais provável?",
+      "options": [
+        "A IA está respondendo com o preço sem contexto, como o que está incluso, prazo e garantia.",
+        "O bot está demorando mais de dez segundos para responder à pergunta do preço.",
+        "O funil está pulando a etapa de atração e o cliente não sabe quem é a loja.",
+        "A IA está oferecendo desconto acima do limite e o cliente desconfia do preço."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 27 aponta que responder preço sem contexto é a maior causa de abandono nessa etapa.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-no-whatsapp-q040",
+      "courseSlug": "ia-no-whatsapp",
+      "question": "Depois de entregar a implantação, o cliente pede um novo fluxo de promoção. O que o contrato bem feito determina?",
+      "options": [
+        "Fazer sem cobrar para manter o cliente satisfeito e garantir a renovação mensal.",
+        "Cobrar à parte, pois mudança de escopo não está coberta pela manutenção mensal.",
+        "Incluir na manutenção, porque suporte cobre qualquer alteração no fluxo atual.",
+        "Recusar o pedido, pois o contrato proíbe qualquer mudança depois da implantação."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T14:04:52.341Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Porque o capítulo 30 ensina que o contrato separa implantação, manutenção e mudança de escopo, e mudança é cobrada à parte.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "dificil"
+      ]
+    }
+  ]
+}

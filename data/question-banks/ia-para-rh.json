@@ -1,0 +1,1128 @@
+{
+  "courseSlug": "ia-para-rh",
+  "lastUpdated": "2026-08-19T15:13:36.818Z",
+  "totalQuestions": 40,
+  "activeQuestions": 40,
+  "questions": [
+    {
+      "id": "ia-para-rh-q001",
+      "courseSlug": "ia-para-rh",
+      "question": "Por que um modelo de linguagem responde com confiança sobre um candidato que nunca viu?",
+      "options": [
+        "Ele consulta um banco de dados com fichas de candidatos.",
+        "Ele calcula a sequência de palavras mais provável para agradar.",
+        "Ele analisa o tom de voz do candidato em entrevistas gravadas e vídeos.",
+        "Ele usa informações de redes sociais para montar um perfil."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 explica que o modelo calcula a sequência de palavras mais provável, não consulta dados do candidato.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q002",
+      "courseSlug": "ia-para-rh",
+      "question": "Qual é a base legal mais comum para tratar dados de candidatos em recrutamento?",
+      "options": [
+        "Consentimento do candidato, de forma livre e informada.",
+        "Execução de contrato de trabalho assinado pelo candidato.",
+        "Interesse legítimo da empresa em contratar o melhor perfil.",
+        "Cumprimento de obrigação legal imposta pelo governo federal."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 3 afirma que o consentimento é a base legal mais comum em recrutamento.",
+      "status": "active",
+      "tags": [
+        "cap3",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q003",
+      "courseSlug": "ia-para-rh",
+      "question": "O que a IA devolve quando você pede uma descrição de vaga sem contexto?",
+      "options": [
+        "Um texto genérico baseado na média de outros anúncios.",
+        "Um texto específico com requisitos da sua empresa.",
+        "Um texto com dados do mercado de trabalho atual.",
+        "Um texto com perguntas para o gestor esclarecer."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 6 mostra que sem contexto a IA devolve texto genérico, a média de outros anúncios.",
+      "status": "active",
+      "tags": [
+        "cap6",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q004",
+      "courseSlug": "ia-para-rh",
+      "question": "Como o viés histórico de contratações pode afetar a IA na triagem de currículos?",
+      "options": [
+        "A IA repete padrões de exclusão dos dados de treino.",
+        "A IA elimina o viés por ser neutra e sem emoção.",
+        "A IA cria critérios novos baseados em ética e justiça.",
+        "A IA ignora dados históricos e usa apenas o currículo."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 mostra que a IA repete padrões de exclusão dos dados de treinamento, e o capítulo 4 reforça a necessidade de revisão humana.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q005",
+      "courseSlug": "ia-para-rh",
+      "question": "Qual é a principal diferença prática entre ChatGPT, Claude e Gemini para tarefas de RH?",
+      "options": [
+        "Cada um tem forças em contexto, escrita e integração.",
+        "Todos são idênticos e servem para qualquer tarefa de RH.",
+        "Apenas o ChatGPT é gratuito e acessível ao público.",
+        "O Gemini é o único que lê currículos em português."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 5 descreve que cada ferramenta tem pontos fortes em contexto, escrita e integração.",
+      "status": "active",
+      "tags": [
+        "cap5",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q006",
+      "courseSlug": "ia-para-rh",
+      "question": "Uma IA avaliou um currículo e deu nota 8,5, mas o candidato nunca foi visto. Como interpretar essa nota?",
+      "options": [
+        "É uma previsão de texto plausível, não um diagnóstico.",
+        "É um diagnóstico baseado em dados confiáveis do candidato.",
+        "É uma avaliação objetiva do desempenho do candidato.",
+        "É uma medida exata do potencial de acerto na vaga."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 1 define que a resposta é uma aposta estatística sobre o que soa plausível, não um diagnóstico.",
+      "status": "active",
+      "tags": [
+        "cap1",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q007",
+      "courseSlug": "ia-para-rh",
+      "question": "Qual situação indica viés algorítmico na triagem de currículos?",
+      "options": [
+        "A IA prioriza candidatos de universidades privadas por padrão histórico.",
+        "A IA prioriza candidatos com mais anos de experiência na área de atuação.",
+        "A IA prioriza candidatos com certificações técnicas específicas da função.",
+        "A IA prioriza candidatos que moram perto da empresa e têm fácil acesso."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 2 mostra que o viés algorítmico nasce da seleção de dados históricos, como a preferência por universidades privadas.",
+      "status": "active",
+      "tags": [
+        "cap2",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q008",
+      "courseSlug": "ia-para-rh",
+      "question": "Em qual etapa do recrutamento a IA deve parar e o humano decidir?",
+      "options": [
+        "Na escolha final entre dois candidatos igualmente qualificados.",
+        "Na triagem inicial de currículos com requisitos objetivos.",
+        "Na extração de palavras-chave de uma grande quantidade de currículos.",
+        "Na geração de perguntas para entrevista comportamental."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 4 define que a fronteira é onde a IA não tem capacidade de julgar cultura do time, como na escolha final entre dois candidatos equivalentes.",
+      "status": "active",
+      "tags": [
+        "cap4",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q009",
+      "courseSlug": "ia-para-rh",
+      "question": "Por que a IA não consegue entender o que o gestor quer dizer com \"perfil dinâmico\"?",
+      "options": [
+        "Porque ela não conhece o contexto interno da empresa.",
+        "Porque ela não foi treinada em vocabulário de RH.",
+        "Porque ela precisa de mais dados sobre o candidato.",
+        "Porque ela não sabe interpretar gírias do gestor."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "A IA não tem acesso ao contexto interno da empresa, então interpreta 'dinâmico' de forma genérica, como explicado no capítulo 7.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q010",
+      "courseSlug": "ia-para-rh",
+      "question": "Qual é o principal benefício de usar perguntas fechadas no formulário de inscrição?",
+      "options": [
+        "Deixa o formulário visualmente mais agradável para o candidato.",
+        "Gera respostas padronizadas que a IA consegue comparar.",
+        "Reduz o tempo de preenchimento do candidato interessado.",
+        "Evita que o candidato forneça dados falsos ou incompletos."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Perguntas fechadas geram respostas padronizadas, essenciais para a IA comparar candidatos, conforme o capítulo 9.",
+      "status": "active",
+      "tags": [
+        "cap9",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q011",
+      "courseSlug": "ia-para-rh",
+      "question": "O que a LGPD regula em relação aos dados de candidatos?",
+      "options": [
+        "A leitura de currículos por ferramentas de inteligência artificial.",
+        "O armazenamento e a retenção de dados pessoais dos candidatos.",
+        "A publicação de vagas em plataformas online de emprego.",
+        "A criação de formulários de inscrição para processos seletivos."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "A LGPD regula o armazenamento e a retenção de dados pessoais, não a leitura, como detalhado no capítulo 11.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q012",
+      "courseSlug": "ia-para-rh",
+      "question": "Por que uma descrição de vaga deve ser adaptada para cada plataforma de publicação?",
+      "options": [
+        "Porque cada plataforma tem limites diferentes de caracteres.",
+        "Porque cada plataforma possui um público e um tom distintos.",
+        "Porque a IA não consegue ler o mesmo texto em todos os lugares.",
+        "Porque a legislação exige textos exclusivos por canal."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Cada plataforma tem público e tom distintos, exigindo adaptação do texto, como explicado no capítulo 8.",
+      "status": "active",
+      "tags": [
+        "cap8",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q013",
+      "courseSlug": "ia-para-rh",
+      "question": "Qual é a vantagem de usar propriedades do tipo \"seleção\" no banco de dados do Notion?",
+      "options": [
+        "Permitem inserir textos longos de observações sobre o candidato.",
+        "Garantem valores consistentes para a leitura pela IA.",
+        "Armazenam imagens dos currículos dos candidatos na página.",
+        "Criam vínculos automáticos entre as tabelas de vagas e candidatos."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Propriedades de seleção garantem valores consistentes, facilitando a leitura pela IA, conforme o capítulo 10.",
+      "status": "active",
+      "tags": [
+        "cap10",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q014",
+      "courseSlug": "ia-para-rh",
+      "question": "Um recrutador pede para a IA \"resumir\" um currículo em vez de compará-lo com a vaga. O que é mais provável que a IA faça?",
+      "options": [
+        "Ela lista as habilidades do candidato sem avaliar a adequação à vaga.",
+        "Ela recomenda avançar para a próxima etapa do processo seletivo imediatamente.",
+        "Ela ignora os requisitos da vaga e cria um ranking de candidatos para priorizar.",
+        "Ela aponta os pontos fracos do candidato em relação aos requisitos da vaga."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Pedir resumo faz a IA descrever, não comparar com os critérios da vaga, como explicado no capítulo 12.",
+      "status": "active",
+      "tags": [
+        "cap12",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q015",
+      "courseSlug": "ia-para-rh",
+      "question": "Um currículo contém informações sobre religião e saúde do candidato. Segundo o capítulo, o que o recrutador deve fazer?",
+      "options": [
+        "Armazenar esses dados para usar em futuras vagas da empresa sem prazo.",
+        "Descartar essas informações por não serem essenciais para a vaga.",
+        "Incluir esses dados no prompt de triagem da IA para análise.",
+        "Perguntar ao candidato se ele quer compartilhar essas informações."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "Dados sensíveis devem ser descartados pelo princípio da minimização, conforme o capítulo 11.",
+      "status": "active",
+      "tags": [
+        "cap11",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q016",
+      "courseSlug": "ia-para-rh",
+      "question": "Um gestor diz que quer um profissional \"proativo\". Após esclarecimento, ele revela que significa \"não precisar de supervisão constante\". Como traduzir isso em requisito de vaga?",
+      "options": [
+        "\"Proativo e independente no cumprimento de tarefas diárias.\"",
+        "\"Capaz de trabalhar sem supervisão direta no dia a dia.\"",
+        "\"Disposto a aprender novas habilidades rapidamente na função.\"",
+        "\"Com iniciativa para propor melhorias no processo de trabalho.\""
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "A tradução do pedido vago em requisito concreto exige interpretação humana do contexto, como mostrado no capítulo 7.",
+      "status": "active",
+      "tags": [
+        "cap7",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q017",
+      "courseSlug": "ia-para-rh",
+      "question": "Por que a IA erra na triagem de currículos mesmo com respostas confiantes?",
+      "options": [
+        "Porque ela calcula probabilidades sem entender o contexto real.",
+        "Porque ela não tem acesso a todos os dados do currículo.",
+        "Porque ela foi treinada apenas com currículos de grandes empresas.",
+        "Porque ela não consegue ler currículos em formatos diferentes do PDF."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 explica que a IA calcula probabilidades e não compreende o contexto, levando a erros confiantes.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q018",
+      "courseSlug": "ia-para-rh",
+      "question": "O que é a média ponderada na matriz de decisão do Excel?",
+      "options": [
+        "Soma das notas multiplicadas pelos pesos de cada critério.",
+        "Média aritmética simples das notas atribuídas a cada candidato.",
+        "Valor máximo entre as notas dos critérios considerados na análise.",
+        "Soma das notas dividida pelo número de critérios usados na triagem."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 14 define média ponderada como a soma de cada nota vezes seu peso.",
+      "status": "active",
+      "tags": [
+        "cap14",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q019",
+      "courseSlug": "ia-para-rh",
+      "question": "Qual é a regra sobre a IA eliminar candidatos em um processo seletivo?",
+      "options": [
+        "A IA pode eliminar se a nota for abaixo de um limite definido.",
+        "A IA nunca elimina, apenas classifica e organiza os candidatos.",
+        "A IA pode eliminar se o currículo não tiver palavras-chave exatas.",
+        "A IA elimina apenas quando o gestor autoriza explicitamente o corte."
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 afirma que a IA nunca elimina, ela apenas classifica e organiza.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q020",
+      "courseSlug": "ia-para-rh",
+      "question": "Como a IA gera perguntas personalizadas para uma entrevista de emprego?",
+      "options": [
+        "Cruzando a vaga com o currículo do candidato específico.",
+        "Usando um banco de perguntas genéricas de entrevistas anteriores.",
+        "Analisando o perfil do candidato nas redes sociais e no LinkedIn.",
+        "Solicitando ao gestor que forneça as perguntas padrão da empresa."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 16 mostra que a IA cruza a descrição da vaga com o currículo do candidato.",
+      "status": "active",
+      "tags": [
+        "cap16",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q021",
+      "courseSlug": "ia-para-rh",
+      "question": "Por que o resumo de uma entrevista feito por IA pode perder informações importantes?",
+      "options": [
+        "Porque ele elimina hesitações, mudanças de tom e contradições.",
+        "Porque ele não inclui as perguntas feitas pelo entrevistador durante a conversa.",
+        "Porque ele é gerado apenas com base no áudio, sem considerar o vídeo.",
+        "Porque ele prioriza respostas curtas e ignora detalhes da linguagem corporal."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 17 explica que o resumo apaga hesitações, tom e contradições, perdendo sinais.",
+      "status": "active",
+      "tags": [
+        "cap17",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q022",
+      "courseSlug": "ia-para-rh",
+      "question": "No processo de comunicação com candidatos, qual é o papel da IA segundo o capítulo?",
+      "options": [
+        "Escrever o rascunho, mas a personalização com contexto é sua tarefa.",
+        "Decidir o tom da mensagem com base na cultura da empresa automaticamente.",
+        "Substituir completamente o envio de e-mails e mensagens para os candidatos.",
+        "Analisar as respostas dos candidatos e sugerir a próxima ação a tomar."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 18 afirma que a IA escreve o rascunho, mas a personalização é responsabilidade humana.",
+      "status": "active",
+      "tags": [
+        "cap18",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q023",
+      "courseSlug": "ia-para-rh",
+      "question": "No fluxo com n8n para triagem, qual é a função do nó de código JavaScript?",
+      "options": [
+        "Calcular a nota final ponderada com os pesos da matriz de decisão.",
+        "Enviar e-mails automáticos para os candidatos aprovados na primeira fase.",
+        "Extrair os dados dos currículos usando o prompt de triagem do capítulo 12.",
+        "Configurar o webhook para receber os currículos enviados pelos candidatos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 15 mostra que o nó de código calcula a nota final ponderada com os pesos definidos.",
+      "status": "active",
+      "tags": [
+        "cap15",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q024",
+      "courseSlug": "ia-para-rh",
+      "question": "Qual padrão de erro da IA faz ela penalizar sinônimos e termos regionais na triagem?",
+      "options": [
+        "Viés de superfície, que supervaloriza palavras-chave e ignora variações.",
+        "Viés de lacuna, que trata períodos sem emprego como risco automático.",
+        "Viés de confirmação, que aceita qualquer menção a termos como suficientes.",
+        "Viés de atualidade, que desconsidera experiências antigas do candidato."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 13 define viés de superfície como a supervalorização de palavras-chave exatas.",
+      "status": "active",
+      "tags": [
+        "cap13",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q025",
+      "courseSlug": "ia-para-rh",
+      "question": "No capítulo 19, qual é a mudança central ao usar IA na pré-seleção de currículos?",
+      "options": [
+        "Pedir à IA que aprove ou reprove o candidato com base no currículo",
+        "Usar a IA para rankear os currículos pelo histórico profissional",
+        "Pedir pontos fortes e lacunas, gerando perguntas para investigar",
+        "Solicitar à IA uma nota de adequação do candidato à vaga"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 propõe pedir pontos fortes e lacunas com perguntas de investigação, em vez de um veredito, para usar a IA como lupa.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q026",
+      "courseSlug": "ia-para-rh",
+      "question": "Segundo o capítulo 20, qual é o papel da IA na redação de feedback de rejeição?",
+      "options": [
+        "Ela decide quem deve ser aprovado ou reprovado no processo seletivo",
+        "Ela transforma fatos observáveis em um rascunho de e-mail específico",
+        "Ela substitui o RH na comunicação com os candidatos reprovados",
+        "Ela escreve um texto genérico para evitar problemas trabalhistas"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 20 mostra que a IA deve transformar fatos observáveis em rascunho específico, mantendo o envio com o RH.",
+      "status": "active",
+      "tags": [
+        "cap20",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q027",
+      "courseSlug": "ia-para-rh",
+      "question": "No capítulo 23, o que garante o anonimato em uma pesquisa de clima no Google Forms?",
+      "options": [
+        "Usar o plano pago do Google Workspace para criar o formulário",
+        "Desativar a coleta de e-mail e evitar perguntas que identifiquem",
+        "Pedir que os funcionários usem um e-mail pessoal para responder",
+        "Criar uma pergunta de nome para controlar quem já respondeu"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 23 ensina a desativar a coleta de e-mail e evitar dados identificáveis para garantir anonimato real.",
+      "status": "active",
+      "tags": [
+        "cap23",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q028",
+      "courseSlug": "ia-para-rh",
+      "question": "De acordo com o capítulo 21, como usar a IA no onboarding sem perder a personalização?",
+      "options": [
+        "Copiar o roteiro gerado pela IA e enviar para todos os novos funcionários",
+        "Usar a IA para criar o roteiro e depois adaptá-lo com nomes e horários",
+        "Deixar a IA definir as atividades e responsáveis de cada etapa do processo",
+        "Gerar o roteiro no ChatGPT e executar sem revisão do time de RH"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 21 orienta gerar o roteiro com IA e personalizar com nomes, horários e cultura da empresa.",
+      "status": "active",
+      "tags": [
+        "cap21",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q029",
+      "courseSlug": "ia-para-rh",
+      "question": "Por que as respostas abertas devem ser anonimizadas antes de serem enviadas à IA?",
+      "options": [
+        "Porque a IA não consegue analisar textos com nomes de pessoas",
+        "Porque a LGPD proíbe o uso de IA para processar dados pessoais",
+        "Porque a IA pode identificar o autor e quebrar a confiança na pesquisa",
+        "Porque o Google Forms não exporta respostas com identificação"
+      ],
+      "correctAnswer": 2,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 6,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 explica que anonimizar antes de enviar à IA protege a confiança e cumpre a LGPD.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "media"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q030",
+      "courseSlug": "ia-para-rh",
+      "question": "No capítulo 22, qual estratégia reduz a alucinação da IA ao criar treinamento de documentos?",
+      "options": [
+        "Usar um modelo de IA mais recente e com maior capacidade de contexto",
+        "Pedir citações literais entre aspas e conferir cada fato no original",
+        "Fornecer os documentos em PDF e confiar no resumo gerado pela IA",
+        "Solicitar que a IA escreva o curso inteiro de uma única vez"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 22 recomenda citações literais e conferência manual para reduzir alucinação.",
+      "status": "active",
+      "tags": [
+        "cap22",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q031",
+      "courseSlug": "ia-para-rh",
+      "question": "Uma resposta sarcástica foi classificada como positiva pela IA. Qual atitude o capítulo 24 recomenda?",
+      "options": [
+        "Aceitar a classificação porque a IA identifica padrões de linguagem",
+        "Revisar os trechos citados e ajustar o prompt para detectar ironia",
+        "Descartar a resposta da análise por ser ambígua demais para usar",
+        "Pedir para a IA justificar cada classificação com base no contexto"
+      ],
+      "correctAnswer": 1,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 24 mostra que a IA erra sarcasmo e exige revisão humana dos trechos citados.",
+      "status": "active",
+      "tags": [
+        "cap24",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q032",
+      "courseSlug": "ia-para-rh",
+      "question": "No capítulo 19, qual é a diferença entre usar a IA como funil e como lupa na seleção?",
+      "options": [
+        "Funil descarta por padrões; lupa gera perguntas para investigar contexto",
+        "Funil prioriza currículos; lupa elimina candidatos com lacunas",
+        "Funil aprova automaticamente; lupa delega a decisão para a IA",
+        "Funil analisa pontos fortes; lupa procura defeitos no currículo"
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 19 distingue funil, que descarta por padrão, de lupa, que gera perguntas para investigar.",
+      "status": "active",
+      "tags": [
+        "cap19",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q033",
+      "courseSlug": "ia-para-rh",
+      "question": "Qual é o erro mais comum ao transformar dados de clima em plano de ação?",
+      "options": [
+        "Tentar resolver todos os problemas de uma vez.",
+        "Usar IA para sugerir ações de melhoria contínua.",
+        "Apresentar o plano de ação à liderança da empresa.",
+        "Atribuir um dono responsável para cada ação do plano."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 lista 'tentar resolver tudo de uma vez' como o primeiro erro comum, pois um plano com dez ações não sai do papel.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q034",
+      "courseSlug": "ia-para-rh",
+      "question": "O que é um trigger no n8n?",
+      "options": [
+        "Um nó que inicia o fluxo quando um evento ocorre.",
+        "Um nó que envia e-mail ao final do fluxo.",
+        "Uma planilha que armazena os dados do formulário.",
+        "Um conector que liga dois aplicativos diferentes."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 define trigger como o evento que inicia a automação, ou seja, o nó que dispara o fluxo.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q035",
+      "courseSlug": "ia-para-rh",
+      "question": "Onde deve ficar o nó de revisão humana no fluxo de triagem?",
+      "options": [
+        "Entre a análise da IA e o envio do e-mail.",
+        "Antes do formulário ser enviado pelo candidato.",
+        "Depois do e-mail de rejeição ser disparado.",
+        "No início do fluxo, antes da coleta de dados."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 27 orienta inserir o nó de revisão entre a análise e a ação, para que nenhuma decisão seja tomada sem olhar humano.",
+      "status": "active",
+      "tags": [
+        "cap27",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q036",
+      "courseSlug": "ia-para-rh",
+      "question": "Qual métrica revela um gargalo no processo seletivo?",
+      "options": [
+        "Taxa de conversão entre etapas consecutivas.",
+        "Quantidade total de candidatos inscritos no processo.",
+        "Número de vagas abertas no período analisado.",
+        "Tempo médio de resposta do RH para os candidatos."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 3,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 28 afirma que a taxa de conversão entre etapas revela gargalos, como quando a triagem filtra demais.",
+      "status": "active",
+      "tags": [
+        "cap28",
+        "facil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q037",
+      "courseSlug": "ia-para-rh",
+      "question": "Uma pesquisa de clima apontou 'comunicação' como tema mais citado, mas as respostas abertas mencionam 'fofoca'. Qual é a ação correta?",
+      "options": [
+        "Tratar como 'transparência' e criar boletim quinzenal.",
+        "Manter o tema 'comunicação' e investir em treinamento.",
+        "Ignorar os dados qualitativos e focar na frequência.",
+        "Apresentar o plano à liderança antes de ajustar o tema."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 25 mostra que Mariana ajustou o tema para 'transparência' e criou um boletim, pois o dado qualitativo indicava fofoca.",
+      "status": "active",
+      "tags": [
+        "cap25",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q038",
+      "courseSlug": "ia-para-rh",
+      "question": "Um fluxo no n8n envia e-mail de confirmação automaticamente. Para uma vaga sensível, o que fazer?",
+      "options": [
+        "Adicionar um nó de espera para aprovação humana.",
+        "Remover o e-mail automático e enviar manualmente.",
+        "Manter o fluxo automático, pois a IA é confiável.",
+        "Criar um segundo fluxo para enviar convites."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 26 recomenda usar o nó Wait para pausar o fluxo e exigir aprovação humana em decisões que afetam candidatos.",
+      "status": "active",
+      "tags": [
+        "cap26",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q039",
+      "courseSlug": "ia-para-rh",
+      "question": "Um analista alterou um prompt de triagem sem aprovação. O que a governança exige?",
+      "options": [
+        "Reverter para a versão anterior e registrar.",
+        "Manter a alteração e avisar o time depois.",
+        "Apagar o log e recriar o prompt do zero imediatamente.",
+        "Deixar como está, pois a IA aprende sozinha."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 29 descreve que a governança manda reverter a mudança não aprovada e registrar a ocorrência, como fez Mariana.",
+      "status": "active",
+      "tags": [
+        "cap29",
+        "dificil"
+      ]
+    },
+    {
+      "id": "ia-para-rh-q040",
+      "courseSlug": "ia-para-rh",
+      "question": "Em uma auditoria, como provar que houve supervisão humana na triagem?",
+      "options": [
+        "Apresentar o dashboard com registro de revisão.",
+        "Mostrar os e-mails enviados pela IA no período.",
+        "Explicar verbalmente o critério usado na triagem.",
+        "Confiar na memória do gestor para confirmar decisões."
+      ],
+      "correctAnswer": 0,
+      "source": "ai-generated",
+      "generatedBy": "~deepseek/deepseek-v4-flash-latest",
+      "createdAt": "2026-08-19T15:13:36.818Z",
+      "qualityScore": 8,
+      "difficultyScore": 9,
+      "discriminationScore": 0,
+      "timesUsed": 0,
+      "timesAnsweredCorrectly": 0,
+      "timesAnsweredIncorrectly": 0,
+      "successRate": 0,
+      "evaluationNotes": "O capítulo 30 afirma que o registro no dashboard com 'revisado por' é a prova de supervisão humana em cada etapa.",
+      "status": "active",
+      "tags": [
+        "cap30",
+        "dificil"
+      ]
+    }
+  ]
+}
