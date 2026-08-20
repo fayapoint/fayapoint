@@ -44,6 +44,7 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { useAdmin } from "@/contexts/AdminContext";
 import { cn } from "@/lib/utils";
+import { LoaderFayai } from "@/components/marca/LoaderFayai";
 
 interface Stats {
   users: {
@@ -310,7 +311,7 @@ export default function AdminDashboardPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-amber-500/30 border-t-violet-500 rounded-full animate-spin" />
+          <LoaderFayai className="text-[44px]" />
           <p className="text-muted-foreground">Carregando dashboard...</p>
         </div>
       </div>

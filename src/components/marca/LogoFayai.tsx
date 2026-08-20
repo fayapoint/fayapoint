@@ -21,6 +21,7 @@ import dynamic from "next/dynamic";
  */
 
 import { VARIANTE_ATUAL, type VarianteLogo } from "@/components/marca/logo3d-variantes";
+import { LetreiroFayai } from "@/components/marca/MarcaFayai";
 
 const LogoFayai3D = dynamic(
   () => import("@/components/marca/LogoFayai3D").then((m) => ({ default: m.LogoFayai3D })),
@@ -154,7 +155,13 @@ export function LogoFayai({
       }}
     >
       {/* O logo de sempre. Continua no DOM quando o 3D entra — some da vista,
-          mas segue sendo o texto que o leitor de tela e o buscador leem. */}
+          mas segue sendo o texto que o leitor de tela e o buscador leem.
+
+          Desde 20/08/2026 o que se VÊ é o letreiro desenhado (os contornos da
+          Inter Bold, com o "Ai" em azul), e não mais a palavra tipografada: a
+          marca passou a ter forma própria, e ela não pode depender de a fonte
+          da página ter carregado. O texto continua ali, em `sr-only` — sem ele
+          o buscador perderia a palavra "FayAi" do cabeçalho de todo o site. */}
       <span
         className="transition-opacity"
         style={{
@@ -162,7 +169,8 @@ export function LogoFayai({
           transitionDuration: fase === "3d" ? "180ms" : `${MS_SAIDA}ms`,
         }}
       >
-        {T(texto)}
+        <LetreiroFayai decorativo />
+        <span className="sr-only">{T(texto)}</span>
       </span>
 
       {/* Folga para o volume girar sem ser recortado. `pointer-events-none` e

@@ -47,6 +47,9 @@ const GEOBLOCK_CONFIG = {
     "/api/pod/webhooks",  // POD webhooks (Printify, Prodigi)
     "/_next",             // Next.js assets
     "/favicon.ico",
+    "/icon.svg",
+    "/apple-icon.png",
+    "/manifest.webmanifest",
     "/robots.txt",
     "/sitemap.xml",
   ],
@@ -856,6 +859,6 @@ export const config = {
     // ícone 3D (`glb`). Rotas de API não terminam nessas extensões, então
     // excluí-las não desprotege nada — mas esquecer de incluir custa uma hora
     // de depuração no lugar errado.
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|.*\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|webm|mp4|m4v|mov|mp3|wav|ogg|woff|woff2|css|js|json|glb|gltf|hdr|ktx2|bin)$).*)"
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.webmanifest|.*\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|webm|mp4|m4v|mov|mp3|wav|ogg|woff|woff2|css|js|json|webmanifest|glb|gltf|hdr|ktx2|bin)$).*)"
   ]
 };

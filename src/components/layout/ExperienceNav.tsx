@@ -40,7 +40,7 @@ export function ExperienceNav({ crumb }: { crumb?: ExperienceCrumb }) {
     <div className="w-full">
       <header className="flex items-center justify-between gap-4 px-4 sm:px-8 pt-4 pb-2 max-w-6xl mx-auto">
         <Link href={rota("/")} className="text-3xl sm:text-4xl tracking-wide select-none shrink-0" style={bebas}>
-          <LogoFayai texto={T("FAYAI")} />
+          <LogoFayai />
         </Link>
         <nav className="hidden md:flex items-center gap-6">
           {LINKS.map((l) => (

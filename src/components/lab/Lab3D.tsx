@@ -117,7 +117,7 @@ export function Lab3D() {
                     style={{ background: fundoClaro ? "rgba(0,0,0,.04)" : "rgba(0,0,0,.35)" }}
                   >
                     <span className="text-5xl tracking-wide select-none" style={bebas}>
-                      <LogoFayai texto={T("FAYAI")} variante={id} />
+                      <LogoFayai variante={id} />
                     </span>
                   </div>
 

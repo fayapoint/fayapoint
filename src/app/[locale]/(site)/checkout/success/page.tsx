@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { getClientAuthHeaders } from "@/lib/client-auth";
 import confetti from "canvas-confetti";
+import { LoaderFayai } from "@/components/marca/LoaderFayai";
 
 function CheckoutSuccessContent() {
   const T = useT();
@@ -262,10 +263,7 @@ function LoadingFallback() {
     <div className="min-h-screen bg-background text-foreground">
       <main className="pt-24 pb-12">
         <div className="container mx-auto px-4 max-w-2xl flex items-center justify-center min-h-[60vh]">
-          <div className="text-center">
-            <Loader2 className="w-12 h-12 text-amber-400 animate-spin mx-auto mb-4" />
-            <p className="text-muted-foreground">{T("Carregando...")}</p>
-          </div>
+          <LoaderFayai legenda={T("Carregando...")} className="text-[clamp(28px,6vw,52px)]" />
         </div>
       </main>
     </div>

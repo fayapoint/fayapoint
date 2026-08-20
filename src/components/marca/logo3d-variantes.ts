@@ -32,7 +32,7 @@ export const RECEITAS: Record<VarianteLogo, ReceitaLogo> = {
     id: "macico",
     nome: "Maciço",
     tese:
-      "Letreiro físico: ouro polido e off-white acetinado, chanfro largo. É a leitura mais próxima do que já está no ar — peso e permanência, sem chamar atenção para o efeito.",
+      "Letreiro físico: azul polido e off-white acetinado, chanfro largo. É a leitura mais próxima do que já está no ar — peso e permanência, sem chamar atenção para o efeito.",
     custo: "baixo",
     extrusao: { depth: 180, bevelThickness: 26, bevelSize: 18, bevelSegments: 3 },
   },
@@ -40,7 +40,7 @@ export const RECEITAS: Record<VarianteLogo, ReceitaLogo> = {
     id: "vidro",
     nome: "Vidro",
     tese:
-      "O “Fay” vira vidro fumê e o “Ai” fica ouro maciço por dentro: o dourado aparece ATRAVÉS da peça. Sofisticado, mas o vidro só funciona sobre fundo escuro — e é a mais cara das três.",
+      "O “Fay” vira vidro fumê e o “Ai” fica azul maciço por dentro: o acento aparece ATRAVÉS da peça. Sofisticado, mas o vidro só funciona sobre fundo escuro — e é a mais cara das três.",
     custo: "alto",
     // Vidro fino não lê como vidro: sem espessura não há refração para ver.
     extrusao: { depth: 260, bevelThickness: 34, bevelSize: 24, bevelSegments: 4 },

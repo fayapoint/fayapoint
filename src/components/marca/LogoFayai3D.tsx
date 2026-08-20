@@ -5,6 +5,7 @@ import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
 import { RECEITAS, VARIANTE_ATUAL, type VarianteLogo } from "@/components/marca/logo3d-variantes";
+import { AZUL, AZUL_CLARO } from "@/components/marca/cores";
 
 /**
  * O logo em 3D de verdade — WebGL, extrudado a partir dos contornos da fonte.
@@ -23,7 +24,7 @@ import { RECEITAS, VARIANTE_ATUAL, type VarianteLogo } from "@/components/marca/
 
 const CAMINHO_SVG = "/3d/logo-fayai.svg";
 
-/** Geometria por cor — o "Fay" claro e o "Ai" dourado viram dois grupos. */
+/** Geometria por cor — o "Fay" claro e o "Ai" azul viram dois grupos. */
 interface PecaLogo {
   geo: THREE.BufferGeometry;
   cor: string;
@@ -167,12 +168,16 @@ function Letras({
     <group ref={grupo} scale={0}>
       <group scale={escala}>
         {pecas.map((p, i) => {
-          const dourado = p.cor.toLowerCase() === "#f5c04e";
+          // ⚠️ O acento é reconhecido pela COR que veio do SVG. O arquivo é
+          // gerado por `scripts/logo-svg.py` com a mesma constante `AZUL` — se
+          // um dos dois mudar sozinho, o logo perde a cor e nada no build
+          // acusa, porque isto é uma comparação de string em tempo de execução.
+          const acento = p.cor.toLowerCase() === AZUL.toLowerCase();
 
           if (variante === "vidro") {
-            // O ouro fica sólido de propósito: se as duas metades virassem
+            // O acento fica sólido de propósito: se as duas metades virassem
             // vidro, o logo perderia o contraste que o torna legível de longe.
-            return dourado ? (
+            return acento ? (
               <mesh key={i} geometry={p.geo}>
                 <meshStandardMaterial color={p.cor} metalness={0.95} roughness={0.14} emissive={p.cor} emissiveIntensity={0.18} />
               </mesh>
@@ -202,10 +207,10 @@ function Letras({
             return (
               <group key={i}>
                 <mesh geometry={p.geo} scale={1.035}>
-                  <meshBasicMaterial color={dourado ? "#f5c04e" : "#8ab4ff"} side={THREE.BackSide} />
+                  <meshBasicMaterial color={acento ? AZUL_CLARO : "#dbe4ff"} side={THREE.BackSide} />
                 </mesh>
                 <mesh geometry={p.geo}>
-                  <meshStandardMaterial color="#0b0f1f" metalness={0.6} roughness={0.85} emissive={dourado ? "#f5c04e" : "#6d8cff"} emissiveIntensity={0.16} />
+                  <meshStandardMaterial color="#0b0f1f" metalness={0.6} roughness={0.85} emissive={acento ? AZUL : "#6d8cff"} emissiveIntensity={0.16} />
                 </mesh>
               </group>
             );
@@ -215,8 +220,8 @@ function Letras({
             <mesh key={i} geometry={p.geo}>
               <meshStandardMaterial
                 color={p.cor}
-                metalness={dourado ? 0.85 : 0.35}
-                roughness={dourado ? 0.22 : 0.4}
+                metalness={acento ? 0.8 : 0.35}
+                roughness={acento ? 0.24 : 0.4}
                 emissive={p.cor}
                 emissiveIntensity={0.12}
               />
@@ -249,10 +254,12 @@ export function LogoFayai3D({
       gl={{ antialias: true, alpha: true }}
       style={{ position: "absolute", inset: 0, background: "transparent" }}
     >
-      {/* Luz de estúdio curta: o dourado precisa de um brilho especular
-          definido para ler como metal, não como amarelo chapado. */}
+      {/* Luz de estúdio curta: o acento precisa de um brilho especular
+          definido para ler como material, não como azul chapado. A luz de
+          preenchimento fria continua vindo do lado oposto — é ela que separa a
+          metade clara do fundo escuro. */}
       <ambientLight intensity={0.55} />
-      <directionalLight position={[2.4, 2.2, 3]} intensity={2.1} color="#fff6e2" />
+      <directionalLight position={[2.4, 2.2, 3]} intensity={2.1} color="#ffffff" />
       <directionalLight position={[-2.6, -1.2, 1.6]} intensity={0.8} color="#8ab4ff" />
       <Letras mouse={mouse} recolhendo={recolhendo} demonstrando={demonstrando} semente={semente} variante={variante} />
     </Canvas>

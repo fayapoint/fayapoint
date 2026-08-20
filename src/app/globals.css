@@ -1648,3 +1648,39 @@ html[data-virada-livro="tras"]::view-transition-new(pagina-direita) {
     opacity: 0;
   }
 }
+
+/* ── O logo que carrega ─────────────────────────────────────────────────────
+   O nível de tinta do "Ai" (e do "A" do símbolo) sobe, respira no cheio e
+   desce de volta. Descer é deliberado: um corte seco de volta ao zero pisca a
+   cada volta, e o piscar é exatamente o que faz um loader parecer travado.
+
+   `--fayai-curso` é a distância entre vazio e cheio EM UNIDADES DO SVG, e vem
+   inline de `LoaderFayai` — cada peça tem um viewBox, então o valor não pode
+   morar aqui. Ver src/components/marca/LoaderFayai.tsx. */
+@keyframes fayai-encher {
+  0% {
+    transform: translateY(var(--fayai-curso, 100px));
+  }
+  55% {
+    transform: translateY(0);
+  }
+  74% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(var(--fayai-curso, 100px));
+  }
+}
+
+.fayai-enchendo {
+  animation: fayai-encher 2.2s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+}
+
+/* Sem movimento, o logo fica CHEIO — que é a marca de verdade. Deixar o
+   recipiente vazio parado mostraria para sempre um logo pela metade. */
+@media (prefers-reduced-motion: reduce) {
+  .fayai-enchendo {
+    animation: none;
+    transform: none;
+  }
+}

@@ -1,6 +1,6 @@
 # Identidade Visual FayAI — Guia Definitivo
 
-*Versão 1.1 — 13/07/2026. Fonte de verdade para todo design do fayai.com.br e materiais da marca. (v1.1 adiciona §9 imagem contextual, §10 animação por camadas, §11 método de produção de páginas.)*
+*Versão 1.2 — 20/08/2026. Fonte de verdade para todo design do fayai.com.br e materiais da marca. (v1.1 adiciona §9 imagem contextual, §10 animação por camadas, §11 método de produção de páginas. **v1.2 troca o acento do LOGO de ouro para azul e define a família da marca — §2a e §3a.**)*
 
 ---
 
@@ -33,10 +33,27 @@ Radial-gradients suaves sempre presentes atrás do conteúdo:
 violeta `rgba(167,139,250,.22)` · ciano `rgba(56,189,248,.16)` · rosa `rgba(244,114,182,.14)`.
 Em seções com vidro, adicionar **orbs** (círculos blur 46px) com drift animado de 11–15s.
 
-### Ouro (a assinatura)
+### Azul da marca (o logo) — desde 20/08/2026
+`#1e9bff` → gradiente `linear-gradient(135deg, #5cc8ff, #1e9bff 55%, #0a74e6)`.
+**Uso exclusivo**: o logo. É o "Ai" do letreiro, o "A" do símbolo, e o líquido que
+enche no carregamento. Não usar como cor de interface — quem precisa de "azul de
+interface" tem o ciano `#38bdf8` da categoria Trabalho.
+
+Fonte de verdade em código: `src/components/marca/cores.ts` (e a cópia declarada
+em `scripts/logo-svg.py`, que gera os SVG).
+
+### Ouro (o acento de recompensa)
 `#f5c04e` → gradiente `linear-gradient(135deg, #f5c04e, #ffd97a)`.
-**Uso exclusivo**: logo (FAY**AI**), XP/recompensas, CTAs primários, destaques de título. O ouro é a marca — não usar como cor decorativa genérica.
+**Uso**: XP/recompensas, certificado, CTAs primários, destaques de título.
 Texto sobre ouro: `#241a05` (marrom-café escuro), nunca branco.
+
+> ⚠️ **O ouro deixou de ser o logo, mas continua no site.** Até 20/08/2026 o
+> acento do letreiro era ouro e a regra dizia "o ouro é a marca". A troca do
+> logo para azul **não** repintou as centenas de telas que usam âmbar como
+> acento de recompensa — isso seria um redesenho, não uma troca de logo. Hoje a
+> divisão é: **azul identifica a casa, ouro premia o aluno.** Se um dia o site
+> inteiro for para o azul, que seja uma decisão de design própria, com o
+> catálogo inteiro na frente.
 
 ### Cores de categoria/projeto (o arco-íris funcional)
 | Categoria | Cor | Também usada em |
@@ -59,11 +76,50 @@ Cada card/página herda a cor do seu contexto em: borda (`{cor}44`–`66`), chip
 
 | Papel | Fonte | Regras |
 |---|---|---|
-| Display (títulos, logo) | **Bebas Neue** (`var(--font-bebas)`) | SEMPRE caixa alta, `tracking-wide`, `leading` 0.9–0.95. Tamanhos generosos (text-5xl a 8xl em heroes) |
+| Display (títulos) | **Bebas Neue** (`var(--font-bebas)`) | SEMPRE caixa alta, `tracking-wide`, `leading` 0.9–0.95. Tamanhos generosos (text-5xl a 8xl em heroes) |
 | Corpo | Inter/Plus Jakarta (padrão do site) | Pesos: bold para leads, regular para texto; `leading-relaxed` |
 | Micro-rótulos | corpo, 10–11px | `font-extrabold uppercase tracking-widest`, na cor de contexto |
 
 Padrão de título: uma palavra-chave em cor (`PROJETOS <span ouro>FAYAI</span>`, `IA <span ouro>HOJE</span>`).
+
+⚠️ O **logo não é tipografia**: ele tem forma própria (§3a). Escrever "FayAi"
+com a fonte da página está certo em texto corrido e em título; está errado onde
+a marca se apresenta (cabeçalho, assinatura, fatura, ícone).
+
+---
+
+## 3a. A família da marca
+
+O logo é o letreiro **FayAi** — "Fay" claro, "Ai" azul. Os contornos saem da
+**Inter Bold** e são extraídos por `scripts/logo-svg.py` (fontTools). Nada de
+redesenhar a mão e nada de imagem generativa: modelo de imagem erra letra, e
+logo com letra errada não é logo.
+
+| Peça | Onde vive | Quando usar |
+|---|---|---|
+| Letreiro | `<LetreiroFayai/>` · `public/brand/fayai-logo.svg` | Sempre que houver largura: cabeçalho, assinatura, apresentação, fatura |
+| Letreiro uma-cor | `variante="branco"` / `"tinta"` · `fayai-logo-branco.svg`, `fayai-logo-tinta.svg` | Fundo colorido, impressão, carimbo |
+| Símbolo | `<SimboloFayai/>` · `fayai-marca.svg` | Onde não cabe o letreiro: favicon, ícone de app, avatar, selo |
+| Carregamento | `<LoaderFayai/>`, `<SeloCarregando/>` · `fayai-loader.svg` | Toda espera visível |
+| Favicon | `src/app/icon.svg` (animado) + `favicon.ico` + `apple-icon.png` | Automático |
+| 3D | `public/3d/logo-fayai.svg` → `LogoFayai3D` | Cabeçalho, no hover |
+
+**O símbolo são as INICIAIS "FA"** — "F" da metade clara, "A" da metade azul.
+A primeira tentativa foi o próprio "Ai" do letreiro e ela foi descartada: "Ai"
+claro sobre quadrado escuro, a 16 px, é a silhueta do Adobe Illustrator.
+
+**Regras de uso**
+- Nunca recolorir o "Fay" nem o "Ai" fora das três variantes.
+- Nunca escrever "FAYAI" em caixa alta como se fosse o logo — o logo é `FayAi`.
+- Área de respiro: a altura do "F" em volta de toda a peça.
+- Fundo mínimo: o letreiro colorido pede fundo escuro; sobre claro, use `tinta`.
+- Regerar tudo: `python scripts/logo-svg.py && node scripts/marca-rasterizar.mjs`.
+
+**O carregamento é parte da marca.** Enquanto o site carrega, o azul do "Ai"
+esvazia para branco e sobe de volta — termina no logo de verdade, cheio. É o
+único movimento que a marca faz por conta própria, e ele existe em três lugares
+ao mesmo tempo: na página, no símbolo e no favicon da aba
+(`src/components/marca/FaviconVivo.tsx`).
 
 ---
 

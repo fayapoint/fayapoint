@@ -438,7 +438,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
       {/* ============================== HEADER ============================== */}
       <header className="flex items-center justify-between px-4 sm:px-8 pt-4 pb-2 shrink-0">
         <span className="text-3xl sm:text-4xl tracking-wide select-none" style={bebas}>
-          <LogoFayai texto={T("FAYAI")} />
+          <LogoFayai />
         </span>
         <div className="flex items-center gap-3">
           {/* A home é a única porta de entrada sem o cabeçalho do site — ela

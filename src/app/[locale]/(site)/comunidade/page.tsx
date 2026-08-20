@@ -18,6 +18,7 @@ import {
   ExternalLink
 } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { LoaderFayai } from "@/components/marca/LoaderFayai";
 interface Creation {
   _id: string;
   userName: string;
@@ -191,7 +192,7 @@ export default function CommunityPage() {
 
           {isLoading ? (
             <div className="flex justify-center py-20">
-              <Loader2 className="animate-spin text-amber-500" size={48} />
+              <LoaderFayai className="text-[44px]" />
             </div>
           ) : creations.length === 0 ? (
             <div className="text-center py-20">

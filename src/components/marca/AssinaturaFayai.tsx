@@ -1,4 +1,5 @@
 import { useT } from "@/i18n/dicionario";
+import { LetreiroFayai, SimboloFayai } from "@/components/marca/MarcaFayai";
 /**
  * A assinatura da casa na página de venda.
  *
@@ -22,9 +23,15 @@ import { useT } from "@/i18n/dicionario";
  * calor âmbar preso à borda esquerda. Assinatura de editora fica no pé da
  * página, discreta — ela credencia, não vende.
  *
- * **2. O monograma é a marca, não uma pessoa.** O losango é a mesma forma que
- * o logo 3D do cabeçalho usa, aqui parado e em fio de ouro. Um avatar redondo
- * com iniciais lê como "perfil de usuário"; um losango gravado lê como selo.
+ * **2. O monograma é a marca, não uma pessoa.** Um avatar redondo com iniciais
+ * lê como "perfil de usuário"; um selo quadrado lê como editora.
+ *
+ * ⚠️ Em 20/08/2026 o losango de fio de ouro que morava aqui saiu: a marca
+ * passou a TER um símbolo de verdade (`SimboloFayai`), e um selo de editora
+ * que desenha um monograma inventado ao lado do nome da casa contradiz o
+ * próprio logo. O calor âmbar da borda ficou — ele é do selo, não da marca —
+ * mas o anel em volta do símbolo virou neutro: âmbar atrás de um "A" azul
+ * briga, e quem perde é o azul.
  *
  * **3. O endereço é o texto, não um enfeite.** `fayai.com.br` aparece em
  * versalete espaçado à direita — é a informação que o Ricardo pediu para estar
@@ -76,23 +83,12 @@ export function AssinaturaFayai({
       />
 
       <div className="relative flex items-center gap-3.5">
-        {/* O monograma: losango de fio de ouro, a mesma forma do logo do topo. */}
+        {/* O símbolo de verdade, no lugar do losango que existia antes. */}
         <span
           aria-hidden
-          className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-amber-400/25 bg-amber-400/[0.07]"
+          className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-white/12 bg-white/[0.04]"
         >
-          <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none">
-            <path
-              d="M12 2.5 21.5 12 12 21.5 2.5 12Z"
-              stroke="rgba(245,192,78,.85)"
-              strokeWidth="1.3"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M12 7.6 16.4 12 12 16.4 7.6 12Z"
-              fill="rgba(245,192,78,.9)"
-            />
-          </svg>
+          <SimboloFayai comFundo={false} style={{ fontSize: 22 }} />
         </span>
 
         <div className="min-w-0 flex-1">
@@ -100,10 +96,9 @@ export function AssinaturaFayai({
             {isPtBr ? T("Produção") : T("Produced by")}
           </div>
           <div className="mt-0.5 flex flex-wrap items-baseline gap-x-2">
-            <span className="text-[15px] font-bold leading-none text-white">
-              
-              {T("FayAi")}
-            </span>
+            {/* O letreiro desenhado — a mesma marca do cabeçalho, no tamanho
+                que a linha já tinha. */}
+            <LetreiroFayai style={{ fontSize: 19 }} titulo={T("FayAi")} />
             <span className="text-[11px] leading-none text-white/35">
               
               {T("fayai.com.br")}

@@ -22,6 +22,11 @@ const BYPASS_PATHS = [
   "/api/auth/google/callback",
   "/_next",
   "/favicon.ico",
+  // Os ícones e o manifesto: sem eles, a aba de quem está fora do Brasil fica
+  // com o quadrado vazio do navegador em vez do 403 com a marca.
+  "/icon.svg",
+  "/apple-icon.png",
+  "/manifest.webmanifest",
   "/robots.txt",
   "/sitemap.xml",
   "/google302d853608efe717.html", // Google Search Console verification file

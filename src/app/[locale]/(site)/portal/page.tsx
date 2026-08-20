@@ -97,6 +97,7 @@ import { CoursesPanel } from "@/components/portal/CoursesPanel";
 import { GaleriaPanel } from "@/components/portal/GaleriaPanel";
 import { AtelieVitrine } from "@/components/portal/AtelieVitrine";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
+import { PaginaCarregando } from "@/components/marca/LoaderFayai";
 
 // Types
 interface DashboardCourseProgress {
@@ -610,12 +611,7 @@ export default function PortalPage() {
 
   if (isDashboardLoading) {
     return (
-      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-muted-foreground">{T("Carregando seu dashboard...")}</p>
-        </div>
-      </div>
+      <PaginaCarregando legenda={T("Carregando seu dashboard...")} />
     );
   }
 
@@ -675,12 +671,7 @@ export default function PortalPage() {
     }
     // Has a valid session but no data yet — show loading
     return (
-      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-amber-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-muted-foreground">{T("Carregando...")}</p>
-        </div>
-      </div>
+      <PaginaCarregando legenda={T("Carregando...")} />
     );
   }
 

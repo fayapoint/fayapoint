@@ -228,6 +228,17 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
     },
     noindex: true,
   },
+  "/lab/marca": {
+    "pt-BR": {
+      title: "Bancada da marca — FayAI",
+      description: "Laboratório interno do logo FayAI: letreiro, símbolo e carregamento.",
+    },
+    en: {
+      title: "Brand workbench — FayAI",
+      description: "FayAI's internal workbench for the logo, the symbol and the loader.",
+    },
+    noindex: true,
+  },
   "/lab/dossie": {
     "pt-BR": {
       title: "Bancada do dossiê — FayAI",

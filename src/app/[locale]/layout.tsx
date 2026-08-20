@@ -25,6 +25,7 @@ import { UserProvider } from "@/contexts/UserContext";
 import { ServiceCartProvider } from "@/contexts/ServiceCartContext";
 import { PostHogProvider } from "@/components/PostHogProvider";
 import { UsoTracker } from "@/components/UsoTracker";
+import { FaviconVivo } from "@/components/marca/FaviconVivo";
 import { routing } from "@/i18n/routing";
 import { CLASSE_DO_CORPO } from "../fontes";
 
@@ -280,6 +281,12 @@ export default async function RootLayout({
     // `logo` do schema.org e o LOGO da organizacao, nao a capa social. Estava
     // apontando para a foto do Web Summit — que nao e logo de coisa nenhuma.
     logo: `${SITE_URL}/brand/fayai-invoice-logo.png`,
+    // O quadrado entra junto: o Google prefere um logo que caiba em recorte
+    // quadrado nos resultados com marca.
+    image: [
+      `${SITE_URL}/brand/fayai-invoice-logo.png`,
+      `${SITE_URL}/brand/fayai-logo-quadrado.png`,
+    ],
     sameAs: ["https://www.instagram.com/fayai"],
   };
 
@@ -384,6 +391,9 @@ export default async function RootLayout({
               rota nossa) e devolve um evento por navegação. Não renderiza nada
               e nunca lança — ver `UsoTracker`. */}
           <UsoTracker />
+          {/* O favicon que enche enquanto o site carrega. Não desenha nada na
+              página — troca o ícone da aba. Ver `FaviconVivo`. */}
+          <FaviconVivo />
           <Toaster
             position="top-center"
             reverseOrder={false}

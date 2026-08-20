@@ -24,10 +24,11 @@ import { toast } from "react-hot-toast";
 
 import { useUser } from "@/contexts/UserContext";
 import { HoneypotField } from "@/components/security/HoneypotField";
+import { PaginaCarregando } from "@/components/marca/LoaderFayai";
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><div className="animate-spin w-8 h-8 border-2 border-amber-500 border-t-transparent rounded-full" /></div>}>
+    <Suspense fallback={<PaginaCarregando />}>
       <LoginPageContent />
     </Suspense>
   );

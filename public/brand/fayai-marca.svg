@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="FayAi">
+<title>FayAi</title>
+<defs><linearGradient id="a" x1="1129.0" y1="0" x2="3052.0" y2="1572" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5cc8ff"/><stop offset=".55" stop-color="#1e9bff"/><stop offset="1" stop-color="#0a74e6"/></linearGradient></defs>
+<rect width="512" height="512" rx="112" fill="#0c0e1d"/>
+<g transform="translate(97.3,153.5) scale(0.12400)"><g transform="translate(0.0,0)"><path fill="#f3f1ff" d="M0 1572V82H980V335H305V751H914V1000H305V1572Z"/></g><g transform="translate(-2409.0,0)"><path fill="url(#a)" d="M3538 1572 4047 82H4447L4969 1572H4630L4391 853Q4348 714 4303.5 548.5Q4259 383 4210 187H4277Q4229 384 4187.5 550.5Q4146 717 4105 853L3875 1572ZM3856 1226V987H4651V1226Z"/></g></g>
+</svg>

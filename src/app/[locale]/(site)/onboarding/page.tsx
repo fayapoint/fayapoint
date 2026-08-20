@@ -18,6 +18,7 @@ import { useUser } from '@/contexts/UserContext';
 import { HoneypotField } from '@/components/security/HoneypotField';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
+import { PaginaCarregando } from "@/components/marca/LoaderFayai";
 
 interface FormData {
   name: string;
@@ -187,9 +188,7 @@ export default function OnboardingPage() {
   // Show loading while checking auth state
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-2 border-white border-t-transparent" />
-      </div>
+      <PaginaCarregando />
     );
   }
 

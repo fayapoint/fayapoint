@@ -7,6 +7,7 @@ import { AdminProvider, useAdmin } from "@/contexts/AdminContext";
 import { AdminSidebar, AdminMobileNav, AdminMobileDrawer } from "@/components/admin/AdminSidebar";
 import { Bell, Search, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { LoaderFayai } from "@/components/marca/LoaderFayai";
 
 // Mobile Header Component
 function AdminMobileHeader({ onOpenMenu }: { onOpenMenu: () => void }) {
@@ -141,7 +142,7 @@ function AdminLayoutContent({ children }: { children: React.ReactNode }) {
           animate={{ opacity: 1, scale: 1 }}
           className="flex flex-col items-center gap-4"
         >
-          <div className="w-12 h-12 border-4 border-amber-500/30 border-t-violet-500 rounded-full animate-spin" />
+          <LoaderFayai className="text-[44px]" />
           <p className="text-muted-foreground text-sm">Carregando...</p>
         </motion.div>
       </div>
