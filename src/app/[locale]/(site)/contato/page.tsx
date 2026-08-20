@@ -1,5 +1,6 @@
 import { useT } from "@/i18n/dicionario";
 import Image from "next/image";
+import { Link } from "@/i18n/navigation";
 import { Mail, Phone, MapPin, CalendarDays } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { ScheduleMeetingForm } from "@/components/consultation/ScheduleMeetingForm";
@@ -150,6 +151,36 @@ export default function ContactPage() {
                   );
                 })}
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* O que esperar depois de enviar.
+            ⚠️ 20/08/2026: a página servia 1.330 caracteres em inglês e 1.423 em
+            português — abaixo do piso em que o rastreador começa a tratar a URL
+            como soft 404. E, do lado de quem escreve, faltava a informação que
+            todo mundo quer antes de apertar "enviar": quanto tempo demora e o
+            que colocar na mensagem. Os dois links no fim também dão a `/ajuda`
+            e a `/faq` um link interno vindo de uma página de topo. */}
+        <section className="container mx-auto px-4 py-20">
+          <div className="mx-auto max-w-4xl">
+            <h2 className="text-3xl font-bold">{t("expect.title")}</h2>
+            <p className="mt-3 text-muted-foreground leading-relaxed">{t("expect.intro")}</p>
+            <div className="mt-8 grid gap-5 md:grid-cols-2">
+              {(t.raw("expect.items") as { title: string; text: string }[]).map((item) => (
+                <div key={item.title} className="rounded-2xl border border-border bg-secondary/40 p-6">
+                  <h3 className="font-semibold">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-7 flex flex-wrap gap-4 text-sm font-medium">
+              <Link href="/ajuda" className="text-amber-400 hover:underline">
+                {t("expect.helpLink")}
+              </Link>
+              <Link href="/faq" className="text-amber-400 hover:underline">
+                {t("expect.faqLink")}
+              </Link>
             </div>
           </div>
         </section>

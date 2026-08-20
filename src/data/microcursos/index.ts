@@ -65,7 +65,23 @@ export function getFontes(): Array<{
   return [...mapa.values()].sort((a, b) => b.publicadoEm.localeCompare(a.publicadoEm));
 }
 
-/** Relacionados: mesma categoria primeiro, completando com a mesma fonte. */
+/**
+ * Relacionados: mesma categoria primeiro, completando com a mesma fonte —
+ * e, no fim, o VIZINHO no anel.
+ *
+ * ⚠️ POR QUE O ANEL (20/08/2026)
+ *
+ * O hub mostra 9 por página. Quem cai da primeira página só é alcançável por
+ * quem clica em "próxima" — e o relatório de SEO de 20/08 pegou um microcurso
+ * (`wonder-da-adobe…`) sem UM link interno em todo o site. Os relacionados não
+ * salvavam: com `slice`, os últimos de cada categoria nunca entravam na lista
+ * de ninguém.
+ *
+ * O vizinho no anel de `microcursosOrdenados` conserta isso por construção:
+ * cada microcurso aponta para o seguinte, o último aponta para o primeiro, e
+ * assim TODO microcurso recebe pelo menos um link, sem depender de categoria,
+ * de paginação ou de alguém lembrar de linkar.
+ */
 export function getRelacionados(slug: string, quantidade = 3): Microcurso[] {
   const base = getMicrocurso(slug);
   if (!base) return [];
@@ -80,7 +96,20 @@ export function getRelacionados(slug: string, quantidade = 3): Microcurso[] {
       m.fonte.videoId === base.fonte.videoId,
   );
 
-  return [...mesmaCategoria, ...mesmaFonte].slice(0, quantidade);
+  const i = microcursosOrdenados.findIndex((m) => m.slug === slug);
+  const vizinho =
+    i >= 0 && microcursosOrdenados.length > 1
+      ? microcursosOrdenados[(i + 1) % microcursosOrdenados.length]
+      : undefined;
+
+  // O vizinho entra ANTES do corte, não depois: entrar depois seria a mesma
+  // falha de antes com outro nome.
+  const lista: Microcurso[] = [];
+  for (const m of [...(vizinho ? [vizinho] : []), ...mesmaCategoria, ...mesmaFonte]) {
+    if (m.slug !== slug && !lista.some((x) => x.slug === m.slug)) lista.push(m);
+    if (lista.length === quantidade) break;
+  }
+  return lista;
 }
 
 /** Link para o trecho exato do vídeo que originou o microcurso. */

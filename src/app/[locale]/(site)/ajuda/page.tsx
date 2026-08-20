@@ -15,7 +15,7 @@ import {
   Users,
   ArrowRight
 } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 type HelpCategory = {
   icon: string;
@@ -92,6 +92,43 @@ export default function HelpCenterPage() {
                 </motion.div>
               );
             })}
+          </div>
+        </section>
+
+        {/* Primeiros passos + problemas comuns.
+            ⚠️ 20/08/2026: esta página servia 1.198 caracteres ao rastreador —
+            seis cards de categoria e nada mais. Página de ajuda sem resposta
+            dentro é soft 404: o Google não indexa e quem chegou continua sem
+            saber o que fazer. O conteúdo abaixo é DIFERENTE do /faq de
+            propósito; repetir as mesmas perguntas em duas URLs faria as duas
+            competirem entre si. */}
+        <section className="container mx-auto px-4 mb-16 max-w-4xl">
+          <h2 className="text-3xl font-bold mb-3">{t("stepsTitle")}</h2>
+          <p className="text-muted-foreground mb-8">{t("stepsIntro")}</p>
+          <ol className="space-y-6">
+            {(t.raw("steps") as { title: string; text: string }[]).map((s, i) => (
+              <li key={s.title} className="flex gap-4">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-sm font-semibold text-amber-300">
+                  {i + 1}
+                </span>
+                <div>
+                  <h3 className="text-lg font-semibold">{s.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{s.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section className="container mx-auto px-4 mb-16 max-w-4xl">
+          <h2 className="text-3xl font-bold mb-8">{t("troubleTitle")}</h2>
+          <div className="space-y-5">
+            {(t.raw("trouble") as { q: string; a: string }[]).map((item) => (
+              <div key={item.q} className="rounded-xl border border-border bg-secondary/40 p-6">
+                <h3 className="font-semibold">{item.q}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.a}</p>
+              </div>
+            ))}
           </div>
         </section>
 

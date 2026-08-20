@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { GraduationCap, Linkedin, Twitter, Globe, Award } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 type Instructor = {
   name: string;
@@ -108,6 +108,43 @@ export default function InstructorsPage() {
                 </div>
               </motion.div>
             ))}
+          </div>
+        </section>
+
+        {/* Como o material é feito.
+            ⚠️ 20/08/2026: a página servia 1.048 caracteres — um card de
+            instrutor e um botão. Quem chega aqui está fazendo uma pergunta de
+            confiança ("quem escreveu isto, e por que eu acreditaria?"), e um
+            card só não responde. O rastreador chegava à mesma conclusão por
+            outro caminho: página sem assunto, tratada como soft 404. */}
+        <section className="container mx-auto px-4 max-w-4xl">
+          <h2 className="text-3xl font-bold">{t("method.title")}</h2>
+          <p className="mt-3 text-muted-foreground leading-relaxed">{t("method.intro")}</p>
+          <ol className="mt-8 space-y-6">
+            {(t.raw("method.items") as { title: string; text: string }[]).map((item, i) => (
+              <li key={item.title} className="flex gap-4">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-sm font-semibold text-amber-300">
+                  {i + 1}
+                </span>
+                <div>
+                  <h3 className="text-lg font-semibold">{item.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+
+          <div className="mt-12 rounded-2xl border border-border bg-secondary/40 p-8">
+            <h2 className="text-2xl font-semibold">{t("teachTitle")}</h2>
+            <p className="mt-3 leading-relaxed text-muted-foreground">{t("teachText")}</p>
+            <div className="mt-5 flex flex-wrap gap-4 text-sm font-medium">
+              <Link href="/cursos/por-ferramenta" className="text-amber-400 hover:underline">
+                {t("teachLink")}
+              </Link>
+              <Link href="/cursos" className="text-amber-400 hover:underline">
+                {t("catalogLink")}
+              </Link>
+            </div>
           </div>
         </section>
 

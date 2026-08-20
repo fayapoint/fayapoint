@@ -202,7 +202,8 @@
         "items": {
           "beginner": "All Courses",
           "freeClass": "Free Class",
-          "pricing": "Pricing"
+          "pricing": "Pricing",
+          "byTool": "Courses by Tool"
         }
       },
       "company": {
@@ -210,7 +211,10 @@
         "items": {
           "about": "About Us",
           "whatWeDo": "What We Do",
-          "contact": "Contact"
+          "contact": "Contact",
+          "services": "Services",
+          "instructors": "Instructors",
+          "partners": "Partnerships"
         }
       },
       "support": {
@@ -218,7 +222,10 @@
         "items": {
           "whatsapp": "WhatsApp",
           "terms": "Terms of Use",
-          "privacy": "Privacy"
+          "privacy": "Privacy",
+          "help": "Help Center",
+          "resources": "Free Resources",
+          "dataDeletion": "Data deletion"
         }
       }
     },
@@ -1096,7 +1103,31 @@
         "value": "Rua Sebastião de Aquino, 11, 207",
         "description": "Visits by appointment"
       }
-    ]
+    ],
+    "expect": {
+      "title": "What happens after you send it",
+      "intro": "The people answering here are the FayAI team, not a triage bot. To make the first reply useful, it helps to know how support works.",
+      "items": [
+        {
+          "title": "The real response time",
+          "text": "Up to 24 working hours for messages sent Monday to Friday. Anything arriving over the weekend joins the queue on Monday morning — and is still answered by a person, not an autoresponder."
+        },
+        {
+          "title": "What to write to speed things up",
+          "text": "Say what you have already tried, what your deadline is and what outcome you need. For account or purchase matters, include your registered email: without it the first reply becomes a request for information and your wait doubles."
+        },
+        {
+          "title": "Student questions have a shorter path",
+          "text": "If your question is about access, certificates, passwords or a specific course, the Help Center solves the common cases immediately — which leaves email support free for what genuinely needs a human."
+        },
+        {
+          "title": "Companies and partnerships",
+          "text": "Private cohorts, in-house training, consulting and press all come through this same form. Describe the size of the team and the problem to solve; the proposal comes back with scope and price, not with a meeting booked blind."
+        }
+      ],
+      "helpLink": "Go to the Help Center",
+      "faqLink": "Read the FAQ"
+    }
   },
   "Blog": {
     "hero": {
@@ -1686,42 +1717,89 @@
     }
   },
   "Resources": {
-    "title": "Resources",
-    "links": [
+    "title": "Free AI resources",
+    "intro": "Everything FayAI publishes for free in one place: the guides that summarise what actually works, the prompts we use day to day, the calculation that shows whether the investment pays off, and the dictionary for when a new acronym shows up. Nothing here asks for a sign-up.",
+    "itemsTitle": "What you will find here",
+    "items": [
       {
         "href": "/recursos/guias",
-        "label": "Free Guides"
+        "label": "Free guides",
+        "count": "6 guides",
+        "summary": "PDF material on prompt engineering, automation with n8n, image generation and using AI in small businesses. Each guide solves one specific problem end to end, with real examples and the steps we would follow ourselves.",
+        "bullets": [
+          "10 to 25 minutes of reading per guide",
+          "Ready-to-copy examples",
+          "Direct download, no form"
+        ]
       },
       {
         "href": "/recursos/templates",
-        "label": "Templates"
+        "label": "Prompt templates",
+        "count": "6 templates",
+        "summary": "Tested prompts for ChatGPT, Claude and Midjourney, organised by task: writing, summarising, analysing data, creating images. Copy it, swap the bracketed variables and go — the structure already carries context, role and output format.",
+        "bullets": [
+          "One click to copy",
+          "Says which tool each prompt is meant for",
+          "Written by hand, not machine-translated"
+        ]
       },
       {
         "href": "/recursos/calculadora-roi",
-        "label": "ROI Calculator"
+        "label": "ROI calculator",
+        "count": "Instant result",
+        "summary": "Enter how much you plan to invest in AI, how much you expect to save or earn per month, and over how many months you want to measure. It returns the percentage return and the point where the investment pays for itself — the number the board asks for before approving anything.",
+        "bullets": [
+          "Runs in your browser, nothing is sent",
+          "Works for a course, a tool or an automation",
+          "Useful for building the budget case"
+        ]
       },
       {
         "href": "/recursos/glossario",
-        "label": "AI Glossary"
+        "label": "AI glossary",
+        "count": "45 terms",
+        "summary": "From hallucination to RAG, by way of token, fine-tuning, embedding and agent. Every term gets a plain-English definition and the context where you will run into the word — written for people who are not engineers.",
+        "bullets": [
+          "Search by term and by category",
+          "Definitions without jargon",
+          "Updated as new terms appear"
+        ]
       }
-    ]
+    ],
+    "ctaTitle": "Want more than the free material?",
+    "ctaText": "FayAI courses take the same content and turn it into guided practice, with a project, a quiz and a certificate. The first lesson of every course is open.",
+    "ctaLink": "Browse the courses",
+    "open": "Open"
   },
   "CoursesByTool": {
-    "title": "Courses by Tool",
-    "cta": "View courses for {tool}",
-    "tools": [
-      "ChatGPT",
-      "Claude",
-      "Gemini",
-      "Perplexity",
-      "Midjourney",
-      "DALL-E",
-      "Stable Diffusion",
-      "n8n",
-      "Make",
-      "Zapier",
-      "Flowise"
-    ]
+    "title": "Courses by tool",
+    "intro": "The same question arrives every week: \"I want to learn ChatGPT, where do I start?\". This page answers it by grouping the catalogue by the tool each course actually teaches — not by topic, by the tool you will have open on screen while you study.",
+    "summary": "{courses} active courses, grouped into {tools} tools. The first lesson of every course is open, so you can check the pace before deciding.",
+    "lessons": "{n} lessons",
+    "preview": "See the first lesson",
+    "otherTool": "Other tools",
+    "genericNote": "Courses built around {tool}. Each one walks through the steps inside the tool itself, with the examples running — not just the theory behind it.",
+    "toolNotes": {
+      "chatgpt": "The most used tool and the most wasted one: almost everyone treats it as a search box. These courses go from the basic prompt to professional use — context, role, output format, custom GPTs, and the tasks where ChatGPT still gets it wrong and you have to check.",
+      "claude": "Claude has the edge on long text, document analysis and working alongside code. These courses cover safe use inside a company, collaborating with the model, and what changes compared to ChatGPT day to day.",
+      "gemini": "Google model, and the practical difference is where it lives: inside Gmail, Docs, Sheets and Drive. The course treats Gemini as part of the workflow you already have, not as a separate website.",
+      "perplexity": "Research with cited sources instead of answers with no trail. It suits anyone who has to verify, compare and deliver material with provenance — and the course also shows how to check what the tool brought back.",
+      "midjourney": "Image generation for people who need consistent results, not luck. Framing, lighting, style reference, and building a prompt you can repeat tomorrow and get the same standard.",
+      "openclaw": "An open alternative that runs under your own control. It matters to anyone who cannot send data outside, or who wants to understand what happens beneath the interface of the closed tools.",
+      "autoresearch": "Automated research in a loop: the machine proposes, tests, measures and keeps what improved. It is the method behind much of what FayAI publishes.",
+      "multi-plataforma": "Courses that are not tied to a single tool, because real work is not either: part in ChatGPT, part in Claude, part in an automation. Choosing between them is taught along the way.",
+      "multi-tool": "Courses that are not tied to a single tool, because real work is not either: part in ChatGPT, part in Claude, part in an automation. Choosing between them is taught along the way.",
+      "multi-framework": "Agent and automation courses that span more than one framework. What you learn here outlives the next fashionable library.",
+      "n8n": "Visual automation you host yourself: boxes joined by arrows instead of code, running on your own machine or server. It is the shortest path between \"I do this by hand every week\" and \"this happens on its own\".",
+      "make": "Cloud automation with hundreds of apps ready to connect. Good for wiring together the tools you already use — spreadsheet, email, CRM, WhatsApp — without maintaining any server.",
+      "langchain": "The scaffolding under most agents: memory, tools, chaining steps and reading documents. Learning it means learning the vocabulary the other frameworks copied.",
+      "docker": "Not an AI tool — it is what makes yours run the same way everywhere. It shows up in the courses where the model, the vector database and the interface come up together and stop depending on whatever was installed on your machine.",
+      "leonardo ai": "Image generation with fine control over style and community-trained models. It suits anyone who needs volume with a consistent visual identity: campaign assets, covers, a character that keeps coming back."
+    },
+    "ctaTitle": "Did not find the tool you use?",
+    "ctaText": "The full catalogue has search by name, level and category. And the free material — guides, prompt templates and glossary — covers several tools that have not become courses yet.",
+    "ctaAll": "Browse the full catalogue",
+    "ctaResources": "Free material"
   },
   "CoursesBySector": {
     "title": "Courses by Industry",
@@ -2665,7 +2743,55 @@
       "description": "Our support team is available to answer your questions.",
       "contactButton": "Contact Support",
       "faqButton": "View FAQ"
-    }
+    },
+    "stepsTitle": "Starting from scratch, in five steps",
+    "stepsIntro": "If this is your first time here, this is the shortest path between opening the site and having watched a lesson. No step requires payment.",
+    "steps": [
+      {
+        "title": "Open a free lesson before creating an account",
+        "text": "The first lesson of every course in the catalogue is open and asks for no sign-up. Use it to check the pace, the depth and whether the way we explain things suits you — before deciding anything."
+      },
+      {
+        "title": "Create the account with the email you actually use",
+        "text": "Your email is what ties together your enrolment, your progress and your certificate. Changing it later is possible but tedious: start with the address you will still be reading a year from now."
+      },
+      {
+        "title": "Pick a course and finish one chapter",
+        "text": "Progress is saved per chapter, automatically. You can stop halfway, close the browser and come back the next day at the exact point where you left off, from any device."
+      },
+      {
+        "title": "Take the quiz when you finish",
+        "text": "Every course has a question bank drawn from the content you have just read. Score above the required minimum and the certificate is issued immediately, with a public verification code."
+      },
+      {
+        "title": "Tailor the material in the Atelier",
+        "text": "Inside a course, under My / Settings, you can adjust the depth and the length of the text for your own context. The material rewrites itself for you without changing the course for anyone else."
+      }
+    ],
+    "troubleTitle": "Common problems, and what to do",
+    "trouble": [
+      {
+        "q": "I logged in but the course I bought is not in my list",
+        "a": "Check that you are signed in with the same email you used at checkout — that is the cause in almost every case. If it is the same address, contact support with the email and the purchase date: the enrolment may have been left inactive, and reactivating takes minutes."
+      },
+      {
+        "q": "The site switched back to Portuguese on its own",
+        "a": "That happens when an older link carries no language and navigation falls back to your browser default. Switch with the language selector at the top: the address then starts with /en and stays that way as you browse."
+      },
+      {
+        "q": "I finished the quiz and no certificate arrived",
+        "a": "The certificate is only issued above the course pass mark. Retake the quiz — questions are drawn from a larger bank, so the second attempt is not the same exam. If you did pass and still received nothing, check the certificate verification page before opening a ticket."
+      },
+      {
+        "q": "The video will not load",
+        "a": "It is nearly always a stale browser cache. Reload with Ctrl+Shift+R (Cmd+Shift+R on Mac). If it persists, try a private window: if it works there, an extension is blocking the media."
+      },
+      {
+        "q": "I forgot my password",
+        "a": "Use password recovery on the login screen. The link arrives by email and expires — if it is slow, check the spam folder before requesting another, because a new request invalidates the previous link."
+      }
+    ],
+    "moreTitle": "Still stuck?"
   },
   "Status": {
     "badge": "System Status",
@@ -2898,7 +3024,37 @@
       "title": "Want to be an Instructor?",
       "description": "If you're an AI expert and want to share knowledge, we want to meet you.",
       "button": "Apply"
-    }
+    },
+    "method": {
+      "title": "How the material is made",
+      "intro": "A FayAI course is not a script recorded in an afternoon. The process is the same in all of them, and it is what holds quality up while the faculty stays small.",
+      "items": [
+        {
+          "title": "Research before writing",
+          "text": "Every course starts with a round of primary-source research: official documentation, product changelogs, papers and tests run in-house. What goes into the text has a traceable origin — no \"people say\"."
+        },
+        {
+          "title": "Every number has a source",
+          "text": "Prices, limits, context sizes and release dates are checked before publishing. A number without a source does not go in, because that is exactly the kind of error that ages a course in three months and takes trust in the rest with it."
+        },
+        {
+          "title": "Text measured against repetition",
+          "text": "Before publishing, the material is measured for repeated paragraphs. A course padded with variations of the same sentence passes any shallow review and teaches nothing; here it does not pass the gate."
+        },
+        {
+          "title": "Practice, quiz and certificate",
+          "text": "Every course ends in an exercise and a question bank drawn from its own content. The certificate is only issued above the pass mark, and carries a public verification code."
+        },
+        {
+          "title": "Updated when the tool changes",
+          "text": "New model, new price, a feature that disappeared: the course is reviewed and whatever aged is rewritten. Anyone who already bought it gets the updated version at no extra cost."
+        }
+      ]
+    },
+    "teachTitle": "Who teaches what",
+    "teachText": "The catalogue covers ChatGPT, Claude, Gemini, Perplexity, image generation and automation. To see the courses grouped by the tool each one teaches, use the index by tool.",
+    "teachLink": "Browse courses by tool",
+    "catalogLink": "Browse the full catalogue"
   },
   "Glossary": {
     "badge": "AI Glossary",
@@ -4094,7 +4250,22 @@
         "titulo": "Hunt the Lost Prompt",
         "desc": "Drag in the right ingredients and dodge the impostors."
       }
-    }
+    },
+    "whyTitle": "Why learn AI by playing",
+    "why": [
+      {
+        "t": "Being wrong is cheap here",
+        "d": "In a game a mistake costs a point; in a work prompt it costs your afternoon. Every round puts you in front of the same decision you meet in real life — which ingredient the prompt is missing, which claim is a myth, which instruction produced that image — with no consequence attached."
+      },
+      {
+        "t": "Short repetition beats long reading",
+        "d": "A round lasts under a minute and answers you immediately. That short loop between trying and finding out is what makes the pattern stick; reading the same rule in a paragraph does not do the same thing."
+      },
+      {
+        "t": "The same games continue inside the platform",
+        "d": "These are the portal games, opened here with no sign-up. With an account they start earning XP, join your history and link to the courses covering the same ground."
+      }
+    ]
   },
   "TranslationNotice": {
     "title": "This book was written in Portuguese.",

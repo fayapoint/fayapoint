@@ -162,6 +162,25 @@ export function PublicArcade() {
           )}
         </AnimatePresence>
 
+        {/* Por que jogar.
+            ⚠️ 20/08/2026: a página servia 1.322 caracteres — cinco cards de
+            jogo e um botão. Página interativa é magra por natureza, mas o
+            rastreador não joga: sem texto que diga do que a página trata, ela
+            entra na conta de soft 404 junto com as páginas de verdade vazias.
+            O texto abaixo também responde a quem chegou sem entender por que
+            um site de curso tem arcade. */}
+        <section className="mx-auto mt-16 max-w-3xl">
+          <h2 className="text-2xl font-bold">{t("whyTitle")}</h2>
+          <div className="mt-6 space-y-5">
+            {(t.raw("why") as { t: string; d: string }[]).map((item) => (
+              <div key={item.t} className="rounded-2xl border border-border bg-secondary/40 p-5">
+                <h3 className="font-semibold">{item.t}</h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{item.d}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <div className="mx-auto mt-12 max-w-lg rounded-2xl border border-amber-500/20 bg-amber-500/5 p-6 text-center">
           <Sparkles className="mx-auto mb-2 text-amber-400" size={22} />
           <h3 className="text-lg font-bold">{t("ctaTitle")}</h3>

@@ -23,21 +23,37 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+/**
+ * ⚠️ O rodapé é a ÚNICA fonte de link interno que existe em toda página.
+ *
+ * 20/08/2026: o relatório de SEO achou `/ajuda` e `/cursos/por-ferramenta` sem
+ * um único link apontando para elas em todo o site — em pt-BR e em en. Página
+ * no sitemap que ninguém linka é a definição prática de "Detectada, mas não
+ * indexada": o Google sabe que existe e decide que não vale rastrear. Entrar
+ * aqui resolve nos dois idiomas de uma vez, porque `comIdioma` prefixa sozinho.
+ */
 const footerLinks = {
   cursos: [
     { key: "links.courses.items.beginner", href: "/cursos" },
+    { key: "links.courses.items.byTool", href: "/cursos/por-ferramenta" },
     { key: "links.courses.items.freeClass", href: "/aula-gratis" },
     { key: "links.courses.items.pricing", href: "/precos" },
   ],
   empresa: [
     { key: "links.company.items.about", href: "/sobre" },
     { key: "links.company.items.whatWeDo", href: "/o-que-fazemos" },
+    { key: "links.company.items.services", href: "/servicos" },
+    { key: "links.company.items.instructors", href: "/instrutores" },
+    { key: "links.company.items.partners", href: "/parcerias" },
     { key: "links.company.items.contact", href: "/contato" },
   ],
   suporte: [
     { key: "links.support.items.whatsapp", href: "https://wa.me/5521971908530" },
+    { key: "links.support.items.help", href: "/ajuda" },
+    { key: "links.support.items.resources", href: "/recursos" },
     { key: "links.support.items.terms", href: "/termos" },
     { key: "links.support.items.privacy", href: "/privacidade" },
+    { key: "links.support.items.dataDeletion", href: "/exclusao-de-dados" },
   ],
 };
 
