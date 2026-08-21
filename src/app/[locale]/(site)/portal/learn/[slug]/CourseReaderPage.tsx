@@ -621,6 +621,15 @@ function useRevealOnVisible<T extends HTMLElement>() {
 function InlineMediaFigure({ media }: { media: InlineMediaMarker }) {
   const T = useT();
   const { ref, revealed } = useRevealOnVisible<HTMLElement>();
+  /* Arte que não existe no disco NÃO vira ícone quebrado no meio da aula.
+     O marcador é escrito em lote (um curso são 180), e a arte chega depois —
+     durante essa janela o aluno veria o retângulo cinza com o alt dentro, que
+     é pior que não ter figura. O vídeo já se comporta assim por conta própria:
+     com o .webm em 404 o poster fica na tela e o play() morre no .catch().
+     ⚠️ Isto esconde o buraco do ALUNO, não de você: quem confere se todo
+     marcador tem arquivo é `scripts/cursos/casar_marcadores_com_disco.mjs`. */
+  const [quebrou, setQuebrou] = useState(false);
+  if (quebrou) return null;
   return (
     <figure
       ref={ref}
@@ -637,6 +646,7 @@ function InlineMediaFigure({ media }: { media: InlineMediaMarker }) {
           className="w-full h-auto object-cover"
           loading="lazy"
           decoding="async"
+          onError={() => setQuebrou(true)}
         />
       </div>
       {media.caption && (
