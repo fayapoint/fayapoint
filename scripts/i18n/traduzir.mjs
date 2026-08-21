@@ -101,6 +101,21 @@ Return ONLY the JSON object. No prose, no markdown fence around it.`;
 /** Só o pedido HTTP. Separado para a captura de erro de rede ficar legível. */
 async function fazerPedido(modelo, conteudo) {
   return fetch("https://openrouter.ai/api/v1/chat/completions", {
+    /**
+     * ⚠️ Teto por requisição. Sem sinal, `fetch` não desiste nunca — e a
+     * repetição de rede logo abaixo não roda, porque não há erro: há silêncio.
+     * Numa fila de 11 cursos isso significa que um pedido pendurado leva junto
+     * todos os cursos atrás dele.
+     *
+     * Não é hipótese confortável: em 20/08/2026, `banana-dev-deploy-ia` levou
+     * **21 minutos** enquanto os vizinhos levavam 2,5 — terminou sozinho, mas
+     * do lado de fora "lento" e "pendurado" são a mesma tela em branco, e a
+     * diferença só apareceu porque fui conferir o `traduzidoEm` no banco.
+     *
+     * Oito minutos é folgado para um lote com raciocínio, e o `AbortError` cai
+     * na captura de "queda de rede", que repete até 5 vezes.
+     */
+    signal: AbortSignal.timeout(8 * 60 * 1000),
     method: "POST",
     headers: {
       "Content-Type": "application/json",
