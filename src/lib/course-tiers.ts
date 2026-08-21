@@ -413,6 +413,18 @@ export const CREDIT_COSTS = {
   /** **R$1 por imagem** gerada no seu contexto (11/08/2026, Ricardo). Era R$3. */
   image_generation: 1,
   /**
+   * O storyboard de uma peça — 20/08/2026.
+   *
+   * Uma chamada de modelo devolve a peça inteira: os quadros, o que se vê em
+   * cada um, o texto de tela, a fala e os ajustes de câmera. Custa pouco de
+   * rodar e vale muito de ter, então o preço é de entrada — o que a pessoa
+   * gasta de verdade vem depois, quando manda gerar as imagens dos quadros
+   * (`image_generation`, R$1 cada).
+   *
+   * Editável na tabela viva (`/precos-creditos` no Mission Control).
+   */
+  storyboard_gerar: 2,
+  /**
    * ⚠️ Preço FIXO, de quando a personalização era um botão só (27/07). Um curso
    * de 5 capítulos e um de 30 custavam o mesmo — e o de 30 dá seis vezes mais
    * trabalho ao modelo. Continua exportado porque rotas antigas o citam, mas o
