@@ -83,3 +83,7 @@ _tmp/
 
 # saida de execucao do vigia (log de rodada). O que vale e base-precos.json.
 scripts/precos/*.log
+
+# Bancada do laço de críticos (skill gauntlet-loop): rodadas, capturas e
+# notas de crítico de UMA sessão. É rascunho de trabalho, não é fonte.
+.gauntlet/
