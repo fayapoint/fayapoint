@@ -21,6 +21,31 @@ import { useCarregando } from "@/components/marca/estado-de-carga";
  * Inter Bold que o SVG usa (`glifos.ts`), então o favicon animado e o parado
  * não podem divergir.
  *
+ * ── ⛔ O que NÃO se pode fazer aqui, nunca ─────────────────────────────────
+ *
+ * **Tirar do `<head>` um `<link>` que o React desenhou.** Foi o que a primeira
+ * versão fazia — removia os ícones do Next (`/favicon.ico` e `/icon.svg`) para
+ * ficar sozinha na aba — e foi o que travou o site inteiro em 21/08/2026.
+ *
+ * `<link>`, `<meta>` e `<title>` no `<head>` são *hoistables* do React 19, e o
+ * desmonte deles não tem rede:
+ *
+ * ```js
+ * case 26: ... t.stateNode && (t = t.stateNode).parentNode.removeChild(t)
+ * ```
+ *
+ * Sem checagem de nulo, e — ao contrário dos casos 5 e 6, logo abaixo — **sem
+ * `try/catch`**. Com o nó já destacado, `parentNode` é `null`, o commit lança
+ * `Cannot read properties of null (reading 'removeChild')` e **morre no meio**:
+ * o conteúdo novo nunca é escrito na tela e o `loading.tsx` fica para sempre.
+ * Do lado de fora: clicou no menu, o logo ficou enchendo, e nada mais
+ * aconteceu.
+ *
+ * Por isso aqui só se **muda atributo** de nó alheio (`href`, `type`), que o
+ * React tolera, e se devolve o valor original no fim. O `<link>` que sai e
+ * entra do `<head>` a cada quadro — o empurrão que faz o navegador reler o
+ * ícone — é um nó **nosso**, criado aqui, e nó nosso pode ir e vir à vontade.
+ *
  * ── O que dispara ──────────────────────────────────────────────────────────
  *
  * 1. a primeira carga da página, até o evento `load`;
@@ -29,9 +54,12 @@ import { useCarregando } from "@/components/marca/estado-de-carga";
  *
  * ── O que NÃO faz ──────────────────────────────────────────────────────────
  *
- * Não fica animando à toa: fora de carregamento os `<link>` originais voltam
- * exatamente como estavam. E respeita `prefers-reduced-motion` — quem pediu
- * menos movimento não ganha uma aba piscando.
+ * Não fica animando à toa: quando a carga acaba o relógio PARA e os `href`
+ * originais voltam. (A primeira versão restaurava sem parar o relógio, e 66 ms
+ * depois o quadro seguinte reinstalava tudo — na prática o favicon nunca
+ * parava, e os ícones do React passavam o dia inteiro entrando e saindo do
+ * `<head>`.) E respeita `prefers-reduced-motion`: quem pediu menos movimento
+ * não ganha uma aba piscando.
  */
 
 const LADO = 32; // o favicon vive entre 16 e 32; acima disso é peso por nada
@@ -46,6 +74,9 @@ export function FaviconVivo() {
     if (typeof window === "undefined") return;
     if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) return;
 
+    let relogio = 0;
+    let encerrado = false;
+
     // A primeira carga anima até o `load`; depois quem manda é o contador.
     let ativo = carregando;
     let pararPrimeira: (() => void) | undefined;
@@ -53,7 +84,10 @@ export function FaviconVivo() {
       ativo = true;
       const fim = () => {
         primeiraCarga.current = false;
-        restaurar();
+        // Se um loader da marca entrou em cena nesse meio-tempo a animação
+        // continua — quem a desliga então é o efeito que roda quando
+        // `carregando` muda.
+        if (!carregando) encerrar();
       };
       window.addEventListener("load", fim, { once: true });
       pararPrimeira = () => window.removeEventListener("load", fim);
@@ -121,21 +155,83 @@ export function FaviconVivo() {
       return 1 - suave((t - 0.74) / 0.26);
     }
 
-    const anteriores = Array.from(
-      document.querySelectorAll<HTMLLinkElement>("link[rel~='icon']")
-    );
-    const nosso = document.createElement("link");
-    nosso.rel = "icon";
-    nosso.type = "image/png";
-    let instalado = false;
+    // O que cada `<link>` era antes de a gente pintar por cima. É o bilhete de
+    // devolução — e a razão de nunca precisarmos destacar nó nenhum.
+    const originais = new Map<HTMLLinkElement, { href: string | null; type: string | null }>();
+    let proprio: HTMLLinkElement | null = null;
+
+    /**
+     * Os `<link rel=icon>` que o React desenhou. Reconsultado a cada quadro de
+     * propósito: numa troca de rota o React pode trocar o nó por outro, e uma
+     * referência guardada apontaria para um `<link>` que já saiu da página.
+     */
+    function alheios(): HTMLLinkElement[] {
+      return Array.from(
+        document.querySelectorAll<HTMLLinkElement>("link[rel~='icon']")
+      ).filter((l) => l !== proprio);
+    }
+
+    /**
+     * Escreve o quadro na aba sem mexer em quem é dono do `<head>`.
+     *
+     * São duas metades, e as duas são necessárias:
+     *
+     * 1. **O `href` dos ícones do Next passa a apontar para o quadro.** Sem
+     *    isso o `/icon.svg` (`sizes="any"`) ganharia a disputa e a animação
+     *    nunca apareceria. Mudar atributo é o máximo que se faz em nó alheio —
+     *    ver o aviso no topo do arquivo. O preço disso é conhecido e medido:
+     *    o React procura o hoistable dele pelo par `rel`+`href`, e enquanto o
+     *    `href` está pintado ele não acha o nó e desenha OUTRO. Sobra um par
+     *    repetido de `<link rel=icon>` no `<head>` — **quatro no total, e
+     *    para de crescer aí** (medido em cinco trocas de rota seguidas). São
+     *    nós idênticos e inertes: o navegador escolhe um, e nenhum deles
+     *    volta a ser tocado.
+     * 2. **Um `<link>` NOSSO sai e entra a cada quadro.** Trocar `href` nem
+     *    sempre faz o navegador reler o ícone; tirar e pôr um `<link>` sempre
+     *    faz — e força a releitura de todos, que a essa altura já apontam para
+     *    o quadro novo. Como o nó é nosso, tirar e pôr não custa nada a
+     *    ninguém.
+     */
+    function pintar(href: string) {
+      for (const l of alheios()) {
+        if (!originais.has(l)) {
+          originais.set(l, { href: l.getAttribute("href"), type: l.getAttribute("type") });
+        }
+        l.setAttribute("href", href);
+        l.setAttribute("type", "image/png");
+      }
+
+      if (!proprio) {
+        proprio = document.createElement("link");
+        proprio.rel = "icon";
+        proprio.type = "image/png";
+      }
+      proprio.href = href;
+      proprio.remove();
+      document.head.appendChild(proprio);
+    }
 
     function restaurar() {
-      if (!instalado) return;
-      instalado = false;
-      nosso.remove();
-      // Os originais foram retirados de propósito: com dois `rel=icon` o
-      // navegador escolhe um e a animação some no meio do caminho.
-      for (const l of anteriores) document.head.appendChild(l);
+      for (const [l, antes] of originais) {
+        if (antes.href === null) l.removeAttribute("href");
+        else l.setAttribute("href", antes.href);
+        if (antes.type === null) l.removeAttribute("type");
+        else l.setAttribute("type", antes.type);
+      }
+      originais.clear();
+      proprio?.remove();
+      proprio = null;
+    }
+
+    /**
+     * Fim de festa: para o relógio E devolve os ícones. Um sem o outro deixa a
+     * animação se reinstalando sozinha no quadro seguinte.
+     */
+    function encerrar() {
+      if (encerrado) return;
+      encerrado = true;
+      window.clearInterval(relogio);
+      restaurar();
     }
 
     function desenhar(t: number) {
@@ -176,25 +272,20 @@ export function FaviconVivo() {
       ctx.fillRect(0, y, LADO, Math.max(1, LADO * 0.03));
       ctx.restore();
 
-      nosso.href = canvas.toDataURL("image/png");
-      if (!instalado) {
-        instalado = true;
-        for (const l of anteriores) l.remove();
-        document.head.appendChild(nosso);
-      }
+      pintar(canvas.toDataURL("image/png"));
     }
 
     const inicio = performance.now();
-    const relogio = window.setInterval(() => {
+    relogio = window.setInterval(() => {
+      if (encerrado) return;
       const t = ((performance.now() - inicio) % DURACAO_MS) / DURACAO_MS;
       desenhar(t);
     }, 1000 / QUADROS_POR_SEGUNDO);
     desenhar(0);
 
     return () => {
-      window.clearInterval(relogio);
       pararPrimeira?.();
-      restaurar();
+      encerrar();
     };
   }, [carregando]);
 
