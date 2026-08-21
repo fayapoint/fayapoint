@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { SVGLoader } from "three/examples/jsm/loaders/SVGLoader.js";
 import { RECEITAS, VARIANTE_ATUAL, type VarianteLogo } from "@/components/marca/logo3d-variantes";
 import { AZUL, AZUL_CLARO } from "@/components/marca/cores";
+import { useContextoWebGL } from "@/components/3d/contexto-webgl";
 
 /**
  * O logo em 3D de verdade — WebGL, extrudado a partir dos contornos da fonte.
@@ -246,6 +247,12 @@ export function LogoFayai3D({
   semente?: number;
   variante?: VarianteLogo;
 }) {
+  // ⚠️ Esta peça entra e sai o tempo todo — a cada passada de cursor e, sozinha,
+  // a cada 10–20 s, em toda página. Sem devolver o contexto WebGL na saída, o
+  // teto de ~16 contextos do Chrome estoura em poucos minutos de navegação e o
+  // console enche de `THREE.WebGLRenderer: Context Lost.`. Ver `contexto-webgl`.
+  const aoCriar = useContextoWebGL();
+
   return (
     <Canvas
       className="pointer-events-none"
@@ -253,6 +260,7 @@ export function LogoFayai3D({
       dpr={[1, 1.6]}
       gl={{ antialias: true, alpha: true }}
       style={{ position: "absolute", inset: 0, background: "transparent" }}
+      onCreated={aoCriar}
     >
       {/* Luz de estúdio curta: o acento precisa de um brilho especular
           definido para ler como material, não como azul chapado. A luz de

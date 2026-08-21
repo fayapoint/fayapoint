@@ -1,9 +1,10 @@
 "use client";
 
-import { Suspense, useCallback, type ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { Canvas } from "@react-three/fiber";
 import { Preload } from "@react-three/drei";
-import type { WebGLRenderer } from "three";
+
+import { useContextoWebGL } from "@/components/3d/contexto-webgl";
 
 interface SceneProps {
   children: ReactNode;
@@ -16,17 +17,10 @@ export function Scene({
   className = "",
   camera = { position: [0, 0, 5], fov: 75 },
 }: SceneProps) {
-  // Handle WebGL context loss gracefully (happens during Fast Refresh)
-  const onCreated = useCallback(({ gl }: { gl: WebGLRenderer }) => {
-    const canvas = gl.domElement;
-    canvas.addEventListener("webglcontextlost", (e) => {
-      e.preventDefault();
-      console.warn("[Scene] WebGL context lost — will auto-restore");
-    });
-    canvas.addEventListener("webglcontextrestored", () => {
-      console.log("[Scene] WebGL context restored");
-    });
-  }, []);
+  // Perda de contexto tratada (deixa o navegador restaurar) e contexto
+  // devolvido no desmonte — sem isso cada cena que sai de cena deixa um
+  // contexto pendurado até o teto do navegador estourar. Ver `contexto-webgl`.
+  const onCreated = useContextoWebGL();
 
   return (
     <Canvas
