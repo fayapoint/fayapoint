@@ -1,0 +1,244 @@
+/*
+ * A pele de cada era.
+ *
+ * A página tem 32 estações. Se todas tivessem a mesma moldura, o passeio
+ * viraria uma lista — e o pedido era o contrário: "cada trabalho com sua forma
+ * de apresentação". A saída foi dar a cada ATO o aparelho da sua época:
+ *
+ *   I   1992—95  tubo de raios catódicos: fósforo âmbar, varredura, curvatura
+ *   II  1995—02  ilha SD: moldura 4:3, área segura, timecode, VU
+ *   III 2002—13  cinema: janela larga, grão de filme, halo quente
+ *   IV  2013—16  drone: HUD do rádio, horizonte artificial, linha de voo
+ *   V   2014—18  emissora HD: tarja de crédito, tally vermelho, grade fria
+ *   VI  2018—    hoje: vidro, malha neural, luz que atravessa
+ *
+ * Tudo aqui é decoração e não pode capturar clique: `pointer-events: none` em
+ * todo pseudo-elemento. E tudo respeita `prefers-reduced-motion` no fim do
+ * arquivo — a página é feita para ser vista, não para dar enjoo.
+ */
+
+/* ─────────────────────────────────────────────────── base ── */
+
+.estacao {
+  position: relative;
+  isolation: isolate;
+}
+
+.moldura {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.25rem;
+  background: #05040a;
+}
+
+.moldura::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* ────────────────────────────────────── I — tubo (1992—95) ── */
+
+.tubo {
+  border-radius: 2rem / 3rem;
+  box-shadow:
+    inset 0 0 6rem rgba(255, 150, 40, 0.16),
+    inset 0 0 1.5rem rgba(0, 0, 0, 0.9),
+    0 0 4rem rgba(124, 77, 255, 0.22);
+  filter: saturate(0.82) contrast(1.12);
+}
+
+.tubo::after {
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 0px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0.34) 3px,
+      rgba(0, 0, 0, 0.34) 4px
+    ),
+    radial-gradient(120% 120% at 50% 50%, rgba(255, 180, 87, 0.1), rgba(0, 0, 0, 0.72) 100%);
+  mix-blend-mode: multiply;
+  animation: varredura 7s linear infinite;
+}
+
+@keyframes varredura {
+  0% { background-position: 0 0, 0 0; }
+  100% { background-position: 0 4px, 0 0; }
+}
+
+/* ──────────────────────────────────── II — ilha SD (1995—02) ── */
+
+.ilha {
+  border: 1px solid rgba(38, 166, 154, 0.4);
+  box-shadow: 0 0 3rem rgba(38, 166, 154, 0.18);
+}
+
+/* a área segura de título, que todo editor de SD carrega na cabeça */
+.ilha::after {
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+  inset: 8%;
+  border-radius: 0.25rem;
+}
+
+.barras {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  height: 0.4rem;
+  width: 100%;
+}
+
+/* ───────────────────────────────────── III — cinema (2002—13) ── */
+
+.cinema {
+  box-shadow: 0 0 6rem rgba(216, 27, 96, 0.2);
+}
+
+.cinema::after {
+  background-image:
+    radial-gradient(140% 100% at 50% 0%, rgba(255, 213, 79, 0.12), transparent 55%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='0.34'/%3E%3C/svg%3E");
+  opacity: 0.55;
+  mix-blend-mode: overlay;
+  animation: grao 0.9s steps(3) infinite;
+}
+
+@keyframes grao {
+  0%   { transform: translate(0, 0); }
+  33%  { transform: translate(-2%, 1%); }
+  66%  { transform: translate(1%, -2%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ─────────────────────────────────────── IV — drone (2013—16) ── */
+
+.ar {
+  box-shadow: 0 0 5rem rgba(3, 155, 229, 0.24);
+}
+
+.ar::after {
+  background:
+    linear-gradient(to bottom, rgba(3, 155, 229, 0.12), transparent 30%, transparent 70%, rgba(0, 0, 0, 0.45)),
+    repeating-linear-gradient(
+      to right,
+      rgba(255, 238, 88, 0.14) 0 1px,
+      transparent 1px 84px
+    );
+}
+
+/* o horizonte artificial do rádio-controle */
+.horizonte {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 42%;
+  height: 1px;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(to right, transparent, rgba(255, 238, 88, 0.85), transparent);
+  pointer-events: none;
+  animation: adernar 9s ease-in-out infinite;
+}
+
+.horizonte::before,
+.horizonte::after {
+  content: "";
+  position: absolute;
+  top: -4px;
+  width: 1px;
+  height: 9px;
+  background: rgba(255, 238, 88, 0.85);
+}
+.horizonte::before { left: 0; }
+.horizonte::after { right: 0; }
+
+@keyframes adernar {
+  0%, 100% { transform: translate(-50%, -50%) rotate(-2.4deg); }
+  50%      { transform: translate(-50%, -50%) rotate(2.4deg); }
+}
+
+/* ──────────────────────────────────── V — emissora (2014—18) ── */
+
+.rede {
+  box-shadow: 0 0 5rem rgba(21, 101, 192, 0.28);
+}
+
+.rede::after {
+  background:
+    linear-gradient(to top, rgba(4, 12, 28, 0.86), transparent 38%),
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 0 1px, transparent 1px 3px);
+}
+
+.tally {
+  animation: pisca 1.8s ease-in-out infinite;
+}
+
+@keyframes pisca {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0.9rem rgba(239, 68, 68, 0.9); }
+  50%      { opacity: 0.42; box-shadow: 0 0 0.2rem rgba(239, 68, 68, 0.35); }
+}
+
+/* ────────────────────────────────── VI — hoje (2018—hoje) ── */
+
+.hoje {
+  border: 1px solid rgba(41, 121, 255, 0.28);
+  box-shadow: 0 0 5rem rgba(41, 121, 255, 0.22);
+  backdrop-filter: blur(2px);
+}
+
+.hoje::after {
+  background:
+    radial-gradient(90% 70% at 15% 0%, rgba(41, 121, 255, 0.2), transparent 60%),
+    repeating-linear-gradient(45deg, rgba(255, 196, 0, 0.05) 0 1px, transparent 1px 26px),
+    repeating-linear-gradient(-45deg, rgba(41, 121, 255, 0.06) 0 1px, transparent 1px 26px);
+}
+
+/* ─────────────────────────────────────────────── a régua ── */
+
+.regua {
+  scrollbar-width: none;
+}
+.regua::-webkit-scrollbar {
+  display: none;
+}
+
+.clipe {
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.28s, box-shadow 0.28s;
+}
+.clipe:hover {
+  transform: translateY(-3px) scaleY(1.35);
+}
+
+/* o cabeçote de leitura da moviola */
+.cabecote {
+  box-shadow: 0 0 0.75rem rgba(255, 255, 255, 0.8), 0 0 2rem rgba(255, 196, 0, 0.55);
+}
+
+/* ──────────────────────────────────────────── tipografia ── */
+
+.numeroAto {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.22);
+  color: transparent;
+  letter-spacing: -0.04em;
+  line-height: 0.8;
+}
+
+.risco {
+  background-image: linear-gradient(to right, currentColor, transparent);
+  height: 1px;
+}
+
+/* ─────────────────────────────────────── quem pediu calma ── */
+
+@media (prefers-reduced-motion: reduce) {
+  .tubo::after,
+  .cinema::after,
+  .horizonte,
+  .tally {
+    animation: none !important;
+  }
+  .clipe {
+    transition: none;
+  }
+}

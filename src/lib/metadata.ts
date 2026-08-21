@@ -367,16 +367,19 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
         "Open roles and opportunities to build AI education in Brazil. Meet the team and learn how to apply.",
     },
   },
+  // 21/08/2026: o título e a descrição aqui descreviam sete cases INVENTADOS
+  // ("projetos de clientes que transformaram suas operações com IA"). A página
+  // passou a ser o portfólio real de 34 anos — ver `src/dados/casos.ts`.
   "/casos": {
     "pt-BR": {
-      title: "Cases e portfólio — projetos de IA e automação | FayAI",
+      title: "Casos — 34 anos de corte, de 1992 a hoje | Ricardo Faya",
       description:
-        "Projetos reais de clientes que transformaram suas operações com IA, automação e plataformas digitais desenvolvidas pela FayAI.",
+        "32 trabalhos reais: MultiRio, ZDF em alemão, Emmanuelle in Rio, FGV, Jockey Club, drone desde 2013, Fox Sports na Copa e nas Olimpíadas, e a virada para inteligência artificial.",
     },
     en: {
-      title: "Case studies and portfolio — AI and automation | FayAI",
+      title: "Work — 34 years of cutting, from 1992 to today | Ricardo Faya",
       description:
-        "Real client projects that transformed their operations with AI, automation and digital platforms built by FayAI.",
+        "32 real projects: MultiRio, ZDF, Emmanuelle in Rio, FGV, Jockey Club, drone flying since 2013, Fox Sports at the World Cup and the Olympics, and the turn to artificial intelligence.",
     },
   },
   "/certificacoes": {
