@@ -6,6 +6,7 @@ import { BuscaClube } from "./BuscaClube";
 import { FormInteresse } from "./FormInteresse";
 import { CalendarioTemporada } from "./CalendarioTemporada";
 import { TabelaClassificacao } from "./TabelaClassificacao";
+import { VideoAmbiente } from "./VideoAmbiente";
 import { LIMA, OURO, CIANO, VIOLETA, ROSA, LARANJA, FUNDO, bebas, superficie, TEXTO } from "@/lib/game/tema";
 
 /**
@@ -29,7 +30,14 @@ const PILLAR_ICONS = [Trophy, Database, Brain, ArrowRightLeft, Target, ShieldChe
  * cairia no primeiro pilar por ser o índice zero do array, não por significar
  * recompensa — que é exatamente o uso decorativo que a §8 proíbe.
  */
-const PILLAR_CORES = [LIMA, CIANO, VIOLETA, ROSA, LARANJA];
+/**
+ * SEIS cores para SEIS pilares. Com cinco, o `i % length` devolvia lima no
+ * primeiro e no último — duas linhas da mesma grade com a mesma cor, que é o
+ * oposto de "o olho aprende a cor uma vez só". O ouro fecha o ciclo porque o
+ * sexto pilar é "Integridade": confiança é a única coisa nesta lista que a §3
+ * reconhece como recompensa.
+ */
+const PILLAR_CORES = [LIMA, CIANO, VIOLETA, ROSA, LARANJA, OURO];
 
 export function GameLanding({ copy, locale }: { copy: GameCopy; locale: string }) {
   return (
@@ -63,18 +71,39 @@ export function GameLanding({ copy, locale }: { copy: GameCopy; locale: string }
             animation: "fx-drift-b 16s ease-in-out infinite",
           }}
         />
-        {/* As linhas do campo: a única "textura" da página, discreta o bastante
-            para não competir com o texto (opacidade .05). */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-[520px] opacity-[0.055]"
-          style={{
-            background:
-              "repeating-linear-gradient(90deg, transparent 0 78px, rgba(255,255,255,.9) 78px 79px)",
-            maskImage: "linear-gradient(180deg, rgba(0,0,0,.8), transparent 85%)",
-            WebkitMaskImage: "linear-gradient(180deg, rgba(0,0,0,.8), transparent 85%)",
-          }}
-        />
+        {/* A FOTO do herói, atrás de tudo.
+            Ela entra como atmosfera, não como ilustração: escurecida e com o
+            fundo dissolvendo para o navy da página, para o letreiro continuar
+            legível por cima (barra C2). O `<img>` é simples e com
+            `aspect-ratio` inline de propósito — §5 da identidade proíbe
+            depender de layout responsivo do Tailwind para arte crítica. */}
+        <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-[560px] overflow-hidden">
+          <VideoAmbiente
+            nome="video-heroi"
+            className="h-full w-full object-cover object-right opacity-[0.62]"
+          />
+          {/* Duas camadas de véu, e nenhuma delas é um "escurecer tudo":
+              a vertical protege a linha de base do texto, a horizontal abre a
+              esquerda para o letreiro. A 40% de opacidade a cena sumia e a foto
+              só custava banda; a 62% ela aparece e o texto continua AA. */}
+          <span
+            className="absolute inset-0"
+            style={{
+              background:
+                `linear-gradient(180deg, ${FUNDO}99 0%, ${FUNDO}a6 45%, ${FUNDO} 94%),` +
+                `linear-gradient(90deg, ${FUNDO}f2 2%, ${FUNDO}59 40%, transparent 70%)`,
+            }}
+          />
+          <span
+            className="absolute inset-0 opacity-[0.05]"
+            style={{
+              background:
+                "repeating-linear-gradient(90deg, transparent 0 78px, rgba(255,255,255,.9) 78px 79px)",
+              maskImage: "linear-gradient(180deg, rgba(0,0,0,.8), transparent 85%)",
+              WebkitMaskImage: "linear-gradient(180deg, rgba(0,0,0,.8), transparent 85%)",
+            }}
+          />
+        </div>
 
         <header className="relative mx-auto max-w-3xl text-center">
           <p
@@ -172,19 +201,40 @@ export function GameLanding({ copy, locale }: { copy: GameCopy; locale: string }
         </h2>
         <div className="mt-8 grid gap-4 md:grid-cols-3">
           {copy.how.steps.map((s, i) => (
-            <div key={s.title} className="relative rounded-2xl border p-6" style={superficie(LIMA)}>
-              {/* O número é o herói do card, em marca-d'água. */}
-              <span
-                aria-hidden
-                className="absolute right-4 top-1 select-none text-6xl leading-none"
-                style={{ ...bebas, color: `${LIMA}1a` }}
-              >
-                {i + 1}
+            <div
+              key={s.title}
+              className="group relative overflow-hidden rounded-2xl border"
+              style={superficie(LIMA)}
+            >
+              {/* A cena que ENCENA o passo (§9, a regra do espelho): "conecte o
+                  clube" é a mão com o elenco na telinha, não um ícone. */}
+              <span className="block relative overflow-hidden" style={{ aspectRatio: "3 / 2" }}>
+                {/* eslint-disable-next-line @next/next/no-img-element -- arte local estática, sem otimizador */}
+                <img
+                  src={`/game/${s.art}.webp`}
+                  alt={s.alt}
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <span
+                  aria-hidden
+                  className="absolute inset-0"
+                  style={{ background: `linear-gradient(180deg, transparent 45%, ${FUNDO}e6 100%)` }}
+                />
+                {/* O número, agora sobre a foto */}
+                <span
+                  aria-hidden
+                  className="absolute right-3 top-1 select-none text-6xl leading-none"
+                  style={{ ...bebas, color: `${LIMA}3d` }}
+                >
+                  {i + 1}
+                </span>
               </span>
-              <h3 className="relative text-lg font-bold" style={{ color: LIMA }}>
-                {s.title.replace(/^\d+\s*·\s*/, "")}
-              </h3>
-              <p className="relative mt-2 text-sm leading-relaxed text-white/60">{s.text}</p>
+              <div className="p-5">
+                <h3 className="text-lg font-bold" style={{ color: LIMA }}>
+                  {s.title.replace(/^\d+\s*·\s*/, "")}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/60">{s.text}</p>
+              </div>
             </div>
           ))}
         </div>
@@ -220,13 +270,31 @@ export function GameLanding({ copy, locale }: { copy: GameCopy; locale: string }
             return (
               <div
                 key={p.title}
-                className="flex gap-3.5 border-t border-white/[0.07] py-4 first:border-t-0 sm:[&:nth-child(2)]:border-t-0"
+                className="group flex gap-4 border-t border-white/[0.07] py-4 first:border-t-0 sm:[&:nth-child(2)]:border-t-0"
               >
+                {/* Miniatura em vez de quadrado de ícone. A lista continua
+                    densa — não vira cartão, que é o que quebra o ritmo da
+                    página — mas cada linha ganha a cena que lhe corresponde.
+                    O ícone fica sobreposto no canto, pequeno, como legenda. */}
                 <span
-                  className="mt-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
-                  style={{ background: `${cor}16`, border: `1px solid ${cor}33` }}
+                  className="relative mt-0.5 block h-16 w-16 shrink-0 overflow-hidden rounded-xl"
+                  style={{ border: `1px solid ${cor}33` }}
                 >
-                  <Icon className="h-[18px] w-[18px]" style={{ color: cor }} />
+                  {/* eslint-disable-next-line @next/next/no-img-element -- arte local estática, sem otimizador */}
+                  <img
+                    src={`/game/${p.art}.webp`}
+                    alt={p.alt}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <span
+                    aria-hidden
+                    className="absolute inset-0"
+                    style={{ background: `linear-gradient(160deg, transparent 40%, ${cor}33)` }}
+                  />
+                  <Icon
+                    className="absolute bottom-1 right-1 h-3.5 w-3.5 drop-shadow"
+                    style={{ color: cor }}
+                  />
                 </span>
                 <div className="min-w-0">
                   <h3 className="font-bold leading-tight">{p.title}</h3>
@@ -238,8 +306,13 @@ export function GameLanding({ copy, locale }: { copy: GameCopy; locale: string }
         </div>
       </section>
 
-      {/* ============================== CALENDÁRIO ============================== */}
-      <div className="relative mx-auto mt-24 max-w-5xl">
+      {/* ============================== CALENDÁRIO ==============================
+          `mt-14` no celular, não `mt-24`: a lista de pilares acima não tem
+          moldura que a feche, então os 96px do desktop viravam um bloco de
+          preto sem função — lia como carregamento incompleto, não como
+          respiro. Em telas largas a lista é de duas colunas e o espaço grande
+          continua fazendo sentido. */}
+      <div className="relative mx-auto mt-14 max-w-5xl sm:mt-24">
         <CalendarioTemporada copy={copy} />
       </div>
 

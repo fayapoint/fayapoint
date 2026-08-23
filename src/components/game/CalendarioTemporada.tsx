@@ -140,6 +140,19 @@ export function CalendarioTemporada({ copy }: { copy: GameCopy }) {
                                 style={{ background: cor, boxShadow: `0 0 10px ${cor}` }}
                               />
                             )}
+                            {/* A DATA dentro da barra. Vazia, a barra lia como
+                                retângulo esquecido de wireframe; a etiqueta do
+                                marco sozinha, flutuando acima, não bastava
+                                para dizer que aquele bloco é uma janela de
+                                tempo com começo. */}
+                            {inicio && f.marks?.[0] && (
+                              <span
+                                className="absolute inset-y-0 left-0 flex items-center pl-4 text-[10px] font-extrabold uppercase tracking-wider"
+                                style={{ color: `${cor}e6` }}
+                              >
+                                {f.marks[0].day}
+                              </span>
+                            )}
                           </div>
                         )}
 

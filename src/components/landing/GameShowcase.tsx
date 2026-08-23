@@ -7,6 +7,7 @@ import { ArrowRight, Trophy, Shield, Search, Check } from "lucide-react";
 import { comIdioma } from "@/lib/rota-idioma";
 import { useReducedMotion } from "@/lib/arcade/engine";
 import { getGameCopy } from "@/lib/game/copy";
+import { VideoAmbiente } from "@/components/game/VideoAmbiente";
 import { LIMA, VIOLETA, bebas, FUNDO, TEXTO } from "@/lib/game/tema";
 
 /**
@@ -136,7 +137,21 @@ export function GameShowcase() {
                     peça gráfica, esta seção lia como caixa de texto no meio de
                     seções ilustradas. É geometria — não custa GPU, não inventa
                     estatística, e diz "futebol" antes de qualquer palavra. */}
-                <div className="relative" style={{ background: `linear-gradient(160deg, ${LIMA}14, transparent 70%)` }}>
+                <div className="relative overflow-hidden">
+                  {/* A foto por trás do letreiro. Era aqui que a vitrine
+                      perdia para o ArcadeShowcase logo acima, que tem arte
+                      contextual: três rodadas de crítica apontaram o mesmo
+                      buraco. O campo desenhado continua por cima da foto —
+                      ele é o que dá a leitura de "campeonato" em 200ms. */}
+                  <VideoAmbiente
+                    nome="video-vitrine"
+                    className="absolute inset-0 h-full w-full object-cover opacity-55 transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <span
+                    aria-hidden
+                    className="absolute inset-0"
+                    style={{ background: `linear-gradient(160deg, ${LIMA}1f, rgba(12,14,29,.72) 65%)` }}
+                  />
                   <svg
                     viewBox="0 0 320 132"
                     className="block w-full"

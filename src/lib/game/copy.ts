@@ -41,11 +41,12 @@ export interface GameCopy {
   };
   how: {
     title: string;
-    steps: Array<{ title: string; text: string }>;
+    /** `art` é o nome do arquivo em `/public/game/`; `alt` descreve a cena. */
+    steps: Array<{ title: string; text: string; art: string; alt: string }>;
   };
   pillars: {
     title: string;
-    items: Array<{ title: string; text: string }>;
+    items: Array<{ title: string; text: string; art: string; alt: string }>;
   };
   roadmap: {
     title: string;
@@ -168,14 +169,20 @@ const pt: GameCopy = {
       {
         title: '1 · Conecte o clube',
         text: 'Busque pelo nome, confirme o clube e pronto: importamos campanha, elenco e histórico direto da fonte pública da EA. Nunca pedimos senha da EA ou da PSN.',
+        art: 'passo-conectar',
+        alt: 'Mão segurando um celular com a lista do elenco na tela, a partida na TV ao fundo',
       },
       {
         title: '2 · Dispute a liga',
         text: 'Inscreva o clube nos nossos campeonatos: tabela, chaveamento, check-in de capitães e resultado confirmado pelos dois lados — divergência vai para árbitro humano.',
+        art: 'passo-disputar',
+        alt: 'Dois amigos no sofá comemorando um gol, controle nas mãos',
       },
       {
         title: '3 · Construa sua carreira',
         text: 'Cada jogador ganha uma página de carreira com estatísticas verificadas, forma recente e histórico de clubes — a base do scouting e do mercado de transferências.',
+        art: 'passo-carreira',
+        alt: 'Jogadora estudando gráficos de desempenho no notebook, controle ao lado',
       },
     ],
   },
@@ -185,26 +192,38 @@ const pt: GameCopy = {
       {
         title: 'Campeonatos e ligas',
         text: 'Pontos corridos, grupos, mata-mata, acesso e rebaixamento — administração completa, sem planilha.',
+        art: 'pilar-campeonatos',
+        alt: 'Troféu dourado sobre a mesa ao lado de um controle',
       },
       {
         title: 'Estatística com procedência',
         text: 'Todo número carrega a nota da fonte (A–E), o horário e a evidência. Dado sem lastro não vira recorde.',
+        art: 'pilar-estatistica',
+        alt: 'Notebook exibindo uma tabela de linhas com barras de desempenho luminosas',
       },
       {
         title: 'Análise de partida com IA',
         text: 'Leitura tática das suas partidas: padrões de jogo, desempenho individual e evolução ao longo da temporada.',
+        art: 'pilar-analise',
+        alt: 'Monitor exibindo um campo visto de cima com setas de movimentação',
       },
       {
         title: 'Scouting e transferências',
         text: 'Jogadores se listam, clubes publicam vagas, contratos digitais com consentimento explícito e janelas de transferência.',
+        art: 'pilar-scouting',
+        alt: 'Camisa dobrada na mesa da cozinha ao lado do notebook com a lista de jogadores',
       },
       {
         title: 'Palpites gratuitos',
         text: 'Bolões por pontos nas partidas monitoradas: placar, artilheiro, craque do jogo. Sem dinheiro real nesta fase.',
+        art: 'pilar-palpites',
+        alt: 'Grupo de amigos comemorando no sofá com o celular na mão',
       },
       {
         title: 'Integridade',
         text: 'Identidade única por jogador, consenso de resultado, trilha de auditoria pública e monitoramento antifraude.',
+        art: 'pilar-integridade',
+        alt: 'Polegar confirmando a identidade no leitor biométrico do celular',
       },
     ],
   },
@@ -404,26 +423,32 @@ const en: GameCopy = {
       {
         title: '1 · Connect your club',
         text: "Search by name, confirm your club, done: we import record, squad and history straight from EA's public source. We never ask for EA or PSN passwords.",
+        art: 'passo-conectar',
+        alt: 'A hand holding a phone showing the squad list, the match on the TV behind',
       },
       {
         title: '2 · Compete',
         text: 'Enter our championships: tables, brackets, captain check-in and results confirmed by both sides — disputes go to a human referee.',
+        art: 'passo-disputar',
+        alt: 'Two friends on a couch celebrating a goal, controllers in hand',
       },
       {
         title: '3 · Build your career',
         text: 'Every player gets a career page with verified stats, current form and club history — the foundation of scouting and the transfer market.',
+        art: 'passo-carreira',
+        alt: 'A player studying performance charts on a laptop, controller beside her',
       },
     ],
   },
   pillars: {
     title: 'What we are building',
     items: [
-      { title: 'Championships & leagues', text: 'Round-robin, groups, knockouts, promotion and relegation — full administration, no spreadsheets.' },
-      { title: 'Stats with provenance', text: 'Every number carries a source grade (A–E), timestamp and evidence. Unverified data never becomes a record.' },
-      { title: 'AI match analysis', text: 'Tactical reading of your matches: play patterns, individual performance and season-long development.' },
-      { title: 'Scouting & transfers', text: 'Players list themselves, clubs publish openings, digital contracts with explicit consent and transfer windows.' },
-      { title: 'Free predictions', text: 'Points-based prediction games on monitored matches: score, top scorer, man of the match. No real money in this phase.' },
-      { title: 'Integrity', text: 'One identity per player, result consensus, public audit trail and anti-fraud monitoring.' },
+      { title: 'Championships & leagues', text: 'Round-robin, groups, knockouts, promotion and relegation — full administration, no spreadsheets.', art: 'pilar-campeonatos', alt: 'A golden trophy on a desk beside a game controller' },
+      { title: 'Stats with provenance', text: 'Every number carries a source grade (A–E), timestamp and evidence. Unverified data never becomes a record.', art: 'pilar-estatistica', alt: 'A laptop showing a table of rows with glowing performance bars' },
+      { title: 'AI match analysis', text: 'Tactical reading of your matches: play patterns, individual performance and season-long development.', art: 'pilar-analise', alt: 'A monitor showing a top-down pitch with movement arrows' },
+      { title: 'Scouting & transfers', text: 'Players list themselves, clubs publish openings, digital contracts with explicit consent and transfer windows.', art: 'pilar-scouting', alt: 'A folded shirt on a kitchen table beside a laptop showing a player list' },
+      { title: 'Free predictions', text: 'Points-based prediction games on monitored matches: score, top scorer, man of the match. No real money in this phase.', art: 'pilar-palpites', alt: 'A group of friends celebrating on the couch, phones in hand' },
+      { title: 'Integrity', text: 'One identity per player, result consensus, public audit trail and anti-fraud monitoring.', art: 'pilar-integridade', alt: 'A thumb confirming identity on a phone fingerprint reader' },
     ],
   },
   roadmap: {
