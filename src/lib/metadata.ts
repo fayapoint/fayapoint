@@ -207,12 +207,12 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
   },
   "/game": {
     "pt-BR": {
-      title: "ONZE — a liga do futebol virtual | FayAI",
+      title: "Winners 22 Championship — a liga do futebol virtual | FayAI",
       description:
         "Campeonatos organizados, estatística verificada e carreira de jogador no modo Clubs do EA SPORTS FC. Conecte seu clube em 30 segundos, sem senha e sem instalação.",
     },
     en: {
-      title: "ONZE — the virtual football league | FayAI",
+      title: "Winners 22 Championship — the virtual football league | FayAI",
       description:
         "Organized championships, verified statistics and player careers for EA SPORTS FC Clubs. Connect your club in 30 seconds — no password, no install.",
     },

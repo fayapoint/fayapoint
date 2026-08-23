@@ -9,7 +9,7 @@ import { TabelaClassificacao } from "./TabelaClassificacao";
 import { LIMA, OURO, CIANO, VIOLETA, ROSA, LARANJA, FUNDO, bebas, superficie, TEXTO } from "@/lib/game/tema";
 
 /**
- * Landing da seção /game (ONZE) — reconstruída em 23/08/2026.
+ * Landing da seção /game (Winners 22 Championship) — 23/08/2026.
  *
  * A v1 era um empilhamento de seis blocos `rounded-2xl border-white/10`
  * idênticos, separados por `mt-24` iguais, num verde `#07120c` que não existe
@@ -83,19 +83,28 @@ export function GameLanding({ copy, locale }: { copy: GameCopy; locale: string }
           >
             {copy.tagline}
           </p>
-          <h1
-            className="mt-4 text-[4.5rem] leading-[0.88] sm:text-[7rem]"
-            style={{ ...bebas, letterSpacing: "0.02em" }}
-          >
+          {/* Letreiro em duas linhas. "Winners 22 Championship" numa linha só,
+              em Bebas a 7rem, quebra feio e some no celular; separado, a
+              primeira linha vira o nome que se grita e a segunda o qualificador
+              — que é como todo escudo de campeonato se organiza. */}
+          <h1 className="mt-4" style={bebas}>
             <span
+              className="block text-[3.6rem] leading-[0.88] sm:text-[6.4rem]"
               style={{
+                letterSpacing: "0.02em",
                 background: `linear-gradient(180deg, #ffffff 20%, ${LIMA})`,
                 WebkitBackgroundClip: "text",
                 backgroundClip: "text",
                 color: "transparent",
               }}
             >
-              {copy.brand}
+              {copy.brandShort}
+            </span>
+            <span
+              className="mt-1 block text-[1.35rem] sm:text-[2.3rem]"
+              style={{ letterSpacing: "0.42em", color: `${LIMA}d9`, textIndent: "0.42em" }}
+            >
+              {copy.brandLine2}
             </span>
           </h1>
           <p className="mx-auto mt-2 max-w-2xl text-xl font-bold leading-tight text-white/95 sm:text-3xl">

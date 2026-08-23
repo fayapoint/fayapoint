@@ -10,7 +10,7 @@ import { getGameCopy } from "@/lib/game/copy";
 import { LIMA, VIOLETA, bebas, FUNDO, TEXTO } from "@/lib/game/tema";
 
 /**
- * VITRINE DO /game (ONZE) na home — 23/08/2026.
+ * VITRINE DO /game (Winners 22 Championship) na home — 23/08/2026.
  *
  * Por que existe: exatamente o defeito que o `ArcadeShowcase` corrigiu para o
  * Arcade, repetido. A seção /game nasceu completa (busca ao vivo contra a API
@@ -155,16 +155,24 @@ export function GameShowcase() {
                     <rect x="8" y="50" width="18" height="32" rx="2" />
                     <rect x="294" y="50" width="18" height="32" rx="2" />
                   </svg>
-                  <span
-                    className="absolute inset-0 flex items-center justify-center text-5xl leading-none"
-                    style={{
-                      ...bebas,
-                      color: TEXTO,
-                      textShadow: `0 0 26px ${LIMA}77`,
-                      letterSpacing: "0.14em",
-                    }}
-                  >
-                    ONZE
+                  <span className="absolute inset-0 flex flex-col items-center justify-center">
+                    <span
+                      className="text-[2.6rem] leading-none"
+                      style={{
+                        ...bebas,
+                        color: TEXTO,
+                        textShadow: `0 0 26px ${LIMA}77`,
+                        letterSpacing: "0.1em",
+                      }}
+                    >
+                      {copy.brandShort}
+                    </span>
+                    <span
+                      className="mt-0.5 text-[0.72rem]"
+                      style={{ ...bebas, color: `${LIMA}e6`, letterSpacing: "0.36em", textIndent: "0.36em" }}
+                    >
+                      {copy.brandLine2}
+                    </span>
                   </span>
                 </div>
 

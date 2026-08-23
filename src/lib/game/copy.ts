@@ -6,12 +6,23 @@
  * português numa página inglesa, sem erro). Aqui o copy viaja com a rota,
  * tipado — quando a seção estabilizar, migra-se para o dicionário se valer.
  *
- * "ONZE" é nome de trabalho (PLANO_GAME_2026-08-23.md §2). Trocar o nome é
- * trocar `brand` aqui.
+ * A marca é **Winners 22 Championship** (Ricardo, 23/08/2026 — substituiu o
+ * nome de trabalho anterior). Ela vive em três campos porque não cabe inteira
+ * em todo lugar: `brand` no texto corrido e no aviso legal, `brandShort` +
+ * `brandLine2` no letreiro de duas linhas e nos espaços apertados.
  */
 
 export interface GameCopy {
+  /** Nome completo da marca. Usado em texto corrido e no aviso legal. */
   brand: string;
+  /**
+   * A primeira linha do letreiro, e a forma que vai onde não cabe o nome
+   * inteiro: menu, escudo, aba. "Winners 22 Championship" tem 24 caracteres —
+   * em Bebas a 7rem isso vira três linhas e some do celular.
+   */
+  brandShort: string;
+  /** A segunda linha do letreiro, sob a curta. */
+  brandLine2: string;
   tagline: string;
   heroTitle: string;
   heroSubtitle: string;
@@ -129,7 +140,9 @@ export interface GameCopy {
 }
 
 const pt: GameCopy = {
-  brand: 'ONZE',
+  brand: 'Winners 22 Championship',
+  brandShort: 'WINNERS 22',
+  brandLine2: 'CHAMPIONSHIP',
   tagline: 'A liga e a central de estatísticas do futebol virtual — por FayAI',
   heroTitle: 'O sistema operacional do futebol virtual',
   heroSubtitle:
@@ -137,7 +150,7 @@ const pt: GameCopy = {
   heroCtaSearch: 'Buscar meu clube',
   heroCtaJoin: 'Entrar na liga piloto',
   disclaimer:
-    'ONZE é um projeto independente da FayAI, não afiliado, endossado ou patrocinado pela Electronic Arts Inc. EA SPORTS FC é marca da Electronic Arts Inc., usada aqui apenas de forma descritiva. Sem apostas com dinheiro real: a fase atual oferece somente palpites gratuitos por pontos.',
+    'Winners 22 Championship é um projeto independente da FayAI, não afiliado, endossado ou patrocinado pela Electronic Arts Inc. EA SPORTS FC é marca da Electronic Arts Inc., usada aqui apenas de forma descritiva. Sem apostas com dinheiro real: a fase atual oferece somente palpites gratuitos por pontos.',
   search: {
     title: 'Encontre seu clube agora',
     subtitle:
@@ -276,7 +289,7 @@ const pt: GameCopy = {
     },
   },
   showcase: {
-    title: 'ONZE — o futebol virtual',
+    title: 'Winners 22 — o futebol virtual',
     highlight: 'com estatística de verdade',
     badge: 'Novo',
     body:
@@ -351,7 +364,7 @@ const pt: GameCopy = {
     matchTypes: { leagueMatch: 'Liga', playoffMatch: 'Playoff', friendlyMatch: 'Amistoso' },
     sourceBadge: 'Fonte: API pública da EA · grau B',
     sourceNote:
-      'Dados lidos ao vivo da fonte pública do modo Clubs. Estatística de competição ONZE terá verificação adicional por consenso de capitães.',
+      'Dados lidos ao vivo da fonte pública do modo Clubs. A estatística das competições do Winners 22 terá verificação adicional por consenso de capitães.',
     link: 'Este clube é meu — vincular à minha conta',
     linking: 'Vinculando…',
     linked: 'Clube vinculado à sua conta ✓',
@@ -363,7 +376,9 @@ const pt: GameCopy = {
 };
 
 const en: GameCopy = {
-  brand: 'ONZE',
+  brand: 'Winners 22 Championship',
+  brandShort: 'WINNERS 22',
+  brandLine2: 'CHAMPIONSHIP',
   tagline: 'The virtual football league & stats hub — by FayAI',
   heroTitle: 'The operating system of virtual football',
   heroSubtitle:
@@ -371,7 +386,7 @@ const en: GameCopy = {
   heroCtaSearch: 'Find my club',
   heroCtaJoin: 'Join the pilot league',
   disclaimer:
-    'ONZE is an independent FayAI project, not affiliated with, endorsed or sponsored by Electronic Arts Inc. EA SPORTS FC is a trademark of Electronic Arts Inc., used here descriptively only. No real-money betting: the current phase offers free, points-based predictions only.',
+    'Winners 22 Championship is an independent FayAI project, not affiliated with, endorsed or sponsored by Electronic Arts Inc. EA SPORTS FC is a trademark of Electronic Arts Inc., used here descriptively only. No real-money betting: the current phase offers free, points-based predictions only.',
   search: {
     title: 'Find your club now',
     subtitle:
@@ -437,7 +452,7 @@ const en: GameCopy = {
     legend: { promotion: 'Promotion', playoff: 'Playoff', relegation: 'Relegation' },
   },
   showcase: {
-    title: 'ONZE — virtual football',
+    title: 'Winners 22 — virtual football',
     highlight: 'with real statistics',
     badge: 'New',
     body:
@@ -500,7 +515,7 @@ const en: GameCopy = {
     matchTypes: { leagueMatch: 'League', playoffMatch: 'Playoff', friendlyMatch: 'Friendly' },
     sourceBadge: 'Source: EA public API · grade B',
     sourceNote:
-      "Data read live from the Clubs public source. ONZE competition statistics get additional verification via captain consensus.",
+      "Data read live from the Clubs public source. Winners 22 competition statistics get additional verification via captain consensus.",
     link: 'This is my club — link to my account',
     linking: 'Linking…',
     linked: 'Club linked to your account ✓',

@@ -285,7 +285,7 @@ export function Header() {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  {/* ONZE (/game). Seção nova de 23/08/2026 e a única do site
+                  {/* Winners 22 Championship (/game). Seção nova de 23/08/2026 e a única
                       cuja porta de entrada era a URL digitada à mão — sem link
                       no menu nem na home, ela não existia para quem chega.
                       Ganha o ponto verde porque é lançamento, não porque é

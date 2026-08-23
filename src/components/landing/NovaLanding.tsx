@@ -931,7 +931,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           link de 11px no rodapé. */}
       <ArcadeShowcase />
 
-      {/* ====================== ONZE / futebol virtual (/game) ======================
+      {/* ================ Winners 22 / futebol virtual (/game) ================
           Logo depois do Arcade porque as duas são o convite de menor
           compromisso do site: jogar e conectar o clube não pedem cadastro nem
           cartão. Antes disto a seção /game não tinha NENHUM link no site — a

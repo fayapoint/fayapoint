@@ -90,7 +90,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/radar",
     // Arcade: joga sem cadastro, é o degrau de menor compromisso do funil.
     "/arcade",
-    // ONZE: a liga de futebol virtual (Clubs). Landing pública com busca de
+    // Winners 22 Championship: a liga de futebol virtual (Clubs). Landing pública com busca de
     // clube ao vivo — ver PLANO_GAME_2026-08-23.md no autoresearch.
     "/game",
     // Microcursos: o blog de ferramentas. Cada ferramenta que aparece nos

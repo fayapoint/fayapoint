@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return generatePageMetadata({
     locale,
     path: `/game/clube/${clubId}`,
-    title: en ? `Club ${clubId} — ONZE | FayAI` : `Clube ${clubId} — ONZE | FayAI`,
+    title: en ? `Club ${clubId} — Winners 22 | FayAI` : `Clube ${clubId} — Winners 22 | FayAI`,
     description: en
       ? "Squad, record and recent matches read live from the Clubs public source."
       : "Elenco, campanha e últimas partidas lidos ao vivo da fonte pública do modo Clubs.",
