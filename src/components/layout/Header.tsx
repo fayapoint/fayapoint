@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
-import { Menu, X, ChevronDown, LogOut, UserCircle, BookOpen, Wrench, Newspaper, Users, Briefcase, Info, DollarSign, GraduationCap, Sparkles } from "lucide-react";
+import { Menu, X, ChevronDown, LogOut, UserCircle, BookOpen, Wrench, Newspaper, Users, Briefcase, Info, DollarSign, GraduationCap, Sparkles, Trophy } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 import { LocaleSwitcher } from "@/components/layout/LocaleSwitcher";
@@ -16,6 +16,9 @@ import { NavCart } from "@/components/cart/NavCart";
 import type { LucideIcon } from "lucide-react";
 import { LogoFayai } from "@/components/marca/LogoFayai";
 import { comIdioma } from "@/lib/rota-idioma";
+// A cor do /game sai do token da seção, não de uma classe `lime-*` escrita à
+// mão: duas fontes de verdade para a mesma cor é como o acento sai do lugar.
+import { LIMA } from "@/lib/game/tema";
 
 // Mobile navigation link component
 interface MobileNavLinkProps {
@@ -160,7 +163,7 @@ export function Header() {
           <div className="flex-1" />
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-2 lg:space-x-3">
             <NavigationMenu>
               <NavigationMenuList>
                 {/* Cursos Dropdown */}
@@ -246,7 +249,7 @@ export function Header() {
                   {/* /noticias é o hub real. `/blog` responde 308 para cá, e o
                       link ficava a dois saltos do destino em toda página. */}
                   <Link href={rota("/noticias")} className={cn(
-                    "px-3 py-2 text-sm font-medium transition",
+                    "px-2 py-2 text-sm font-medium transition",
                     pathname === "/noticias"
                       ? "text-primary"
                       : "text-foreground/90 hover:text-primary"
@@ -257,7 +260,7 @@ export function Header() {
 
                 <NavigationMenuItem>
                   <Link href={rota("/ferramentaria")} className={cn(
-                    "px-3 py-2 text-sm font-medium transition",
+                    "px-2 py-2 text-sm font-medium transition",
                     pathname === "/ferramentaria"
                       ? "text-primary"
                       : "text-foreground/90 hover:text-primary"
@@ -272,7 +275,7 @@ export function Header() {
                       interno não entra no índice, ela só engorda a conta de
                       "detectada, mas não indexada". */}
                   <Link href={rota("/inventando")} className={cn(
-                    "px-3 py-2 text-sm font-medium transition",
+                    "px-2 py-2 text-sm font-medium transition",
                     pathname === "/inventando"
                       ? "text-primary"
                       : "text-foreground/90 hover:text-primary"
@@ -282,8 +285,36 @@ export function Header() {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
+                  {/* ONZE (/game). Seção nova de 23/08/2026 e a única do site
+                      cuja porta de entrada era a URL digitada à mão — sem link
+                      no menu nem na home, ela não existia para quem chega.
+                      Ganha o ponto verde porque é lançamento, não porque é
+                      importante: o ponto sai quando a liga piloto abrir. */}
+                  <Link
+                    href={rota("/game")}
+                    className={cn(
+                      "inline-flex items-center gap-1.5 px-2 py-2 text-sm font-medium transition",
+                      pathname === "/game"
+                        ? "text-primary"
+                        : "text-foreground/90 hover:text-primary"
+                    )}
+                  >
+                    {/* O ponto lima é selo de LANÇAMENTO, não decoração fixa:
+                        sai quando a liga piloto abrir (outubro/2026). Enquanto
+                        isso é o que faz um item novo ser notado num cabeçalho
+                        de oito. O rótulo segue o mesmo `cn()` dos vizinhos. */}
+                    <span
+                      aria-hidden
+                      className="h-1.5 w-1.5 rounded-full"
+                      style={{ background: LIMA }}
+                    />
+                    {t("nav.game")}
+                  </Link>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
                   <Link href={rota("/sobre")} className={cn(
-                    "px-3 py-2 text-sm font-medium transition",
+                    "px-2 py-2 text-sm font-medium transition",
                     pathname === "/sobre"
                       ? "text-primary"
                       : "text-foreground/90 hover:text-primary"
@@ -294,7 +325,7 @@ export function Header() {
 
                 <NavigationMenuItem>
                   <Link href={rota("/comunidade")} className={cn(
-                    "px-3 py-2 text-sm font-medium transition",
+                    "px-2 py-2 text-sm font-medium transition",
                     pathname === "/comunidade" 
                       ? "text-primary" 
                       : "text-foreground/90 hover:text-primary"
@@ -305,7 +336,7 @@ export function Header() {
 
                 <NavigationMenuItem>
                   <Link href={rota("/casos")} className={cn(
-                    "px-3 py-2 text-sm font-medium transition",
+                    "px-2 py-2 text-sm font-medium transition",
                     pathname === "/casos" 
                       ? "text-primary" 
                       : "text-foreground/90 hover:text-primary"
@@ -316,7 +347,7 @@ export function Header() {
 
                 <NavigationMenuItem>
                   <Link href={rota("/precos")} className={cn(
-                    "px-3 py-2 text-sm font-medium transition",
+                    "px-2 py-2 text-sm font-medium transition",
                     pathname === "/precos" 
                       ? "text-primary" 
                       : "text-foreground/90 hover:text-primary"
@@ -342,10 +373,18 @@ export function Header() {
           </div>
 
           {/* CTA Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-1.5 lg:space-x-2">
             <NavCart />
             <LocaleSwitcher />
-            <ThemeSwitcher />
+            {/* O seletor de tema é um combo de 90px com rótulo — o item mais
+                largo e o menos urgente desta fileira. Entre 768px e 1400px o
+                cabeçalho não fecha (medido em 23/08/2026: estourava 181px, e
+                já estourava 91px antes de o /game entrar), e era o "Começar
+                Grátis" que saía da tela. Some aqui e continua no menu mobile,
+                onde a mesma fileira de controles rápidos já o oferece. */}
+            <span className="hidden min-[1400px]:inline-flex">
+              <ThemeSwitcher />
+            </span>
             {mounted && isLoggedIn && user ? (
               <>
                 <div className="flex items-center gap-2 text-foreground/80">
@@ -447,8 +486,15 @@ export function Header() {
               >
                 {t("nav.blog")}
               </MobileNavLink>
-              <MobileNavLink 
-                href={rota("/sobre")} 
+              <MobileNavLink
+                href={rota("/game")}
+                icon={Trophy}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {t("nav.game")}
+              </MobileNavLink>
+              <MobileNavLink
+                href={rota("/sobre")}
                 icon={Info}
                 onClick={() => setMobileMenuOpen(false)}
               >

@@ -21,6 +21,7 @@ import {
 import type { AiNewsItem } from "@/data/landing/seed-news";
 import { useUser } from "@/contexts/UserContext";
 import { ArcadeShowcase } from "@/components/landing/ArcadeShowcase";
+import { GameShowcase } from "@/components/landing/GameShowcase";
 import { RadarSection } from "@/components/landing/RadarSection";
 import { LogoFayai } from "@/components/marca/LogoFayai";
 import { BotaoIdioma } from "@/components/layout/BotaoIdioma";
@@ -929,6 +930,13 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           certo logo depois do hero. Antes disto o Arcade só existia como um
           link de 11px no rodapé. */}
       <ArcadeShowcase />
+
+      {/* ====================== ONZE / futebol virtual (/game) ======================
+          Logo depois do Arcade porque as duas são o convite de menor
+          compromisso do site: jogar e conectar o clube não pedem cadastro nem
+          cartão. Antes disto a seção /game não tinha NENHUM link no site — a
+          porta de entrada era digitar a URL. */}
+      <GameShowcase />
 
       {/* ============================== RADAR DA IA ==============================
           Vem ANTES dos cursos porque estabelece a demanda antes de oferecer a

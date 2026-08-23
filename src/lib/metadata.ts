@@ -205,6 +205,18 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
         "Try FayAi's 5 generative-AI mini-games without creating an account. Build prompts, tell truth from myth and more.",
     },
   },
+  "/game": {
+    "pt-BR": {
+      title: "ONZE — a liga do futebol virtual | FayAI",
+      description:
+        "Campeonatos organizados, estatística verificada e carreira de jogador no modo Clubs do EA SPORTS FC. Conecte seu clube em 30 segundos, sem senha e sem instalação.",
+    },
+    en: {
+      title: "ONZE — the virtual football league | FayAI",
+      description:
+        "Organized championships, verified statistics and player careers for EA SPORTS FC Clubs. Connect your club in 30 seconds — no password, no install.",
+    },
+  },
   "/inventando": {
     "pt-BR": {
       title: "Inventando — microcursos grátis de ferramentas de IA | FayAI",

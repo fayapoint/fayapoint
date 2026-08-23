@@ -45,6 +45,16 @@ const CHAVE_DE_CACHE_DE_PRODUTOS =
   "query=locale|type|category|tag|search|limit|sortBy|action";
 
 const config: NextConfig = {
+  // Pasta de build alternativa, por variável de ambiente.
+  //
+  // Sem isto, dois `next dev` no mesmo diretório disputam o mesmo `.next`: o
+  // segundo servidor passa a servir CSS e chunks compilados pelo primeiro, e o
+  // sintoma é traiçoeiro — a classe do Tailwind existe no HTML, a regra não
+  // existe na folha, e o conserto "não aparece" sem nenhum erro. Custou uma
+  // caçada em 23/08/2026. `NEXT_DIST_DIR=.next-b npx next dev --port 3010` dá
+  // um servidor isolado. Sem a variável, nada muda.
+  distDir: process.env.NEXT_DIST_DIR || ".next",
+
   // Prevent 308 redirects on trailing slashes — critical for Asaas webhooks
   // Asaas sends POST to /api/payments/webhook/ (with trailing slash) and
   // Next.js default behavior returns 308, breaking webhook delivery.
