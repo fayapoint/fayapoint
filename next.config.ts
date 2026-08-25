@@ -215,10 +215,29 @@ const config: NextConfig = {
       // =========================================================================
       // STATIC ASSETS - Immutable caching
       // =========================================================================
+      /**
+       * `immutable` só vale onde o nome do arquivo carrega hash de CONTEÚDO —
+       * ou seja, no build de produção. No `next dev` com Turbopack o nome do
+       * chunk vem do CAMINHO do módulo (`src_9804c10c._.js`) e não muda quando
+       * o código muda: com `max-age=31536000, immutable` o navegador guarda o
+       * chunk por um ano e nunca mais pergunta.
+       *
+       * O sintoma é o pior que existe: o servidor recompila, o log diz
+       * "Compiled", a rota responde 200 com o código novo — e a tela continua
+       * mostrando o antigo, sem erro nenhum. Nem aba nova resolve (o cache é do
+       * perfil, não da aba); só recarga forçada. Custou uma caçada em 25/08/2026
+       * e é o mesmo defeito registrado antes como "chunk js antigo no Chrome".
+       */
       {
         source: '/_next/static/:path*',
         headers: [
-          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+          {
+            key: 'Cache-Control',
+            value:
+              process.env.NODE_ENV === 'production'
+                ? 'public, max-age=31536000, immutable'
+                : 'no-cache, no-store, must-revalidate',
+          },
         ],
       },
       {

@@ -38,6 +38,21 @@ export interface GameCopy {
     empty: string;
     open: string;
     membersLabel: string;
+    /** Seletor de piscina: as duas gerações de console não se enxergam na EA. */
+    platformLabel: string;
+    platformAll: string;
+    platformGen5: string;
+    platformGen4: string;
+    /** O painel de ajuda — a queixa nº 1 da seção é "não acho meu clube". */
+    helpTitle: string;
+    helpItems: string[];
+    idHint: string;
+    /** `{n}` vira o número de clubes varridos na consulta. */
+    scanned: string;
+    approxTitle: string;
+    divisionShort: string;
+    /** Como cada linha foi encontrada — a interface diz, não esconde. */
+    foundBy: { id: string; exato: string; prefixo: string; contem: string; aproximado: string };
   };
   how: {
     title: string;
@@ -79,6 +94,45 @@ export interface GameCopy {
     slotLabel: string;
     cols: { pos: string; club: string; played: string; won: string; drawn: string; lost: string; gf: string; ga: string; gd: string; points: string; form: string };
     legend: { promotion: string; playoff: string; relegation: string };
+  };
+  /**
+   * RANKING GLOBAL — a tabela CHEIA que a página não tinha.
+   * A classificação da piloto só existe em outubro; enquanto isso a EA publica
+   * o ranking de todos os tempos do modo Clubs, com número em toda célula.
+   */
+  ranking: {
+    title: string;
+    subtitle: string;
+    badge: string;
+    platformLabel: string;
+    platformGen5: string;
+    platformGen4: string;
+    cols: {
+      rank: string;
+      club: string;
+      division: string;
+      played: string;
+      won: string;
+      drawn: string;
+      lost: string;
+      gf: string;
+      ga: string;
+      gd: string;
+      cleanSheets: string;
+      skill: string;
+    };
+    loading: string;
+    error: string;
+    note: string;
+    more: string;
+    less: string;
+  };
+  /** A escada de divisões do modo Clubs, com os pontos que promovem e seguram. */
+  divisions: {
+    title: string;
+    subtitle: string;
+    cols: { division: string; promotion: string; hold: string; title: string };
+    note: string;
   };
   /** Bloco do /game na home do site. */
   showcase: {
@@ -137,6 +191,57 @@ export interface GameCopy {
     notFound: string;
     loading: string;
     backToSearch: string;
+    /** ---- Painel de divisão (endpoint `settings` + campanha) ---- */
+    divisionTitle: string;
+    divisionNow: string;
+    divisionBest: string;
+    pointsToPromote: string;
+    pointsToHold: string;
+    pointsToTitle: string;
+    reputation: string;
+    winStreak: string;
+    unbeaten: string;
+    playoffGames: string;
+    promotions: string;
+    relegations: string;
+    divisionUnknown: string;
+    /** As três faixas da régua de divisão — o que cada pontuação significa. */
+    divisionZoneDrop: string;
+    divisionZoneHold: string;
+    divisionZoneUp: string;
+    /** ---- Calendário de partidas ---- */
+    calendarTitle: string;
+    calendarSubtitle: string;
+    calendarAll: string;
+    detail: string;
+    hideDetail: string;
+    /** `{club}` vira o nome de quem largou a partida — nunca "o adversário". */
+    dnfBy: string;
+    todayLabel: string;
+    yesterdayLabel: string;
+    /** ---- Elenco: temporada × carreira ---- */
+    tabSeason: string;
+    tabCareer: string;
+    careerNote: string;
+    /** ---- Ficha do Pro e reivindicação de jogador ---- */
+    claimTitle: string;
+    claimSubtitle: string;
+    claimButton: string;
+    claiming: string;
+    claimed: string;
+    claimLogin: string;
+    claimPick: string;
+    /** ---- Colunas e rótulos novos ---- */
+    colWinRate: string;
+    colOverall: string;
+    colRed: string;
+    colSaves: string;
+    minutesLabel: string;
+    idleLabel: string;
+    /** Explica a cor da coluna de minutos na súmula — sem ela, lê como erro. */
+    idleLegend: string;
+    matchPlayers: string;
+    platformLabel: string;
   };
 }
 
@@ -159,9 +264,32 @@ const pt: GameCopy = {
     placeholder: 'Nome do clube no Clubs…',
     button: 'Buscar',
     searching: 'Buscando…',
-    empty: 'Nenhum clube com esse nome. Confira a grafia exata usada no jogo.',
+    empty: 'Nenhum clube encontrado — nem varrendo as duas gerações de console. Veja as dicas abaixo: quase sempre é espaço duplo no nome ou a plataforma errada.',
     open: 'Ver central do clube',
     membersLabel: 'região',
+    platformLabel: 'Plataforma',
+    platformAll: 'Todas',
+    platformGen5: 'PS5 · Series · PC',
+    platformGen4: 'PS4 · Xbox One',
+    helpTitle: 'Não achou seu clube? Leia isto — o problema quase nunca é você',
+    helpItems: [
+      'A busca da EA casa só o COMEÇO do nome. "Sul" não acha "Leões do Sul"; "Leões" acha. Comece pela primeira palavra.',
+      'O jogo guarda espaços duplos. "Flamengo     00" tem cinco espaços entre as palavras — por isso a busca daqui compara palavra por palavra, ignorando espaço, acento e maiúscula.',
+      'PS4 e Xbox One vivem numa piscina separada de PS5, Xbox Series e PC. Deixe "Todas" marcado se não tiver certeza.',
+      'Se souber o número do clube, digite só o número: a busca vai direto pela ficha, sem depender do nome.',
+      'Clube recém-criado, que ainda não terminou uma temporada, pode não estar no índice público da EA. Nesse caso só o número resolve.',
+    ],
+    idHint: 'Dica: digitar só números busca pelo ID do clube.',
+    scanned: '{n} clubes varridos na fonte da EA',
+    approxTitle: 'Nenhum casou exatamente. Os mais próximos que apareceram:',
+    divisionShort: 'Div',
+    foundBy: {
+      id: 'por ID',
+      exato: 'nome exato',
+      prefixo: 'começa assim',
+      contem: 'contém as palavras',
+      aproximado: 'aproximado',
+    },
   },
   how: {
     title: 'Como funciona',
@@ -307,6 +435,46 @@ const pt: GameCopy = {
       relegation: 'Rebaixamento',
     },
   },
+  ranking: {
+    title: 'Ranking global do Clubs',
+    subtitle:
+      'Os melhores clubes do modo Clubs de todos os tempos, lidos ao vivo da fonte pública da EA. Toda célula é número medido — nada aqui é exemplo.',
+    badge: 'Dado ao vivo',
+    platformLabel: 'Geração',
+    platformGen5: 'PS5 · Series · PC',
+    platformGen4: 'PS4 · Xbox One',
+    cols: {
+      rank: '#',
+      club: 'Clube',
+      division: 'Div',
+      played: 'J',
+      won: 'V',
+      drawn: 'E',
+      lost: 'D',
+      gf: 'GP',
+      ga: 'GC',
+      gd: 'SG',
+      cleanSheets: 'CS',
+      skill: 'Skill',
+    },
+    loading: 'Lendo o ranking na fonte da EA…',
+    error: 'A fonte da EA não respondeu agora. O ranking volta assim que ela voltar.',
+    note: 'CS = jogos sem sofrer gol. Skill = pontuação de habilidade do clube, o critério de ordenação da própria EA.',
+    more: 'Ver os 100 primeiros',
+    less: 'Mostrar menos',
+  },
+  divisions: {
+    title: 'A escada das divisões',
+    subtitle:
+      'As regras que a EA aplica em cada divisão do modo Clubs: quantos pontos promovem, quantos seguram a divisão e quantos dão o título. Lidas do mesmo endpoint que o jogo consulta.',
+    cols: {
+      division: 'Divisão',
+      promotion: 'Sobe com',
+      hold: 'Fica com',
+      title: 'Título com',
+    },
+    note: 'Pontos por temporada de divisão. Abaixo do "fica com", o clube cai.',
+  },
   showcase: {
     title: 'Winners 22 — o futebol virtual',
     highlight: 'com estatística de verdade',
@@ -391,6 +559,52 @@ const pt: GameCopy = {
     notFound: 'Clube não encontrado — a fonte da EA pode estar fora do ar. Tente de novo em instantes.',
     loading: 'Lendo dados do clube…',
     backToSearch: '← Voltar para a busca',
+    divisionTitle: 'Divisão e temporada',
+    divisionNow: 'Divisão atual',
+    divisionBest: 'Melhor divisão',
+    pointsToPromote: 'Sobe com',
+    pointsToHold: 'Fica com',
+    pointsToTitle: 'Título com',
+    reputation: 'Reputação',
+    winStreak: 'Sequência de vitórias',
+    unbeaten: 'Invencibilidade',
+    playoffGames: 'Jogos de playoff',
+    promotions: 'Acessos',
+    relegations: 'Quedas',
+    divisionUnknown: 'A EA não publica a divisão atual neste endpoint — só a melhor já alcançada.',
+    divisionZoneDrop: 'Cai',
+    divisionZoneHold: 'Permanece',
+    divisionZoneUp: 'Sobe',
+    calendarTitle: 'Calendário de partidas',
+    calendarSubtitle:
+      'Liga, playoff e amistoso numa linha do tempo só, do jogo mais recente para trás. Abra qualquer partida para ver a súmula: quem marcou, quem deu assistência, nota, defesas e cartões — jogador por jogador, dos dois lados.',
+    calendarAll: 'Todas',
+    detail: 'Ver súmula',
+    hideDetail: 'Fechar súmula',
+    dnfBy: '{club} abandonou',
+    todayLabel: 'Hoje',
+    yesterdayLabel: 'Ontem',
+    tabSeason: 'Temporada',
+    tabCareer: 'Carreira',
+    careerNote: 'Carreira soma todas as temporadas do jogador neste clube.',
+    claimTitle: 'Qual desses é você?',
+    claimSubtitle:
+      'Escolha seu Pro no elenco para ligar a gamertag à sua conta FayAI. É assim que sua estatística individual passa a te seguir — sem senha da EA, sem instalação.',
+    claimButton: 'Sou eu',
+    claiming: 'Ligando…',
+    claimed: 'Jogador ligado à sua conta',
+    claimLogin: 'Entre na sua conta FayAI para reivindicar seu jogador',
+    claimPick: 'Selecione um jogador do elenco',
+    colWinRate: 'Vit %',
+    colOverall: 'OVR',
+    colRed: 'CV',
+    colSaves: 'Def',
+    minutesLabel: 'min',
+    idleLabel: 'parado',
+    idleLegend:
+      'Minutos em vermelho: a EA registrou o jogador parado em mais de um terço do tempo em campo. Passe o cursor para ver quanto.',
+    matchPlayers: 'Súmula da partida',
+    platformLabel: 'Plataforma',
   },
 };
 
@@ -413,9 +627,32 @@ const en: GameCopy = {
     placeholder: 'Your Clubs team name…',
     button: 'Search',
     searching: 'Searching…',
-    empty: 'No club with that name. Check the exact in-game spelling.',
+    empty: 'No club found — not even sweeping both console generations. Read the tips below: it is almost always a double space in the name or the wrong platform.',
     open: 'Open club hub',
     membersLabel: 'region',
+    platformLabel: 'Platform',
+    platformAll: 'All',
+    platformGen5: 'PS5 · Series · PC',
+    platformGen4: 'PS4 · Xbox One',
+    helpTitle: "Can't find your club? Read this — it is almost never your fault",
+    helpItems: [
+      'EA only matches the START of the name. "Sul" will not find "Leões do Sul"; "Leões" will. Start with the first word.',
+      'The game stores double spaces. "Flamengo     00" has five spaces between the words — which is why this search compares word by word, ignoring spacing, accents and case.',
+      'PS4 and Xbox One live in a pool separate from PS5, Xbox Series and PC. Leave "All" selected if you are unsure.',
+      'If you know the club number, type only the number: the search goes straight to the record, no name involved.',
+      "A brand-new club that hasn't finished a season yet may be missing from EA's public index. Only the number finds it then.",
+    ],
+    idHint: 'Tip: typing digits only searches by club ID.',
+    scanned: '{n} clubs swept in the EA source',
+    approxTitle: 'None matched exactly. The closest ones that came up:',
+    divisionShort: 'Div',
+    foundBy: {
+      id: 'by ID',
+      exato: 'exact name',
+      prefixo: 'starts with',
+      contem: 'contains the words',
+      aproximado: 'approximate',
+    },
   },
   how: {
     title: 'How it works',
@@ -475,6 +712,46 @@ const en: GameCopy = {
     slotLabel: 'Slot {n} — open',
     cols: { pos: '#', club: 'Club', played: 'P', won: 'W', drawn: 'D', lost: 'L', gf: 'GF', ga: 'GA', gd: 'GD', points: 'PTS', form: 'Form' },
     legend: { promotion: 'Promotion', playoff: 'Playoff', relegation: 'Relegation' },
+  },
+  ranking: {
+    title: 'Global Clubs ranking',
+    subtitle:
+      "The best Clubs sides of all time, read live from EA's public source. Every cell is a measured number — nothing here is a sample.",
+    badge: 'Live data',
+    platformLabel: 'Generation',
+    platformGen5: 'PS5 · Series · PC',
+    platformGen4: 'PS4 · Xbox One',
+    cols: {
+      rank: '#',
+      club: 'Club',
+      division: 'Div',
+      played: 'P',
+      won: 'W',
+      drawn: 'D',
+      lost: 'L',
+      gf: 'GF',
+      ga: 'GA',
+      gd: 'GD',
+      cleanSheets: 'CS',
+      skill: 'Skill',
+    },
+    loading: "Reading the ranking from EA's source…",
+    error: "EA's source did not answer just now. The ranking returns when it does.",
+    note: "CS = clean sheets. Skill = the club's skill rating, EA's own sorting criterion.",
+    more: 'Show the top 100',
+    less: 'Show less',
+  },
+  divisions: {
+    title: 'The division ladder',
+    subtitle:
+      'The rules EA applies to every Clubs division: how many points promote you, how many hold your division and how many win the title. Read from the same endpoint the game queries.',
+    cols: {
+      division: 'Division',
+      promotion: 'Promoted at',
+      hold: 'Safe at',
+      title: 'Title at',
+    },
+    note: 'Points per divisional season. Below the "safe at" mark, the club goes down.',
   },
   showcase: {
     title: 'Winners 22 — virtual football',
@@ -548,6 +825,52 @@ const en: GameCopy = {
     notFound: "Club not found — EA's source may be down. Try again shortly.",
     loading: 'Reading club data…',
     backToSearch: '← Back to search',
+    divisionTitle: 'Division & season',
+    divisionNow: 'Current division',
+    divisionBest: 'Best division',
+    pointsToPromote: 'Promoted at',
+    pointsToHold: 'Safe at',
+    pointsToTitle: 'Title at',
+    reputation: 'Reputation',
+    winStreak: 'Win streak',
+    unbeaten: 'Unbeaten run',
+    playoffGames: 'Playoff games',
+    promotions: 'Promotions',
+    relegations: 'Relegations',
+    divisionUnknown: 'EA does not publish the current division on this endpoint — only the best ever reached.',
+    divisionZoneDrop: 'Relegated',
+    divisionZoneHold: 'Safe',
+    divisionZoneUp: 'Promoted',
+    calendarTitle: 'Match calendar',
+    calendarSubtitle:
+      'League, playoff and friendly on a single timeline, newest first. Open any match for the full sheet: scorers, assists, rating, saves and cards — player by player, both sides.',
+    calendarAll: 'All',
+    detail: 'Open match sheet',
+    hideDetail: 'Close match sheet',
+    dnfBy: '{club} quit',
+    todayLabel: 'Today',
+    yesterdayLabel: 'Yesterday',
+    tabSeason: 'Season',
+    tabCareer: 'Career',
+    careerNote: 'Career totals every season the player has had at this club.',
+    claimTitle: 'Which one is you?',
+    claimSubtitle:
+      'Pick your Pro from the squad to tie the gamertag to your FayAI account. That is how your individual stats start following you — no EA password, no install.',
+    claimButton: "That's me",
+    claiming: 'Linking…',
+    claimed: 'Player linked to your account',
+    claimLogin: 'Sign in to your FayAI account to claim your player',
+    claimPick: 'Select a player from the squad',
+    colWinRate: 'Win %',
+    colOverall: 'OVR',
+    colRed: 'RC',
+    colSaves: 'Saves',
+    minutesLabel: 'min',
+    idleLabel: 'idle',
+    idleLegend:
+      'Minutes in red: EA recorded the player idle for more than a third of their time on the pitch. Hover to see how much.',
+    matchPlayers: 'Match sheet',
+    platformLabel: 'Platform',
   },
 };
 

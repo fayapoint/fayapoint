@@ -104,24 +104,24 @@ export function TabelaElenco({ membros, copy }: { membros: ClubMemberStats[]; co
     }
   }
 
-  /** Cabeçalho clicável com a seta do sentido corrente. */
-  function Th({ col, label, largura, oculta }: { col: Coluna; label: string; largura: string; oculta?: string }) {
-    const ativa = ordem === col;
-    return (
-      <th className={`${largura} ${oculta ?? ""} px-1 py-0`}>
-        <button
-          type="button"
-          onClick={() => clicar(col)}
-          aria-sort={ativa ? (desc ? "descending" : "ascending") : "none"}
-          className="flex w-full items-center justify-center gap-1 px-1 py-3 text-[10px] font-extrabold uppercase tracking-widest transition-colors hover:text-white"
-          style={{ color: ativa ? LIMA : "rgba(255,255,255,.55)" }}
-        >
-          {label}
-          {ativa && (desc ? <ArrowDown size={11} /> : <ArrowUp size={11} />)}
-        </button>
-      </th>
-    );
-  }
+  /**
+   * O cabeçalho clicável vive FORA do componente (ver `Th`, no fim do arquivo).
+   * Declarado aqui dentro, ele era recriado a cada render e o React tratava
+   * cada versão como um componente novo — o `react-hooks/static-components`
+   * reprova, e com razão: qualquer estado que ele venha a ter se perderia.
+   */
+  const th = (col: Coluna, label: string, largura: string, oculta?: string) => (
+    <Th
+      key={col}
+      col={col}
+      label={label}
+      largura={largura}
+      oculta={oculta}
+      ativa={ordem === col}
+      desc={desc}
+      aoClicar={clicar}
+    />
+  );
 
   return (
     <div>
@@ -145,14 +145,14 @@ export function TabelaElenco({ membros, copy }: { membros: ClubMemberStats[]; co
                     {ordem === "name" && (desc ? <ArrowDown size={11} /> : <ArrowUp size={11} />)}
                   </button>
                 </th>
-                <Th col="gamesPlayed" label={c.squadCols.games} largura="w-16" />
-                <Th col="goals" label={c.squadCols.goals} largura="w-16" />
-                <Th col="assists" label={c.squadCols.assists} largura="w-16" />
-                <Th col="contribution" label={c.squadCols.contribution} largura="w-16" oculta="hidden lg:table-cell" />
-                <Th col="passSuccessRate" label={c.squadCols.passes} largura="w-[68px]" oculta="hidden lg:table-cell" />
-                <Th col="shotSuccessRate" label={c.squadCols.shots} largura="w-[68px]" oculta="hidden xl:table-cell" />
-                <Th col="manOfTheMatch" label={c.squadCols.motm} largura="w-16" />
-                <Th col="ratingAve" label={c.squadCols.rating} largura="w-[76px]" />
+                {th("gamesPlayed", c.squadCols.games, "w-16")}
+                {th("goals", c.squadCols.goals, "w-16")}
+                {th("assists", c.squadCols.assists, "w-16")}
+                {th("contribution", c.squadCols.contribution, "w-16", "hidden lg:table-cell")}
+                {th("passSuccessRate", c.squadCols.passes, "w-[68px]", "hidden lg:table-cell")}
+                {th("shotSuccessRate", c.squadCols.shots, "w-[68px]", "hidden xl:table-cell")}
+                {th("manOfTheMatch", c.squadCols.motm, "w-16")}
+                {th("ratingAve", c.squadCols.rating, "w-[76px]")}
               </tr>
             </thead>
             <tbody className="tabular-nums">
@@ -336,5 +336,48 @@ function Percentual({ v }: { v: number | null }) {
       </span>
       <span className="text-[11px] font-semibold text-white/70">{Math.round(v)}</span>
     </span>
+  );
+}
+
+/**
+ * Cabeçalho clicável com a seta do sentido corrente.
+ *
+ * Mora aqui fora, no escopo do módulo, e não dentro de `TabelaElenco`: um
+ * componente declarado dentro de outro nasce novo a cada render, o React perde
+ * a identidade dele e qualquer estado interno seria zerado sem aviso. O estado
+ * de ordenação continua sendo do pai — ele chega por prop.
+ */
+function Th({
+  col,
+  label,
+  largura,
+  oculta,
+  ativa,
+  desc,
+  aoClicar,
+}: {
+  col: Coluna;
+  label: string;
+  largura: string;
+  oculta?: string;
+  ativa: boolean;
+  desc: boolean;
+  aoClicar: (col: Coluna) => void;
+}) {
+  return (
+    <th
+      className={`${largura} ${oculta ?? ""} px-1 py-0`}
+      aria-sort={ativa ? (desc ? "descending" : "ascending") : "none"}
+    >
+      <button
+        type="button"
+        onClick={() => aoClicar(col)}
+        className="flex w-full items-center justify-center gap-1 px-1 py-3 text-[10px] font-extrabold uppercase tracking-widest transition-colors hover:text-white"
+        style={{ color: ativa ? LIMA : "rgba(255,255,255,.55)" }}
+      >
+        {label}
+        {ativa && (desc ? <ArrowDown size={11} /> : <ArrowUp size={11} />)}
+      </button>
+    </th>
   );
 }

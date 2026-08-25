@@ -6,6 +6,7 @@ import { BuscaClube } from "./BuscaClube";
 import { FormInteresse } from "./FormInteresse";
 import { CalendarioTemporada } from "./CalendarioTemporada";
 import { TabelaClassificacao } from "./TabelaClassificacao";
+import { TabelaRanking } from "./TabelaRanking";
 import { VideoAmbiente } from "./VideoAmbiente";
 import { LIMA, OURO, CIANO, VIOLETA, ROSA, LARANJA, FUNDO, bebas, superficie, TEXTO } from "@/lib/game/tema";
 
@@ -191,6 +192,29 @@ export function GameLanding({ copy, locale }: { copy: GameCopy; locale: string }
           <div className="mt-5">
             <BuscaClube copy={copy} />
           </div>
+        </div>
+      </section>
+
+      {/* ============================== RANKING AO VIVO ==============================
+          Vem logo depois da busca, e não no fim: quem acabou de procurar o
+          próprio clube quer, no mesmo fôlego, ver contra quem ele se compara.
+          É também a primeira tabela CHEIA da página — a da liga piloto, mais
+          abaixo, só ganha sentido de "prévia" depois que existe uma de verdade. */}
+      <section className="relative mx-auto mt-24 max-w-5xl">
+        <div
+          aria-hidden
+          className="fx-orb"
+          style={{
+            width: 320,
+            height: 320,
+            left: "6%",
+            top: -80,
+            background: `radial-gradient(circle, ${LIMA}26, transparent 65%)`,
+            animation: "fx-drift-a 15s ease-in-out infinite",
+          }}
+        />
+        <div className="relative">
+          <TabelaRanking copy={copy} />
         </div>
       </section>
 

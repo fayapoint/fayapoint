@@ -1,75 +1,134 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "@/i18n/navigation";
-import { Shield, BadgeCheck, ArrowLeft, Loader2, AlertTriangle, Crown, Award } from "lucide-react";
+import {
+  Shield,
+  BadgeCheck,
+  ArrowLeft,
+  Loader2,
+  AlertTriangle,
+  Gamepad2,
+  TrendingUp,
+  TrendingDown,
+  Flame,
+  UserCheck,
+  Users,
+} from "lucide-react";
 import type { GameCopy } from "@/lib/game/copy";
-import type { ClubMatch, ClubMemberStats, ClubOverallStats, MatchType } from "@/lib/game/ea-api";
+import type {
+  ClubMatch,
+  ClubMemberCareer,
+  ClubMemberStats,
+  ClubOverallStats,
+  ClubSearchResult,
+  DivisaoEA,
+  EaPlatform,
+} from "@/lib/game/ea-api";
 import { TabelaElenco } from "./TabelaElenco";
-import { LIMA, OURO, RUBRO, CINZA, CIANO, VIOLETA, bebas, corNota, corResultado, superficie, FUNDO } from "@/lib/game/tema";
+import { CalendarioPartidas } from "./CalendarioPartidas";
+import {
+  LIMA,
+  OURO,
+  RUBRO,
+  CINZA,
+  CIANO,
+  VIOLETA,
+  bebas,
+  corResultado,
+  superficie,
+  FUNDO,
+  corSetor,
+  setorDaPosicao,
+  corNota,
+} from "@/lib/game/tema";
 
 interface ClubePayload {
-  info: { clubId: string; name: string } | null;
+  info: ClubSearchResult | null;
   stats: ClubOverallStats | null;
   members: ClubMemberStats[];
+  career: ClubMemberCareer[];
+  divisoes: DivisaoEA[];
+  /** A linha do clube no índice da EA — a única fonte de divisão ATUAL. */
+  tabela: ClubSearchResult | null;
+  plataforma: EaPlatform;
   capturedAt: string;
 }
 
 /**
- * CENTRAL DO CLUBE — reconstruída em 23/08/2026.
+ * CENTRAL DO CLUBE — ampliada em 25/08/2026.
  *
- * É a página que prova a tese da seção: o dado do time do usuário entra na
- * plataforma sem senha e sem instalação. Por isso ela precisa PARECER um painel
- * de estatística de e-sports (a referência é PROCLUBS.IO/FUTBIN), não um
- * formulário com números soltos — que era o defeito da v1.
+ * A v1 (23/08) provava a tese: o dado do time entra sem senha. Ela mostrava
+ * campanha, elenco e as últimas 10 partidas de um tipo.
  *
- * O que mudou: cabeçalho com escudo e aproveitamento, faixa de campanha com
- * barra V/E/D proporcional, strip de forma das últimas partidas, elenco na
- * `TabelaElenco` (ordenável, com barras e mobile em cartão), e placar de
- * partida com destaque de craque em vez de uma linha de texto com emojis.
+ * Faltavam quatro coisas que a EA publica e a página não lia:
+ *  1. **Divisão atual e pontos da temporada** — os dois números que um time de
+ *     Clubs olha primeiro. Não estão em `overallStats`; só no índice de busca.
+ *  2. **A forma real das 10 últimas** (`lastMatch0..9`), que atravessa os tipos
+ *     de partida — a v1 derivava forma de 6 jogos de um tipo só.
+ *  3. **Carreira** de cada jogador, ao lado da temporada.
+ *  4. **O jogador**: qual daquelas gamertags é a pessoa que está olhando a tela.
+ *
+ * E o calendário de jogos, que virou componente próprio (`CalendarioPartidas`),
+ * com a súmula dos DOIS times por partida.
  */
-export function ClubeHub({ clubId, copy }: { clubId: string; copy: GameCopy }) {
+export function ClubeHub({
+  clubId,
+  copy,
+  locale,
+  plataforma: plataformaPedida,
+}: {
+  clubId: string;
+  copy: GameCopy;
+  locale: string;
+  plataforma?: EaPlatform;
+}) {
   const [dado, setDado] = useState<ClubePayload | null | "erro">(null);
   const [partidas, setPartidas] = useState<ClubMatch[] | null>(null);
-  const [tipo, setTipo] = useState<MatchType>("leagueMatch");
   const [vinculo, setVinculo] = useState<"idle" | "enviando" | "ok" | "login">("idle");
+  const [aba, setAba] = useState<"temporada" | "carreira">("temporada");
+
+  const qs = plataformaPedida ? `?plataforma=${plataformaPedida}` : "";
 
   useEffect(() => {
-    fetch(`/api/game/ea/clube/${clubId}`)
+    let vivo = true;
+    fetch(`/api/game/ea/clube/${clubId}${qs}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then(setDado)
-      .catch(() => setDado("erro"));
-  }, [clubId]);
+      .then((d) => vivo && setDado(d))
+      .catch(() => vivo && setDado("erro"));
+    return () => {
+      vivo = false;
+    };
+  }, [clubId, qs]);
 
+  // As partidas só podem ser pedidas depois que a plataforma real é conhecida:
+  // pedir na piscina errada devolve lista vazia sem erro nenhum.
+  const plataformaReal = dado && dado !== "erro" ? dado.plataforma : null;
   useEffect(() => {
+    if (!plataformaReal) return;
+    let vivo = true;
     setPartidas(null);
-    fetch(`/api/game/ea/clube/${clubId}/partidas?tipo=${tipo}`)
+    fetch(`/api/game/ea/clube/${clubId}/partidas?tipo=todas&plataforma=${plataformaReal}`)
       .then((r) => r.json())
-      .then((d) => setPartidas(Array.isArray(d.matches) ? d.matches : []))
-      .catch(() => setPartidas([]));
-  }, [clubId, tipo]);
+      .then((d) => vivo && setPartidas(Array.isArray(d.matches) ? d.matches : []))
+      .catch(() => vivo && setPartidas([]));
+    return () => {
+      vivo = false;
+    };
+  }, [clubId, plataformaReal]);
 
-  /** A forma recente sai das partidas carregadas, da mais nova para a mais velha. */
-  const forma = useMemo(() => {
-    if (!partidas) return [];
-    return partidas
-      .slice(0, 6)
-      .map((p) => p.clubs.find((c) => c.clubId === clubId)?.result)
-      .filter((r): r is "win" | "draw" | "loss" => Boolean(r));
-  }, [partidas, clubId]);
-
-  async function vincular() {
+  const vincular = useCallback(async () => {
     if (vinculo === "enviando") return;
     setVinculo("enviando");
     const res = await fetch("/api/game/clube/vincular", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ eaClubId: clubId }),
+      body: JSON.stringify({ eaClubId: clubId, plataforma: plataformaReal ?? "common-gen5" }),
     }).catch(() => null);
     if (res?.ok) setVinculo("ok");
     else if (res?.status === 401) setVinculo("login");
     else setVinculo("idle");
-  }
+  }, [clubId, plataformaReal, vinculo]);
 
   const c = copy.club;
 
@@ -105,6 +164,7 @@ export function ClubeHub({ clubId, copy }: { clubId: string; copy: GameCopy }) {
   /** Aproveitamento no critério brasileiro: pontos ganhos sobre pontos disputados. */
   const aproveitamento = s ? Math.round(((s.wins * 3 + s.ties) / (total * 3)) * 100) : 0;
   const saldo = s ? s.goals - s.goalsAgainst : 0;
+  const forma = s?.form ?? [];
 
   return (
     <div className="mx-auto max-w-6xl">
@@ -117,7 +177,10 @@ export function ClubeHub({ clubId, copy }: { clubId: string; copy: GameCopy }) {
       </Link>
 
       {/* ============================== CABEÇALHO ============================== */}
-      <header className="relative mt-4 overflow-hidden rounded-3xl border p-5 sm:p-7" style={superficie(LIMA, "forte")}>
+      <header
+        className="relative mt-4 overflow-hidden rounded-3xl border p-5 sm:p-7"
+        style={superficie(LIMA, "forte")}
+      >
         <div
           aria-hidden
           className="fx-orb"
@@ -150,26 +213,42 @@ export function ClubeHub({ clubId, copy }: { clubId: string; copy: GameCopy }) {
                 <BadgeCheck size={11} />
                 {c.sourceBadge}
               </span>
-              {forma.length > 0 && (
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/40">
-                    {c.form}
-                  </span>
-                  <span className="flex gap-1">
-                    {forma.map((r, i) => (
-                      <span
-                        key={i}
-                        className="flex h-5 w-5 items-center justify-center rounded-[5px] text-[10px] font-black"
-                        style={{ background: `${corResultado(r)}26`, color: corResultado(r) }}
-                        title={r}
-                      >
-                        {r === "win" ? c.wins : r === "loss" ? c.losses : c.draws}
-                      </span>
-                    ))}
-                  </span>
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-white/60"
+                style={{ borderColor: "rgba(255,255,255,.14)" }}
+              >
+                <Gamepad2 size={11} />
+                {dado.plataforma === "common-gen4"
+                  ? copy.search.platformGen4
+                  : copy.search.platformGen5}
+              </span>
+              {dado.info?.stadName && (
+                <span className="text-[11px] font-semibold text-white/45">
+                  {dado.info.stadName}
                 </span>
               )}
             </div>
+
+            {/* A forma REAL das 10 últimas, direto de `lastMatch0..9`. */}
+            {forma.length > 0 && (
+              <div className="mt-3 flex items-center gap-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-white/40">
+                  {c.form}
+                </span>
+                <span className="flex gap-1">
+                  {forma.map((r, i) => (
+                    <span
+                      key={i}
+                      className="flex h-5 w-5 items-center justify-center rounded-[5px] text-[10px] font-black"
+                      style={{ background: `${corResultado(r)}26`, color: corResultado(r) }}
+                      title={r}
+                    >
+                      {r === "win" ? c.wins : r === "loss" ? c.losses : c.draws}
+                    </span>
+                  ))}
+                </span>
+              </div>
+            )}
           </div>
 
           <div className="shrink-0">
@@ -245,11 +324,7 @@ export function ClubeHub({ clubId, copy }: { clubId: string; copy: GameCopy }) {
               ["SG", (saldo > 0 ? "+" : "") + saldo, saldo >= 0 ? LIMA : RUBRO],
               [c.skillRating, s.skillRating != null ? String(s.skillRating) : "—", CIANO],
               [c.record, `${aproveitamento}%`, VIOLETA],
-              [
-                c.squadCols.games,
-                String(s.gamesPlayed),
-                "rgba(255,255,255,.75)",
-              ],
+              [c.squadCols.games, String(s.gamesPlayed), "rgba(255,255,255,.75)"],
             ] as const
           ).map(([label, valor, cor]) => (
             <div key={label} className="rounded-2xl border p-4" style={superficie(LIMA)}>
@@ -264,30 +339,30 @@ export function ClubeHub({ clubId, copy }: { clubId: string; copy: GameCopy }) {
         </section>
       )}
 
-      {/* ============================== ELENCO ============================== */}
-      <section className="mt-12">
-        <h2 className="text-2xl sm:text-3xl" style={bebas}>
-          {c.squad.toUpperCase()}
-        </h2>
-        <div className="mt-4">
-          <TabelaElenco membros={dado.members} copy={copy} />
-        </div>
-      </section>
+      {/* ============================== DIVISÃO ============================== */}
+      {s && <PainelDivisao stats={s} tabela={dado.tabela} divisoes={dado.divisoes} copy={copy} />}
 
-      {/* ============================== PARTIDAS ============================== */}
+      {/* ============================== ELENCO ============================== */}
       <section className="mt-12">
         <div className="flex flex-wrap items-center gap-3">
           <h2 className="flex-1 text-2xl sm:text-3xl" style={bebas}>
-            {c.matches.toUpperCase()}
+            {c.squad.toUpperCase()}
           </h2>
-          <div className="flex flex-wrap gap-2">
-            {(Object.keys(c.matchTypes) as MatchType[]).map((t) => (
+          <div className="flex gap-2">
+            {(
+              [
+                ["temporada", c.tabSeason],
+                ["carreira", c.tabCareer],
+              ] as const
+            ).map(([valor, rotulo]) => (
               <button
-                key={t}
-                onClick={() => setTipo(t)}
+                key={valor}
+                type="button"
+                onClick={() => setAba(valor)}
+                aria-pressed={aba === valor}
                 className="rounded-full border px-4 py-1.5 text-sm font-semibold transition-colors"
                 style={
-                  tipo === t
+                  aba === valor
                     ? { background: LIMA, color: FUNDO, borderColor: LIMA }
                     : {
                         background: "rgba(255,255,255,.05)",
@@ -296,108 +371,410 @@ export function ClubeHub({ clubId, copy }: { clubId: string; copy: GameCopy }) {
                       }
                 }
               >
-                {c.matchTypes[t]}
+                {rotulo}
               </button>
             ))}
           </div>
         </div>
 
-        <div className="mt-5 grid gap-3">
-          {partidas === null && (
-            <div className="flex items-center justify-center gap-2 rounded-2xl border border-white/[0.08] py-10 text-sm text-white/50">
-              <Loader2 size={15} className="animate-spin" />
-              {c.loading}
-            </div>
+        <div className="mt-4">
+          {aba === "temporada" ? (
+            <TabelaElenco membros={dado.members} copy={copy} />
+          ) : (
+            <TabelaCarreira carreira={dado.career} copy={copy} />
           )}
-          {partidas?.length === 0 && (
-            <p className="rounded-2xl border border-dashed border-white/12 px-5 py-10 text-center text-sm text-white/55">
-              {c.matchesEmpty}
-            </p>
-          )}
-          {partidas?.map((p) => (
-            <CartaoPartida key={p.matchId} partida={p} clubId={clubId} copy={copy} />
-          ))}
         </div>
 
-        <p className="mt-4 text-[11.5px] leading-relaxed text-white/45">{c.sourceNote}</p>
+        {/* Reivindicação do jogador — o "então termos seu player". */}
+        <ReivindicarJogador
+          clubId={clubId}
+          plataforma={dado.plataforma}
+          membros={dado.members}
+          copy={copy}
+        />
       </section>
+
+      {/* ============================== CALENDÁRIO ============================== */}
+      <div className="mt-12">
+        <CalendarioPartidas partidas={partidas} clubId={clubId} copy={copy} locale={locale} />
+      </div>
     </div>
   );
 }
 
-/** Placar de uma partida: resultado, escaladores e o craque do jogo. */
-function CartaoPartida({
-  partida,
-  clubId,
+/**
+ * PAINEL DE DIVISÃO — o que um time de Clubs pergunta primeiro.
+ *
+ * Junta três fontes: a divisão atual e os pontos da temporada (índice de busca),
+ * a campanha histórica (`overallStats`) e as regras da divisão (`settings`).
+ * Com as três, a barra responde "faltam quantos pontos para subir" — que
+ * nenhuma delas responde sozinha.
+ */
+function PainelDivisao({
+  stats,
+  tabela,
+  divisoes,
   copy,
 }: {
-  partida: ClubMatch;
-  clubId: string;
+  stats: ClubOverallStats;
+  tabela: ClubSearchResult | null;
+  divisoes: DivisaoEA[];
   copy: GameCopy;
 }) {
-  const nos = partida.clubs.find((x) => x.clubId === clubId);
-  const eles = partida.clubs.find((x) => x.clubId !== clubId);
-  if (!nos || !eles) return null;
-
-  const cor = corResultado(nos.result);
   const c = copy.club;
-  /** O craque: o MOM declarado pela EA, ou a maior nota como suplente. */
-  const craque =
-    nos.players.find((j) => j.mom) ??
-    nos.players.slice().sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0))[0];
-  const artilheiros = nos.players.filter((j) => j.goals > 0).sort((a, b) => b.goals - a.goals);
+  const divAtual = tabela?.currentDivision ?? null;
+  const regra = divAtual ? divisoes.find((d) => d.divisionId === divAtual) ?? null : null;
 
   return (
-    <article className="overflow-hidden rounded-2xl border" style={superficie(cor)}>
-      {/* Faixa de resultado à esquerda + placar */}
-      <div className="flex items-stretch">
-        <span aria-hidden className="w-1 shrink-0" style={{ background: cor }} />
-        <div className="flex flex-1 items-center gap-3 px-4 py-3.5 sm:gap-5">
-          <p className="min-w-0 flex-1 truncate text-right text-sm font-bold sm:text-base">
-            {nos.name}
-          </p>
-          <p className="shrink-0 text-3xl leading-none tabular-nums" style={bebas}>
-            <span style={{ color: cor }}>{nos.goals}</span>
-            <span className="mx-1.5 text-white/25">×</span>
-            <span className="text-white/85">{eles.goals}</span>
-          </p>
-          <p className="min-w-0 flex-1 truncate text-sm font-bold text-white/75 sm:text-base">
-            {eles.name}
-          </p>
+    <section className="mt-10">
+      <h2 className="text-2xl sm:text-3xl" style={bebas}>
+        {c.divisionTitle.toUpperCase()}
+      </h2>
+
+      <div className="mt-4 grid gap-3 lg:grid-cols-[1.2fr_1fr]">
+        <div className="rounded-3xl border p-5" style={superficie(CIANO)}>
+          {/* `shrink-0` + `whitespace-nowrap` nos rótulos: sem eles, "MELHOR
+              DIVISÃO" em caixa alta com tracking largo transbordava por cima da
+              coluna vizinha e as duas legendas se fundiam numa só palavra. */}
+          <div className="flex flex-wrap items-end gap-x-8 gap-y-3">
+            <div className="shrink-0">
+              <p className="whitespace-nowrap text-[10px] font-extrabold uppercase tracking-widest text-white/45">
+                {c.divisionNow}
+              </p>
+              <p className="mt-0.5 text-4xl leading-none" style={{ ...bebas, color: CIANO }}>
+                {divAtual ?? "—"}
+              </p>
+            </div>
+            <div className="shrink-0">
+              <p className="whitespace-nowrap text-[10px] font-extrabold uppercase tracking-widest text-white/45">
+                {c.divisionBest}
+              </p>
+              <p className="mt-0.5 text-2xl leading-none" style={{ ...bebas, color: OURO }}>
+                {stats.bestDivision ?? "—"}
+              </p>
+            </div>
+          </div>
+
+          {/*
+            O que a divisão EXIGE — não onde o clube está nela.
+            A EA publica um campo `points` no índice, e ele é tentador: daria a
+            barra "faltam X para subir". Mas o número não fecha com nada
+            (106 pontos para 73V/15E, numa divisão que titula com 15), e não há
+            fonte que diga o que ele conta. Afirmar posição com ele seria
+            inventar. Então a régua mostra os três limiares da divisão atual, que
+            são fato publicado, e para aí.
+          */}
+          {regra ? (
+            /*
+              A régua das ZONAS da divisão — não um progresso. Cada faixa é uma
+              consequência real da temporada de divisão: abaixo de `fica com` o
+              clube cai, entre `fica` e `sobe` ele permanece, de `sobe` em diante
+              ele é promovido, e no topo está o título. Uma barra só de limiares,
+              sem essa leitura, seria enfeite; com ela, responde "o que cada
+              número significa para mim".
+            */
+            <div className="mt-6">
+              <div className="flex h-8 w-full overflow-hidden rounded-lg text-[9px] font-black uppercase tracking-wider">
+                {(
+                  [
+                    [c.divisionZoneDrop, regra.pointsToHoldDivision, RUBRO],
+                    [
+                      c.divisionZoneHold,
+                      regra.pointsForPromotion - regra.pointsToHoldDivision,
+                      CINZA,
+                    ],
+                    [c.divisionZoneUp, regra.pointsToTitle - regra.pointsForPromotion, LIMA],
+                  ] as const
+                ).map(([rotulo, largura, cor]) => (
+                  <span
+                    key={rotulo}
+                    className="flex items-center justify-center overflow-hidden whitespace-nowrap px-1"
+                    style={{
+                      width: `${(largura / regra.pointsToTitle) * 100}%`,
+                      background: `${cor}24`,
+                      color: cor,
+                      borderRight: `1px solid ${cor}66`,
+                    }}
+                  >
+                    {rotulo}
+                  </span>
+                ))}
+              </div>
+              {/* Os números que separam as faixas, alinhados às divisas. */}
+              <div className="relative mt-1 h-4">
+                {(
+                  [
+                    [regra.pointsToHoldDivision, CINZA, c.pointsToHold],
+                    [regra.pointsForPromotion, LIMA, c.pointsToPromote],
+                    [regra.pointsToTitle, OURO, c.pointsToTitle],
+                  ] as const
+                ).map(([v, cor, titulo]) => (
+                  <span
+                    key={titulo}
+                    className="absolute -translate-x-1/2 text-[11px] font-black tabular-nums"
+                    style={{ left: `${(v / regra.pointsToTitle) * 100}%`, color: cor }}
+                    title={`${titulo}: ${v}`}
+                  >
+                    {v}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-[11px] font-bold">
+                {(
+                  [
+                    [c.pointsToHold, regra.pointsToHoldDivision, CINZA],
+                    [c.pointsToPromote, regra.pointsForPromotion, LIMA],
+                    [c.pointsToTitle, regra.pointsToTitle, OURO],
+                  ] as const
+                ).map(([rotulo, v, cor]) => (
+                  <span key={rotulo} className="inline-flex items-center gap-1.5" style={{ color: cor }}>
+                    <span className="h-2 w-2 rounded-sm" style={{ background: cor }} />
+                    {rotulo} <span className="tabular-nums">{v}</span>
+                  </span>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <p className="mt-4 text-[12px] leading-relaxed text-white/45">{c.divisionUnknown}</p>
+          )}
+        </div>
+
+        {/* Os números de temporada que a campanha não mostra. */}
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-2">
+          {(
+            [
+              [c.promotions, stats.promotions, LIMA, TrendingUp],
+              [c.relegations, stats.relegations, RUBRO, TrendingDown],
+              [c.winStreak, stats.winStreak, OURO, Flame],
+              [c.unbeaten, stats.unbeatenStreak, CIANO, Flame],
+              [c.playoffGames, stats.gamesPlayedPlayoff, VIOLETA, Users],
+              [c.reputation, stats.reputationTier, "rgba(255,255,255,.75)", BadgeCheck],
+            ] as const
+          ).map(([label, v, cor, Icon]) => (
+            <div key={label} className="rounded-2xl border p-3.5" style={superficie(CIANO)}>
+              <p className="flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-widest text-white/45">
+                <Icon size={11} style={{ color: cor }} />
+                {label}
+              </p>
+              <p className="mt-1 text-xl leading-none tabular-nums" style={{ ...bebas, color: cor }}>
+                {v ?? "—"}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
+    </section>
+  );
+}
 
-      {/* Quem fez o jogo acontecer */}
-      {(artilheiros.length > 0 || craque) && (
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-white/[0.07] bg-white/[0.02] px-4 py-2.5">
-          {artilheiros.length > 0 && (
-            <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1 text-[11.5px]">
-              <Crown size={12} style={{ color: OURO }} />
-              {artilheiros.map((j) => (
-                <span key={j.name} className="font-semibold text-white/75">
-                  {j.name}
-                  {j.goals > 1 && <span style={{ color: OURO }}> ×{j.goals}</span>}
-                </span>
-              ))}
-            </span>
-          )}
-          {craque && (
-            <span className="ml-auto inline-flex items-center gap-1.5 text-[11.5px]">
-              <Award size={12} style={{ color: OURO }} />
-              <span className="text-white/45">{c.momBadge}</span>
-              <span className="font-bold text-white/85">{craque.name}</span>
-              {craque.rating != null && (
-                <span
-                  className="rounded px-1.5 py-0.5 text-[11px] font-black tabular-nums"
-                  style={{ color: corNota(craque.rating), background: `${corNota(craque.rating)}18` }}
+/** Carreira: o acumulado que atravessa temporadas, ao lado da temporada atual. */
+function TabelaCarreira({ carreira, copy }: { carreira: ClubMemberCareer[]; copy: GameCopy }) {
+  const c = copy.club;
+  if (carreira.length === 0) {
+    return (
+      <p className="rounded-2xl border border-dashed border-white/12 px-5 py-10 text-center text-sm text-white/55">
+        {c.squadEmpty}
+      </p>
+    );
+  }
+  const ordenado = carreira
+    .slice()
+    .sort((a, b) => b.goals + b.assists - (a.goals + a.assists) || b.gamesPlayed - a.gamesPlayed);
+  const max = Math.max(1, ...ordenado.map((m) => m.goals + m.assists));
+
+  return (
+    <div className="overflow-hidden rounded-3xl border" style={superficie(VIOLETA)}>
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[520px] text-sm">
+          <thead>
+            <tr className="border-b border-white/10 bg-white/[0.04] text-[10px] font-extrabold uppercase tracking-widest text-white/55">
+              <th className="py-3 pl-4 pr-2 text-left">{c.squadCols.player}</th>
+              <th className="w-14 px-1 py-3 text-center">{c.squadCols.games}</th>
+              <th className="w-12 px-1 py-3 text-center">{c.squadCols.goals}</th>
+              <th className="w-12 px-1 py-3 text-center">{c.squadCols.assists}</th>
+              <th className="w-14 px-1 py-3 text-center">{c.squadCols.motm}</th>
+              <th className="w-14 px-1 py-3 text-center">{c.squadCols.rating}</th>
+              <th className="px-2 py-3 pr-4 text-left">{c.squadCols.contribution}</th>
+            </tr>
+          </thead>
+          <tbody className="tabular-nums">
+            {ordenado.map((m) => {
+              const setor = setorDaPosicao(m.favoritePosition);
+              const ga = m.goals + m.assists;
+              return (
+                <tr key={m.name} className="border-t border-white/[0.06]">
+                  <td className="py-2.5 pl-4 pr-2">
+                    <span className="flex items-center gap-2">
+                      <span
+                        className="inline-block w-8 shrink-0 rounded px-1 text-center text-[9px] font-black"
+                        style={{ background: `${corSetor(setor)}1c`, color: corSetor(setor) }}
+                      >
+                        {setor}
+                      </span>
+                      <span className="truncate font-semibold text-white/90">{m.name}</span>
+                    </span>
+                  </td>
+                  <td className="px-1 py-2.5 text-center text-white/70">{m.gamesPlayed}</td>
+                  <td className="px-1 py-2.5 text-center font-bold" style={{ color: OURO }}>
+                    {m.goals}
+                  </td>
+                  <td className="px-1 py-2.5 text-center" style={{ color: LIMA }}>
+                    {m.assists}
+                  </td>
+                  <td className="px-1 py-2.5 text-center text-white/70">{m.manOfTheMatch}</td>
+                  <td className="px-1 py-2.5 text-center">
+                    <span
+                      className="inline-block rounded px-1.5 py-0.5 text-[12px] font-black"
+                      style={{ color: corNota(m.ratingAve), background: `${corNota(m.ratingAve)}16` }}
+                    >
+                      {m.ratingAve != null ? m.ratingAve.toFixed(1) : "—"}
+                    </span>
+                  </td>
+                  <td className="py-2.5 pl-2 pr-4">
+                    <span className="flex items-center gap-2">
+                      <span aria-hidden className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/[0.06]">
+                        <span
+                          className="block h-full rounded-full"
+                          style={{ width: `${(ga / max) * 100}%`, background: VIOLETA }}
+                        />
+                      </span>
+                      <span className="w-8 text-right text-[12px] font-bold text-white/75">{ga}</span>
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p className="border-t border-white/10 bg-white/[0.02] px-4 py-3 text-[11px] text-white/45">
+        {c.careerNote}
+      </p>
+    </div>
+  );
+}
+
+/**
+ * "Qual desses é você?" — liga a gamertag do elenco à conta FayAI.
+ *
+ * A lista vem do elenco que a EA publica, então não existe campo de texto livre
+ * onde alguém digite um nome inventado. Não é prova de posse (a Fase 1 traz o
+ * código de verificação), mas já é o suficiente para a estatística individual
+ * começar a seguir a pessoa — que é o que faltava para a plataforma conhecer
+ * JOGADORES, e não só clubes.
+ */
+function ReivindicarJogador({
+  clubId,
+  plataforma,
+  membros,
+  copy,
+}: {
+  clubId: string;
+  plataforma: EaPlatform;
+  membros: ClubMemberStats[];
+  copy: GameCopy;
+}) {
+  const c = copy.club;
+  const [escolhido, setEscolhido] = useState<string | null>(null);
+  const [estado, setEstado] = useState<"idle" | "enviando" | "ok" | "login" | "erro">("idle");
+
+  if (membros.length === 0) return null;
+
+  async function reivindicar() {
+    if (!escolhido || estado === "enviando") return;
+    setEstado("enviando");
+    const res = await fetch("/api/game/jogador/vincular", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ eaClubId: clubId, gamertag: escolhido, plataforma }),
+    }).catch(() => null);
+    if (res?.ok) setEstado("ok");
+    else if (res?.status === 401) setEstado("login");
+    else setEstado("erro");
+  }
+
+  return (
+    <div className="mt-6 rounded-3xl border p-5 sm:p-6" style={superficie(OURO)}>
+      <h3 className="flex items-center gap-2 text-xl sm:text-2xl" style={bebas}>
+        <UserCheck size={18} style={{ color: OURO }} />
+        {c.claimTitle.toUpperCase()}
+      </h3>
+      <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/60">{c.claimSubtitle}</p>
+
+      {estado === "ok" ? (
+        <p
+          className="mt-4 inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-bold"
+          style={{ borderColor: `${LIMA}55`, color: LIMA, background: `${LIMA}12` }}
+        >
+          <BadgeCheck size={15} />
+          {c.claimed} — {escolhido}
+        </p>
+      ) : (
+        <>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {membros.map((m) => {
+              const ativo = escolhido === m.name;
+              const setor = setorDaPosicao(m.favoritePosition);
+              return (
+                <button
+                  key={m.name}
+                  type="button"
+                  onClick={() => setEscolhido(m.name)}
+                  aria-pressed={ativo}
+                  className="inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-left transition-transform hover:-translate-y-0.5"
+                  style={
+                    ativo
+                      ? { borderColor: OURO, background: `${OURO}18` }
+                      : { borderColor: "rgba(255,255,255,.12)", background: "rgba(255,255,255,.04)" }
+                  }
                 >
-                  {craque.rating.toFixed(1)}
-                </span>
-              )}
-            </span>
-          )}
-        </div>
+                  <span
+                    className="inline-block w-8 shrink-0 rounded px-1 text-center text-[9px] font-black"
+                    style={{ background: `${corSetor(setor)}1c`, color: corSetor(setor) }}
+                  >
+                    {setor}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block truncate text-[13px] font-bold text-white/90">
+                      {m.name}
+                    </span>
+                    <span className="block text-[10px] font-semibold text-white/45">
+                      {m.proName ?? "—"}
+                      {m.proOverall != null && (
+                        <span style={{ color: OURO }}> · {c.colOverall} {m.proOverall}</span>
+                      )}
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={reivindicar}
+              disabled={!escolhido || estado === "enviando"}
+              className="inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-bold transition-transform disabled:cursor-not-allowed disabled:opacity-40 enabled:hover:-translate-y-0.5"
+              style={{ background: OURO, color: FUNDO }}
+            >
+              {estado === "enviando" && <Loader2 size={14} className="animate-spin" />}
+              {estado === "enviando" ? c.claiming : c.claimButton}
+            </button>
+            {!escolhido && <span className="text-[12px] text-white/45">{c.claimPick}</span>}
+            {estado === "login" && (
+              <Link href="/login" className="text-[12px] font-bold" style={{ color: OURO }}>
+                {c.claimLogin}
+              </Link>
+            )}
+            {estado === "erro" && (
+              <span className="text-[12px] font-semibold" style={{ color: RUBRO }}>
+                {copy.join.error}
+              </span>
+            )}
+          </div>
+        </>
       )}
-    </article>
+    </div>
   );
 }

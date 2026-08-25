@@ -3,9 +3,12 @@ import { ClubeHub } from "@/components/game/ClubeHub";
 import { generatePageMetadata } from "@/lib/metadata";
 import { getGameCopy } from "@/lib/game/copy";
 import { FUNDO } from "@/lib/game/tema";
+import type { EaPlatform } from "@/lib/game/ea-api";
 
 interface Props {
   params: Promise<{ locale: string; clubId: string }>;
+  /** `?p=common-gen4` vem da busca, que já sabe em que piscina achou o clube. */
+  searchParams: Promise<{ p?: string }>;
 }
 
 /**
@@ -27,14 +30,25 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   });
 }
 
-export default async function ClubePage({ params }: Props) {
+export default async function ClubePage({ params, searchParams }: Props) {
   const { locale, clubId } = await params;
+  const { p } = await searchParams;
+  // Só as duas piscinas da EA passam; qualquer outra coisa vira descoberta
+  // automática no servidor (tenta as duas), que é o comportamento seguro.
+  const plataforma: EaPlatform | undefined =
+    p === "common-gen4" || p === "common-gen5" ? p : undefined;
+
   return (
     <main
       className="min-h-dvh overflow-x-clip px-4 pb-16 pt-24 sm:px-8 sm:pt-28"
       style={{ background: FUNDO, color: "#f3f1ff" }}
     >
-      <ClubeHub clubId={clubId} copy={getGameCopy(locale)} />
+      <ClubeHub
+        clubId={clubId}
+        copy={getGameCopy(locale)}
+        locale={locale}
+        plataforma={plataforma}
+      />
     </main>
   );
 }
