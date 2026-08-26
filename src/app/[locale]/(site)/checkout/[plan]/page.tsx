@@ -28,6 +28,8 @@ import {
   ArrowRight,
   Timer,
   BadgeCheck,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import Image from "next/image";
 
@@ -272,6 +274,9 @@ export default function CheckoutPage() {
   const [email, setEmail] = useState("");
   const [cpfCnpj, setCpfCnpj] = useState("");
   const [phone, setPhone] = useState("");
+  /** Senha escolhida por quem compra sem ter conta. Ver `criarContaDeCompra`. */
+  const [guestPassword, setGuestPassword] = useState("");
+  const [mostrarSenha, setMostrarSenha] = useState(false);
 
   // Credit card
   const [cardNumber, setCardNumber] = useState("");
@@ -434,7 +439,7 @@ export default function CheckoutPage() {
       if (paid) {
         toast.success(T("Pagamento confirmado!"));
         clearCart();
-        router.push(`/pt-BR/checkout/success?order=${paymentResult.orderNumber}`);
+        router.push(`/${locale}/checkout/success?order=${paymentResult.orderNumber}`);
       }
     } catch (e) { console.error("Error checking status:", e); }
     finally { setCheckingStatus(false); }
@@ -462,7 +467,45 @@ export default function CheckoutPage() {
     setLoading(true);
     try {
       const token = getClientBearerToken();
-      if (!isLoggedIn && !token) { toast.error(T("Faça login para continuar.")); router.push(`/${locale}/login`); return; }
+
+      /**
+       * Comprar sem ter conta.
+       *
+       * Antes, quem chegasse aqui deslogado levava "Faça login para continuar"
+       * e era mandado embora para o /login — perdendo o carrinho, a intenção e,
+       * quase sempre, a venda. Agora a conta nasce junto com a compra, num
+       * passo só: o comprador já digitou nome e e-mail acima, falta escolher a
+       * senha.
+       *
+       * A conta é criada ANTES de cobrar. Se falhar, ninguém foi cobrado; se o
+       * e-mail já pertence a alguém, o /api/auth/register recusa (é ele quem
+       * guarda a regra de posse provada do endereço) e mandamos a pessoa fazer
+       * login, sem tocar na conta alheia.
+       */
+      if (!isLoggedIn && !token) {
+        if (!guestPassword || guestPassword.length < 8) {
+          toast.error(T("Escolha uma senha de pelo menos 8 caracteres para criar sua conta."));
+          setLoading(false);
+          return;
+        }
+        const criar = await fetch("/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ name, email, password: guestPassword, source: "checkout" }),
+        });
+        const criado = await criar.json().catch(() => ({}));
+        if (!criar.ok) {
+          const jaExiste = /já está cadastrado|already registered/i.test(String(criado?.error || ""));
+          toast.error(jaExiste
+            ? T("Já existe uma conta com esse e-mail. Entre para finalizar a compra.")
+            : (criado?.error || T("Não foi possível criar sua conta.")));
+          if (jaExiste) router.push(`/${locale}/login?redirect=${encodeURIComponent(window.location.pathname)}`);
+          setLoading(false);
+          return;
+        }
+        toast.success(T("Conta criada! Seguindo para o pagamento."));
+      }
 
       // Send identifiers and the displayed price snapshot. The server resolves
       // the actual name, availability and charge amount from its own catalog.
@@ -554,7 +597,7 @@ export default function CheckoutPage() {
       if (data.isPaid) {
         toast.success(T("Pagamento aprovado!"));
         clearCart();
-        router.push(`/pt-BR/checkout/success?order=${data.orderNumber}`);
+        router.push(`/${locale}/checkout/success?order=${data.orderNumber}`);
       } else {
         toast.success(T("Cobrança criada! Complete o pagamento."));
       }
@@ -770,24 +813,69 @@ export default function CheckoutPage() {
                   {T("Seus Dados")}
                 </h3>
                 <p className="text-sm text-muted-foreground mb-5">{T("Informações protegidas e não compartilhadas.")}</p>
+                {/* `autoComplete` e `inputMode` nao sao enfeite: sem eles o
+                    navegador e o gerenciador de senhas nao preenchem nada, e no
+                    celular o CPF e o telefone abrem o teclado de LETRAS. Era
+                    assim em todos os campos ate 26/08/2026. */}
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className={labelClass}>{T("Nome completo *")}</label>
-                    <input className={inputClass} placeholder={T("Seu nome")} value={name} onChange={(e) => setName(e.target.value)} disabled={isLoggedIn} />
+                    <label className={labelClass} htmlFor="checkout-nome">{T("Nome completo *")}</label>
+                    <input id="checkout-nome" name="name" autoComplete="name" required className={inputClass} placeholder={T("Seu nome")} value={name} onChange={(e) => setName(e.target.value)} disabled={isLoggedIn} />
                   </div>
                   <div>
-                    <label className={labelClass}>{T("Email *")}</label>
-                    <input className={inputClass} placeholder={T("email@exemplo.com")} value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoggedIn} />
+                    <label className={labelClass} htmlFor="checkout-email">{T("Email *")}</label>
+                    <input id="checkout-email" name="email" type="email" autoComplete="email" inputMode="email" required className={inputClass} placeholder={T("email@exemplo.com")} value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoggedIn} />
                   </div>
                   <div>
-                    <label className={labelClass}>{isFreeCourseCheckout ? T("CPF ou CNPJ") : T("CPF ou CNPJ *")}</label>
-                    <input className={inputClass} placeholder={isFreeCourseCheckout ? T("Opcional") : "000.000.000-00"} value={cpfCnpj} onChange={(e) => setCpfCnpj(formatCpfCnpj(e.target.value))} maxLength={18} />
+                    <label className={labelClass} htmlFor="checkout-cpf">{isFreeCourseCheckout ? T("CPF ou CNPJ") : T("CPF ou CNPJ *")}</label>
+                    <input id="checkout-cpf" name="cpf" inputMode="numeric" autoComplete="off" required={!isFreeCourseCheckout} className={inputClass} placeholder={isFreeCourseCheckout ? T("Opcional") : "000.000.000-00"} value={cpfCnpj} onChange={(e) => setCpfCnpj(formatCpfCnpj(e.target.value))} maxLength={18} />
                   </div>
                   <div>
-                    <label className={labelClass}>{T("WhatsApp")}</label>
-                    <input className={inputClass} placeholder="(11) 99999-9999" value={phone} onChange={(e) => setPhone(formatPhone(e.target.value))} maxLength={15} />
+                    <label className={labelClass} htmlFor="checkout-tel">{T("WhatsApp")}</label>
+                    <input id="checkout-tel" name="tel" type="tel" inputMode="tel" autoComplete="tel" className={inputClass} placeholder="(11) 99999-9999" value={phone} onChange={(e) => setPhone(formatPhone(e.target.value))} maxLength={15} />
                   </div>
                 </div>
+
+                {/* Comprar sem ter conta: a senha entra aqui e a conta nasce
+                    junto com a compra, em vez de mandar a pessoa embora para o
+                    /login e perder o carrinho no caminho. */}
+                {!isLoggedIn && (
+                  <div className="mt-4 rounded-xl border border-indigo-100 bg-indigo-50/60 p-4">
+                    <label className={labelClass} htmlFor="checkout-senha">{T("Crie uma senha *")}</label>
+                    <div className="relative">
+                      <input
+                        id="checkout-senha"
+                        name="new-password"
+                        type={mostrarSenha ? "text" : "password"}
+                        autoComplete="new-password"
+                        minLength={8}
+                        required
+                        className={inputClass}
+                        placeholder={T("Pelo menos 8 caracteres")}
+                        value={guestPassword}
+                        onChange={(e) => setGuestPassword(e.target.value)}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setMostrarSenha((v) => !v)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-gray-700"
+                        aria-label={mostrarSenha ? T("Ocultar senha") : T("Mostrar senha")}
+                      >
+                        {mostrarSenha ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-2">
+                      {T("Sua conta é criada junto com a compra — e o acesso ao curso já fica nela.")}{" "}
+                      <button
+                        type="button"
+                        onClick={() => router.push(`/${locale}/login?redirect=${encodeURIComponent(typeof window !== "undefined" ? window.location.pathname : "")}`)}
+                        className="text-indigo-600 font-medium underline underline-offset-2"
+                      >
+                        {T("Já tenho conta")}
+                      </button>
+                    </p>
+                  </div>
+                )}
                 {isLoggedIn && (
                   <p className="text-xs text-emerald-600 flex items-center gap-1.5 mt-4 font-medium"><BadgeCheck className="w-4 h-4" />  {T("Logado como")} {T(user?.name)}</p>
                 )}
