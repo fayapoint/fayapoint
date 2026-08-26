@@ -1643,7 +1643,7 @@
       "students": "Alunos",
       "courses": "Cursos",
       "rating": "Avaliação Média",
-      "lessons": "Aulas"
+      "lessons": "Capítulos"
     },
     "filters": {
       "categoryPlaceholder": "Categoria",
@@ -3675,8 +3675,8 @@
       "experience": "anos exp."
     },
     "stats": {
-      "videoLessons": "Aulas em Vídeo",
-      "ofContent": "De Conteúdo",
+      "videoLessons": "Capítulos",
+      "ofContent": "De Leitura",
       "downloads": "Recursos Baixáveis",
       "certificate": "Certificado",
       "ofCompletion": "De Conclusão",
@@ -3704,8 +3704,8 @@
       "buyNow": "Comprar Agora",
       "addToCart": "Adicionar ao Carrinho",
       "courseIncludes": "Este curso inclui:",
-      "lessons": "{count} aulas em vídeo",
-      "content": "{duration} de conteúdo",
+      "lessons": "{count} capítulos escritos",
+      "content": "{duration} de leitura",
       "lifetimeAccess": "Acesso vitalício",
       "completionCertificate": "Certificado de conclusão",
       "freeUpdates": "Atualizações gratuitas",
@@ -3764,8 +3764,8 @@
     "curriculum": {
       "title": "Conteúdo do <highlight>Curso</highlight>",
       "subtitle": "Um currículo abrangente projetado para resultados reais",
-      "lessons": "aulas",
-      "modules": "{count} Módulos • {lessons} Aulas",
+      "lessons": "capítulos",
+      "modules": "{count} Módulos • {lessons} Capítulos",
       "stepByStep": "Um sistema passo a passo para garantir seu sucesso"
     },
     "bonuses": {

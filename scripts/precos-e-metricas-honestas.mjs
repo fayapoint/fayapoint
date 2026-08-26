@@ -20,6 +20,26 @@
  * R$ 97/mês, Expert R$ 167/mês. O avulso é vitalício, então tem de ficar abaixo
  * de um mês de assinatura para a conta fechar dos dois lados.
  *
+ * ⚠️⚠️ NÃO RODE COM `--gravar` SEM LER ISTO (26/08/2026, no mesmo dia)
+ * ─────────────────────────────────────────────────────────────────────────────
+ *
+ * A faixa abaixo lê `metrics.lessons`, e **o campo estava inflado** — em 18 dos
+ * 22 cursos, e justamente nos MENORES. `openclaw` dizia 180 aulas e tem 16
+ * capítulos; `make-integracao`, 150 para 15. A escada saiu invertida:
+ *
+ *   perplexity ......... 305k caracteres, 31 capítulos ... R$ 29
+ *   make-integracao .... 145k caracteres, 15 capítulos ... R$ 79
+ *
+ * `aulas-e-tempo-honestos.mjs` já corrigiu o campo (soma do catálogo: 1.525 →
+ * 517). Com os números certos, nenhum curso passa de 31 capítulos: a faixa de
+ * R$ 79 fica VAZIA e todo o catálogo desaba para R$ 29 — o que não é decisão
+ * deste script.
+ *
+ * Antes de rodar de novo, a escada precisa de uma unidade nova. A candidata
+ * medida é o tamanho do texto (caracteres), que é o que o aluno recebe; a
+ * tabela está no handoff de 26/08. Rodar como está hoje é dar 63% de desconto
+ * em seis cursos sem querer.
+ *
  * Uso:
  *   node scripts/precos-e-metricas-honestas.mjs           (simula, não grava)
  *   node scripts/precos-e-metricas-honestas.mjs --gravar  (grava, com backup)

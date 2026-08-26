@@ -17,6 +17,7 @@ interface HomepageStats {
   totalCertificates: number;
   totalCourses: number;
   totalChapters: number;
+  totalTools: number;
 }
 
 interface MonthlyOffer {
@@ -62,6 +63,14 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
 }
 
 // ─── Service Cards Data ─────────────────────────────────────────
+/**
+ * Uma ficha por ferramenta. `allCourses` tem 19 cursos e 11 ferramentas
+ * distintas — sem isto, o mesmo "ChatGPT" passava quatro vezes por volta.
+ */
+const ferramentasDosCursos = allCourses.filter(
+  (c, i, todos) => todos.findIndex((o) => o.tool === c.tool) === i,
+);
+
 const services = [
   {
     icon: Code, title: "Construção de Sites",
@@ -105,7 +114,7 @@ export function NewHomepage() {
     fetch("/api/public/homepage-stats")
       .then((r) => r.json())
       .then(setStats)
-      .catch(() => setStats({ totalUsers: 0, totalCertificates: 0, totalCourses: allCourses.length, totalChapters: 0 }));
+      .catch(() => setStats({ totalUsers: 0, totalCertificates: 0, totalCourses: allCourses.length, totalChapters: 0, totalTools: 0 }));
   }, []);
 
   // Fetch monthly offer
@@ -207,10 +216,16 @@ export function NewHomepage() {
             transition={{ delay: 0.6 }}
             className="mt-6 text-lg md:text-xl text-slate-400 max-w-xl mx-auto leading-relaxed"
           >
+            {/* ⚠️ Número medido ou número nenhum.
+                Até 26/08/2026 esta linha dizia "256 capítulos" quando a busca
+                ainda não tinha voltado, "2.035" quando voltava (soma de um
+                arquivo escrito à mão) e "40+ ferramentas" sempre — o diretório
+                tem 15. Nenhum dos três vinha de contagem. Enquanto o número não
+                chega, a frase espera por ele. */}
             {stats?.totalCourses || allCourses.length}  {T("cursos práticos.")}{" "}
-            {stats?.totalChapters || "256"}  {T("capítulos.")}{" "}
-            
-            {T("40+ ferramentas de IA. Um curso grátis todo mês.")}
+            {stats?.totalChapters ? <>{stats.totalChapters}  {T("capítulos.")}{" "}</> : null}
+            {stats?.totalTools ? <>{stats.totalTools}  {T("ferramentas de IA.")}{" "}</> : null}
+            {T("Um curso grátis todo mês.")}
           </motion.p>
 
           {/* CTA Buttons */}
@@ -492,11 +507,17 @@ export function NewHomepage() {
       <section className="py-16 overflow-hidden">
         <div className="text-center mb-10">
           <p className="text-sm font-semibold uppercase tracking-widest text-amber-400 mb-3">{T("Ferramentas")}</p>
-          <h2 className="text-3xl md:text-4xl font-bold">{T("40+ ferramentas de IA")}</h2>
+          <h2 className="text-3xl md:text-4xl font-bold">
+            {stats?.totalTools ? `${stats.totalTools} ` : ""}
+            {T("ferramentas de IA")}
+          </h2>
         </div>
         <div className="relative">
           <div className="flex gap-4 animate-[marquee_30s_linear_infinite]">
-            {[...allCourses, ...allCourses].map((c, i) => (
+            {/* Sem repetir nome: eram 19 fichas para 11 ferramentas distintas,
+                e "ChatGPT" passava quatro vezes na mesma volta. A duplicação da
+                lista continua — ela é que faz o laço parecer infinito. */}
+            {[...ferramentasDosCursos, ...ferramentasDosCursos].map((c, i) => (
               <div
                 key={`${c.slug}-${i}`}
                 className="flex-shrink-0 px-5 py-3 rounded-xl border border-white/[0.06] bg-white/[0.02] text-sm text-slate-300 whitespace-nowrap"

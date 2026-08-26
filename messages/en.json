@@ -1634,7 +1634,7 @@
       "students": "Students",
       "courses": "Courses",
       "rating": "Average Rating",
-      "lessons": "Lessons"
+      "lessons": "Chapters"
     },
     "filters": {
       "categoryPlaceholder": "Category",
@@ -3585,8 +3585,8 @@
       "experience": "years exp."
     },
     "stats": {
-      "videoLessons": "Video Lessons",
-      "ofContent": "Of Content",
+      "videoLessons": "Chapters",
+      "ofContent": "Of Reading",
       "downloads": "Downloadable Resources",
       "certificate": "Certificate",
       "ofCompletion": "Of Completion",
@@ -3614,8 +3614,8 @@
       "buyNow": "Buy Now",
       "addToCart": "Add to Cart",
       "courseIncludes": "This course includes:",
-      "lessons": "{count} video lessons",
-      "content": "{duration} of content",
+      "lessons": "{count} written chapters",
+      "content": "{duration} of reading",
       "lifetimeAccess": "Lifetime access",
       "completionCertificate": "Completion certificate",
       "freeUpdates": "Free updates",
@@ -3674,8 +3674,8 @@
     "curriculum": {
       "title": "Course <highlight>Content</highlight>",
       "subtitle": "A comprehensive curriculum designed for real results",
-      "lessons": "lessons",
-      "modules": "{count} Modules • {lessons} Lessons",
+      "lessons": "chapters",
+      "modules": "{count} Modules • {lessons} Chapters",
       "stepByStep": "A step-by-step system to ensure your success"
     },
     "bonuses": {

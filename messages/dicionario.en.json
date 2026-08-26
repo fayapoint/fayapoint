@@ -7739,5 +7739,10 @@
   "O que nunca vai ser exposto": "What will never be exposed",
   "Login, checkout, painel do aluno, administração e o texto das aulas ficam fora da API pública — hoje e depois. Cada um deles é ou a porta de casa, ou o produto. Nenhum dos dois se documenta em página aberta.": "Login, checkout, the student portal, administration and the lesson text stay outside the public API — now and later. Each one is either the front door or the product itself. Neither belongs in open documentation.",
   "Precisa de uma integração agora?": "Need an integration now?",
-  "Se você tem um caso de uso concreto, ele muda a ordem das três frentes acima. Conte qual é — é assim que decidimos o que construir primeiro.": "If you have a concrete use case, it changes the order of the three fronts above. Tell us what it is — that is how we decide what to build first."
+  "Se você tem um caso de uso concreto, ele muda a ordem das três frentes acima. Conte qual é — é assim que decidimos o que construir primeiro.": "If you have a concrete use case, it changes the order of the three fronts above. Tell us what it is — that is how we decide what to build first.",
+  "ferramentas de IA": "AI tools",
+  "ferramentas de IA.": "AI tools.",
+  "Um curso grátis todo mês.": "A free course every month.",
+  "Chapters": "Chapters",
+  "De Leitura": "Of Reading"
 }

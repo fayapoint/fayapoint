@@ -218,7 +218,10 @@ export default function CoursesCatalog({
             </div>
             <div>
               <p className="text-3xl font-bold text-amber-400">
-                {loading ? "..." : `${totalLessons}+`}
+                {/* Sem "+": o número é a contagem exata dos capítulos escritos,
+                    medida no conteúdo. O "+" existia quando ele era um palpite
+                    redondo — a soma dizia 1.525 e o catálogo tinha 517. */}
+                {loading ? "..." : totalLessons}
               </p>
               <p className="text-muted-foreground">{T(statsLabels.lessons)}</p>
             </div>
