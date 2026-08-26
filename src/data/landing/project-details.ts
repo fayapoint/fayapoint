@@ -13,12 +13,12 @@ export const PROJECT_DETAILS: Record<string, ProjectDetail> = {
   cursos: {
     lead: "Aprender IA não é assistir aula — é fazer, errar, repetir e sair com prova de que você sabe.",
     story: [
-      "Os 18 cursos da FayAI cobrem o arsenal completo da era da IA: ChatGPT, Claude, Gemini, Midjourney, Leonardo, n8n, Make, agentes autônomos, engenharia de prompt e muito mais. Tudo 100% em português, atualizado constantemente — porque nesse mundo, conteúdo de seis meses atrás já é história antiga.",
+      "Os 22 cursos da FayAI cobrem o arsenal completo da era da IA: ChatGPT, Claude, Gemini, Midjourney, Leonardo, n8n, Make, agentes autônomos, engenharia de prompt e muito mais. Tudo 100% em português, atualizado constantemente — porque nesse mundo, conteúdo de seis meses atrás já é história antiga.",
       "Cada curso termina numa certificação de verdade: quiz avaliativo com nota mínima de 70%, até 3 tentativas, e um código de verificação público que qualquer empregador pode conferir online. Não é um PDF decorativo — é um certificado que aguenta pergunta de RH.",
       "E o melhor: você começa de graça. Todo mês um curso completo fica aberto, sem cartão de crédito, sem pegadinha.",
     ],
     features: [
-      { title: "18 cursos completos", desc: "Das ferramentas mais famosas às técnicas avançadas de agentes" },
+      { title: "22 cursos completos", desc: "Das ferramentas mais famosas às técnicas avançadas de agentes" },
       { title: "Certificação verificável", desc: "Quiz com 70% de nota mínima e código público de verificação" },
       { title: "100% em português", desc: "Feito para o Brasil, com exemplos da vida real brasileira" },
       { title: "Curso grátis todo mês", desc: "Sem cartão, sem compromisso — entre e comece agora" },

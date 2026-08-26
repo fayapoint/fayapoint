@@ -35,7 +35,7 @@
       "freeLabel": "FREE",
       "feature1": {
         "title": "Complete AI Courses",
-        "desc": "18 practical courses on ChatGPT, Midjourney, automation and more"
+        "desc": "22 practical courses on ChatGPT, Midjourney, automation and more"
       },
       "feature2": {
         "title": "AI Image Studio",
@@ -684,7 +684,7 @@
     },
     "CourseCategories": {
       "title": "Complete Learning Paths",
-      "description": "150+ courses organized for your success",
+      "description": "22 courses written in full, organized by track",
       "coursesLabel": "{count} courses",
       "exploreButton": "Explore",
       "allCoursesCta": "View All Courses",
@@ -832,7 +832,7 @@
     "Pricing": {
       "title": "Investments That Pay for Themselves",
       "description": "Choose the plan that fits your journey",
-      "guarantee": "30-day guarantee",
+      "guarantee": "7-day guarantee",
       "rating": "4.9/5 rating",
       "footnote": "Cancel anytime • No fees • No fine print"
     },
@@ -1695,13 +1695,13 @@
     "promo": {
       "specialOffer": "SPECIAL OFFER",
       "discountText": "Up to 75% OFF on selected courses",
-      "guarantee": "30-day guarantee",
+      "guarantee": "7-day guarantee",
       "lifetimeAccess": "Lifetime access"
     },
     "featured": {
-      "badge": "BESTSELLER",
+      "badge": "MOST COMPLETE",
       "title": "Featured Course",
-      "bestseller": "#1 Bestseller",
+      "bestseller": "Largest in the catalog",
       "students": "students",
       "reviews": "reviews",
       "lessons": "lessons",
@@ -3669,7 +3669,7 @@
       "title": "What you will <highlight>master</highlight>",
       "subtitle": "Concrete results you will achieve upon completing this course",
       "cta": "Yes, I Want to Master All of This Now",
-      "ctaSubtext": "✓ Immediate access ✓ 30-day guarantee ✓ Certificate included"
+      "ctaSubtext": "✓ Immediate access ✓ 7-day guarantee ✓ Certificate included"
     },
     "curriculum": {
       "title": "Course <highlight>Content</highlight>",
@@ -3699,7 +3699,7 @@
         },
         {
           "question": "What if I don't like the course?",
-          "answer": "We offer an unconditional 30-day guarantee. If you're not satisfied for any reason, we'll refund 100% of your investment, no questions asked."
+          "answer": "We offer an unconditional 7-day guarantee. If you're not satisfied for any reason, we'll refund 100% of your investment, no questions asked."
         },
         {
           "question": "Do I need prior knowledge?",
@@ -3720,9 +3720,9 @@
       ]
     },
     "finalCta": {
-      "badge": "LAST CHANCE",
+      "badge": "START NOW",
       "title": "Are you ready to <highlight>transform your career</highlight>?",
-      "subtitle": "Join over {students} students who are already mastering AI and accelerating their careers.",
+      "subtitle": "{lessons} lessons written in full, unlocked the moment you pay — and the certificate comes at the end.",
       "enrollNow": "Enroll Now for {currency} {price}",
       "guarantee": "{days}-day guarantee",
       "securePayment": "Secure payment",
@@ -3795,7 +3795,7 @@
     },
     "links": {
       "courses": "Courses",
-      "coursesDesc": "18 courses with a certificate",
+      "coursesDesc": "22 courses with a certificate",
       "arcade": "Arcade",
       "arcadeDesc": "5 free games, no signup",
       "tools": "Tools",

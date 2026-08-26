@@ -136,7 +136,7 @@ export default function ChatGPTAllowlistingPage() {
                   <Badge className="bg-white/10 text-white/80 border-white/20 px-3 py-1">
                     <Shield className="mr-1" size={14} />
                     
-                    {T("Garantia 30 dias")}
+                    {T("Garantia 7 dias")}
                   </Badge>
                 </div>
 
@@ -180,7 +180,7 @@ export default function ChatGPTAllowlistingPage() {
                   <div className="flex items-center gap-2 text-muted-foreground text-sm">
                     <Shield size={16} className="text-green-500" />
                     
-                    {T("Garantia de 30 dias")}
+                    {T("Garantia de 7 dias")}
                   </div>
                 </div>
 
@@ -648,7 +648,7 @@ export default function ChatGPTAllowlistingPage() {
               {[
                 { title: T("Conteúdo Técnico Real"), desc: T("Configuração passo a passo de Cloudflare, robots.txt, schema markup e verificação de assinatura OpenAI."), icon: "🔧" },
                 { title: T("Estratégia Completa"), desc: T("Da otimização técnica à criação de conteúdo que IAs priorizam — cobrimos todo o funil."), icon: "📊" },
-                { title: T("Garantia de 30 dias"), desc: T("Se o curso não entregar o que promete, devolvemos 100% do valor. Sem perguntas."), icon: "🛡️" },
+                { title: T("Garantia de 7 dias"), desc: T("Se o curso não entregar o que promete, devolvemos 100% do valor. Sem perguntas."), icon: "🛡️" },
               ].map((item, i) => (
                 <Card key={i} className="bg-card/80 border-border p-6 hover:border-green-500/30 transition-all">
                   <div className="text-3xl mb-4">{T(item.icon)}</div>
@@ -739,7 +739,7 @@ export default function ChatGPTAllowlistingPage() {
                   </Button>
 
                   <div className="mt-6 flex items-center justify-center gap-6 text-sm text-muted-foreground flex-wrap">
-                    <span className="flex items-center gap-2"><Shield size={16} className="text-green-500" />  {T("30 dias de garantia")}</span>
+                    <span className="flex items-center gap-2"><Shield size={16} className="text-green-500" />  {T("7 dias de garantia")}</span>
                     <span className="flex items-center gap-2"><Lock size={16} className="text-green-500" />  {T("Pagamento seguro")}</span>
                   </div>
                 </Card>

@@ -35,7 +35,7 @@
       "freeLabel": "GRÁTIS",
       "feature1": {
         "title": "Cursos Completos de IA",
-        "desc": "18 cursos práticos sobre ChatGPT, Midjourney, automação e mais"
+        "desc": "22 cursos práticos sobre ChatGPT, Midjourney, automação e mais"
       },
       "feature2": {
         "title": "Studio AI para Criar Imagens",
@@ -684,7 +684,7 @@
     },
     "CourseCategories": {
       "title": "Trilhas de Aprendizado Completas",
-      "description": "Mais de 150 cursos organizados para seu sucesso",
+      "description": "22 cursos escritos por inteiro, organizados por trilha",
       "coursesLabel": "{count} cursos",
       "exploreButton": "Explorar",
       "allCoursesCta": "Ver Todos os Cursos",
@@ -832,7 +832,7 @@
     "Pricing": {
       "title": "Investimento que se Paga",
       "description": "Escolha o plano ideal para sua jornada",
-      "guarantee": "Garantia de 30 dias",
+      "guarantee": "Garantia de 7 dias",
       "rating": "4.9/5 de avaliação",
       "footnote": "Cancele quando quiser • Sem multas • Sem pegadinhas"
     },
@@ -1704,13 +1704,13 @@
     "promo": {
       "specialOffer": "OFERTA ESPECIAL",
       "discountText": "Até 75% OFF em cursos selecionados",
-      "guarantee": "Garantia de 30 dias",
+      "guarantee": "Garantia de 7 dias",
       "lifetimeAccess": "Acesso vitalício"
     },
     "featured": {
-      "badge": "MAIS VENDIDO",
+      "badge": "MAIS COMPLETO",
       "title": "Curso em Destaque",
-      "bestseller": "#1 Bestseller",
+      "bestseller": "O maior do catálogo",
       "students": "alunos",
       "reviews": "avaliações",
       "lessons": "aulas",
@@ -3759,7 +3759,7 @@
       "title": "O que você vai <highlight>dominar</highlight>",
       "subtitle": "Resultados concretos que você alcançará ao concluir este curso",
       "cta": "Sim, Quero Dominar Tudo Isso Agora",
-      "ctaSubtext": "✓ Acesso imediato ✓ Garantia de 30 dias ✓ Certificado incluído"
+      "ctaSubtext": "✓ Acesso imediato ✓ Garantia de 7 dias ✓ Certificado incluído"
     },
     "curriculum": {
       "title": "Conteúdo do <highlight>Curso</highlight>",
@@ -3810,9 +3810,9 @@
       ]
     },
     "finalCta": {
-      "badge": "ÚLTIMA CHANCE",
+      "badge": "COMEÇAR AGORA",
       "title": "Está pronto para <highlight>transformar sua carreira</highlight>?",
-      "subtitle": "Junte-se a mais de {students} alunos que já estão dominando IA e acelerando suas carreiras.",
+      "subtitle": "São {lessons} aulas escritas por inteiro, liberadas na hora do pagamento — e o certificado sai ao final.",
       "enrollNow": "Matricular Agora por {currency} {price}",
       "guarantee": "Garantia de {days} dias",
       "securePayment": "Pagamento seguro",
@@ -3885,7 +3885,7 @@
     },
     "links": {
       "courses": "Cursos",
-      "coursesDesc": "18 cursos com certificado",
+      "coursesDesc": "22 cursos com certificado",
       "arcade": "Arcade",
       "arcadeDesc": "5 jogos grátis, sem cadastro",
       "tools": "Ferramentas",

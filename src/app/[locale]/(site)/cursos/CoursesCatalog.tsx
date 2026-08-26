@@ -430,8 +430,12 @@ export default function CoursesCatalog({
 
             {/* Featured Course Card */}
             {(() => {
-              const featured = products.reduce((best, p) => 
-                p.metrics.students > (best?.metrics.students || 0) ? p : best
+              /* Escolhido pelo TAMANHO, não por venda. Enquanto isto olhava
+                 `metrics.students`, o destaque era o curso com o número de
+                 alunos inventado — e, depois de zerar os inventados, seria
+                 simplesmente o primeiro da lista. Aulas é dado real. */
+              const featured = products.reduce((best, p) =>
+                (p.metrics?.lessons || 0) > (best?.metrics?.lessons || 0) ? p : best
               , products[0]);
               
               if (!featured) return null;
@@ -503,9 +507,11 @@ export default function CoursesCatalog({
                           <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/50">
                             {T(featured.categoryPrimary)}
                           </Badge>
-                          <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
-                            {featured.metrics.students.toLocaleString()}+ {t("featured.students")}
-                          </Badge>
+                          {featured.metrics.students > 0 && (
+                            <Badge className="bg-green-500/20 text-green-400 border-green-500/50">
+                              {featured.metrics.students.toLocaleString()}+ {t("featured.students")}
+                            </Badge>
+                          )}
                         </div>
 
                         <h3 className="text-3xl font-bold mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
@@ -517,11 +523,13 @@ export default function CoursesCatalog({
                         </p>
 
                         <div className="flex flex-wrap items-center gap-6 mb-6 text-sm">
-                          <div className="flex items-center gap-2">
-                            <Star className="text-yellow-400 fill-yellow-400" size={20} />
-                            <span className="font-bold text-lg">{featured.metrics.rating}</span>
-                            <span className="text-muted-foreground">({featured.metrics.reviewCount} {t("featured.reviews")})</span>
-                          </div>
+                          {featured.metrics.rating > 0 && (
+                            <div className="flex items-center gap-2">
+                              <Star className="text-yellow-400 fill-yellow-400" size={20} />
+                              <span className="font-bold text-lg">{featured.metrics.rating}</span>
+                              <span className="text-muted-foreground">({featured.metrics.reviewCount} {t("featured.reviews")})</span>
+                            </div>
+                          )}
                           <div className="flex items-center gap-2 text-muted-foreground">
                             <Clock size={18} />
                             <span>{T(featured.metrics.duration)}</span>

@@ -1126,7 +1126,7 @@ export default function CourseSalesPage({
               </h2>
               
               <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                {t("finalCta.subtitle", { students: product.metrics.students.toLocaleString() })}
+                {t("finalCta.subtitle", { lessons: product.metrics.lessons })}
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
@@ -1145,7 +1145,7 @@ export default function CourseSalesPage({
               <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Shield className="text-green-400" size={18} />
-                  <span>{t("finalCta.guarantee", { days: 30 })}</span>
+                  <span>{t("finalCta.guarantee", { days: 7 })}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Lock className="text-amber-400" size={18} />
