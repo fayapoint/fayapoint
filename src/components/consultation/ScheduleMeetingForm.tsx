@@ -233,7 +233,10 @@ export function ScheduleMeetingForm({
         </div>
       )}
 
+      {/* `aria-label` porque o formulario nao tem rotulo visivel: o
+          placeholder some ao digitar e nem todo leitor de tela o anuncia. */}
       <Input
+        aria-label={T(copy.fields.fullName)}
         placeholder={T(copy.fields.fullName)}
         value={formData.fullName}
         onChange={handleChange("fullName")}
@@ -242,6 +245,7 @@ export function ScheduleMeetingForm({
       />
       <Input
         type="email"
+        aria-label={T(copy.fields.email)}
         placeholder={T(copy.fields.email)}
         value={formData.email}
         onChange={handleChange("email")}
@@ -252,12 +256,14 @@ export function ScheduleMeetingForm({
       {showCompanyRole ? (
         <div className="grid sm:grid-cols-2 gap-4">
           <Input
+            aria-label={T(copy.fields.company)}
             placeholder={T(copy.fields.company)}
             value={formData.company}
             onChange={handleChange("company")}
             className="h-12"
           />
           <Input
+            aria-label={T(copy.fields.role)}
             placeholder={T(copy.fields.role)}
             value={formData.role}
             onChange={handleChange("role")}
@@ -267,6 +273,7 @@ export function ScheduleMeetingForm({
       ) : null}
 
       <Textarea
+        aria-label={copy.fields.details ?? copy.fields.detailsPlaceholder}
         placeholder={copy.fields.details ?? copy.fields.detailsPlaceholder}
         value={formData.details}
         onChange={handleChange("details")}

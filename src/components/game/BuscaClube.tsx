@@ -171,6 +171,7 @@ export function BuscaClube({ copy }: { copy: GameCopy }) {
           <input
             value={nome}
             onChange={(e) => setNome(e.target.value)}
+            aria-label={c.placeholder}
             placeholder={c.placeholder}
             className="w-full rounded-xl border border-white/12 bg-white/[0.06] py-4 pl-12 pr-4 text-white outline-none transition-colors placeholder:text-white/45 focus:border-[color:var(--lima)] focus:bg-white/[0.08]"
             style={{ ["--lima" as string]: `${LIMA}99` }}

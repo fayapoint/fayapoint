@@ -74,16 +74,18 @@ export function FormInteresse({ copy, locale }: { copy: GameCopy; locale: string
           </button>
         ))}
       </div>
-      <input name="email" type="email" required placeholder={copy.join.email} className={campo} />
-      <input name="gamertag" placeholder={copy.join.gamertag} className={campo} maxLength={60} />
+      <input name="email" type="email" autoComplete="email" required aria-label={copy.join.email} placeholder={copy.join.email} className={campo} />
+      <input name="gamertag" aria-label={copy.join.gamertag} placeholder={copy.join.gamertag} className={campo} maxLength={60} />
       <input
         name="clubName"
+        aria-label={copy.join.clubName}
         placeholder={copy.join.clubName}
         className={`${campo} sm:col-span-2`}
         maxLength={120}
       />
       <textarea
         name="message"
+        aria-label={copy.join.message}
         placeholder={copy.join.message}
         rows={3}
         className={`${campo} sm:col-span-2 resize-none`}

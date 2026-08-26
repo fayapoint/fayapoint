@@ -25,6 +25,23 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
 
   return (
     <>
+      {/*
+        "Pular para o conteúdo" — WCAG 2.4.1.
+
+        O cabeçalho tem dez links. Sem este atalho, quem navega por teclado ou
+        leitor de tela tabula os dez de novo a cada página antes de chegar ao
+        texto. Nenhuma página do site tinha o atalho (medido em 26/08/2026).
+
+        Fica invisível até receber foco, e então aparece — por isso `sr-only`
+        com `focus:not-sr-only`, e não `display:none`, que o tiraria da ordem
+        de tabulação e o tornaria inalcançável.
+      */}
+      <a
+        href="#conteudo"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[1000] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+      >
+        Pular para o conteúdo
+      </a>
       <Header />
       {/*
         O piso de altura existe para segurar o RODAPÉ fora da dobra no primeiro
@@ -48,7 +65,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
         nas páginas comerciais; enquanto essa migração não acontece, este piso
         é o que separa "ruim" de "bom" na medição.
       */}
-      <div className="min-h-screen">{children}</div>
+      <div id="conteudo" className="min-h-screen">{children}</div>
       <Footer />
     </>
   );

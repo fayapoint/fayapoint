@@ -191,6 +191,11 @@ export function Footer() {
               <Input
                 type="email"
                 autoComplete="email"
+                /* O placeholder some assim que a pessoa digita e nem todo leitor
+                   de tela o anuncia — rótulo de verdade é `aria-label`. Este
+                   campo está no rodapé de TODAS as páginas, então era o campo
+                   sem rótulo mais repetido do site (26/08/2026). */
+                aria-label={t("newsletter.placeholder")}
                 placeholder={t("newsletter.placeholder")}
                 className="flex-1 bg-input border-border"
                 value={newsletterEmail}

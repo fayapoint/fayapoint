@@ -234,7 +234,8 @@ export default function CoursesCatalog({
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
               <Input
-                type="text"
+                type="search"
+                aria-label={T(searchPlaceholder)}
                 placeholder={T(searchPlaceholder)}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -615,10 +616,15 @@ export default function CoursesCatalog({
               <p className="text-sm text-muted-foreground">
                 {t("filters.results", { count: filteredCourses.length })}
               </p>
-              <div className="flex gap-1">
+              {/* Botao so com icone precisa de nome: sem `aria-label` o leitor
+                  de tela anuncia "botao" e mais nada. `aria-pressed` diz qual
+                  dos dois esta ativo. */}
+              <div className="flex gap-1" role="group" aria-label={T("Modo de exibição")}>
                 <Button
                   variant={viewMode === "grid" ? "default" : "ghost"}
                   size="icon"
+                  aria-label={T("Ver em grade")}
+                  aria-pressed={viewMode === "grid"}
                   onClick={() => setViewMode("grid")}
                 >
                   <Grid size={18} />
@@ -626,6 +632,8 @@ export default function CoursesCatalog({
                 <Button
                   variant={viewMode === "list" ? "default" : "ghost"}
                   size="icon"
+                  aria-label={T("Ver em lista")}
+                  aria-pressed={viewMode === "list"}
                   onClick={() => setViewMode("list")}
                 >
                   <List size={18} />

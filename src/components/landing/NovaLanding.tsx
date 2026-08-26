@@ -436,6 +436,16 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 22px 50px -16px rgba(0,0,0,.6);
         }
       ` }} />
+      {/* "Pular para o conteúdo" — WCAG 2.4.1. A home mora fora do grupo
+          (site) e não recebe o atalho do `SiteChrome`, então tem o seu.
+          Invisível até receber foco: `sr-only` e não `display:none`, que o
+          tiraria da ordem de tabulação. */}
+      <a
+        href="#conteudo"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[1000] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-black focus:shadow-lg focus:outline-none"
+      >
+        {T("Pular para o conteúdo")}
+      </a>
       {/* ============================== HEADER ============================== */}
       <header className="flex items-center justify-between px-4 sm:px-8 pt-4 pb-2 shrink-0">
         <span className="text-3xl sm:text-4xl tracking-wide select-none" style={bebas}>
@@ -514,7 +524,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
       </header>
 
       {/* ============================== MINIGAME ============================== */}
-      <main className="flex-1 flex flex-col items-center justify-center px-4 sm:px-8 py-4">
+      <main id="conteudo" className="flex-1 flex flex-col items-center justify-center px-4 sm:px-8 py-4">
         <div className="w-full max-w-3xl">
           {stage === "pick" && (
             <motion.section
