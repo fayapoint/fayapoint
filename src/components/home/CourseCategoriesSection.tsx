@@ -1,9 +1,12 @@
 "use client";
 import { useT } from "@/i18n/dicionario";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { comIdioma } from "@/lib/rota-idioma";
+import { contarPorCategoria } from "@/lib/categoria-de-curso";
+import type { Product } from "@/lib/products";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SectionDivider } from "@/components/ui/section-divider";
@@ -29,42 +32,39 @@ const categories = [
   {
     key: "generativeAI",
     icon: <Brain className="w-6 h-6" />,
-    courses: 25,
     color: "from-amber-500 to-yellow-600",
     href: "/cursos/categoria/ia-generativa",
   },
   {
     key: "visualCreation",
     icon: <Palette className="w-6 h-6" />,
-    courses: 18,
     color: "from-blue-500 to-cyan-500",
     href: "/cursos/categoria/criacao-visual",
   },
   {
     key: "automation",
     icon: <Code2 className="w-6 h-6" />,
-    courses: 22,
     color: "from-green-500 to-emerald-500",
     href: "/cursos/categoria/automacao",
   },
   {
     key: "agents",
     icon: <Bot className="w-6 h-6" />,
-    courses: 15,
     color: "from-orange-500 to-red-500",
     href: "/cursos/categoria/agentes-ia",
   },
   {
     key: "data",
     icon: <BarChart3 className="w-6 h-6" />,
-    courses: 12,
     color: "from-indigo-500 to-amber-500",
-    href: "/cursos/categoria/analise-dados",
+    // ⚠️ `pesquisa-analise` e não `analise-dados`: a página de categoria mapeia
+    // aquele slug, e o banco tem "Pesquisa e Análise". Os dois nunca casaram —
+    // o card levava a uma categoria que não existia em lugar nenhum.
+    href: "/cursos/categoria/pesquisa-analise",
   },
   {
     key: "business",
     icon: <Briefcase className="w-6 h-6" />,
-    courses: 20,
     color: "from-yellow-500 to-orange-500",
     href: "/cursos/categoria/ia-negocios",
   },
@@ -77,6 +77,30 @@ export function CourseCategoriesSection() {
   const locale = useLocale();
   const isPtBr = locale.toLowerCase().startsWith("pt");
   const coursesLabel = (count: number) => t("coursesLabel", { count });
+
+  /**
+   * ⚠️ A CONTAGEM ERA INVENTADA (26/08/2026).
+   *
+   * Cada categoria trazia um número escrito à mão — 25, 18, 22, 15, 12, 20 —
+   * somando **112 cursos** para um catálogo de 22. Agora vem do catálogo, e
+   * categoria sem curso não aparece: card com "0 cursos" é convite para uma
+   * página vazia.
+   */
+  const [produtos, setProdutos] = useState<Product[]>([]);
+  useEffect(() => {
+    let vivo = true;
+    fetch(`/api/products?type=course&limit=200&locale=${locale}`)
+      .then((r) => r.json())
+      .then((d) => vivo && setProdutos(d.products || []))
+      .catch(() => vivo && setProdutos([]));
+    return () => {
+      vivo = false;
+    };
+  }, [locale]);
+
+  const comContagem = categories
+    .map((c) => ({ ...c, courses: contarPorCategoria(produtos, c.href.split("/").pop() || "") }))
+    .filter((c) => c.courses > 0);
   const exploreLabel = t("exploreButton");
   const verifiedAtLabel = formatEditorialDate(
     DEFAULT_EDITORIAL_VERIFICATION.verifiedAt,
@@ -168,7 +192,7 @@ export function CourseCategoriesSection() {
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-          {categories.map((category, i) => (
+          {comContagem.map((category, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, y: 20 }}
