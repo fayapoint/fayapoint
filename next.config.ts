@@ -60,6 +60,38 @@ const config: NextConfig = {
   // Next.js default behavior returns 308, breaking webhook delivery.
   skipTrailingSlashRedirect: true,
 
+  /**
+   * ⚠️ O TÍTULO PRECISA ESTAR NO `<head>`, PARA TODO MUNDO (26/08/2026)
+   *
+   * O Next 15+ TRANSMITE os metadados de página dinâmica: o `<head>` sai
+   * imediatamente, sem `<title>`, e a tag aparece lá no fim do corpo, para o
+   * React içar depois. Só que ele volta a BLOQUEAR quando o `user-agent` casa
+   * com `htmlLimitedBots` — e o padrão dele deixa o `Googlebot` de fora de
+   * propósito (o Google renderiza JS, então recuperaria a tag).
+   *
+   * Duas razões pelas quais isso não servia aqui:
+   *
+   * 1. **O cache não varia por `user-agent`.** Medido em produção: o
+   *    `netlify-vary` de `/pt-BR/cursos` lista query, rsc e cookie — nada de
+   *    UA. A página é ISR (`revalidate = 900`), então QUEM AQUECER O CACHE
+   *    decide o HTML que todos recebem. Em 26/08 ela estava aquecida com a
+   *    variante transmitida: `<head>` sem título nenhum, para o Googlebot e
+   *    para a prévia de link do WhatsApp igualmente. O acerto por UA vira
+   *    sorteio assim que existe cache na frente.
+   *
+   * 2. **Os motores de resposta ficam de fora da lista.** `PerplexityBot`,
+   *    `OAI-SearchBot`, `ChatGPT-User` e `ClaudeBot` recebem a versão
+   *    transmitida. O `robots.txt` e o `geoblock.ts` abriram a porta para eles
+   *    justamente porque citam a fonte — e depois a casa os recebia com HTML
+   *    sem título.
+   *
+   * A expressão abaixo casa com qualquer user-agent, então o metadado bloqueia
+   * sempre. O custo é alguns milissegundos no primeiro byte de página
+   * dinâmica; o ganho é `<head>` completo em toda resposta — inclusive na que
+   * fica guardada na borda e é servida a todos.
+   */
+  htmlLimitedBots: /.*/,
+
   // Enable experimental features for better performance
   experimental: {
     // Optimize package imports
@@ -275,6 +307,36 @@ const config: NextConfig = {
    */
   async redirects() {
     return [
+      /**
+       * ⚠️ O `/blog` PRECISA REDIRECIONAR AQUI, NÃO NA PÁGINA (26/08/2026)
+       *
+       * `src/app/[locale]/(site)/blog/page.tsx` chama `permanentRedirect`
+       * desde 27/07 e o comentário dele promete "308". Medido em produção um
+       * mês depois: `/pt-BR/blog` responde **200** com uma página inteira de
+       * 212 KB.
+       *
+       * A causa é que a rota é PRÉ-RENDERIDA (`●` no build, os dois idiomas).
+       * Página estática não tem como carregar um código de status: o Next assa
+       * a intenção como `<meta http-equiv="refresh">` dentro do HTML. Sai um
+       * documento com título próprio ("Blog de IA — Artigos e Tutoriais"),
+       * cabeçalho, rodapé e ZERO artigo — exatamente o "texto magro" que o
+       * relatório de SEO vinha acusando, e uma duplicata competindo com o hub
+       * de notícias no índice.
+       *
+       * Aqui em cima a rota nem chega a renderizar: sai 308 de verdade, antes
+       * de qualquer HTML. `(pt-BR|en)` e o `/blog` cru, e nada além disso —
+       * `/blog/[slug]` continua servindo os posts legados.
+       */
+      {
+        source: '/:locale(pt-BR|en)/blog',
+        destination: '/:locale/noticias',
+        permanent: true,
+      },
+      {
+        source: '/blog',
+        destination: '/pt-BR/noticias',
+        permanent: true,
+      },
       {
         source: '/:locale(pt-BR|en)/noticias/anthropic-lanca-opus-5',
         destination: '/:locale/noticias/claude-opus-5',

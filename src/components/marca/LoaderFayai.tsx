@@ -146,7 +146,16 @@ export function LoaderFayai({
         aria-busy="true"
         style={{ height: "1em", width: "auto", display: "block" }}
       >
-        <title>{legenda ?? "Carregando"}</title>
+        {/* ⚠️ SEM <title> AQUI DE PROPÓSITO (26/08/2026).
+          `<title>` é elemento de SVG tanto quanto de HTML, e o navegador o
+          coloca no MESMO espaço de nomes que o título da aba. Como o `<head>`
+          servido não traz título (o Next só emite o dele no fim do fluxo,
+          ~290 KB adiante), o primeiro `<title>` do documento era este — e
+          toda página que desenhava o loader se anunciava como "Carregando"
+          para rastreador, prévia de link e régua de SEO.
+          O nome acessível não se perde: `role="img"` + `aria-label` já o dão,
+          e pela precedência da ARIA o `aria-label` venceria o `<title>` de
+          qualquer jeito. Não reintroduza. */}
         {claros.map((g, i) => (
           <path key={i} d={g.d} fill={BRANCO_DA_MARCA} />
         ))}
@@ -211,7 +220,16 @@ export function SeloCarregando({
       aria-busy="true"
       style={{ height: "1em", width: "1em", display: "block", ...style }}
     >
-      <title>{legenda ?? "Carregando"}</title>
+      {/* ⚠️ SEM <title> AQUI DE PROPÓSITO (26/08/2026).
+          `<title>` é elemento de SVG tanto quanto de HTML, e o navegador o
+          coloca no MESMO espaço de nomes que o título da aba. Como o `<head>`
+          servido não traz título (o Next só emite o dele no fim do fluxo,
+          ~290 KB adiante), o primeiro `<title>` do documento era este — e
+          toda página que desenhava o loader se anunciava como "Carregando"
+          para rastreador, prévia de link e régua de SEO.
+          O nome acessível não se perde: `role="img"` + `aria-label` já o dão,
+          e pela precedência da ARIA o `aria-label` venceria o `<title>` de
+          qualquer jeito. Não reintroduza. */}
       {comFundo && <rect width={lado} height={lado} rx={lado * 0.22} fill={NAVY} />}
       <g transform={transformacao} fill={BRANCO_DA_MARCA}>
         {glifos

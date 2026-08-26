@@ -90,7 +90,13 @@ export function LetreiroFayai({
       // o logo acompanha o texto ao redor sem ninguém converter nada.
       style={{ height: "1em", width: "auto", display: "block", ...style }}
     >
-      {!decorativo && <title>{titulo}</title>}
+      {/* ⚠️ SEM <title> AQUI DE PROPÓSITO (26/08/2026).
+          O logo aparece no cabeçalho de TODA página, e `<title>` de SVG divide
+          espaço de nomes com o título da aba. Como o `<head>` servido sai sem
+          título (o Next emite o dele no fim do fluxo), estes dois eram os
+          primeiros `<title>` do documento em todo o site — "FayAi" pelado, sem
+          a página. O `aria-label` acima já dá o nome acessível e, pela
+          precedência da ARIA, venceria o `<title>` de qualquer forma. */}
       {variante === "cor" && <Gradiente />}
       {GLIFOS.map((g, i) => (
         <path key={i} d={g.d} fill={g.acento ? acento : claro} />
@@ -127,7 +133,13 @@ export function SimboloFayai({
       aria-label={titulo}
       style={{ height: "1em", width: "1em", display: "block", ...style }}
     >
-      <title>{titulo}</title>
+      {/* ⚠️ SEM <title> AQUI DE PROPÓSITO (26/08/2026).
+          O logo aparece no cabeçalho de TODA página, e `<title>` de SVG divide
+          espaço de nomes com o título da aba. Como o `<head>` servido sai sem
+          título (o Next emite o dele no fim do fluxo), estes dois eram os
+          primeiros `<title>` do documento em todo o site — "FayAi" pelado, sem
+          a página. O `aria-label` acima já dá o nome acessível e, pela
+          precedência da ARIA, venceria o `<title>` de qualquer forma. */}
       <Gradiente />
       {comFundo && <rect width={lado} height={lado} rx={lado * 0.22} fill={NAVY} />}
       <g transform={`translate(${dx},${dy}) scale(${escala})`}>
