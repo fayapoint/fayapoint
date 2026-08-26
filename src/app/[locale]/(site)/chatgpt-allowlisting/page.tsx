@@ -63,8 +63,21 @@ export default function ChatGPTAllowlistingPage() {
   const aeoInView = useInView(aeoRef, { once: true, margin: "-100px" });
   
   const course = chatGPTAllowlistingCourse;
-  const discount = Math.round(((course.originalPrice - course.price) / course.originalPrice) * 100);
-  const savings = course.originalPrice - course.price;
+  /**
+   * ⚠️ Esta página tinha uma tabela de preços PRÓPRIA, e ela discordava do
+   * checkout (26/08/2026): anunciava "R$ 397 riscado, R$ 57 hoje, −86%"
+   * enquanto o carrinho cobrava R$ 49. Nenhum dos dois números de referência
+   * jamais foi praticado — é o item 4 do laudo, na única página de venda que a
+   * correção do banco não alcançava, porque esta lê `@/data/courses`.
+   *
+   * O arquivo agora vem do banco (`scripts/sincronizar-cursos-estaticos.mjs`),
+   * onde `originalPrice === price`. Sem preço cheio não há desconto: as duas
+   * contas dão zero e todo riscado desta tela sai do ar pela guarda abaixo.
+   */
+  const temPrecoCheio = course.originalPrice > course.price;
+  const discount = temPrecoCheio
+    ? Math.round(((course.originalPrice - course.price) / course.originalPrice) * 100)
+    : 0;
   const totalBonusValue = course.bonuses?.reduce((sum, bonus) => sum + bonus.value, 0) || 0;
 
   // Rotate scenarios
@@ -193,14 +206,20 @@ export default function ChatGPTAllowlistingPage() {
                       </div>
                     ))}
                   </div>
-                  <div>
-                    <div className="flex gap-0.5 mb-1">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} size={14} className="fill-yellow-400 text-yellow-400" />
-                      ))}
+                  {/* ⚠️ Cinco estrelas cheias e "+0 profissionais já
+                      configuraram" — o curso não tem aluno nem avaliação. Sem
+                      número, sem selo: a prova social só aparece quando existe
+                      (item 3 do laudo, 26/08/2026). */}
+                  {course.students > 0 && (
+                    <div>
+                      <div className="flex gap-0.5 mb-1">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} size={14} className="fill-yellow-400 text-yellow-400" />
+                        ))}
+                      </div>
+                      <p className="text-sm text-muted-foreground">+{course.students}  {T("profissionais já configuraram")}</p>
                     </div>
-                    <p className="text-sm text-muted-foreground">+{course.students}  {T("profissionais já configuraram")}</p>
-                  </div>
+                  )}
                 </div>
               </div>
 
@@ -264,9 +283,13 @@ export default function ChatGPTAllowlistingPage() {
                     <div className="flex items-baseline justify-between">
                       <div>
                         <span className="text-3xl font-bold text-white">{T("R$")} {course.price}</span>
-                        <span className="text-muted-foreground line-through ml-2">{T("R$")} {course.originalPrice}</span>
+                        {temPrecoCheio && (
+                          <span className="text-muted-foreground line-through ml-2">{T("R$")} {course.originalPrice}</span>
+                        )}
                       </div>
-                      <Badge className="bg-red-500/20 text-red-400 border-red-500/30">-{discount}%</Badge>
+                      {temPrecoCheio && (
+                        <Badge className="bg-red-500/20 text-red-400 border-red-500/30">-{discount}%</Badge>
+                      )}
                     </div>
 
                     <Button 
@@ -304,7 +327,18 @@ export default function ChatGPTAllowlistingPage() {
 
         {/* AEO EXPLANATION - The New SEO */}
         <section ref={aeoRef} className="py-24 bg-gradient-to-b from-black via-gray-950 to-black relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+          {/* A grade era `bg-[url('/grid.svg')]`, e o arquivo nunca existiu:
+              um 404 por visita para uma textura de 5% de opacidade. Feita em
+              CSS, não pede nada da rede. */}
+          <div
+            className="absolute inset-0 opacity-5"
+            style={{
+              backgroundImage:
+                "linear-gradient(to right, currentColor 1px, transparent 1px)," +
+                "linear-gradient(to bottom, currentColor 1px, transparent 1px)",
+              backgroundSize: "40px 40px",
+            }}
+          />
           
           <div className="container mx-auto px-4 relative z-10">
             {/* Section Header */}
@@ -680,33 +714,27 @@ export default function ChatGPTAllowlistingPage() {
               <div className="grid md:grid-cols-2 gap-4 mb-12">
                 <div className="flex items-center gap-3 p-4 bg-card/50 border border-border rounded-lg">
                   <Check className="text-green-500 flex-shrink-0" size={20} />
-                  <span className="text-muted-foreground">{T("Curso completo de AEO (8+ horas)")}</span>
-                  <span className="ml-auto text-muted-foreground line-through text-sm">{T("R$ 997")}</span>
+                  <span className="text-muted-foreground">{T("Curso completo de AEO")}</span>
                 </div>
                 <div className="flex items-center gap-3 p-4 bg-card/50 border border-border rounded-lg">
                   <Check className="text-green-500 flex-shrink-0" size={20} />
                   <span className="text-muted-foreground">{T("Templates robots.txt (20+)")}</span>
-                  <span className="ml-auto text-muted-foreground line-through text-sm">{T("R$ 197")}</span>
                 </div>
                 <div className="flex items-center gap-3 p-4 bg-card/50 border border-border rounded-lg">
                   <Check className="text-green-500 flex-shrink-0" size={20} />
                   <span className="text-muted-foreground">{T("Regras Cloudflare prontas")}</span>
-                  <span className="ml-auto text-muted-foreground line-through text-sm">{T("R$ 297")}</span>
                 </div>
                 <div className="flex items-center gap-3 p-4 bg-card/50 border border-border rounded-lg">
                   <Check className="text-green-500 flex-shrink-0" size={20} />
                   <span className="text-muted-foreground">{T("Dashboard de monitoramento")}</span>
-                  <span className="ml-auto text-muted-foreground line-through text-sm">{T("R$ 497")}</span>
                 </div>
                 <div className="flex items-center gap-3 p-4 bg-card/50 border border-border rounded-lg">
                   <Check className="text-green-500 flex-shrink-0" size={20} />
                   <span className="text-muted-foreground">{T("Acesso comunidade VIP")}</span>
-                  <span className="ml-auto text-muted-foreground line-through text-sm">{T("R$ 297")}</span>
                 </div>
                 <div className="flex items-center gap-3 p-4 bg-card/50 border border-border rounded-lg">
                   <Check className="text-green-500 flex-shrink-0" size={20} />
                   <span className="text-muted-foreground">{T("Atualizações vitalícias")}</span>
-                  <span className="ml-auto text-muted-foreground line-through text-sm">∞</span>
                 </div>
               </div>
 
@@ -715,18 +743,19 @@ export default function ChatGPTAllowlistingPage() {
                 <Card className="bg-card border-green-500/30 p-8 text-center relative overflow-hidden">
                   <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-emerald-400" />
                   
-                  <div className="mb-4">
-                    <span className="text-muted-foreground text-lg">{T("Valor total:")}</span>
-                    <span className="text-muted-foreground line-through ml-2 text-lg">{T("R$ 2.285")}</span>
-                  </div>
-                  
+                  {/* ⚠️ Saiu daqui a pilha de valor: "Valor total: R$ 2.285"
+                      riscado, somado de seis preços que ninguém nunca cobrou
+                      (R$ 997 pelo curso, R$ 497 pelo painel, R$ 297 pela
+                      comunidade). O preço é o preço — a mesma regra que o
+                      catálogo inteiro passou a seguir em 26/08/2026. */}
                   <div className="mb-6">
-                    <span className="text-muted-foreground text-lg">{T("Hoje apenas:")}</span>
+                    <span className="text-muted-foreground text-lg">{T("Preço:")}</span>
                     <div className="flex items-center justify-center gap-3 mt-2">
                       <span className="text-5xl md:text-6xl font-bold text-white">{T("R$")} {course.price}</span>
-                      <Badge className="bg-red-500 text-white border-0 text-lg px-3 py-1">-{discount}%</Badge>
+                      {temPrecoCheio && (
+                        <Badge className="bg-red-500 text-white border-0 text-lg px-3 py-1">-{discount}%</Badge>
+                      )}
                     </div>
-                    <p className="text-green-400 text-sm mt-2">{T("Economia de R$")} {savings}  {T("+ R$")} {totalBonusValue}  {T("em bônus")}</p>
                   </div>
 
                   <Button 

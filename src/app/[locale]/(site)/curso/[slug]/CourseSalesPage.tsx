@@ -136,14 +136,29 @@ export default function CourseSalesPage({
           T("Certificado digital ao concluir"),
         ];
 
-  const discount = Math.round(((product.pricing.originalPrice - product.pricing.price) / product.pricing.originalPrice) * 100);
-  const savings = product.pricing.originalPrice - product.pricing.price;
+  /**
+   * ⚠️ `originalPrice` PODE NÃO EXISTIR — e desde 26/08/2026 ele não existe.
+   *
+   * O laudo mandou o preço passar a ser o preço (item 4): o campo foi apagado
+   * dos 22 cursos, junto com o `discount`. Estas duas contas continuaram
+   * subtraindo `undefined` e devolvendo **NaN** — e o cartão de preço exibia
+   * "Economize R$ NaN hoje!" ao lado do botão de comprar, num bloco que
+   * renderizava sem condição nenhuma.
+   *
+   * Sem preço cheio não há economia: a faixa verde some inteira.
+   */
+  const precoDe = product.pricing.originalPrice ?? 0;
+  const temPrecoCheio = precoDe > product.pricing.price;
+  const discount = temPrecoCheio
+    ? Math.round(((precoDe - product.pricing.price) / precoDe) * 100)
+    : 0;
+  const savings = temPrecoCheio ? precoDe - product.pricing.price : 0;
   const isPtBr = locale === 'pt-BR';
   const isFreeCourseOfMonth = Boolean(product.monthlyOffer?.isFreeCourseOfMonth);
   const effectivePrice = isFreeCourseOfMonth ? 0 : product.pricing.price;
   const effectiveOriginalPrice = isFreeCourseOfMonth
     ? product.pricing.price
-    : product.pricing.originalPrice;
+    : precoDe;
   const effectiveDiscount =
     isFreeCourseOfMonth && product.pricing.price > 0
       ? 100
@@ -169,7 +184,6 @@ export default function CourseSalesPage({
   
   // Calculate total bonus value
   const totalBonusValue = product.bonuses?.reduce((sum, bonus) => sum + bonus.value, 0) || 0;
-  const totalValue = product.pricing.originalPrice + totalBonusValue;
 
   const toggleModule = (id: number) => {
     setExpandedModules(prev =>
@@ -386,10 +400,10 @@ export default function CourseSalesPage({
                     </>
                   )}
                   <div className="flex items-center gap-2">
-                    <PlayCircle className="text-amber-400" size={20} />
+                    <BookOpen className="text-amber-400" size={20} />
                     <div>
                       <div className="font-bold text-lg">{product.metrics.lessons}</div>
-                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? T("Aulas") : T("Lessons")}</div>
+                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? T("Capítulos") : T("Chapters")}</div>
                     </div>
                   </div>
                   <Separator orientation="vertical" className="h-12 hidden md:block" />
@@ -397,7 +411,7 @@ export default function CourseSalesPage({
                     <Clock className="text-blue-400" size={20} />
                     <div>
                       <div className="font-bold text-lg">{T(product.metrics.duration)}</div>
-                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? T("de conteúdo") : T("of content")}</div>
+                      <div className="text-xs text-muted-foreground">{locale === 'pt-BR' ? T("de leitura") : T("of reading")}</div>
                     </div>
                   </div>
                   <Separator orientation="vertical" className="h-12 hidden md:block" />
@@ -449,7 +463,7 @@ export default function CourseSalesPage({
                 {/* Quick Course Highlights - Fills the gap */}
                 <div className="mt-8 grid grid-cols-2 gap-4">
                   {[
-                    { icon: PlayCircle, value: `${product.metrics.lessons}`, label: t("stats.videoLessons") },
+                    { icon: BookOpen, value: `${product.metrics.lessons}`, label: t("stats.videoLessons") },
                     { icon: Clock, value: product.metrics.duration, label: t("stats.ofContent") },
                     { icon: BookOpen, value: `${product.curriculum?.moduleCount || '10'}`, label: locale === 'pt-BR' ? T("Módulos") : 'Modules' },
                     { icon: Award, value: t("stats.certificate"), label: t("stats.ofCompletion") }
@@ -619,11 +633,13 @@ export default function CourseSalesPage({
                           <p className="text-muted-foreground">
                             {t("sidebar.orInstallments", { installments: 12, value: `R$ ${(product.pricing.price / 12).toFixed(2)}` })}
                           </p>
-                          <div className="mt-2 p-2 bg-green-500/10 border border-green-500/50 rounded text-center">
-                            <span className="text-green-400 font-bold">
-                              {t("sidebar.saveToday", { amount: `R$ ${savings.toLocaleString()}` })}
-                            </span>
-                          </div>
+                          {savings > 0 && (
+                            <div className="mt-2 p-2 bg-green-500/10 border border-green-500/50 rounded text-center">
+                              <span className="text-green-400 font-bold">
+                                {t("sidebar.saveToday", { amount: `R$ ${savings.toLocaleString()}` })}
+                              </span>
+                            </div>
+                          )}
                         </>
                       )}
                     </div>
@@ -837,8 +853,8 @@ export default function CourseSalesPage({
               {/* Transformation Stats */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
                 {[
-                  { value: `${product.metrics.lessons}`, label: locale === 'pt-BR' ? T("Aulas Práticas") : 'Practical Lessons' },
-                  { value: product.metrics.duration, label: locale === 'pt-BR' ? T("De Conteúdo") : 'Of Content' },
+                  { value: `${product.metrics.lessons}`, label: locale === 'pt-BR' ? T("Capítulos") : 'Chapters' },
+                  { value: product.metrics.duration, label: locale === 'pt-BR' ? T("De Leitura") : 'Of Reading' },
                   { value: `${product.curriculum?.moduleCount || 10}`, label: locale === 'pt-BR' ? T("Módulos Completos") : 'Complete Modules' },
                   { value: locale === 'pt-BR' ? T("7 dias") : '7 days', label: locale === 'pt-BR' ? 'Garantia Total' : 'Full Guarantee' }
                 ].map((stat, i) => (
