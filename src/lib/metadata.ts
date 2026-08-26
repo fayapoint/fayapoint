@@ -212,7 +212,7 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
         "Campeonatos organizados, estatística verificada e carreira de jogador no modo Clubs do EA SPORTS FC. Conecte seu clube em 30 segundos, sem senha e sem instalação.",
     },
     en: {
-      title: "Winners 22 Championship — the virtual football league | FayAI",
+      title: "Winners 22 Championship — virtual football | FayAI",
       description:
         "Organized championships, verified statistics and player careers for EA SPORTS FC Clubs. Connect your club in 30 seconds — no password, no install.",
     },
@@ -269,12 +269,12 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
   },
   "/noticias": {
     "pt-BR": {
-      title: "Blog IA Hoje — notícias e guias de inteligência artificial | FayAI",
+      title: "Blog IA Hoje — notícias de IA explicadas | FayAI",
       description:
         "As notícias de IA que importam para brasileiros, selecionadas e explicadas todos os dias pela FayAI — com link para a fonte original.",
     },
     en: {
-      title: "AI Blog Today — artificial intelligence news and guides | FayAI",
+      title: "AI Blog Today — AI news, explained | FayAI",
       description:
         "The AI news that matters, picked and explained every day by FayAI — always with a link to the original source.",
     },
@@ -304,12 +304,12 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
   },
   "/radar": {
     "pt-BR": {
-      title: "Radar FayAI — o que o Brasil e o mundo estão procurando agora",
+      title: "Radar FayAI — o que o Brasil procura agora em IA",
       description:
         "Tendências medidas, não estimadas: buscas em alta do Google por estado, artigos mais lidos da Wikipédia e a demanda real de inteligência artificial no autocomplete do Google e do YouTube.",
     },
     en: {
-      title: "FayAI Radar — what Brazil and the world are searching for right now",
+      title: "FayAI Radar — what Brazil is searching for in AI",
       description:
         "Trends that are measured, not estimated: Google's rising searches by state, the most-read Wikipedia articles, and real artificial-intelligence demand in Google and YouTube autocomplete.",
     },
@@ -365,7 +365,7 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
   },
   "/aula-gratis": {
     "pt-BR": {
-      title: "Mini-curso grátis de IA — 3 aulas práticas, sem cadastro | FayAI",
+      title: "Mini-curso grátis de IA — 3 aulas, sem cadastro | FayAI",
       description:
         "Três aulas gratuitas para começar a usar Inteligência Artificial hoje. Conteúdo real, sem cadastro e sem cartão de crédito.",
     },
@@ -397,7 +397,7 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
         "32 trabalhos reais: MultiRio, ZDF em alemão, Emmanuelle in Rio, FGV, Jockey Club, drone desde 2013, Fox Sports na Copa e nas Olimpíadas, e a virada para inteligência artificial.",
     },
     en: {
-      title: "Work — 34 years of cutting, from 1992 to today | Ricardo Faya",
+      title: "Work — 34 years of cutting | Ricardo Faya",
       description:
         "32 real projects: MultiRio, ZDF, Emmanuelle in Rio, FGV, Jockey Club, drone flying since 2013, Fox Sports at the World Cup and the Olympics, and the turn to artificial intelligence.",
     },
@@ -456,7 +456,7 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
   },
   "/cursos/por-ferramenta": {
     "pt-BR": {
-      title: "Cursos de IA por ferramenta — ChatGPT, Claude, Midjourney | FayAI",
+      title: "Cursos de IA por ferramenta — ChatGPT, Claude | FayAI",
       description:
         "Escolha o curso pela ferramenta que você quer dominar: ChatGPT, Claude, Gemini, Perplexity, Midjourney, DALL-E e mais.",
     },
@@ -468,7 +468,7 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
   },
   "/cursos/por-setor": {
     "pt-BR": {
-      title: "Cursos de IA por setor — e-commerce, saúde, advocacia | FayAI",
+      title: "Cursos de IA por setor — e-commerce, saúde | FayAI",
       description:
         "Cursos de Inteligência Artificial aplicados ao seu mercado: e-commerce, educação, saúde, advocacia e marketing digital.",
     },
@@ -540,7 +540,7 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
   },
   "/recursos": {
     "pt-BR": {
-      title: "Recursos gratuitos de IA — guias, templates e glossário | FayAI",
+      title: "Recursos gratuitos de IA — guias e templates | FayAI",
       description:
         "Materiais gratuitos da FayAI: guias práticos, templates de prompts, calculadora de ROI e glossário de Inteligência Artificial.",
     },
@@ -564,7 +564,7 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
   },
   "/recursos/glossario": {
     "pt-BR": {
-      title: "Glossário de Inteligência Artificial — termos explicados | FayAI",
+      title: "Glossário de IA — os termos explicados | FayAI",
       description:
         "Dicionário de IA em português: modelos, técnicas, ferramentas e conceitos explicados de forma direta, de A a Z.",
     },

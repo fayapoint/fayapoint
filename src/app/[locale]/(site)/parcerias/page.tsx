@@ -4,7 +4,7 @@ import { useT } from "@/i18n/dicionario";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { Handshake, Building, GraduationCap, Megaphone, CheckCircle, ArrowRight } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 type PartnerType = {
   icon: string;

@@ -2,7 +2,7 @@
 import { useT } from "@/i18n/dicionario";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { 

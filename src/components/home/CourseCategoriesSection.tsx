@@ -176,7 +176,9 @@ export function CourseCategoriesSection() {
               transition={{ delay: i * 0.1 }}
               viewport={{ once: true }}
             >
-              <Link href={category.href}>
+              {/* O href vem do array acima, escrito sem idioma — `rota()`
+                  é idempotente e resolve os seis de uma vez. */}
+              <Link href={rota(category.href)}>
                 <Card className="bg-card/50 backdrop-blur border-border hover:bg-card transition-all duration-300 p-6 h-full cursor-pointer group hover:shadow-xl hover:shadow-primary/5">
                   <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${category.color} flex items-center justify-center mb-4`}>
                     {category.icon}

@@ -865,9 +865,9 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
             <div className="grid gap-6 lg:grid-cols-[1.05fr_.95fr] lg:items-center">
               <div className="order-2 lg:order-1">
             <div className="flex items-baseline gap-3 flex-wrap">
-              <h3 className="text-2xl sm:text-4xl tracking-wide" style={bebas}>
+              <h2 className="text-2xl sm:text-4xl tracking-wide" style={bebas}>
                 {t.rich("atelie.title", { destaque })}
-              </h3>
+              </h2>
               <span className="inline-flex items-center gap-1 text-[11px] uppercase tracking-wider text-amber-300/80">
                 <Sparkles size={13} /> {t("atelie.badge")}
               </span>
@@ -991,9 +991,9 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           <div aria-hidden className="fx-orb" style={{ width: 240, height: 240, right: "6%", top: 40, background: "radial-gradient(circle, rgba(163,230,53,.3), transparent 65%)", animation: "fx-drift-b 14s ease-in-out infinite" }} />
           <div className="relative max-w-5xl mx-auto">
             <div className="flex items-baseline gap-3 mb-1 flex-wrap">
-              <h3 className="text-xl sm:text-2xl tracking-wide" style={bebas}>
+              <h2 className="text-xl sm:text-2xl tracking-wide" style={bebas}>
                 {t.rich("featured.title", { destaque })}
-              </h3>
+              </h2>
               <span className="inline-flex items-center gap-1 text-[11px] uppercase tracking-wider text-lime-300/80">
                 <BadgeCheck size={13} /> {t("featured.badge")}
               </span>
@@ -1037,11 +1037,16 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
         <div aria-hidden className="fx-orb" style={{ width: 240, height: 240, left: "44%", top: 60, background: "radial-gradient(circle, rgba(167,139,250,.35), transparent 65%)", animation: "fx-drift-a 15s ease-in-out infinite reverse" }} />
         <div className="relative max-w-5xl mx-auto">
           <div className="flex items-baseline gap-3 mb-2.5">
-            <h3 className="text-xl sm:text-2xl tracking-wide" style={bebas}>
+            <h2 className="text-xl sm:text-2xl tracking-wide" style={bebas}>
               {t.rich("news.title", { destaque })}
-            </h3>
+            </h2>
             <span className="text-[11px] uppercase tracking-wider text-white/40">
-              {new Date().toLocaleDateString(tagIntl(locale), { day: "2-digit", month: "long" })}
+              {/* ⚠️ COM fuso. Sem `timeZone`, o servidor (UTC na Netlify) e o leitor
+                  (UTC−3) discordam da data entre 21h e meia-noite todo dia — e
+                  texto diferente entre servidor e cliente é erro de hidratação,
+                  que faz o React descartar a árvore inteira. Mesma causa do
+                  `formatEditorialDate` em `ca86238`. */}
+              {new Date().toLocaleDateString(tagIntl(locale), { day: "2-digit", month: "long", timeZone: "America/Sao_Paulo" })}
             </span>
           </div>
           <div className="grid sm:grid-cols-3 gap-3">

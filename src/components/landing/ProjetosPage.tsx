@@ -1,7 +1,7 @@
 "use client";
 import { useT } from "@/i18n/dicionario";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ArrowRight, ArrowUpRight, Sparkles, Wrench } from "lucide-react";
 import { FAY_PROJECTS, SERVICES, STATUS_LABEL, type ProjectStatus } from "@/data/landing/projects";
 import { ExperienceNav } from "@/components/layout/ExperienceNav";

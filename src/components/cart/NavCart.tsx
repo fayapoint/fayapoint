@@ -6,7 +6,10 @@ import { ShoppingCart, X, Trash2 } from "lucide-react";
 import { useServiceCart } from "@/contexts/ServiceCartContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useRouter } from "next/navigation";
+// ⚠️ O `useRouter` do i18n, não o do `next/navigation`: este prefixa o idioma
+// sozinho. Com o outro, `push("/checkout/cart")` levava 308 para o idioma
+// padrão — quem comprava em inglês caía no português no passo do pagamento.
+import { useRouter } from "@/i18n/navigation";
 
 import {
   Popover,
@@ -14,9 +17,17 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-const currencyFormatter = new Intl.NumberFormat("en-US", {
+/**
+ * ⚠️ O carrinho mostrava DÓLAR (26/08/2026).
+ *
+ * O formatador era `en-US`/`USD`: um curso de R$ 29 aparecia como "$29.00" na
+ * bandeja do carrinho, ao lado do botão de finalizar compra — enquanto a página
+ * de venda, o checkout e a cobrança falavam em real. A loja é brasileira e
+ * cobra em BRL por Asaas e MercadoPago.
+ */
+const currencyFormatter = new Intl.NumberFormat("pt-BR", {
   style: "currency",
-  currency: "USD",
+  currency: "BRL",
 });
 
 export function NavCart() {
@@ -30,7 +41,12 @@ export function NavCart() {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative text-foreground/80 hover:text-primary">
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={itemCount > 0 ? `${T("Carrinho")} (${itemCount})` : T("Carrinho")}
+          className="relative text-foreground/80 hover:text-primary"
+        >
           <ShoppingCart className="w-5 h-5" />
           {itemCount > 0 && (
             <Badge className="absolute -top-1 -right-1 h-4 w-4 flex items-center justify-center p-0 rounded-full text-[10px]">
@@ -42,7 +58,7 @@ export function NavCart() {
       <PopoverContent className="w-96 p-4" align="end">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-bold text-sm">{T("Seu Carrinho")}</h3>
-          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setIsOpen(false)}>
+          <Button variant="ghost" size="icon" aria-label={T("Fechar")} className="h-6 w-6" onClick={() => setIsOpen(false)}>
             <X className="w-3 h-3" />
           </Button>
         </div>
@@ -74,6 +90,7 @@ export function NavCart() {
                       <Button 
                         variant="ghost" 
                         size="icon" 
+                        aria-label={`${T("Remover")} ${item.name}`}
                         className="h-6 w-6 text-muted-foreground hover:text-destructive"
                         onClick={() => removeItem(item.id)}
                       >
@@ -97,7 +114,7 @@ export function NavCart() {
                    {T("Limpar")}
                  </Button>
                  <Button size="sm" onClick={() => {
-                   router.push(`/checkout/cart`); // We might need a cart page or checkout
+                   router.push(`/checkout/cart`);
                    setIsOpen(false);
                  }}>
                    

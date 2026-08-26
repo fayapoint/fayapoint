@@ -169,7 +169,10 @@ export function HeroSection() {
             </div>
 
             <div className="flex flex-col gap-4 sm:flex-row">
-              <Link href={freeCourse ? `/curso/${freeCourse.slug}` : "/aula-gratis"}>
+              {/* ⚠️ `rota()` também aqui: era o único link deste arquivo sem
+                  prefixo de idioma, e custava um 308 no botão principal do
+                  herói (item 20 do laudo). */}
+              <Link href={rota(freeCourse ? `/curso/${freeCourse.slug}` : "/aula-gratis")}>
                 <Button size="lg" className="h-14 bg-gradient-to-r from-emerald-500 to-cyan-500 px-8 text-base font-bold text-black shadow-[0_14px_40px_rgba(16,185,129,0.24)] hover:from-emerald-400 hover:to-cyan-400">
                   <Gift className="mr-2 h-5 w-5" />
                   {freeCourse

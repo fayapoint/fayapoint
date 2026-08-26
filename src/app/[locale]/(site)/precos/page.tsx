@@ -392,7 +392,11 @@ export default function PricingPage() {
       <main>
 
         {/* ━━━ Hero ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-        <section className="relative pt-28 pb-16 px-4 overflow-hidden">
+        {/* ⚠️ O espaço entre a linha de selos e o primeiro plano era de 115 px
+            (64 de rodapé do herói + 48 de topo dos planos, medidos em
+            26/08/2026 — item 31 do laudo). Numa página em que o plano É a
+            decisão, isso é a decisão empurrada para baixo sem nada no meio. */}
+        <section className="relative pt-28 pb-8 px-4 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(139,92,246,0.08),transparent_60%)] pointer-events-none" />
           <div className="container mx-auto max-w-4xl relative text-center">
             <Badge className="mb-5 px-4 py-2 bg-amber-500/10 border-amber-500/20 text-amber-300" variant="outline">
@@ -508,7 +512,7 @@ export default function PricingPage() {
         )}
 
         {/* ━━━ Plan Cards ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */}
-        <section className="py-12 px-4" id="planos">
+        <section className="pt-6 pb-12 px-4" id="planos">
           <div className="container mx-auto max-w-6xl">
             <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-5">
               {PLANS.map((plan, i) => {

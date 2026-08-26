@@ -4,7 +4,7 @@ import { useT } from "@/i18n/dicionario";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { HelpCircle, Search, MessageCircle } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import {
   Accordion,
   AccordionContent,

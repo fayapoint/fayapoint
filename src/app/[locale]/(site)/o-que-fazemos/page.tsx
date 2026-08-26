@@ -3,7 +3,7 @@ import { useT } from "@/i18n/dicionario";
 
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import {
   ArrowRight,
   Sparkles,

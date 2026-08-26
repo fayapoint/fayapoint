@@ -1,5 +1,5 @@
 import { useT } from "@/i18n/dicionario";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 /**
  * 404 com bússola — página perdida nunca pode ser beco sem saída (13/07/2026).

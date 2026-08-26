@@ -5,7 +5,7 @@ import { FaixaDeVideo } from "@/components/ui/FaixaDeVideo";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { Briefcase, MapPin, Clock, Heart, Zap, Users, Coffee, Laptop } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 type Benefit = {
   icon: string;

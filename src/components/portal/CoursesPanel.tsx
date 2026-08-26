@@ -2,7 +2,7 @@
 import { useT } from "@/i18n/dicionario";
 import { useLocale } from "next-intl";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useEffect, useMemo, useState } from "react";
 // A lista encolheu junto com o painel: das onze seções de antes sobraram três,
 // e com elas foram embora dezoito ícones que ninguém mais desenha.

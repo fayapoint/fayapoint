@@ -3,7 +3,7 @@ import { useT } from "@/i18n/dicionario";
 import { BotaoIdioma } from "@/components/layout/BotaoIdioma";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {

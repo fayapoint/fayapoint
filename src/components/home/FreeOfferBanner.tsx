@@ -4,6 +4,7 @@ import { useT } from "@/i18n/dicionario";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { comIdioma } from "@/lib/rota-idioma";
 import {
   Gift,
   BookOpen,
@@ -57,7 +58,9 @@ export function FreeOfferBanner() {
   if (shouldHide) return null;
 
   const freeCourse = monthlyOffers?.freeCourse || null;
-  const ctaHref = freeCourse ? `/curso/${freeCourse.slug}` : "/onboarding";
+  // ⚠️ COM idioma: sem `comIdioma`, o botão do curso grátis do mês levava
+  // 308 para o português — inclusive para quem estava em /en.
+  const ctaHref = comIdioma(freeCourse ? `/curso/${freeCourse.slug}` : "/onboarding", locale);
   const benefits = freeCourse
     ? [
         {

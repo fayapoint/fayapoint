@@ -178,9 +178,9 @@ export function Footer() {
       <div className="bg-gradient-to-r from-primary/15 to-accent/10 py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h3 className="text-2xl font-bold mb-4">
+            <h2 className="text-2xl font-bold mb-4">
               {t("newsletter.title")}
-            </h3>
+            </h2>
             <p className="text-muted-foreground mb-6">
               {t("newsletter.description")}
             </p>
@@ -219,10 +219,14 @@ export function Footer() {
           {/* Company Info */}
           <div className="lg:col-span-2">
             <Link href={comIdioma("/")} className="inline-block mb-4">
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
+              {/* ⚠️ Era um <h2>, e a marca não é um título de seção: o leitor
+                  de tela anunciava "FayAi, título nível 2" no rodapé de toda
+                  página, e logo abaixo vinham três <h4> — um salto h2→h4 em 13
+                  das 14 páginas medidas (item 19 do laudo, 26/08/2026). */}
+              <span className="block text-2xl font-bold bg-gradient-to-r from-amber-400 to-yellow-500 bg-clip-text text-transparent">
                 
                 {T("FayAi")}
-              </h2>
+              </span>
             </Link>
             <p className="text-muted-foreground mb-4">
               {t("company.tagline")}
@@ -250,7 +254,7 @@ export function Footer() {
 
           {/* Links Sections */}
           <div>
-            <h4 className="font-semibold text-white mb-4">{t("links.courses.title")}</h4>
+            <h2 className="font-semibold text-white mb-4">{t("links.courses.title")}</h2>
             <ul className="space-y-1">
               {footerLinks.cursos.map((link) => (
                 <li key={link.href}>
@@ -266,7 +270,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold text-white mb-4">{t("links.company.title")}</h4>
+            <h2 className="font-semibold text-white mb-4">{t("links.company.title")}</h2>
             <ul className="space-y-1">
               {footerLinks.empresa.map((link) => (
                 <li key={link.href}>
@@ -282,7 +286,7 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="font-semibold text-white mb-4">{t("links.support.title")}</h4>
+            <h2 className="font-semibold text-white mb-4">{t("links.support.title")}</h2>
             <ul className="space-y-1">
               {footerLinks.suporte.map((link) => (
                 <li key={link.href}>

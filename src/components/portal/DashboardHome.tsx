@@ -3,7 +3,7 @@ import { useT } from "@/i18n/dicionario";
 import { useLocale } from "next-intl";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { motion } from "framer-motion";
 import {
   Sparkles,

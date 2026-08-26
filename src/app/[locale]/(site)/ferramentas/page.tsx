@@ -141,7 +141,10 @@ export default function ToolsPage() {
 
               {/* Category */}
               <Select value={category} onValueChange={setCategory}>
-                <SelectTrigger className="bg-secondary border-border">
+                {/* O rótulo do filtro vive no `placeholder`, e placeholder some
+                    quando há valor escolhido: o leitor de tela anunciava só
+                    "Freemium", sem dizer de que filtro. */}
+                <SelectTrigger aria-label={t("category")} className="bg-secondary border-border">
                   <SelectValue placeholder={t("category")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -155,7 +158,7 @@ export default function ToolsPage() {
 
               {/* Pricing */}
               <Select value={pricing} onValueChange={setPricing}>
-                <SelectTrigger className="bg-secondary border-border">
+                <SelectTrigger aria-label={t("price")} className="bg-secondary border-border">
                   <SelectValue placeholder={t("price")} />
                 </SelectTrigger>
                 <SelectContent>
@@ -168,7 +171,7 @@ export default function ToolsPage() {
 
               {/* Sort */}
               <Select value={sortBy} onValueChange={setSortBy}>
-                <SelectTrigger className="bg-secondary border-border">
+                <SelectTrigger aria-label={t("sort")} className="bg-secondary border-border">
                   <SelectValue placeholder={t("sort")} />
                 </SelectTrigger>
                 <SelectContent>

@@ -2,7 +2,7 @@
 import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Coins, Loader2, Wand2 } from "lucide-react";
 import { getClientAuthHeaders } from "@/lib/client-auth";
 import { ComprarCreditos } from "./ComprarCreditos";

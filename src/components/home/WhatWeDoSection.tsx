@@ -99,7 +99,11 @@ function CapabilityCard({
   onHover: () => void;
 }) {
   const Icon = capability.icon;
-  const href = capabilityLinks[capability.id];
+  // ⚠️ COM idioma. O cartão vivia fora do `rota()` do componente de cima, e os
+  // quatro links de serviço da /descobrir custavam um 308 por clique — os
+  // últimos quatro vazamentos do item 20 do laudo.
+  const locale = useLocale();
+  const href = comIdioma(capabilityLinks[capability.id], locale);
   return (
     <motion.div
       onMouseEnter={onHover}

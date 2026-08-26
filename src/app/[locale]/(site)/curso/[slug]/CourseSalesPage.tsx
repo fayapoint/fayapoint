@@ -496,10 +496,13 @@ export default function CourseSalesPage({
 
                 {/* Key Outcomes Preview */}
                 <div className="mt-8 p-6 bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-xl border border-green-500/30">
-                  <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
+                  {/* h2 e não h3: é o primeiro título depois do <h1> da página,
+                      e pular nível faz o leitor de tela anunciar uma seção que
+                      não existe (item 19 do laudo). */}
+                  <h2 className="font-bold text-lg mb-4 flex items-center gap-2">
                     <Target className="text-green-400" size={20} />
                     {t("highlights.guaranteedResults")}
-                  </h3>
+                  </h2>
                   <div className="space-y-3">
                     {beneficios.slice(0, 4).map((benefit, i) => (
                       <div key={i} className="flex items-center gap-3">
