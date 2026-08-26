@@ -516,7 +516,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               <ArrowRight size={15} />
             </Link>
           ) : (
-            <Link href={rota("/login")} className="text-sm font-semibold text-white/60 hover:text-white transition-colors">
+            <Link href={rota("/login")} className="inline-flex min-h-11 items-center text-sm font-semibold text-white/60 hover:text-white transition-colors sm:min-h-0">
               {t("signIn")}
             </Link>
           )}
@@ -1160,7 +1160,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               ["/privacidade", "Privacidade"],
               ["/exclusao-de-dados", "Exclusão de dados"],
             ].map(([href, rotulo]) => (
-              <Link key={href} href={rota(href)} className="hover:text-white/80 transition-colors">
+              <Link key={href} href={rota(href)} className="inline-flex min-h-11 items-center hover:text-white/80 transition-colors sm:min-h-0">
                 {T(rotulo)}
               </Link>
             ))}

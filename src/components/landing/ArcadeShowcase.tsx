@@ -145,7 +145,7 @@ export function ArcadeShowcase() {
 
         <Link
           href={rota("/arcade")}
-          className="mt-3 inline-flex items-center gap-1.5 text-xs font-bold text-white/55 transition-colors hover:text-white"
+          className="mt-3 inline-flex min-h-11 items-center gap-1.5 text-xs font-bold text-white/55 transition-colors hover:text-white sm:min-h-0"
         >
           {t("seeAll")} <ArrowRight size={13} />
         </Link>

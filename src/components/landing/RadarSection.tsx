@@ -379,7 +379,7 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
                   painel.fechar();
                 }}
                 aria-pressed={on}
-                className="inline-flex items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-wider transition-colors cursor-pointer"
+                className="inline-flex min-h-11 items-center gap-1.5 rounded-xl px-3.5 py-1.5 text-xs font-extrabold uppercase tracking-wider transition-colors cursor-pointer sm:min-h-0"
                 style={
                   on
                     ? { background: id === "ia" ? "#a78bfa22" : `${GOLD}22`, color: id === "ia" ? "#a78bfa" : GOLD }
@@ -395,7 +395,7 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
 
         <Link
           href={rota("/radar")}
-          className="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-white/45 hover:text-white transition-colors"
+          className="inline-flex min-h-11 items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider text-white/45 hover:text-white transition-colors sm:min-h-0"
         >
           {t("openFull")} <ArrowUpRight size={12} />
         </Link>
@@ -482,7 +482,11 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
                   {i > 0 && <ChevronRight size={11} className="text-white/25" />}
                   <button
                     onClick={() => irPara(l.id)}
-                    className="font-bold hover:underline cursor-pointer"
+                    /* `py-3` cresce a área do dedo sem empurrar a linha: em
+                       elemento inline o preenchimento vertical não muda o
+                       fluxo do texto. A trilha "Mundo › Brasil" media 17 px de
+                       altura (item 18 do laudo). */
+                    className="-my-3 py-3 font-bold hover:underline cursor-pointer"
                     style={{ color: l.id === lugarId ? l.cor : "rgba(255,255,255,.45)" }}
                   >
                     {T(l.nome)}
@@ -579,7 +583,7 @@ function FaixaDeLugares({
             onFocus={() => onSobCursor(k)}
             onBlur={() => onSobCursor(null)}
             onClick={() => onIr(l.id)}
-            className="rounded-lg px-2 py-0.5 text-[11px] font-bold border transition-colors cursor-pointer"
+            className="inline-flex min-h-11 items-center rounded-lg px-2 py-0.5 text-[11px] font-bold border transition-colors cursor-pointer sm:min-h-0"
             style={{
               borderColor: aceso ? l.cor : "rgba(255,255,255,.12)",
               background: aceso ? `${l.cor}26` : "transparent",
@@ -806,7 +810,7 @@ function PainelIa({
               role="tab"
               aria-selected={on}
               onClick={() => setNichoId(n.id)}
-              className="shrink-0 rounded-full px-2.5 py-1 text-[11px] font-bold border-2 transition-colors cursor-pointer"
+              className="inline-flex min-h-11 shrink-0 items-center rounded-full px-2.5 py-1 text-[11px] font-bold border-2 transition-colors cursor-pointer sm:min-h-0"
               style={
                 on
                   ? { borderColor: n.cor, background: `${n.cor}1f`, color: n.cor }
@@ -833,7 +837,7 @@ function PainelIa({
               onClick={() => alternarFonte(id)}
               aria-pressed={on}
               title={T(desc)}
-              className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold border transition-colors cursor-pointer"
+              className="inline-flex min-h-11 items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold border transition-colors cursor-pointer sm:min-h-0"
               style={
                 on
                   ? { borderColor: "rgba(255,255,255,.3)", background: "rgba(255,255,255,.07)", color: "#f3f1ff" }
@@ -918,7 +922,7 @@ function PainelIa({
             <Link
               key={c.slug}
               href={rota(`/curso/${c.slug}`)}
-              className="inline-flex items-center gap-1 rounded-xl px-2.5 py-1 text-[11px] font-bold border transition-colors hover:bg-white/10"
+              className="inline-flex min-h-11 items-center gap-1 rounded-xl px-2.5 py-1 text-[11px] font-bold border transition-colors hover:bg-white/10 sm:min-h-0"
               style={{ borderColor: `${nicho.cor}55`, color: "#f3f1ff" }}
             >
               {T(c.nome)} <ArrowUpRight size={11} />

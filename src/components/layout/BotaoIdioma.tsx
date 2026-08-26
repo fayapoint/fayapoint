@@ -34,10 +34,15 @@ export function BotaoIdioma({ className = "" }: { className?: string }) {
             onClick={() => trocar(item.code)}
             aria-current={ativo ? "true" : undefined}
             aria-label={T(item.label)}
+            /* ⚠️ `min-h-11` = 44 px, o mínimo de alvo de toque do iOS. Os dois
+               botões mediam 34×25 no celular (item 18 do laudo, 26/08/2026).
+               A altura é invisível: `inline-flex items-center` mantém o rótulo
+               do mesmo tamanho e só amplia o que o dedo acerta. */
             className={
-              ativo
+              "inline-flex min-h-11 items-center justify-center sm:min-h-0 " +
+              (ativo
                 ? "rounded-full bg-white/90 px-2.5 py-1 text-[#12142a]"
-                : "rounded-full px-2.5 py-1 text-white/55 transition-colors hover:text-white disabled:opacity-50"
+                : "rounded-full px-2.5 py-1 text-white/55 transition-colors hover:text-white disabled:opacity-50")
             }
           >
             {T(item.short)}

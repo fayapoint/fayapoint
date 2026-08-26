@@ -47,7 +47,7 @@ export function ExperienceNav({ crumb }: { crumb?: ExperienceCrumb }) {
             <Link
               key={l.href}
               href={rota(l.href)}
-              className="text-sm font-semibold text-white/60 hover:text-white transition-colors"
+              className="inline-flex min-h-11 items-center text-sm font-semibold text-white/60 hover:text-white transition-colors sm:min-h-0"
             >
               {T(l.label)}
             </Link>
@@ -64,7 +64,7 @@ export function ExperienceNav({ crumb }: { crumb?: ExperienceCrumb }) {
             <ArrowRight size={15} />
           </Link>
         ) : (
-          <Link href={rota("/login")} className="text-sm font-semibold text-white/60 hover:text-white transition-colors shrink-0">
+          <Link href={rota("/login")} className="inline-flex min-h-11 shrink-0 items-center text-sm font-semibold text-white/60 hover:text-white transition-colors sm:min-h-0">
             
             {T("Entrar")}
           </Link>
