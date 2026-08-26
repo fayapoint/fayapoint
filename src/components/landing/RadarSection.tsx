@@ -119,7 +119,20 @@ export function RadarSection({ news = [] }: { news?: AiNewsItem[] }) {
   // Link interno sem `/pt-BR` custa um 308 por clique e some da contagem de
   // link interno das ferramentas de auditoria. Ver [[reference_seo_armadilhas_locale]].
   const rota = (h: string) => comIdioma(h, locale);
-  const [camada, setCamada] = useState<Camada>("mundo");
+  /**
+   * Abre na camada de IA, não na de tendência geral.
+   *
+   * Com "mundo" por padrão, a home de um site de cursos de IA entregava uma
+   * seção inteira ao que o Brasil estava buscando no Google naquele minuto — e
+   * o site não escolhe o que aparece ali. Em 26/08/2026 os destaques eram
+   * "Cássio Gabus Mendes", "Vietnã X Tailândia", "Jaecoo 5" e "Espancamento".
+   * Nenhum deles tem relação com o produto, e o último é o tipo de palavra que
+   * ninguém quer ver ao lado da própria marca.
+   *
+   * A camada "ia" mostra o que este público veio ver, e é o único conteúdo do
+   * bloco que a casa controla. A aba "World Trend" continua ali, a um clique.
+   */
+  const [camada, setCamada] = useState<Camada>("ia");
   const [lugarId, setLugarId] = useState("BR");
   const [zoom, setZoom] = useState(1);
   /** Lugar sob o cursor — mora aqui, e não dentro do globo, porque é o que

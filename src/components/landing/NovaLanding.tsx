@@ -441,6 +441,27 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
         <span className="text-3xl sm:text-4xl tracking-wide select-none" style={bebas}>
           <LogoFayai />
         </span>
+        {/* Navegação no topo — 26/08/2026.
+
+            A home é a página que mais recebe gente e era a única sem caminho
+            nenhum no cabeçalho: só logo, idioma, XP e "Entrar". Quem chegava
+            aqui não tinha como ir para o catálogo, para os preços ou para o
+            blog sem descer a página inteira até o mapa do rodapé. Os quatro
+            destinos que respondem por quase toda a intenção comercial cabem
+            aqui; o resto continua no rodapé. Some no celular, onde o espaço é
+            do XP e do "Entrar". */}
+        <nav aria-label={T("Navegação principal")} className="hidden md:flex items-center gap-5 text-sm font-semibold text-white/55">
+          {[
+            ["/cursos", t("links.courses")],
+            ["/precos", "Preços"],
+            ["/servicos", "Serviços"],
+            ["/noticias", t("links.blog")],
+          ].map(([href, rotulo]) => (
+            <Link key={href} href={rota(href)} className="hover:text-white transition-colors">
+              {T(rotulo)}
+            </Link>
+          ))}
+        </nav>
         <div className="flex items-center gap-3">
           {/* A home é a única porta de entrada sem o cabeçalho do site — ela
               fica fora do grupo (site), que é onde o SiteChrome monta Header e
@@ -895,15 +916,22 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                   com as capas do trilho, que é o que a pessoa veio ver. */}
               <div className="order-1 lg:order-2">
                 <div className="relative overflow-hidden rounded-2xl border border-amber-400/25 bg-black shadow-[0_30px_70px_-36px_rgba(245,192,78,.5)]">
-                  <video
-                    src="/home/atelie-loop.webm"
-                    poster="/home/atelie-loop.webp"
-                    autoPlay
-                    muted
-                    loop
-                    playsInline
-                    preload="metadata"
+                  {/* ⚠️ Era um <video src="/home/atelie-loop.webm"> — e esse
+                      arquivo NUNCA existiu no repositório: a home pedia,
+                      levava 404 e mostrava o poster mesmo assim (a única
+                      requisição com falha do site inteiro, medida em
+                      26/08/2026). Enquanto o loop não for produzido, quem
+                      manda é o quadro que existe. Para voltar ao vídeo: gerar
+                      `public/home/atelie-loop.webm` e trocar esta <img> por um
+                      <video> com `poster` no mesmo .webp, `preload="metadata"`
+                      (não `auto` — isto fica logo abaixo da dobra e disputaria
+                      banda com as capas do trilho). */}
+                  <img
+                    src="/home/atelie-loop.webp"
+                    alt=""
                     aria-hidden="true"
+                    loading="lazy"
+                    decoding="async"
                     className="aspect-video w-full object-cover"
                   />
                   <span
@@ -1109,6 +1137,13 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               // indexada"), veredito correto para uma página órfã. Ou ela
               // ganha link, ou sai do sitemap; ganhou link.
               ["/api-docs", "API"],
+              // Termos e Privacidade não tinham link NENHUM na home — nem no
+              // topo nem no rodapé (26/08/2026). Fora o dever com o visitante,
+              // Meta e Google Ads pedem política de privacidade alcançável a
+              // partir da página anunciada.
+              ["/termos", "Termos de Uso"],
+              ["/privacidade", "Privacidade"],
+              ["/exclusao-de-dados", "Exclusão de dados"],
             ].map(([href, rotulo]) => (
               <Link key={href} href={rota(href)} className="hover:text-white/80 transition-colors">
                 {T(rotulo)}
