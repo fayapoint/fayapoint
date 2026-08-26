@@ -343,16 +343,24 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
         "Getting-started guides, platform tutorials and support to make the most of FayAI's AI courses.",
     },
   },
+  /**
+   * ⚠️ Reescrito em 26/08/2026 junto com a página. O texto anterior prometia
+   * "referência da API RESTful, com quick start e exemplos de requisição" — e
+   * o que existia era a lista dos endpoints INTERNOS do site, com exemplo de
+   * como mandar senha para a rota de login. Título e descrição são promessa
+   * feita na página de resultado do Google; esta estava sendo quebrada no
+   * primeiro clique. Ver o cabeçalho de `(site)/api-docs/page.tsx`.
+   */
   "/api-docs": {
     "pt-BR": {
-      title: "Documentação da API — autenticação, cursos e IA | FayAI",
+      title: "API FayAI — o que existe hoje e o que vem | FayAI",
       description:
-        "Referência da API RESTful da FayAI: autenticação, endpoints de usuário, cursos e geração com IA, com quick start e exemplos de requisição.",
+        "O estado da API da FayAI, sem promessa: o que já dá para consumir hoje, as três frentes em construção e por que a cobrança será em créditos.",
     },
     en: {
-      title: "API Documentation — auth, courses and AI | FayAI",
+      title: "FayAI API — what exists today and what is coming | FayAI",
       description:
-        "FayAI RESTful API reference: authentication, user endpoints, courses and generative AI, with a quick start and request examples.",
+        "The honest state of the FayAI API: what you can consume today, the three fronts being built, and why billing will be in credits.",
     },
   },
   "/aula-gratis": {

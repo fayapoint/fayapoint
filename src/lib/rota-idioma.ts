@@ -24,7 +24,23 @@
 /** `/cursos` → `/pt-BR/cursos`. Deixa em paz externo, âncora, `/api` e o que já tem prefixo. */
 export function comIdioma(href: string, locale: string): string {
   if (!href.startsWith("/")) return href; // http(s), mailto:, tel:, #ancora
-  if (href.startsWith("/api")) return href;
+  /**
+   * ⚠️ CASAR O SEGMENTO, NÃO O PREFIXO (26/08/2026).
+   *
+   * `startsWith("/api")` casa por SUBSTRING: a página `/api-docs` entrava aqui
+   * como se fosse rota de API e saía sem prefixo de idioma. O resultado é que a
+   * home linkava `/api-docs`, que redireciona, e o Google contava esse link
+   * como destino diferente de `/pt-BR/api-docs` — a página aparecia órfã
+   * recebendo link.
+   *
+   * O `src/proxy.ts` já tinha consertado exatamente isto (linha ~318) depois de
+   * a mesma armadilha ter produzido um 404 registrado no Search Console. Esta
+   * era a segunda cópia da regra, e ficou para trás.
+   *
+   * Qualquer rota futura começada por "api" — `/api-status`, `/apidocs` —
+   * cairia na mesma.
+   */
+  if (href === "/api" || href.startsWith("/api/")) return href;
   if (/^\/(pt-BR|en)(\/|$)/.test(href)) return href;
   return `/${locale}${href === "/" ? "" : href}`;
 }

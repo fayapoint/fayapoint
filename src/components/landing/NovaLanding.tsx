@@ -1104,6 +1104,11 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               ["/sobre", "Sobre"],
               ["/parcerias", "Parcerias"],
               ["/contato", "Contato"],
+              // A `/api-docs` estava no sitemap e não recebia link de lugar
+              // nenhum — o Google leu e recusou ("Rastreada, mas não
+              // indexada"), veredito correto para uma página órfã. Ou ela
+              // ganha link, ou sai do sitemap; ganhou link.
+              ["/api-docs", "API"],
             ].map(([href, rotulo]) => (
               <Link key={href} href={rota(href)} className="hover:text-white/80 transition-colors">
                 {T(rotulo)}
