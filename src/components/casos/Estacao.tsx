@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { motion, useInView } from "framer-motion";
@@ -86,6 +87,7 @@ function BarrasDeCor() {
 
 /** O painel do rádio-controle — só no Ato IV. */
 function PainelDeVoo({ cor }: { cor: string }) {
+  const T = useT();
   return (
     <>
       <div className={css.horizonte} aria-hidden="true" />
@@ -94,9 +96,9 @@ function PainelDeVoo({ cor }: { cor: string }) {
         style={{ color: cor }}
         aria-hidden="true"
       >
-        <span>ALT 42m</span>
-        <span>GPS 9</span>
-        <span>BAT 68%</span>
+        <span>{T("ALT 42m")}</span>
+        <span>{T("GPS 9")}</span>
+        <span>{T("BAT 68%")}</span>
       </div>
     </>
   );
@@ -118,6 +120,7 @@ function TarjaDeCredito({ texto, cor }: { texto: string; cor: string }) {
 }
 
 export function Estacao({ t, indice }: { t: Trabalho; indice: number }) {
+  const T = useT();
   const ref = useRef<HTMLElement>(null);
   const naTela = useInView(ref, { margin: "-45% 0px -45% 0px" });
   const [arteQuebrada, setArteQuebrada] = useState(false);
@@ -167,21 +170,21 @@ export function Estacao({ t, indice }: { t: Trabalho; indice: number }) {
               className="font-mono font-semibold tracking-[0.22em]"
               style={{ color: t.cor }}
             >
-              {t.rotulo}
+              {T(t.rotulo)}
             </span>
             <span className="h-px w-8" style={{ background: `${t.cor}66` }} />
             <span className="inline-flex items-center gap-1 text-muted-foreground">
               <MapPin className="h-3 w-3" />
               {t.cidade}
             </span>
-            {t.destaque ? <Etiqueta cor={t.corSec}>destaque</Etiqueta> : null}
+            {t.destaque ? <Etiqueta cor={t.corSec}>{T("destaque")}</Etiqueta> : null}
           </div>
 
           <h3
             id={`${t.slug}-titulo`}
             className="text-balance text-3xl font-bold leading-[1.05] sm:text-4xl lg:text-5xl"
           >
-            {t.titulo}
+            {T(t.titulo)}
           </h3>
 
           <p className="mt-3 text-sm uppercase tracking-[0.16em] text-muted-foreground">
@@ -195,7 +198,7 @@ export function Estacao({ t, indice }: { t: Trabalho; indice: number }) {
             {t.linha}
           </p>
 
-          <TextoRico className="mt-5 leading-relaxed text-muted-foreground">{t.resumo}</TextoRico>
+          <TextoRico className="mt-5 leading-relaxed text-muted-foreground">{T(t.resumo)}</TextoRico>
 
           {/* o contexto de época — o coração do dossiê */}
           <div
@@ -204,7 +207,8 @@ export function Estacao({ t, indice }: { t: Trabalho; indice: number }) {
           >
             <p className="mb-3 flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em]" style={{ color: t.cor }}>
               <Cpu className="h-3.5 w-3.5" />
-              O que existia na época
+              
+              {T("O que existia na época")}
             </p>
             <TextoRico className="text-sm leading-relaxed text-muted-foreground">
               {t.contexto}
@@ -253,7 +257,8 @@ export function Estacao({ t, indice }: { t: Trabalho; indice: number }) {
           <details className="group mt-6 text-xs text-muted-foreground/80">
             <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 font-medium hover:text-foreground">
               <Quote className="h-3 w-3" aria-hidden="true" />
-              De onde saiu
+              
+              {T("De onde saiu")}
             </summary>
             <p className="mt-2 border-l pl-3 leading-relaxed" style={{ borderColor: `${t.cor}55` }}>
               {t.prova}
@@ -316,7 +321,7 @@ export function Estacao({ t, indice }: { t: Trabalho; indice: number }) {
                 <figure key={f.src} className="overflow-hidden rounded-xl ring-1 ring-white/10">
                       <img
                     src={f.src}
-                    alt={f.legenda}
+                    alt={T(f.legenda)}
                     loading="lazy"
                     decoding="async"
                     className="aspect-video w-full object-cover"
@@ -324,7 +329,7 @@ export function Estacao({ t, indice }: { t: Trabalho; indice: number }) {
                   <figcaption className="flex items-start gap-1.5 bg-white/[0.03] px-2.5 py-2 text-[10px] leading-snug text-muted-foreground">
                     <Camera className="mt-px h-3 w-3 shrink-0" style={{ color: t.corSec }} aria-hidden="true" />
                     <span>
-                      <strong className="font-semibold text-foreground/80">Foto real.</strong> {f.legenda}
+                      <strong className="font-semibold text-foreground/80">{T("Foto real.")}</strong> {T(f.legenda)}
                     </span>
                   </figcaption>
                 </figure>
@@ -336,10 +341,11 @@ export function Estacao({ t, indice }: { t: Trabalho; indice: number }) {
             <div className="mt-5">
               <p className="mb-2.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                 <ListVideo className="h-3.5 w-3.5" aria-hidden="true" />
-                Do acervo — {t.videos.length} {t.videos.length === 1 ? "peça" : "peças"}
+                
+                {T("Do acervo —")} {t.videos.length} {t.videos.length === 1 ? T("peça") : T("peças")}
                 {fechados > 0 ? (
                   <span className="normal-case tracking-normal opacity-60">
-                    ({fechados} {fechados === 1 ? "fechada" : "fechadas"})
+                    ({fechados} {fechados === 1 ? T("fechada") : T("fechadas")})
                   </span>
                 ) : null}
                 {t.playlist ? <span className="normal-case tracking-normal opacity-70">· {t.playlist}</span> : null}
@@ -370,7 +376,8 @@ export function Estacao({ t, indice }: { t: Trabalho; indice: number }) {
                   style={{ borderColor: `${t.cor}55`, color: t.corSec }}
                 >
                   <ListVideo className="h-3.5 w-3.5" aria-hidden="true" />
-                  Ver as {tocaveis.length} no YouTube
+                  
+                  {T("Ver as")} {tocaveis.length}  {T("no YouTube")}
                   <ExternalLink className="h-3 w-3 opacity-60" aria-hidden="true" />
                 </a>
               ) : null}
@@ -379,7 +386,7 @@ export function Estacao({ t, indice }: { t: Trabalho; indice: number }) {
             <p className="mt-5 rounded-xl border border-dashed border-border/60 p-4 text-xs leading-relaxed text-muted-foreground">
               {t.videos.length > 0
                 ? `As ${t.videos.length} peças deste trabalho estão fechadas no acervo — existem, mas não são públicas. O que prova a passagem está no currículo, acima.`
-                : "Sem vídeo no acervo — este trabalho é anterior ao YouTube, ou saiu em fita e nunca foi digitalizado. O que prova a passagem está no currículo, acima."}
+                : T("Sem vídeo no acervo — este trabalho é anterior ao YouTube, ou saiu em fita e nunca foi digitalizado. O que prova a passagem está no currículo, acima.")}
             </p>
           )}
         </motion.div>

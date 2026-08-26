@@ -1,4 +1,5 @@
-import { ATOS, TRABALHOS, TOTAL_TOCAVEIS } from "@/dados/casos";
+import { TRABALHOS, TOTAL_TOCAVEIS } from "@/dados/casos";
+import { casosDoIdioma } from "@/dados/casos-idioma";
 import { GaleriaCasos } from "@/components/casos/GaleriaCasos";
 
 /**
@@ -26,8 +27,12 @@ import { GaleriaCasos } from "@/components/casos/GaleriaCasos";
  * HTML. A interação — cena WebGL, moviola, trilha, vídeos — mora numa única
  * ilha cliente. Ver `GaleriaCasos`.
  *
- * ⚠️ O conteúdo é biográfico e está em português. O cromo do site é traduzido
- * por `next-intl`, mas o dossiê não — ver o HANDOFF desta sessão.
+ * ⚠️ O conteúdo é biográfico. Até 26/08/2026 ele saía em PORTUGUÊS na árvore
+ * inglesa — 36 trechos, ou seja a página toda (item 12 do laudo): o cromo do
+ * site é traduzido por `next-intl`, e o dossiê não vem de `messages/`. Agora
+ * passa por `casosDoIdioma`, que junta `casos.en.json` campo a campo e cai no
+ * português quando a tradução falta. Título de vídeo, nome de instituição e
+ * cidade seguem em português DE PROPÓSITO — são registro, não texto de tela.
  *
  * ⚠️ Título e descrição NÃO saem daqui. Saem de `ROUTE_SEO["/casos"]` em
  * `src/lib/metadata.ts`, pelo `generateMetadata` do `layout.tsx` ao lado — que
@@ -63,7 +68,13 @@ function esquema() {
   };
 }
 
-export default function PaginaCasos() {
+export default async function PaginaCasos({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const { atos, trabalhos } = casosDoIdioma(locale);
   return (
     <>
       <script
@@ -71,7 +82,7 @@ export default function PaginaCasos() {
          
         dangerouslySetInnerHTML={{ __html: JSON.stringify(esquema()) }}
       />
-      <GaleriaCasos atos={ATOS} trabalhos={TRABALHOS} totalVideos={TOTAL_TOCAVEIS} />
+      <GaleriaCasos atos={atos} trabalhos={trabalhos} totalVideos={TOTAL_TOCAVEIS} />
     </>
   );
 }

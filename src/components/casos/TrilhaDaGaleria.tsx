@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useRef, useState } from "react";
 import { Music, VolumeX } from "lucide-react";
@@ -28,6 +29,7 @@ import { useGaleria } from "./estado";
 const VOLUME = 0.32;
 
 export function TrilhaDaGaleria({ atos }: { atos: Ato[] }) {
+  const T = useT();
   const { ato } = useGaleria();
   const audio = useRef<HTMLAudioElement>(null);
   const [ligada, setLigada] = useState(false);
@@ -103,7 +105,7 @@ export function TrilhaDaGaleria({ atos }: { atos: Ato[] }) {
         type="button"
         onClick={alternar}
         aria-pressed={ligada}
-        aria-label={ligada ? "Desligar a trilha" : "Ligar a trilha da galeria"}
+        aria-label={ligada ? T("Desligar a trilha") : T("Ligar a trilha da galeria")}
         /*
          * À ESQUERDA de propósito: o canto inferior direito já é do botão
          * flutuante do site, e os dois se sobrepunham.
@@ -134,7 +136,7 @@ export function TrilhaDaGaleria({ atos }: { atos: Ato[] }) {
           <Music className="h-3.5 w-3.5" aria-hidden="true" />
         )}
         <span className="hidden text-[11px] font-medium tracking-wide sm:inline">
-          {ligada ? nome : "Trilha"}
+          {ligada ? nome : T("Trilha")}
         </span>
         {ligada ? <VolumeX className="h-3.5 w-3.5 opacity-60" aria-hidden="true" /> : null}
       </button>

@@ -14,7 +14,7 @@
  *        160         |          20            |  claude-cowork-colaboracao
  *        150         |          15            |  make-integracao-total
  *
- * A vitrine somava **1.525 aulas**. O catálogo tem **514 capítulos escritos**.
+ * A vitrine somava **1.525 aulas**. O catálogo tem **517 capítulos escritos**.
  * `metrics.lessons` estava errado em 18 dos 22 cursos, e `contentChapters` em
  * 11 — os dois campos guardados à mão, nenhum medido.
  *
@@ -214,8 +214,56 @@ for (const p of cursos.sort((a, b) => a.slug.localeCompare(b.slug))) {
           ...(modulos.length ? { 'curriculum.modules': modulosNovos } : {}),
           metricasMedidasEm: new Date(),
         },
+        /**
+         * ⚠️ O ESPELHO INGLÊS CONGELAVA O NÚMERO VELHO.
+         *
+         * `i18n.en` guarda a tradução do produto, e `paraIdioma` a serve por
+         * cima do português. O tradutor do catálogo levava `metrics.duration`
+         * e `curriculum.modules[].duration` junto — então a página inglesa do
+         * `make-integracao` dizia **"25+ hours"** enquanto a portuguesa já
+         * dizia "1h55", e cada módulo dizia "3 hours" contra "13 min".
+         *
+         * Duração agora é FORMATO, não frase: "1h55" é igual nos dois idiomas.
+         * Apagar o campo do espelho faz o inglês cair no português, que é o
+         * número medido. O tradutor também parou de colher os dois campos.
+         */
       }
     );
+  }
+
+  /**
+   * A limpeza do espelho corre FORA do `if (mudou)`.
+   *
+   * Quando o número já está certo no português, `mudou` é falso — e era
+   * exatamente aí que a tradução velha continuava no ar, sozinha, servida só
+   * para quem lê em inglês. O critério tem de ser "o espelho ainda carrega
+   * duração?", não "o português mudou?".
+   */
+  if (GRAVAR) {
+    const espelho = await col.findOne(
+      { _id: p._id },
+      { projection: { 'i18n.en.metrics': 1, 'i18n.en.curriculum.modules': 1 } }
+    );
+    const en = espelho?.i18n?.en;
+    if (en?.metrics !== undefined) {
+      await col.updateOne({ _id: p._id }, { $unset: { 'i18n.en.metrics': '' } });
+      console.log(`      espelho: i18n.en.metrics apagado (dizia ${JSON.stringify(en.metrics)})`);
+    }
+    const modsEn = en?.curriculum?.modules;
+    if (Array.isArray(modsEn) && modsEn.some((m) => m && m.duration !== undefined)) {
+      await col.updateOne(
+        { _id: p._id },
+        {
+          $set: {
+            'i18n.en.curriculum.modules': modsEn.map((m) => {
+              const { duration: _fora, ...resto } = m || {};
+              return resto;
+            }),
+          },
+        }
+      );
+      console.log('      espelho: duração dos módulos apagada');
+    }
   }
 }
 

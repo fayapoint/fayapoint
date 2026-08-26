@@ -1,0 +1,524 @@
+{
+  "trabalhos": {
+    "tales-of-the-vale": {
+      "titulo": "Tales of the Vale",
+      "papel": "Owner, brand, and method",
+      "rotulo": "1992 — 1994",
+      "linha": "At 16, an RPG shop where computer graphics became teaching material.",
+      "resumo": "His first company. An RPG shop in the countryside of São Paulo, with a logo he designed himself and — the part nobody else did — his own method for teaching the game, entirely visual, illustrated with images he rendered himself.",
+      "contexto": "Explaining RPGs in 1992 meant reading rules from a hardcover book, in English, to people who had never played. He decided to use images instead. The tools available for that: **3D Studio R1**, running on DOS, rendering a single frame over several minutes on a 386 machine, and **Photoshop 2.0/2.5**, which had just appeared and didn't even have layers yet. Every piece of material was a calculation of hours. In a town where almost no one had seen a rendered image, this wasn't decoration: it was the sales pitch.",
+      "prova": "CV (long version, 14/04/2021) — \"Owner. Responsible for all marketing, having created the shop's logo and a new method for learning RPG.\"",
+      "feitos": [
+        "Created the shop's logo and entire visual identity",
+        "Invented a visual method for learning RPG, using computer graphics instead of text",
+        "Handled marketing, customer service, and production — alone"
+      ]
+    },
+    "igres": {
+      "titulo": "IGRES Technology and Design",
+      "papel": "IT technician and graphic designer",
+      "rotulo": "1994 — 1995",
+      "linha": "Built the computer in the morning and designed the newspaper ad in the afternoon.",
+      "resumo": "IGRES was responsible for most personal and corporate computers in the Vale do Paraíba region. He \"tuned and configured\" the machines the company distributed — and, in the same shift, created the ads for the Vale Paraibano newspaper and the animations commissioned by local businesses.",
+      "contexto": "The installed base ranged from the **386DX to the Pentium**, which was brand new. Tuning a machine back then meant resolving IRQ conflicts by hand, fiddling with motherboard jumpers, and writing CONFIG.SYS and AUTOEXEC.BAT to squeeze the CD-ROM driver into the 640 KB of low memory. On the other side of the desk, the graphics work: newspaper ads and animations in **FLI, FLC, and AVI** — AVI had been born just a year earlier with Video for Windows. Having both hands, one for hardware and one for imagery, is what explains the next thirty years.",
+      "prova": "Resume — \"Responsible for tuning and configuring microcomputers... the company was in charge of ads in the Jornal Vale Paraibano and animations in FLI, FLC, AVI.\"",
+      "feitos": [
+        "Hardware and software setup and maintenance for the region's installed base",
+        "Ads for the Vale Paraibano newspaper",
+        "Animations in FLI, FLC, and AVI for companies in São José dos Campos"
+      ]
+    },
+    "cna": {
+      "titulo": "CNA — Language Teaching",
+      "papel": "English teacher (beginner, intermediate, and advanced)",
+      "rotulo": "1994 — 1996",
+      "linha": "Came back from the United States speaking English and brought a computer into the classroom.",
+      "resumo": "Two years teaching all three levels. The edge wasn't the English itself — which he picked up living abroad, between Wisconsin and New York — it was using technology in the classroom to hold the attention of students who were there because they had to be.",
+      "contexto": "A language classroom in 1994 meant cassette players, VHS, and overhead projectors. Nobody brought a PC to class. He did because he had the repertoire from both sides: the fluency came from high school in the US, and the machine came from IGRES, during the same period. This is the first time the pattern that repeats throughout his life shows up — **grabbing the new tool and using it to explain things better**.",
+      "prova": "Resume in English — \"Used technology in the classroom to improve student engagement and learning outcomes.\" CTI transcript confirms the first year of high school completed in the US.",
+      "feitos": [
+        "Taught beginner, intermediate, and advanced levels",
+        "Used technology in the classroom to boost engagement — before that was even a thing"
+      ]
+    },
+    "multirio": {
+      "titulo": "MultiRio",
+      "papel": "Video Machine Editor",
+      "rotulo": "1995 — 2002 · 7 years",
+      "linha": "Seven years learning non-linear editing from technical manuals written in English.",
+      "resumo": "Production company for socio-educational programs aired on broadcast TV (TVE, Bandeirantes) and cable (NET). He started as a **Video Machine** editor and left operating **Discreet Flint** — the highest finishing tier that existed.",
+      "contexto": "The Video Machine, by Fast Electronic, was one of the first non-linear suites to fit on a PC: a capture card with a hardware JPEG codec, and editing moving from tape-to-tape cutting to a timeline. There were no tutorials, no forums, no YouTube. What there was was the **manufacturer's manual, in English** — and that's literally how he tells it on his resume. The English from CNA became a work tool. Then came **Discreet Flint**, which ran on an **SGI** workstation and cost as much as an apartment: broadcast-level compositing and finishing. All in SD 4:3, Betacam SP, timecode, and the discipline of someone who can't undo.",
+      "prova": "Resume — \"Working as a Video Machine Editor... learning the philosophy of non-linear editing (offline) was very intuitive. Knowledge and technical guidance acquired from the manufacturers' technical manuals (manuals written in English).\" Courses: Video Machine — MultiRio; Discreet Flint — MultiRio.",
+      "feitos": [
+        "Editing of socio-educational programs for TVE, Bandeirantes, and NET",
+        "Mastery of offline non-linear editing when it was still an exception in Brazil",
+        "Operation of Discreet Flint (finishing and compositing on an SGI workstation)",
+        "Technical learning directly from English manuals and from in-house technicians"
+      ]
+    },
+    "virtual-mdb": {
+      "titulo": "VIRTUAL · MDB Entretenimento",
+      "papel": "Video division — capture, editing suite, editing, sound, and post",
+      "rotulo": "2000 — 2001",
+      "linha": "Video for the internet when the internet was 56k — and he built the editing suite from scratch.",
+      "resumo": "The video division of a website, at the height of the Brazilian dot-com bubble. He did it all: captured footage at events, **built the editing suite**, edited, sound-designed, and finished.",
+      "contexto": "In 2000, putting video on the web meant RealVideo or Windows Media at 30 kbps, for people connecting via dial-up modem. The frame was the size of a postage stamp and every second was negotiated byte by byte. Building the suite meant choosing a capture card, a disk fast enough for video (which at the time was rare and expensive), and solving the IDE bottleneck. This is the first time he **sets up the entire operation**, not just running someone else's.",
+      "prova": "Resume — \"Video division of the website. From capturing images at events, to setting up the editing suite, editing, sound design, and post-production.\"",
+      "feitos": [
+        "Image capture at events",
+        "Built the editing suite from scratch",
+        "Editing, sound design, and post-production"
+      ]
+    },
+    "zdf": {
+      "titulo": "ZDF Television — Brazil bureau",
+      "papel": "Freelance editor — filling in for the editor-in-chief in Brazil",
+      "rotulo": "2000 — 2010",
+      "linha": "Edited for German TV on an island where the entire operating system was in German.",
+      "resumo": "Brought in to fill in for ZDF's editor-in-chief in Brazil. The detail that defines the job is right there on the résumé: **the equipment and the computer's operating system were all in German**. He doesn't speak German.",
+      "contexto": "Editing without understanding what the buttons say is possible for one reason only: someone who knows the *logic* of an island recognizes where a function lives before reading its label. It's the same muscle he trained at MultiRio reading manuals in English, now without even the manual. ZDF is Europe's second-largest public broadcaster; the material went from Rio to Mainz via satellite, on a newsroom deadline. The stories he lists give you the scale: the life of **Comandante Rolim** (founder of TAM, who died in 2001), **Rio de corpo e alma**, **Rio's Carnival**, and **coverage of Argentina's presidential elections**.",
+      "prova": "Résumé — \"Editor hired temporarily to fill in for ZDF's editor-in-chief in Brazil. The equipment and the computer's operating system were all in German.\"",
+      "feitos": [
+        "Life and work of Comandante Rolim (TAM)",
+        "\"Rio, uma cidade de corpo e alma\"",
+        "Rio's Carnival",
+        "Coverage of Argentina's presidential elections"
+      ]
+    },
+    "dvplus-hollywood": {
+      "titulo": "DVPlus · Emmanuelle in Rio",
+      "papel": "Lead editor — and co-writer",
+      "rotulo": "2002 — 2003",
+      "linha": "A Hollywood feature shot in Rio, cut on Avid — and he had a hand in the script.",
+      "resumo": "Lead editor at DVPlus, handling political campaigns and international programs. In the middle of all that, **Emmanuelle in Rio**, a US-produced English-language feature: he edited it and **helped shape the screenplay**.",
+      "contexto": "2002 was the year the Brazilian presidential election mobilized television like never before — and a political campaign is the toughest regime an edit suite can face: footage arriving up to the last minute, a non-negotiable legal deadline, and zero chance of \"we'll fix it tomorrow.\" On the other side of the same room, an English-language feature. Cutting fiction on **Avid Media Composer** in 2002 meant working with low-res offline media and conforming later — which forces you to decide the film in your head before you ever see it look good. Being brought into the script, as the editor, tells you exactly what the director thought of his eye.",
+      "prova": "Resume — \"Lead Editor. Responsible for political campaigns and international programs. Among them, the film Emanuelle in Rio, where in addition to editing, I took part in developing the screenplay.\" LinkedIn profile lists the experience under the label \"Hollywood.\"",
+      "feitos": [
+        "Edited the feature Emmanuelle in Rio (US production, English-language)",
+        "Contributed to the screenplay",
+        "Political campaigns and international programs"
+      ]
+    },
+    "fgv": {
+      "titulo": "FGV — Fundação Getulio Vargas",
+      "papel": "Editor-in-chief — all audiovisual content for the Executivo Jr course",
+      "rotulo": "2003 — 2006 · 3 years",
+      "linha": "Responsible for all audiovisual content for an FGV course — right at the shift from CD-ROM to online.",
+      "resumo": "Editor-in-chief: **all** audiovisual content for the Executivo Jr course in Brazil went through him. Years later he'd return as a freelancer for institutional videos, now also handling graphic design.",
+      "contexto": "Distance learning in 2003 in Brazil meant CD-ROMs and DVDs in a box, with streaming still in its infancy — broadband was arriving, but you couldn't count on it. That changes everything in editing: the video has to fit within a fixed megabyte budget, the audio needs to be intelligible on PC speakers, and the lesson has to work without a teacher by your side. A course editor-in-chief is part editor, part instructional designer — and it's the direct seed of what he does today at FayAI, twenty years later.",
+      "prova": "Resume — \"Editor-in-chief. Responsible for all audiovisual content for the Executivo Jr course in Brazil.\" Portfolio: FGV institutional video with the description \"Responsible for editing and graphic design.\"",
+      "feitos": [
+        "All audiovisual content for the Executivo Jr course",
+        "FGV institutional videos (editing and graphic design)",
+        "Piece \"Vida de Estudante\""
+      ]
+    },
+    "jockey-club": {
+      "titulo": "Jockey Club Brasileiro · TV Turfe",
+      "papel": "Editing Coordinator — and the man behind the SD→HD transition",
+      "rotulo": "2006 — 2013 · 7 years",
+      "linha": "Deployed the DV system at the station, trained the team, and led the switch to HD — gear and people.",
+      "resumo": "Seven years coordinating editing for the Jockey's TV station. He did three things that rarely show up on the same résumé: **deployed** the DV system, **trained** the staff, and **led the transition to HD** — adapting both the archive and the people. As a bonus, he designed the new visual identity and logo.",
+      "contexto": "The SD→HD migration, between 2006 and 2013, broke major broadcasters worldwide. It's not just swapping cameras: it's 4:3 becoming 16:9 with a legacy archive that still needs to stay on air, it's tape turning into files, it's codecs, it's storage, it's people who had worked the same way for twenty years. The hard part isn't technical — it's **the people**. He trained the TV Turfe team in non-linear editing and deployed the VT4 system — and this is listed separately, as freelance work, which suggests he made the same crossing twice. By the end of the period, 2010, the material is output as `.f4v` — Flash — which was how video reached the browser before HTML5.",
+      "prova": "Résumé — \"Editing Coordinator, Implementation of the DV system at the station, staff training and the transition to HD, all the adaptation of material and personnel from SD to HD was carried out during this period.\" Archive: \"Opening sequence made for JCB where, in addition to the bumpers, I was responsible for the new visual identity and logo.\"",
+      "feitos": [
+        "Deployment of the DV system at the station",
+        "Staff training in non-linear editing",
+        "Complete transition from SD to HD — material and personnel",
+        "New visual identity, logo, and bumpers for JCB",
+        "Daily opening, race coverage, and auction bumpers",
+        "Deployment of the VT4 system at TV Turfe and technical team training"
+      ]
+    },
+    "freelas-nao-linear": {
+      "titulo": "The freelancer's list",
+      "papel": "Non-linear editor and video director",
+      "rotulo": "late 90s — 2013",
+      "linha": "The resume ends with a list and an \"among many others.\" It deserves its own room.",
+      "resumo": "Under the heading \"Other Activities\" lies a list that, on its own, would be someone's entire resume. German broadcaster, Globo, Record, a 3D political campaign, event video direction, a feature film. Each line is a different island, a different piece of software, and a client who didn't have time to explain things twice.",
+      "contexto": "Reading the list by *software* tells the story of the industry: **LIQUID** (the Pinnacle island ARD used), **Avid at Studio Line**, **Premiere** for a TV show, **3D Studio Max** for campaign computer graphics. No one was a specialist in four systems by choice — that was how you survived freelancing when every shop had its own. The constant in all of them: he arrives, figures out the island, and delivers on the deadline of those who were already there.",
+      "prova": "Resume (long version) — \"Other Activities / Freelance Non-Linear Editing Work\" section, closed with \"among many others...\".",
+      "feitos": [
+        "Editing for German TV station ARD in LIQUID",
+        "Implementation of the VT4 system at TV Turfe and technical team training",
+        "Post-production of Sabbá Show, national network, in Premiere",
+        "Disque Paquera commercials at Studio Line, in Avid",
+        "3 chapters of Globo Ecologia at Studio Line, in Avid",
+        "Editing of the program Giro na Noite, in Premiere",
+        "Institutional videos for the Department of the Environment at Disa Vídeo, in Avid",
+        "Video direction for the Telefônica Open Air event",
+        "Esoteric simulation episodes for TV Record, in Premiere",
+        "Institutional video about the Mauá Shipyard merger, in Premiere",
+        "Computer graphics for a political campaign, in 3D Studio Max"
+      ]
+    },
+    "programa-zero": {
+      "titulo": "Program Zero — the pilot",
+      "papel": "Editing and backstage",
+      "rotulo": "2010",
+      "linha": "The pilot that never aired, shot on HDV, with the entire backstage preserved.",
+      "resumo": "A three-block program pilot, plus the making-of. It's in the HDV archive, in alpha versions, with a separate teaser — a snapshot of how you tested a format before there was a platform to publish it directly.",
+      "contexto": "In 2010, HDV was the cheap gateway to HD: it recorded 1440×1080 compressed onto MiniDV tape, so a credit card could buy what once demanded a broadcaster's budget. You made a program pilot and carried it under your arm. The archive holds block zero, one, and three, plus the backstage — including a file called `backstage piloto 00alpha`, which is how you name something that's still going to change.",
+      "prova": "Channel archive: 6 pieces including blocks, teaser, and backstage, May/2010.",
+      "feitos": [
+        "Editing of the pilot blocks",
+        "Backstage and teaser",
+        "HDV mastering"
+      ]
+    },
+    "lixo-luanda": {
+      "titulo": "Trash in Luanda",
+      "papel": "Vignettes and graphic treatment",
+      "rotulo": "2010",
+      "linha": "A sanitation campaign for Angola, resolved with graphic design over live-action footage.",
+      "resumo": "Vignettes for a campaign about urban waste in Luanda. The description he left in the file is from someone who thought through the problem: *\"vignette with graphic alterations and highlighting of venomous animals with saturation at the start\"*.",
+      "contexto": "Public health campaigns have a tough communication problem: showing the risk without making people look away. His solution was an editor's solution — **saturate the start** to hook the viewer, and use graphic design (the prohibited symbol over the rats) to name the danger without relying on subtitles, which matters when the audience has uneven literacy levels. Three versions in the archive show the piece was adjusted more than once.",
+      "prova": "Archive: 3 pieces, March/2010, with description by the author himself.",
+      "feitos": [
+        "Main vignette and variations",
+        "Graphic treatment and highlighting of disease vectors"
+      ]
+    },
+    "tjrj": {
+      "titulo": "Rio de Janeiro Court of Justice",
+      "papel": "Opening and closing",
+      "rotulo": "2010",
+      "linha": "The opening of the institutional video for the Rio de Janeiro Judiciary.",
+      "resumo": "Opening of the 2010 TJRJ video, with original voice-over and audio mastering.",
+      "contexto": "An institutional piece for a public agency has a requirement that commercial production doesn't: sobriety that doesn't turn into boredom. The file is called `AUDIO BERTO NO AR 3 master2` — meaning the third version of the voice-over, on the second master. It's the kind of detail that only shows up in someone who delivers institutional work: **approval comes in layers**.",
+      "prova": "Portfolio: \"Video opening for TJRJ 2010.\"",
+      "feitos": [
+        "Institutional opening",
+        "Mixing and mastering with voice-over"
+      ]
+    },
+    "band-otogrupo": {
+      "titulo": "Commercials and vignettes",
+      "papel": "Editing, motion, and finishing",
+      "rotulo": "2009 — 2010",
+      "linha": "Broadcast TV commercial, animated logo, and website vignette — the menu of someone who lives off commissioned work.",
+      "resumo": "A handful of short pieces from the same period: a commercial for **Band** with a separate alpha channel delivery, an animated logo for **Otogrupo**, a vignette for **Atmos 3**, and the commercial vignette for the **zura.com.br** website.",
+      "contexto": "Delivering \"with alpha\" is the detail that gives away the pro: it means the broadcaster can overlay the piece onto any background, and that the work was done with the next link in the chain in mind, not just a pretty preview. A 4-to-8-second piece is the toughest motion exercise: there isn't a single frame to spare for hesitation.",
+      "prova": "Archive: 5 pieces with description, between Dec/2009 and Feb/2010.",
+      "feitos": [
+        "Band commercial (alpha channel delivery)",
+        "Otogrupo animated logo",
+        "Atmos 3 vignette",
+        "zura.com.br commercial vignette"
+      ]
+    },
+    "obras-corregos": {
+      "titulo": "Córregos, Rua Picão and the Tapera",
+      "papel": "Filming and editing",
+      "rotulo": "2011",
+      "linha": "Twenty field pieces: community meetings, interviews in living rooms, the stream, the school van.",
+      "resumo": "The largest thematic block of 2011 in the archive. Two long films — *01 Córregos* and *02 Rua Picão*, each over twenty minutes — surrounded by field material: community assemblies, at-home interviews, children in the van, the river, the stone.",
+      "contexto": "This is the exact opposite of vignette work. Here there's no broadcaster deadline and no client approving a version: there are people speaking in their own living rooms, with whatever audio the room provides, and a camera that needs to be forgotten for the conversation to happen. Editing this means choosing who speaks and for how long — the most political decision an editor makes. The material bears the mark of direct documentary: long takes, no voice-over on top.",
+      "prova": "Archive: 20 pieces between August and November 2011, verified by thumbnail.",
+      "feitos": [
+        "Two documentaries over 20 minutes each",
+        "Coverage of community assemblies",
+        "In-home interviews",
+        "Footage of the stream, the Tapera, and school transportation"
+      ]
+    },
+    "moda-publicidade": {
+      "titulo": "Fashion and advertising",
+      "papel": "Campaign assembly and finishing",
+      "rotulo": "2011 — 2012",
+      "linha": "Twenty fashion campaign pieces — summer collection, beauty editorial, catalog, and calendar.",
+      "resumo": "A consistent body of advertising work: collection films for **Werner** and **Opalocka**, beauty editorials, **Bazar Fashion**, the *girl* series, **WDF**, and the **Duas Rodas** video catalog. Two- to three-minute pieces, each with a master, low-res version, and variation.",
+      "contexto": "Fashion is the genre where the cut is the music. There's no dialogue to hold the structure together: what holds it is rhythm, breath, and color. The archive shows the entire process — `MASTER`, `MASTERXX`, `MASTERXXX`, `low`, `h264`, `Desktop` — which is the vocabulary of someone who delivers to agencies and receives revision requests. And it shows something else: by 2011, he already mastered color correction as a language, not as a fix.",
+      "prova": "Archive: 20 pieces between 2011 and 2012, content confirmed by thumbnail.",
+      "feitos": [
+        "Collection films (Werner summer, Opalocka)",
+        "Beauty editorials and the girl series",
+        "Bazar Fashion",
+        "WDF",
+        "Duas Rodas video catalog"
+      ]
+    },
+    "eventos": {
+      "titulo": "Events and parties",
+      "papel": "Multi-camera capture and editing",
+      "rotulo": "2011",
+      "linha": "Silver wedding anniversary, party with a live band, packed venue — the kind of job that pays the month.",
+      "resumo": "Coverage of private events: **Beto and Andrea's silver wedding anniversary** in both long and short versions, and an entire night captured across thirteen files, with a live band playing.",
+      "contexto": "An event is the most honest test of an editor. The light is whatever's there, the audio comes straight from the room, and there's no second take for a toast. The 2011 footage arrives with a camera filename — `20111016 020144` — which is the raw file, exactly as it came off the card, at two in the morning. From that same night come two deliverables: the ten-minute version and the six-minute one, because the client always wants both.",
+      "prova": "Archive: 13 pieces from 2011.",
+      "feitos": [
+        "Silver wedding anniversary — long version and highlights",
+        "Multi-camera nighttime coverage with a live band"
+      ]
+    },
+    "fermoplast": {
+      "titulo": "Fermoplast",
+      "papel": "Industrial institutional",
+      "rotulo": "2012",
+      "linha": "Industrial institutional — the genre where the challenge is making a process look interesting.",
+      "resumo": "Institutional video in two master versions, delivered for client approval.",
+      "contexto": "Industrial institutional is the exercise of turning a production line into a narrative. The client wants to see the machine; the viewer needs a reason to keep watching. The usual approach is rhythm and scale — a macro of the detail, then a shot that shows the sheer size of it. He left the file marked as *\"video to be approved\"*, which is the state where 90% of institutional work lives.",
+      "prova": "Archive: 2 pieces, May/2012.",
+      "feitos": [
+        "Institutional in two master versions"
+      ]
+    },
+    "maua-2017": {
+      "titulo": "Mauá 2017",
+      "papel": "Capture and finishing",
+      "rotulo": "2017",
+      "linha": "Seven minutes of 2017 with an authorial color grade.",
+      "resumo": "A 2017 piece with strong color correction, kept in the public archive.",
+      "contexto": "It sits in the middle of the Fox period, when the entire day was spent working within the standards of a global network. An authorial piece in this context acts as a release valve: it's where the editor tests what the programming grid won't allow. The color treatment is the opposite of broadcast — saturated, warm, with blooming.",
+      "prova": "Archive: 1 piece, 2017. ⚠️ Client not identified — see HANDOFF.",
+      "feitos": [
+        "Capture and assembly",
+        "Authorial color grading"
+      ]
+    },
+    "drone-pioneiro": {
+      "titulo": "O Ar — drone pilot since 2013",
+      "papel": "Pilot, aerial camera operator, and instructor",
+      "rotulo": "2013 — 2016 · 71 flights in the archive",
+      "linha": "Bought a DJI Phantom the year it launched, and trained until he could take on any job.",
+      "resumo": "The Phantom 1 hit the market in January 2013. By October 2013 he was already posting his first flight attempt — and in November, after four days of training, he wrote: *\"now I feel confident to take on any job that comes up\"*. There are **71 aerial pieces** in the archive, from Grumari to Pedra de Itaúna, from the cable-stayed bridge to the Santa Mônica field.",
+      "contexto": "It's worth insisting on what a drone was in 2013, because today it seems like nothing: **no obstacle sensor, no decent video return, no follow-me, no screen**. You flew looking at the sky, with a GoPro hanging from a gimbal that barely held it, ten minutes of battery, and the wind deciding the rest. He trained the GPS return *failsafe* on purpose, flew out of sight on purpose, and flew at night knowing the risk — his text about the night flight says *\"I almost hit the roof on the way up... the landing took half a second, I was shaking\"*. And the proudest title in the entire archive is a technical statement: **\"NO SOFTWARE OR YOUTUBE STABILIZATION WHATSOEVER\"** — the image is stable because the hand was, not because software fixed it. By 2015 he was already on the **Phantom 3 in 4K**, filming at five in the morning. And he was already **training other pilots** to serve a larger market.",
+      "prova": "Archive: 71 pieces between 2013 and 2016, with accounts written by the pilot himself at each stage of training.",
+      "feitos": [
+        "First documented flights in October 2013 — the Phantom 1 had been on the market for 9 months",
+        "Deliberate training of GPS failsafe and out-of-sight flight",
+        "Night flight in strong wind, documented without sugarcoating the risk",
+        "Aerial series: Pedra de Itaúna (5 parts), Grumari (10), cable-stayed bridge, Santa Mônica F.C.",
+        "Migration to Phantom 3 4K in 2015",
+        "Training new pilots to expand the operation",
+        "Image stabilized by piloting, with no software stabilization"
+      ]
+    },
+    "trailer-recuts": {
+      "titulo": "Editing Studies",
+      "papel": "Re-editing Classics",
+      "rotulo": "2013",
+      "linha": "Re-edited 2001, Gatsby, Dirty Dancing, and Romeo and Juliet in 1080p — on purpose, as training.",
+      "resumo": "Seven re-editing exercises of well-known film scenes, all in 1080p, done the year before joining Fox. This isn't a client portfolio: it's a musician's practice routine.",
+      "contexto": "Re-editing a scene already cut by a great editor is the hardest and most useful exercise there is: you have the same raw footage and a reference to compare against, so there's no fooling yourself. He deliberately chose tough cases — **2001** (slow, geometric pacing), **The Great Gatsby** (excess), **Dirty Dancing** (music as structure), and **Romeo and Juliet**. A year later, he was at Fox International Channels.",
+      "prova": "Archive: 7 private pieces from 2013 — including the same scene in two versions, with and without audio.",
+      "feitos": [
+        "Re-edit of 2001",
+        "The Great Gatsby",
+        "Dirty Dancing",
+        "Romeo and Juliet",
+        "Change-Up (with and without audio, to compare the effect of sound on editing)"
+      ]
+    },
+    "set-palestra": {
+      "titulo": "SET 2013 — Dr. Adilson Pontes Malta",
+      "papel": "Recording and editing",
+      "rotulo": "2013",
+      "linha": "Recording of the lecture at the country's largest TV engineering convention.",
+      "resumo": "Eight minutes of Dr. Adilson Pontes Malta's lecture at the 2013 SET congress.",
+      "contexto": "The SET congress is where the Brazilian television industry discusses standards, codecs, and transmission. Being there recording in 2013 — right in the middle of HD consolidation and the early talks about 4K — means being in the room where the rules of the craft were being written.",
+      "prova": "Archive: 1 piece, 2013.",
+      "feitos": [
+        "Lecture capture and editing"
+      ]
+    },
+    "fox-sports": {
+      "titulo": "Fox International Channels · Fox Sports",
+      "papel": "Senior Avid Editor",
+      "rotulo": "2014 — 2018 · 4 years and 4 months",
+      "linha": "World Cup, Olympics, and Hollywood films, for over 20 million viewers a day.",
+      "resumo": "Four years and four months as a senior editor at 20th Century Fox's international channels. Edited everything from World Cup matches to Hollywood films. The number he uses in his own summary is **over 20 million viewers daily**.",
+      "contexto": "Editing sports at a global network is the most demanding regime in the profession: footage arrives while the game is still happening, the piece goes on air at halftime, and any mistake is live. The workflow was **Avid Media Composer on shared storage** — multiple editors in the same project, centrally managed media, and the sacred rule of never breaking what the colleague next to you is using. The archive carries this routine's signature in its file names: `BDF 241018 EURICO`, `HFS 130718 ZUKERMAN`, `EVE 310718`, `VCP 251219 JASON ... BASE XAVC` — show code, date, and assignment, which is how you name things when you're producing dozens of pieces a week. And then there are the CG tests (`TESTE CG AMOROSO RB`, with the note *\"impact, bigger box, clubs = title\"*), which is the editor discussing on-air graphic typography. The English résumé holds the other half of the work, the part that doesn't appear on screen: *\"worked with project managers to develop and implement cost-reduction and resource-optimization strategies\"*.",
+      "prova": "Résumé and LinkedIn — \"Avid Editor, September 2014 – December 2018\". Summary in Portuguese: \"Trabalhei na Copa do Mundo, nos Jogos Olímpicos e na maioria das principais redes de TV no Brasil, com mais de 20 milhões de espectadores DIARIAMENTE.\" Archive: 31 pieces with daily-operation naming conventions.",
+      "feitos": [
+        "World Cups (2014 and 2018) and Rio Olympics (2016)",
+        "Edited Hollywood films for the group's channels",
+        "Daily shows: assignments, VTs, and clips with show code, date, and halftime deadline",
+        "Idents, bumpers, 8- and 20-minute packages, and ident loops",
+        "On-air graphic testing and standardization (CG)",
+        "Worked with project managers on cost reduction and resource optimization",
+        "Fox internal cup and ACERJ Cup — full coverage with tactical insight",
+        "Fox Flight — aerial footage for the channel"
+      ],
+      "fotos": [
+        {
+          "legenda": "The Fox Sports studio in Rio, with the team standing on set. His photo, 2020."
+        }
+      ]
+    },
+    "petrobras-ibama": {
+      "titulo": "Petrobras · IBAMA",
+      "papel": "DVD editing and authoring",
+      "rotulo": "2014",
+      "linha": "Seminar DVD for the country's largest company and the federal environmental agency.",
+      "resumo": "Two samples in the archive: the Petrobras seminar DVD example and the Petrobras/IBAMA piece.",
+      "contexto": "Working for Petrobras and IBAMA in the same package means material with double review — technical and environmental — and delivery on physical media, which in 2014 was still the standard for corporate seminars because it guaranteed the video would play in any room, without relying on the auditorium network.",
+      "prova": "Archive: 2 pieces from 2014.",
+      "feitos": [
+        "Seminar content editing",
+        "DVD authoring and sample"
+      ]
+    },
+    "apple-legendagem": {
+      "titulo": "Apple — subtitled panel",
+      "papel": "Editing, proofing, and PT/EN subtitling",
+      "rotulo": "2014 · resumed in 2023",
+      "linha": "A nearly half-hour panel, edited, proofed, and subtitled — in seven versions.",
+      "resumo": "A 28-minute panel about cinema, with Apple branding on set, edited and subtitled. The archive holds the full chain of versions: *edited, audio still untreated* → *final edit, proofed* → *proofed subpt1* → *subpt2* → *subpt123*.",
+      "contexto": "The naming sequence accidentally tells the whole post-production story: first lock the cut, then treat the audio, then proof, and only then subtitle — in blocks, because subtitling 28 minutes of spontaneous speech in two languages is the slowest job in the chain. Panel subtitling adds an extra challenge: people talk over each other, and the subtitle has to choose. In 2023 the piece was republished in a public version, nine years later.",
+      "prova": "Archive: 7 versions, from 2014 to 2023.",
+      "feitos": [
+        "Full panel assembly",
+        "Audio treatment",
+        "Color correction",
+        "Portuguese subtitling over English speech, in three blocks"
+      ]
+    },
+    "vinhetas-cg": {
+      "titulo": "Bumpers and CG tests",
+      "papel": "TV motion and graphic art",
+      "rotulo": "2014 — 2018",
+      "linha": "The 6- and 10-second pieces nobody credits and without which no channel exists.",
+      "resumo": "Loops, bumpers, show opens, and character generator tests from my time at the network.",
+      "contexto": "A bumper is a channel's signature and the most rewritten thing on the schedule. A six-second piece goes through dozens of versions because the season's color changes, the sponsor changes, the font changes. The archive has `MAIN`, `MAIN2`, `monstrov3`, `monstrov4` — the numbering is the history of the work.",
+      "prova": "Archive: 6 short pieces.",
+      "feitos": [
+        "Show opens and bumpers",
+        "Break loops",
+        "Character generator tests"
+      ]
+    },
+    "proclubs-bugados": {
+      "titulo": "Bugados FC · Pro Clubs",
+      "papel": "Starting player, producer, and broadcast editor",
+      "rotulo": "2018 — 2019 · 39 matches",
+      "linha": "Left Fox in December and by May was already a starter on a league team, producing his own broadcast.",
+      "resumo": "Fox Sports ended in December 2018. He didn't stop: he became a **starting defensive midfielder for Bugados FC** in the second division of a Pro Clubs league, and started producing and publishing the matches — 39 pieces, many over 30 minutes long, some reaching 41.",
+      "contexto": "It's the same skill set on a different medium. Broadcasting a Pro Clubs match demands exactly what he did at the network: framing the play, cutting at the right moment, giving context to whoever joined mid-stream, and publishing before the conversation goes cold. The difference is that now he is the team, the production, and the channel all at once. One description captures the tone of someone who understands sports storytelling: *\"a video that marks the beginning of Jason the Monster's career. From this video onward, our midfielder Monstro — he may take his time, but when he arrives, he delivers!\"* — he is building a character for a video game player.",
+      "prova": "Archive: 39 pieces between July 2018 and June 2019, with original descriptions.",
+      "feitos": [
+        "Starter for Bugados FC in the 2nd division of a Pro Clubs league",
+        "39 matches published — including full games from 30 to 41 minutes",
+        "Narrative and character building for teammates",
+        "Coverage of the series against Vírus da Bola, Estudiantes DLP, Damolé, and Generaly FA"
+      ]
+    },
+    "games-machinima": {
+      "titulo": "Machinima — the portfolio inside the game",
+      "papel": "Direction, capture, and editing in a game engine",
+      "rotulo": "2020 — 2025",
+      "linha": "In 2020 he rebuilt his own portfolio inside a video game — and wrote about why.",
+      "resumo": "The piece **Video Portfolio made with game** is a statement: a thirty-year-old editor's portfolio, presented with the technology he was studying at that moment. The description ends with a thank you: *\"image credits to everyone at FOX SPORTS, the best company I ever worked for and will never stop missing\"*.",
+      "contexto": "Late 2020: pandemic, and virtual production moving from the lab to the set. Using a game engine as a studio — virtual camera, set, lighting — was exactly what the industry was starting to call *virtual production*. He got there through the player's door, not the vendor's. In the same period: a rock band rehearsal in Cobra Kai, a conversation about the RPG secrets in Cyberpunk 2077 during launch week, and later MIR4 and Last War — the latter published raw, on purpose: *\"the video is not edited, you'll see exactly how bad I am\"*, because the intent was to inform, not to impress.",
+      "prova": "Archive: 8 pieces between 2020 and 2025, with authorial descriptions.",
+      "feitos": [
+        "Video Portfolio made with game — the résumé built inside the game",
+        "Cyberpunk 2077: a tabletop RPG reading by someone who played the original",
+        "Rock band rehearsal staged in Cobra Kai",
+        "MIR4 and Last War — analytical record, published without editing on purpose"
+      ]
+    },
+    "castelos-sao-jorge": {
+      "titulo": "Castelos de São Jorge",
+      "papel": "Direction, filming, and editing",
+      "rotulo": "2021 — 2024 · 8 versions",
+      "linha": "Three years and eight versions to lock a 14-minute film.",
+      "resumo": "The most stubborn piece in the collection. It starts in 2021 with *version 1*, goes through *version 5*, through three cuts called *YouTube*, through a *master*, through a beta opening — and only in June 2024 does it become **Castelo de São Jorge**, public, 14 minutes and 26 seconds.",
+      "contexto": "Eight versions over three years isn't indecision: it's what happens when the film is yours and there's no client to say \"it's good.\" Each cut has a different target — the long version, the festival version, the version that fits on YouTube. Editing your own film is the exercise of killing the scenes you love, and the collection shows the whole process instead of hiding behind the result.",
+      "prova": "Collection: 8 pieces between 2021 and 2024.",
+      "feitos": [
+        "Direction and filming in Lisbon",
+        "8 cuts over 3 years",
+        "Custom opening",
+        "Final public version of 14min26"
+      ]
+    },
+    "fayacuts": {
+      "titulo": "Fayacuts — the own brand",
+      "papel": "Owner, editor, and director",
+      "rotulo": "2023 — 2024",
+      "linha": "After thirty years editing for others, his own name on the door.",
+      "resumo": "Fayacuts is his studio. In two years, the following pass through it: **CopanemaTV** (with an iFood piece), **Bugs n Bus**, **Make TV**, **Feiticeira Secreta**, **Marina**'s workout, an **e-book** opening, the **Rafa & Luiz Breakfast**, the two-day coverage of **Girs** — one of them nearly three hours long — and the **DropD Full Show**, an hour and a half.",
+      "contexto": "This is the phase where he stops being an employee and becomes a supplier: he prospects, quotes, delivers, and signs off. The portfolio is deliberately mixed — advertising, TV, events, content, and institutional — because a small studio doesn't get to pick a niche in its first year. CopanemaTV is the most complete case: there's the master, there are thirty-second cuts, and there's a file called `Copiao TRILHA FALTA LOCUCAO`, which is the piece assembled with the soundtrack, waiting for the voice actor — the exact portrait of how a studio works on the inside. And there's a video testimonial: **Eduardo Elias and Marina Ferrari, from Central Fox, thanking him for the beautiful editing**.",
+      "prova": "Archive: 19 pieces between 2023 and 2024. Video testimonial from Eduardo Elias and Marina Ferrari (Central Fox).",
+      "feitos": [
+        "CopanemaTV — master, cuts, and advertising piece",
+        "Bugs n Bus — opening",
+        "Make TV — making of",
+        "Maria Clara, the Secret Witch",
+        "Marina — 1-minute workout, with color correction",
+        "E-book opening in three versions",
+        "Rafa & Luiz Breakfast",
+        "Girs — two-day coverage (nearly 3h of footage on day 1)",
+        "DropD — Full Show, 1h30"
+      ],
+      "fotos": [
+        {
+          "legenda": "In the field, camera in hand, shooting with Marina. 29/09/2016 — the timecode is on screen."
+        },
+        {
+          "legenda": "Working with Make TV."
+        }
+      ]
+    },
+    "fayai": {
+      "titulo": "FayAI — artificial intelligence as an editing island",
+      "papel": "Founder, product architect, and content producer",
+      "rotulo": "2024 — today",
+      "linha": "The same move from 1992: grab the tool that was just born and use it to explain things better.",
+      "resumo": "FayAI is his platform — courses, tools, and content about artificial intelligence. On the channel, the turning point comes in August 2024, when he publishes a technical analysis of the series Terminator Zero **made in conversation with ChatGPT**, and continues in 2025 with a series about DeepSeek and the technological dependency between China and the United States.",
+      "contexto": "It's worth noticing what he chooses to discuss: it's not \"the 10 best AI tools.\" It's **FP8, NVIDIA GPUs, Meta's PyTorch, the parallel with bitcoin ASICs, and the \"Sputnik moment\"** — meaning the infrastructure layer, the one he has always understood, ever since the IGRES jumpers back in 1994. By 2026 the channel already features clips of his **own AI-generated avatar** (the `clip id01 … RicardoFaya` series) and the manifesto **FayAi — Helping others defeat ignorance**. It's the same person from the CNA classroom in 1994, with a different tool in hand.",
+      "prova": "Archive: 23 pieces between August 2024 and August 2026. Website: fayai.com.br.",
+      "feitos": [
+        "fayai.com.br — platform for AI courses and tools",
+        "Series on DeepSeek and the China × USA tech race",
+        "Technical analysis of Terminator Zero co-produced with ChatGPT",
+        "Own AI-generated avatars (clip id01 series)",
+        "FayAi manifesto — Helping others defeat ignorance"
+      ]
+    },
+    "acervo-pessoal": {
+      "titulo": "The personal archive",
+      "papel": "Thirty years of tapes",
+      "rotulo": "2008 — 2026",
+      "linha": "A tribute to his father, his son's goals, the rally, the band, the first plugin tests in 2008.",
+      "resumo": "What's left when you take work out of the picture: the tribute to his father, the mass, João's under-15 and under-17 matches, beach tennis in Ipanema, the rally, skateboarding, rock band rehearsals, the first experiments with a toon plugin in 2008, and six full HDV tapes digitized in 2020.",
+      "contexto": "It belongs here because this is where the craft was trained for free. The *toonized* plugin test over a War Pigs solo, back in 2008, comes from the same curiosity that, twenty years earlier, made a sixteen-year-old render a dragon in 3D Studio to sell an RPG — and that today makes the same man generate an avatar with AI. **The tool changes; the curiosity stays the same.**",
+      "prova": "Collection: 41 personal pieces + 6 HDV tapes + raw footage.",
+      "feitos": [
+        "Tribute to his father and recording of the mass",
+        "João's goals",
+        "Rally, skateboarding, and beach tennis",
+        "Rock band rehearsals",
+        "Plugin tests in 2008",
+        "HDV tape digitization"
+      ]
+    }
+  },
+  "atos": {
+    "1": {
+      "titulo": "The Workshop",
+      "linha": "Before the word \"creator\" existed, he was already it: hardware in the morning, image in the afternoon."
+    },
+    "2": {
+      "titulo": "The Island",
+      "linha": "Seven years at MultiRio, an English manual, and an entire island in German."
+    },
+    "3": {
+      "titulo": "The Editor-in-Chief",
+      "linha": "Hollywood, FGV, Jockey Club — and a freelance list that ends with \"among many others\"."
+    },
+    "4": {
+      "titulo": "The Air",
+      "linha": "Bought a drone the year the drone was invented."
+    },
+    "5": {
+      "titulo": "The Global Network",
+      "linha": "World Cup, Olympics, and cinema, for 20 million people a day."
+    },
+    "6": {
+      "titulo": "The Renaissance",
+      "linha": "Lost his job in a global restructuring and became his own studio."
+    }
+  }
+}

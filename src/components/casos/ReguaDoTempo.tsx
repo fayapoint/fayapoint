@@ -1,4 +1,5 @@
 "use client";
+import { useT } from "@/i18n/dicionario";
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -30,6 +31,7 @@ function paraAno(iso: string | null, padrao: number) {
 }
 
 export function ReguaDoTempo({ atos, trabalhos }: { atos: Ato[]; trabalhos: Trabalho[] }) {
+  const T = useT();
   const { estacao, ato } = useGaleria();
   const [aberta, setAberta] = useState(false);
   const [dica, setDica] = useState<string | null>(null);
@@ -94,7 +96,7 @@ export function ReguaDoTempo({ atos, trabalhos }: { atos: Ato[]; trabalhos: Trab
 
   return (
     <nav
-      aria-label="Linha do tempo dos trabalhos"
+      aria-label={T("Linha do tempo dos trabalhos")}
       onMouseEnter={() => setAberta(true)}
       onMouseLeave={() => {
         setAberta(false);
@@ -124,7 +126,7 @@ export function ReguaDoTempo({ atos, trabalhos }: { atos: Ato[]; trabalhos: Trab
                   color: ativo ? "#fff" : "rgba(255,255,255,0.42)",
                 }}
               >
-                {a.numero} · {a.titulo}
+                {a.numero} · {T(a.titulo)}
               </span>
             );
           })}
@@ -192,9 +194,9 @@ export function ReguaDoTempo({ atos, trabalhos }: { atos: Ato[]; trabalhos: Trab
               const t = trabalhos.find((x) => x.slug === dica);
               return t ? (
                 <>
-                  <span className="font-semibold text-white">{t.titulo}</span>
+                  <span className="font-semibold text-white">{T(t.titulo)}</span>
                   <span className="mx-2 opacity-40">·</span>
-                  <span className="font-mono">{t.rotulo}</span>
+                  <span className="font-mono">{T(t.rotulo)}</span>
                   <span className="mx-2 opacity-40">·</span>
                   <span>{t.papel}</span>
                 </>

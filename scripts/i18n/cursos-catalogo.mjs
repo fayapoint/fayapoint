@@ -30,6 +30,9 @@
  *
  * Uso:
  *   node --env-file=.env.local scripts/i18n/cursos-catalogo.mjs [--so-um slug] [--secar]
+ *   node --env-file=.env.local scripts/i18n/cursos-catalogo.mjs --completar
+ *     (traduz só os campos que ainda faltam em `i18n.en` — para quando um
+ *      campo novo entra no extrator depois de o catálogo já estar traduzido)
  */
 
 import { MongoClient } from "mongodb";
@@ -72,7 +75,11 @@ function extrair(p) {
   (p.curriculum?.modules ?? []).forEach((mod, i) => {
     por(`curriculum.modules.${i}.title`, mod.title);
     por(`curriculum.modules.${i}.description`, mod.description);
-    por(`curriculum.modules.${i}.duration`, mod.duration);
+    // ⚠️ `duration` NÃO entra mais. Desde 26/08/2026 ela é medida e formatada
+    // ("1h55", "22 min"), não escrita à mão ("3 horas") — formato não se
+    // traduz, e a tradução antiga congelava o número velho: a página inglesa
+    // do `make-integracao` dizia "25+ hours" enquanto a portuguesa já dizia
+    // "1h55". Ver `scripts/aulas-e-tempo-honestos.mjs`.
   });
 
   (p.bonuses ?? []).forEach((b, i) => {
@@ -99,7 +106,11 @@ function extrair(p) {
   por("seo.metaTitle", p.seo?.metaTitle);
   por("seo.metaDescription", p.seo?.metaDescription);
 
-  por("metrics.duration", p.metrics?.duration);
+  // A nota do preço simbólico é a única frase dentro de `pricing` — o resto do
+  // bloco é número. Sem ela, `/en/curso/chatgpt-zero` mostrava "Valor
+  // simbólico: cobre só o processamento do pagamento…" em português, ao lado
+  // do preço (item 12 do laudo).
+  por("pricing.note", p.pricing?.note);
 
   return m;
 }
@@ -127,6 +138,15 @@ async function main() {
   const argv = process.argv.slice(2);
   const soUm = argv.includes("--so-um") ? argv[argv.indexOf("--so-um") + 1] : null;
   const secar = argv.includes("--secar"); // dry run: mostra e não grava
+  /**
+   * `--completar`: traduz SÓ os caminhos que ainda não existem em `i18n.en`.
+   *
+   * Sem isto, campo novo no extrator só chegava ao inglês apagando a tradução
+   * inteira do curso e pagando tudo de novo — e como o script pula quem já tem
+   * `i18n.en.name`, na prática ele nunca chegava. Foi o que aconteceu com
+   * `pricing.note`. O modo completa o que falta e não toca no que existe.
+   */
+  const completar = argv.includes("--completar");
 
   const cliente = new MongoClient(URI, OPCOES_DE_SCRIPT);
   await cliente.connect();
@@ -140,11 +160,20 @@ async function main() {
   let feitos = 0;
 
   for (const p of produtos) {
-    if (p.i18n?.en?.name && !secar) {
+    if (p.i18n?.en?.name && !secar && !completar) {
       console.log(`· ${p.slug} (já traduzido, pulando)`);
       continue;
     }
-    const mapa = extrair(p);
+    let mapa = extrair(p);
+    if (completar && p.i18n?.en) {
+      const jaTem = (caminho) =>
+        caminho.split(".").reduce((no, k) => (no == null ? undefined : no[k]), p.i18n.en) !== undefined;
+      mapa = Object.fromEntries(Object.entries(mapa).filter(([k]) => !jaTem(k)));
+      if (!Object.keys(mapa).length) {
+        console.log(`· ${p.slug} (nada faltando)`);
+        continue;
+      }
+    }
     const chaves = Object.keys(mapa).length;
     const chars = Object.values(mapa).join("").length;
     console.log(`→ ${p.slug} — ${chaves} campos, ${chars} caracteres`);
@@ -187,7 +216,15 @@ async function main() {
     const en = remontar(saida);
     await col.updateOne(
       { _id: p._id },
-      { $set: { "i18n.en": { ...en, traduzidoEm: new Date() } } },
+      completar
+        // ⚠️ `$set` por CAMINHO no modo completar: `{ "i18n.en": {...} }`
+        // substituiria o subdocumento inteiro e apagaria o que já estava
+        // traduzido — o oposto de completar.
+        ? { $set: Object.fromEntries([
+            ...Object.entries(saida).map(([k, v]) => [`i18n.en.${k}`, v]),
+            ["i18n.en.traduzidoEm", new Date()],
+          ]) }
+        : { $set: { "i18n.en": { ...en, traduzidoEm: new Date() } } },
     );
     console.log(`   gravado em i18n.en (${dinheiro(custo)})`);
   }
