@@ -12,6 +12,7 @@ import { CubeInteractive } from "./CubeInteractive";
 import { useUser } from "@/contexts/UserContext";
 import s from "./cube.module.css";
 import Link from "next/link";
+import { comIdioma } from "@/lib/rota-idioma";
 
 function NavDot({ index, active, label, onClick }: { index: number; active: boolean; label: string; onClick: () => void }) {
   const T = useT();
@@ -102,10 +103,27 @@ export function CubeHomepage() {
   }, []);
 
   const locale = pathname?.split("/").find((part) => part === "pt-BR" || part === "en") || "pt-BR";
-  const localizeRoute = useCallback((href: string) => {
-    if (!href.startsWith("/") || href.startsWith(`/${locale}`) || href.startsWith("/api")) return href;
-    return `/${locale}${href}`;
-  }, [locale]);
+  /**
+   * ⚠️ ERA A TERCEIRA CÓPIA DESTA REGRA (26/08/2026), e a pior das três.
+   *
+   * O corpo antigo era:
+   *
+   *   if (!href.startsWith("/") || href.startsWith(`/${locale}`) || href.startsWith("/api")) return href;
+   *
+   * Dois defeitos, ambos por casar SUBSTRING onde se queria SEGMENTO:
+   *
+   *  1. `startsWith("/api")` casa a PÁGINA `/api-docs`, que saía sem prefixo de
+   *     idioma. Mesma armadilha que já produziu um 404 no Search Console pelo
+   *     `proxy.ts` e uma página órfã pelo `rota-idioma.ts`.
+   *  2. ``startsWith(`/${locale}`)`` com `locale = "en"` casa `/entrar`,
+   *     `/enxoval`, qualquer rota começada por "en" — ela seria tratada como já
+   *     prefixada e ficaria sem idioma. Nenhuma rota assim existe hoje; é uma
+   *     mina esperando a primeira.
+   *
+   * `comIdioma` é a implementação única, casa por segmento e é função pura —
+   * atravessa a fronteira de cliente sem problema. Uma regra, um lugar.
+   */
+  const localizeRoute = useCallback((href: string) => comIdioma(href, locale), [locale]);
 
   // Face click -> zoom into face -> navigate
   const handleFaceClick = useCallback((face: string, route: string) => {
