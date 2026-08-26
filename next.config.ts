@@ -324,17 +324,22 @@ const config: NextConfig = {
        * de notícias no índice.
        *
        * Aqui em cima a rota nem chega a renderizar: sai 308 de verdade, antes
-       * de qualquer HTML. `(pt-BR|en)` e o `/blog` cru, e nada além disso —
-       * `/blog/[slug]` continua servindo os posts legados.
+       * de qualquer HTML. Só o `/blog` COM idioma — `/blog/[slug]` continua
+       * servindo os posts legados.
+       *
+       * ⚠️ Não adiante uma regra para o `/blog` CRU (sem idioma): ela não é
+       * alcançada em produção. Medido em 26/08 — o proxy de idioma roda antes
+       * dos `redirects()` do Next, e TODA URL sem prefixo leva 308 para a
+       * versão com prefixo (`/cursos`, `/ferramentas`, `/noticias`, todas).
+       * O `/blog` cru custa um salto a mais por causa disso, e tudo bem: ele
+       * não está no sitemap nem recebe link interno. A cadeia é
+       * `/blog → /pt-BR/blog → /pt-BR/noticias → 200`, contra as quatro
+       * respostas de antes — em que a última nem era redirecionamento, e sim
+       * uma página de 212 KB com meta-refresh.
        */
       {
         source: '/:locale(pt-BR|en)/blog',
         destination: '/:locale/noticias',
-        permanent: true,
-      },
-      {
-        source: '/blog',
-        destination: '/pt-BR/noticias',
         permanent: true,
       },
       {
