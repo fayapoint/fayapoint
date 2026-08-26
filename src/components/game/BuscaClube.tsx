@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import type { GameCopy } from "@/lib/game/copy";
 import type { ClubSearchResult, EaPlatform } from "@/lib/game/ea-api";
+import { SeloProcedencia, type FonteDado } from "./SeloProcedencia";
 import { LIMA, OURO, RUBRO, CINZA, CIANO, superficie, FUNDO, bebas } from "@/lib/game/tema";
 
 type Piscina = "todas" | EaPlatform;
@@ -23,6 +24,9 @@ interface Resposta {
   varridos: number;
   aproximado: boolean;
   porId: boolean;
+  /** De onde veio o resultado: fonte viva da EA ou o nosso acervo. */
+  fonte: FonteDado;
+  capturedAt: string | null;
 }
 
 /**
@@ -80,11 +84,20 @@ export function BuscaClube({ copy }: { copy: GameCopy }) {
         clubs: Array.isArray(data.clubs) ? data.clubs : [],
         varridos: Number(data.varridos ?? 0),
         aproximado: Boolean(data.aproximado),
+        fonte: (data.fonte ?? "vazio") as FonteDado,
+        capturedAt: data.capturedAt ?? null,
         porId: Boolean(data.porId),
       });
     } catch (err) {
       if ((err as Error)?.name !== "AbortError") {
-        setResposta({ clubs: [], varridos: 0, aproximado: false, porId: false });
+        setResposta({
+          clubs: [],
+          varridos: 0,
+          aproximado: false,
+          porId: false,
+          fonte: "vazio",
+          capturedAt: null,
+        });
       }
     } finally {
       if (!ctrl.signal.aborted) setBuscando(false);
@@ -161,9 +174,16 @@ export function BuscaClube({ copy }: { copy: GameCopy }) {
         <div className="mt-4">
           {/* Linha de procedência: quantos clubes foram varridos de verdade. */}
           {resposta.varridos > 0 && (
-            <p className="mb-2 inline-flex items-center gap-1.5 text-[11px] font-semibold text-white/45">
-              <Radar size={12} style={{ color: CIANO }} />
-              {c.scanned.replace("{n}", String(resposta.varridos))}
+            <p className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-white/45">
+                <Radar size={12} style={{ color: CIANO }} />
+                {c.scanned.replace("{n}", String(resposta.varridos))}
+              </span>
+              <SeloProcedencia
+                fonte={resposta.fonte}
+                capturedAt={resposta.capturedAt}
+                copy={copy}
+              />
             </p>
           )}
 

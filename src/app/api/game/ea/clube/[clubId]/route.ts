@@ -1,43 +1,26 @@
 import { NextResponse } from "next/server";
-import {
-  clubInfo,
-  clubOverallStats,
-  clubMembersStats,
-  clubMembersCareer,
-  divisoes,
-  linhaDoClube,
-  PLATAFORMAS,
-  type EaPlatform,
-  type ClubSearchResult,
-} from "@/lib/game/ea-api";
+import { type EaPlatform } from "@/lib/game/ea-api";
+import { clubeComEspelho, divisoesComEspelho } from "@/lib/game/espelho";
 
 /**
  * GET /api/game/ea/clube/[clubId]?plataforma=common-gen5
  *
  * Ficha completa do clube: identidade, campanha, elenco da temporada, carreira
- * de cada membro e a tabela de divisões do modo Clubs (para dizer quantos
- * pontos promovem e quantos seguram a divisão atual).
+ * de cada membro e a tabela de divisões do modo Clubs.
  *
- * **Descoberta de plataforma**: a v1 assumia `common-gen5` e um clube de PS4/
- * Xbox One devolvia página vazia sem dizer por quê. Quando o cliente não manda
- * a piscina, tentamos as duas em paralelo e ficamos com a que respondeu.
+ * Passa pelo ESPELHO (`lib/game/espelho.ts`), que tenta a fonte viva e cai no
+ * nosso Mongo quando a EA recusa — o que, para IP de datacenter, é sempre.
+ * A resposta declara `fonte` e `capturedAt`.
  *
- * Cache curto (2 min): stats mudam a cada partida, mas a página do clube é o
- * hot path da seção e não pode virar metralhadora contra a EA.
+ * **Descoberta de plataforma**: a v1 assumia `common-gen5` e um clube de PS4
+ * devolvia página vazia sem dizer por quê. Quando o cliente não manda a piscina,
+ * o espelho tenta as duas.
+ *
+ * `divisoes()` (o endpoint `settings`) é o único que continua indo direto na EA:
+ * é estático por título, não vale um espelho próprio, e quando falhar a régua de
+ * divisão simplesmente não aparece.
  */
 export const dynamic = "force-dynamic";
-
-/** Descobre em qual piscina o clube vive. Uma ida por piscina, em paralelo. */
-async function descobrir(clubId: string): Promise<{
-  plataforma: EaPlatform;
-  info: ClubSearchResult | null;
-}> {
-  const respostas = await Promise.all(
-    PLATAFORMAS.map(async (p) => ({ plataforma: p, info: await clubInfo(clubId, p) }))
-  );
-  const boa = respostas.find((r) => r.info && r.info.name !== "?");
-  return boa ?? { plataforma: PLATAFORMAS[0], info: null };
-}
 
 export async function GET(
   req: Request,
@@ -46,45 +29,31 @@ export async function GET(
   const { clubId } = await params;
   const url = new URL(req.url);
   const pedida = url.searchParams.get("plataforma");
+  const plataforma: EaPlatform | undefined =
+    pedida === "common-gen5" || pedida === "common-gen4" ? pedida : undefined;
 
   if (!/^\d{1,12}$/.test(clubId)) {
     return NextResponse.json({ error: "clubId inválido" }, { status: 400 });
   }
 
-  let plataforma: EaPlatform;
-  let info: ClubSearchResult | null;
+  const [r, divs] = await Promise.all([clubeComEspelho(clubId, plataforma), divisoesComEspelho()]);
 
-  if (pedida === "common-gen5" || pedida === "common-gen4") {
-    plataforma = pedida;
-    info = await clubInfo(clubId, plataforma);
-  } else {
-    ({ plataforma, info } = await descobrir(clubId));
-  }
-
-  const [stats, members, career, divs, tabela] = await Promise.all([
-    clubOverallStats(clubId, plataforma),
-    clubMembersStats(clubId, plataforma),
-    clubMembersCareer(clubId, plataforma),
-    divisoes(),
-    // Divisão ATUAL e pontos da temporada só existem no índice de busca.
-    info ? linhaDoClube(clubId, info.name, plataforma) : Promise.resolve(null),
-  ]);
-
-  if (!info && !stats && members.length === 0) {
+  if (!r.dados) {
     return NextResponse.json({ error: "clube não encontrado" }, { status: 404 });
   }
 
   return NextResponse.json(
     {
-      info,
-      stats,
-      members,
-      career,
-      divisoes: divs,
-      tabela,
-      plataforma,
+      info: r.dados.info,
+      stats: r.dados.stats,
+      members: r.dados.members,
+      career: r.dados.career,
+      tabela: r.dados.tabela,
+      divisoes: divs.dados,
+      plataforma: r.dados.plataforma,
+      fonte: r.fonte,
+      capturedAt: r.capturedAt,
       sourceGrade: "B",
-      capturedAt: new Date().toISOString(),
     },
     {
       headers: {

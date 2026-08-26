@@ -134,6 +134,25 @@ export interface GameCopy {
     cols: { division: string; promotion: string; hold: string; title: string };
     note: string;
   };
+  /**
+   * PROCEDÊNCIA DO DADO — de onde veio o que está na tela.
+   *
+   * Existe porque a EA recusa leitura de servidor (403 para IP de datacenter),
+   * então em produção o dado vem do NOSSO espelho, com a idade que tiver. Dado
+   * espelhado sem a data é afirmação sem procedência.
+   */
+  fonte: {
+    live: string;
+    /** `{quando}` vira a idade do espelho ("há 2 horas"). */
+    mirror: string;
+    mirrorWhy: string;
+    empty: string;
+    justNow: string;
+    /** `{n}` vira o número. */
+    minutes: string;
+    hours: string;
+    days: string;
+  };
   /** Bloco do /game na home do site. */
   showcase: {
     title: string;
@@ -242,6 +261,8 @@ export interface GameCopy {
     idleLegend: string;
     matchPlayers: string;
     platformLabel: string;
+    /** Elenco vazio porque o acervo só tem a linha de índice deste clube. */
+    mirrorShallow: string;
   };
 }
 
@@ -475,6 +496,17 @@ const pt: GameCopy = {
     },
     note: 'Pontos por temporada de divisão. Abaixo do "fica com", o clube cai.',
   },
+  fonte: {
+    live: 'Ao vivo da fonte da EA',
+    mirror: 'Do nosso acervo · {quando}',
+    mirrorWhy:
+      'A EA recusa leitura vinda de servidor (só IP residencial passa), então quem lê a fonte é uma máquina nossa, que grava aqui. O número é o que a EA publicava na hora da leitura.',
+    empty: 'Este clube ainda não está no nosso acervo. Use a busca por nome para trazê-lo.',
+    justNow: 'agora há pouco',
+    minutes: 'há {n} min',
+    hours: 'há {n} h',
+    days: 'há {n} d',
+  },
   showcase: {
     title: 'Winners 22 — o futebol virtual',
     highlight: 'com estatística de verdade',
@@ -605,6 +637,8 @@ const pt: GameCopy = {
       'Minutos em vermelho: a EA registrou o jogador parado em mais de um terço do tempo em campo. Passe o cursor para ver quanto.',
     matchPlayers: 'Súmula da partida',
     platformLabel: 'Plataforma',
+    mirrorShallow:
+      'Este clube está no nosso acervo só pela ficha — identidade, divisão e campanha. Elenco e partidas entram na próxima coleta.',
   },
 };
 
@@ -753,6 +787,17 @@ const en: GameCopy = {
     },
     note: 'Points per divisional season. Below the "safe at" mark, the club goes down.',
   },
+  fonte: {
+    live: "Live from EA's source",
+    mirror: 'From our archive · {quando}',
+    mirrorWhy:
+      "EA refuses reads coming from a server (only residential IPs get through), so a machine of ours reads the source and writes it here. The numbers are what EA published at read time.",
+    empty: 'This club is not in our archive yet. Use the name search to bring it in.',
+    justNow: 'just now',
+    minutes: '{n} min ago',
+    hours: '{n} h ago',
+    days: '{n} d ago',
+  },
   showcase: {
     title: 'Winners 22 — virtual football',
     highlight: 'with real statistics',
@@ -871,6 +916,8 @@ const en: GameCopy = {
       'Minutes in red: EA recorded the player idle for more than a third of their time on the pitch. Hover to see how much.',
     matchPlayers: 'Match sheet',
     platformLabel: 'Platform',
+    mirrorShallow:
+      'This club is in our archive by record only — identity, division and campaign. Squad and matches arrive on the next collection run.',
   },
 };
 

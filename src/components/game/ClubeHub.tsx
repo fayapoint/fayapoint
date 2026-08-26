@@ -27,6 +27,7 @@ import type {
 } from "@/lib/game/ea-api";
 import { TabelaElenco } from "./TabelaElenco";
 import { CalendarioPartidas } from "./CalendarioPartidas";
+import { SeloProcedencia, type FonteDado } from "./SeloProcedencia";
 import {
   LIMA,
   OURO,
@@ -52,7 +53,9 @@ interface ClubePayload {
   /** A linha do clube no índice da EA — a única fonte de divisão ATUAL. */
   tabela: ClubSearchResult | null;
   plataforma: EaPlatform;
-  capturedAt: string;
+  /** Fonte viva da EA ou o nosso acervo — a tela precisa dizer qual. */
+  fonte: FonteDado;
+  capturedAt: string | null;
 }
 
 /**
@@ -213,6 +216,7 @@ export function ClubeHub({
                 <BadgeCheck size={11} />
                 {c.sourceBadge}
               </span>
+              <SeloProcedencia fonte={dado.fonte} capturedAt={dado.capturedAt} copy={copy} />
               <span
                 className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-white/60"
                 style={{ borderColor: "rgba(255,255,255,.14)" }}
@@ -378,7 +382,18 @@ export function ClubeHub({
         </div>
 
         <div className="mt-4">
-          {aba === "temporada" ? (
+          {/*
+            Elenco vazio tem DUAS causas diferentes, e dizer a errada é pior que
+            não dizer nada: ou a EA não publicou elenco para o clube, ou o nosso
+            acervo ainda só tem a linha de índice dele (identidade e campanha,
+            sem captura funda). O segundo caso é temporário e tem conserto —
+            então ele merece a própria frase.
+          */}
+          {dado.fonte === "espelho" && dado.members.length === 0 ? (
+            <p className="rounded-2xl border border-dashed border-white/12 px-5 py-10 text-center text-sm leading-relaxed text-white/55">
+              {c.mirrorShallow}
+            </p>
+          ) : aba === "temporada" ? (
             <TabelaElenco membros={dado.members} copy={copy} />
           ) : (
             <TabelaCarreira carreira={dado.career} copy={copy} />

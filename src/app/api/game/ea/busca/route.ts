@@ -1,30 +1,25 @@
 import { NextResponse } from "next/server";
-import {
-  buscarClubes,
-  clubePorId,
-  PLATAFORMAS,
-  type EaPlatform,
-} from "@/lib/game/ea-api";
+import { PLATAFORMAS, type EaPlatform } from "@/lib/game/ea-api";
+import { buscarComEspelho, clubeComEspelho } from "@/lib/game/espelho";
 
 /**
  * GET /api/game/ea/busca?nome=<clube|id>&plataforma=todas|common-gen5|common-gen4
  *
- * Busca de clube na fonte pública da EA. Pública, sem auth — é a mesma consulta
- * que o site oficial faz aberto.
+ * Busca de clube. Pública, sem auth.
  *
- * A v1 fazia UMA consulta, numa piscina só, sem `maxResultCount` — e a EA, sem
- * esse parâmetro, devolve ~14 linhas de um casamento que é só PREFIXO literal.
- * Resultado: clube existente aparecia como inexistente, inclusive o do Ricardo.
- * Agora o trabalho pesado está em `buscarClubes` (leque de prefixos nas duas
- * piscinas + filtro por palavras contidas) e esta rota só decide o modo:
+ * Duas correções moram aqui, ambas de 25/08/2026:
  *
- *  - termo só de dígitos com 4–12 casas → é ID de clube, vai direto no `clubs/info`;
- *  - qualquer outra coisa → busca em leque.
+ * 1. **A busca da EA é fraca de um jeito que escondia clubes**: casa só PREFIXO
+ *    da string inteira, com espaço literal (e o jogo guarda nomes com espaço
+ *    duplo), e sem `maxResultCount` devolve ~14 linhas. O motor em leque de
+ *    `buscarClubes` conserta isso.
+ * 2. **A EA responde 403 para IP de datacenter** — ou seja, nunca funcionou em
+ *    produção. Por isso a rota não fala com a EA direto: fala com o ESPELHO,
+ *    que tenta a fonte viva e cai no nosso Mongo quando ela recusa. A resposta
+ *    declara `fonte` e `capturedAt` para a tela poder dizer a idade do dado.
  *
- * Cache de 10 min na borda: a lista de clubes com um dado nome quase não muda,
- * e cada acerto de cache é uma requisição a menos batendo na Akamai da EA.
- * `Netlify-Vary` é obrigatório: sem ele a borda da Netlify ignora a query e
- * serviria a busca de um nome para todos os outros.
+ * Cache curto e por query. `Netlify-Vary` é obrigatório: sem ele a borda ignora
+ * a query e serviria a busca de um nome para todos os outros.
  */
 export const dynamic = "force-dynamic";
 
@@ -41,12 +36,20 @@ export async function GET(req: Request) {
     pedida === "common-gen5" || pedida === "common-gen4" ? [pedida] : PLATAFORMAS;
 
   if (nome.length < 2) {
-    return NextResponse.json({ clubs: [], varridos: 0, trilha: [], aproximado: false });
+    return NextResponse.json({
+      clubs: [],
+      varridos: 0,
+      trilha: [],
+      aproximado: false,
+      fonte: "vazio",
+      capturedAt: null,
+    });
   }
 
   // Caminho do ID: quem já sabe o número do clube não deve depender do nome.
   if (/^\d{4,12}$/.test(nome)) {
-    const clube = await clubePorId(nome);
+    const r = await clubeComEspelho(nome);
+    const clube = r.dados?.info ?? null;
     return NextResponse.json(
       {
         clubs: clube ? [clube] : [],
@@ -54,15 +57,25 @@ export async function GET(req: Request) {
         trilha: [],
         aproximado: false,
         porId: true,
+        fonte: r.fonte,
+        capturedAt: r.capturedAt,
       },
       { headers: CACHE }
     );
   }
 
-  const { clubes, varridos, trilha, aproximado } = await buscarClubes(nome, { plataformas });
+  const r = await buscarComEspelho(nome, plataformas);
 
   return NextResponse.json(
-    { clubs: clubes, varridos, trilha, aproximado, porId: false },
+    {
+      clubs: r.dados,
+      varridos: r.varridos,
+      trilha: [],
+      aproximado: r.aproximado,
+      porId: false,
+      fonte: r.fonte,
+      capturedAt: r.capturedAt,
+    },
     { headers: CACHE }
   );
 }

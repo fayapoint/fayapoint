@@ -5,6 +5,7 @@ import { Link } from "@/i18n/navigation";
 import { Loader2, Radio, TrendingUp, ChevronDown, ChevronUp, Layers } from "lucide-react";
 import type { GameCopy } from "@/lib/game/copy";
 import type { DivisaoEA, EaPlatform, LinhaRanking } from "@/lib/game/ea-api";
+import { SeloProcedencia, type FonteDado } from "./SeloProcedencia";
 import { LIMA, OURO, RUBRO, CINZA, CIANO, bebas, superficie } from "@/lib/game/tema";
 
 /**
@@ -30,6 +31,8 @@ const PREVIA = 25;
 interface Payload {
   ranking: LinhaRanking[];
   divisoes: DivisaoEA[];
+  fonte: FonteDado;
+  capturedAt: string | null;
 }
 
 export function TabelaRanking({ copy }: { copy: GameCopy }) {
@@ -46,7 +49,12 @@ export function TabelaRanking({ copy }: { copy: GameCopy }) {
         if (!vivo) return;
         const linhas: LinhaRanking[] = Array.isArray(d.ranking) ? d.ranking : [];
         if (linhas.length === 0) return setDado("erro");
-        setDado({ ranking: linhas, divisoes: Array.isArray(d.divisoes) ? d.divisoes : [] });
+        setDado({
+          ranking: linhas,
+          divisoes: Array.isArray(d.divisoes) ? d.divisoes : [],
+          fonte: (d.fonte ?? "vazio") as FonteDado,
+          capturedAt: d.capturedAt ?? null,
+        });
       })
       .catch(() => vivo && setDado("erro"));
     return () => {
@@ -63,12 +71,19 @@ export function TabelaRanking({ copy }: { copy: GameCopy }) {
         <h2 className="text-2xl sm:text-3xl" style={bebas}>
           {r.title.toUpperCase()}
         </h2>
-        <span
-          className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-widest"
-          style={{ borderColor: `${LIMA}55`, color: LIMA, background: `${LIMA}14` }}
-        >
-          <Radio size={11} /> {r.badge}
-        </span>
+        {/* O selo antes era um "DADO AO VIVO" fixo. Em produção isso era falso:
+            a EA recusa leitura de servidor e a tabela vem do nosso acervo. O
+            selo agora diz qual das duas fontes serviu esta tela. */}
+        {dado && dado !== "erro" ? (
+          <SeloProcedencia fonte={dado.fonte} capturedAt={dado.capturedAt} copy={copy} />
+        ) : (
+          <span
+            className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-widest"
+            style={{ borderColor: `${LIMA}55`, color: LIMA, background: `${LIMA}14` }}
+          >
+            <Radio size={11} /> {r.badge}
+          </span>
+        )}
       </div>
       <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/60">{r.subtitle}</p>
 

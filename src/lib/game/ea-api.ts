@@ -53,7 +53,57 @@ const HEADERS: Record<string, string> = {
   referer: "https://www.ea.com/",
 };
 
+/* ------------------------------------------------------------------ */
+/* Disjuntor: a EA recusa IP de datacenter                             */
+/* ------------------------------------------------------------------ */
+
+/**
+ * **Medido em 25/08/2026: a EA responde HTTP 403 para IP de datacenter.**
+ * Do PC do Ricardo (residencial) tudo responde 200; da função da Netlify e da
+ * VPS da Hostinger, 403 em todos os endpoints. Não é cabeçalho, não é região:
+ * é a origem da requisição.
+ *
+ * Sem disjuntor, cada visita em produção pagaria uma ida inútil à EA antes de
+ * cair no espelho. Depois de 3 recusas, este módulo para de tentar por 10
+ * minutos — e volta a tentar sozinho depois disso, para o dia em que a EA
+ * deixar de bloquear (ou em que a leitura passar a sair de outro lugar).
+ */
+const JANELA_DISJUNTOR = 10 * 60 * 1000;
+const RECUSAS_PARA_ABRIR = 3;
+let recusas = 0;
+let abertoAte = 0;
+
+/**
+ * Verdadeiro enquanto vale a pena nem tentar falar com a EA.
+ *
+ * `GAME_EA_FORCAR_ESPELHO=1` finge que a EA está recusando. Serve para provar,
+ * na máquina de desenvolvimento (onde a EA responde), que o caminho do espelho
+ * funciona — sem isso, o comportamento de PRODUÇÃO só se testa em produção, que
+ * é exatamente como esta seção ficou dois dias parecendo funcionar.
+ */
+export function eaRecusandoAcesso(): boolean {
+  if (process.env.GAME_EA_FORCAR_ESPELHO === "1") return true;
+  if (abertoAte && Date.now() < abertoAte) return true;
+  if (abertoAte && Date.now() >= abertoAte) {
+    // Passou a janela: uma nova chance, do zero.
+    abertoAte = 0;
+    recusas = 0;
+  }
+  return false;
+}
+
+function registrarRecusa() {
+  recusas += 1;
+  if (recusas >= RECUSAS_PARA_ABRIR) abertoAte = Date.now() + JANELA_DISJUNTOR;
+}
+
+function registrarSucesso() {
+  recusas = 0;
+  abertoAte = 0;
+}
+
 async function eaGet<T>(path: string, params: Record<string, string>): Promise<T | null> {
+  if (eaRecusandoAcesso()) return null;
   const url = new URL(`${BASE}/${path}`);
   for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
 
@@ -67,9 +117,12 @@ async function eaGet<T>(path: string, params: Record<string, string>): Promise<T
       cache: "no-store",
     });
     if (!res.ok) {
+      // 403/401 são a recusa por origem; 500 é a EA mal, e não fecha o disjuntor.
+      if (res.status === 403 || res.status === 401) registrarRecusa();
       console.error(`[game/ea-api] ${path} -> HTTP ${res.status}`);
       return null;
     }
+    registrarSucesso();
     return (await res.json()) as T;
   } catch (err) {
     console.error(`[game/ea-api] ${path} falhou:`, err);
@@ -323,6 +376,15 @@ const numOrNull = (v: unknown): number | null => {
   const n = typeof v === "string" ? parseFloat(v) : typeof v === "number" ? v : NaN;
   return Number.isFinite(n) ? n : null;
 };
+/**
+ * As divisões do Clubs vão de 1 a 10. A EA devolve **0** para clube que não
+ * está numa temporada de divisão — e 0 impresso numa coluna "Div" lê como
+ * "divisão zero", que não existe. Aqui 0 vira ausência, que é o que ele é.
+ */
+const divisaoOuNull = (v: unknown): number | null => {
+  const n = numOrNull(v);
+  return n != null && n > 0 ? n : null;
+};
 const texto = (v: unknown): string => repararTexto(String(v ?? ""));
 
 /** `lastMatchN` da EA: 1 = vitória, 0 = empate, 2 = derrota, -1 = não houve. */
@@ -345,8 +407,8 @@ function linhaBusca(r: Record<string, unknown>, platform: EaPlatform): ClubSearc
     crestAssetId: customKit.crestAssetId ? String(customKit.crestAssetId) : null,
     stadName: customKit.stadName ? texto(customKit.stadName) : null,
     platform,
-    currentDivision: numOrNull(r.currentDivision),
-    bestDivision: numOrNull(r.bestDivision),
+    currentDivision: divisaoOuNull(r.currentDivision),
+    bestDivision: divisaoOuNull(r.bestDivision),
     skillRating: numOrNull(r.skillRating),
     wins: num(r.wins),
     ties: num(r.ties),
@@ -521,7 +583,7 @@ export async function clubOverallStats(
     leagueAppearances: numOrNull(r.leagueAppearances),
     promotions: numOrNull(r.promotions),
     relegations: numOrNull(r.relegations),
-    bestDivision: numOrNull(r.bestDivision),
+    bestDivision: divisaoOuNull(r.bestDivision),
     bestFinishGroup: numOrNull(r.bestFinishGroup),
     reputationTier: numOrNull(r.reputationtier),
     winStreak: numOrNull(r.wstreak),
@@ -780,8 +842,8 @@ export async function rankingGlobal(
       name: texto(r.clubName ?? info.name ?? "?"),
       platform,
       skillRating: numOrNull(r.skillRating),
-      currentDivision: numOrNull(r.currentDivision),
-      bestDivision: numOrNull(r.bestDivision),
+      currentDivision: divisaoOuNull(r.currentDivision),
+      bestDivision: divisaoOuNull(r.bestDivision),
       wins: num(r.wins),
       ties: num(r.ties),
       losses: num(r.losses),

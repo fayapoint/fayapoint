@@ -8,6 +8,15 @@
       "port": 3000
     },
     {
+      "name": "fayapoint-espelho",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": [
+        "-c",
+        "eval \"$(fnm env --shell bash)\" && GAME_EA_FORCAR_ESPELHO=1 NEXT_DIST_DIR=.next-espelho npx next dev --port 3020"
+      ],
+      "port": 3020
+    },
+    {
       "name": "fayapoint-dev-b",
       "runtimeExecutable": "bash",
       "runtimeArgs": [

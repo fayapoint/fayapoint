@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { rankingGlobal, divisoes, type EaPlatform } from "@/lib/game/ea-api";
+import { type EaPlatform } from "@/lib/game/ea-api";
+import { rankingComEspelho, divisoesComEspelho } from "@/lib/game/espelho";
 
 /**
  * GET /api/game/ea/ranking?plataforma=common-gen5
@@ -24,16 +25,17 @@ export async function GET(req: Request) {
   const plataforma: EaPlatform = pedida === "common-gen4" ? "common-gen4" : "common-gen5";
   const limite = Math.min(100, Math.max(5, Number(url.searchParams.get("limite") ?? 25)));
 
-  const [linhas, divs] = await Promise.all([rankingGlobal(plataforma), divisoes()]);
+  const [r, divs] = await Promise.all([rankingComEspelho(plataforma, limite), divisoesComEspelho()]);
 
   return NextResponse.json(
     {
-      ranking: linhas.slice(0, limite),
-      total: linhas.length,
-      divisoes: divs,
+      ranking: r.dados,
+      total: r.dados.length,
+      divisoes: divs.dados,
       plataforma,
+      fonte: r.fonte,
+      capturedAt: r.capturedAt,
       sourceGrade: "B",
-      capturedAt: new Date().toISOString(),
     },
     {
       headers: {
