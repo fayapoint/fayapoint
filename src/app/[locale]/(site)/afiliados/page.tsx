@@ -1,8 +1,6 @@
-"use client";
-import { useT } from "@/i18n/dicionario";
+import { obterT } from "@/i18n/dicionario-servidor";
 
-import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
+import { getTranslations } from "next-intl/server";
 import { DollarSign, TrendingUp, Gift, Users, CheckCircle, ArrowRight, Percent, Clock, BarChart } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 
@@ -26,9 +24,14 @@ const benefitIcons: Record<string, React.ComponentType<{ className?: string }>> 
   DollarSign,
 };
 
-export default function AffiliatesPage() {
-  const T = useT();
-  const t = useTranslations("Affiliates");
+export default async function AffiliatesPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const T = await obterT(locale);
+  const t = await getTranslations({ locale, namespace: "Affiliates" });
   const benefits = t.raw("benefits") as Benefit[];
   const steps = t.raw("steps") as Step[];
 
@@ -38,10 +41,8 @@ export default function AffiliatesPage() {
       <main className="pt-32 pb-20">
         {/* Hero */}
         <section className="container mx-auto px-4 text-center mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-3xl mx-auto"
+          <div
+            className="entra max-w-3xl mx-auto"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20 mb-6">
               <DollarSign size={16} className="text-green-400" />
@@ -56,7 +57,7 @@ export default function AffiliatesPage() {
               <span className="text-2xl font-bold text-green-400">{t("commissionRate")}</span>
               <span className="text-muted-foreground">{t("commissionLabel")}</span>
             </div>
-          </motion.div>
+          </div>
         </section>
 
         {/* How it Works */}
@@ -64,20 +65,16 @@ export default function AffiliatesPage() {
           <h2 className="text-3xl font-bold text-center mb-12">{t("howItWorksTitle")}</h2>
           <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
             {steps.map((step, idx) => (
-              <motion.div
+              <div
                 key={step.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="text-center"
+                className="entra-2 text-center"
               >
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-2xl font-bold">
                   {idx + 1}
                 </div>
                 <h3 className="text-xl font-semibold mb-2">{T(step.title)}</h3>
                 <p className="text-muted-foreground">{T(step.description)}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </section>
@@ -89,18 +86,14 @@ export default function AffiliatesPage() {
             {benefits.map((benefit, idx) => {
               const Icon = benefitIcons[benefit.icon] || Gift;
               return (
-                <motion.div
+                <div
                   key={benefit.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="bg-secondary border border-border rounded-xl p-6"
+                  className="entra-3 bg-secondary border border-border rounded-xl p-6"
                 >
                   <Icon className="w-10 h-10 text-green-400 mb-4" />
                   <h3 className="text-lg font-semibold mb-2">{T(benefit.title)}</h3>
                   <p className="text-muted-foreground text-sm">{T(benefit.description)}</p>
-                </motion.div>
+                </div>
               );
             })}
           </div>
@@ -108,11 +101,8 @@ export default function AffiliatesPage() {
 
         {/* CTA */}
         <section className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-3xl mx-auto text-center bg-gradient-to-r from-green-900/20 to-emerald-900/20 border border-green-500/30 rounded-2xl p-10"
+          <div
+            className="entra-4 max-w-3xl mx-auto text-center bg-gradient-to-r from-green-900/20 to-emerald-900/20 border border-green-500/30 rounded-2xl p-10"
           >
             <h2 className="text-3xl font-bold mb-4">{t("cta.title")}</h2>
             <p className="text-muted-foreground mb-8">{t("cta.description")}</p>
@@ -123,7 +113,7 @@ export default function AffiliatesPage() {
               {t("cta.button")}
               <ArrowRight size={18} />
             </Link>
-          </motion.div>
+          </div>
         </section>
       </main>
       

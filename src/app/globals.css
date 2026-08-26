@@ -1684,3 +1684,64 @@ html[data-virada-livro="tras"]::view-transition-new(pagina-direita) {
     transform: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   A ENTRADA, EM CSS — para a página não precisar de JavaScript só por causa
+   dela.
+   ─────────────────────────────────────────────────────────────────────────
+   Item 17 do laudo de 26/08/2026: 39 das 80 páginas eram `"use client"`
+   inteiras. Em treze delas — `/termos`, `/privacidade`, `/faq`, `/sobre`,
+   `/ajuda`, `/carreiras`… — o ÚNICO motivo era um `motion.div` com
+   `initial/animate`: uma cortina de meio segundo pagando o preço de renderizar
+   a página no navegador, carregar o framer-motion e servir HTML vazio ao
+   rastreador. É também a raiz do CLS de 0,43 que o laudo mediu: o conteúdo só
+   existia depois da hidratação.
+
+   `.entra` faz a mesma coisa em três linhas de CSS, sem depender de nada.
+
+   ⚠️ `backwards`, e NÃO `both` — a diferença decide se a página pode ficar
+   invisível.
+
+   O `fill-mode` precisa cobrir o ATRASO, senão o elemento aparece no estado
+   final, espera, e só então salta para a opacidade 0: um pisca ao contrário.
+   Isso os dois fazem. A diferença está no fim: `forwards` (dentro de `both`)
+   deixa o último quadro grudado no elemento PARA SEMPRE, e um quadro é o que o
+   navegador desenhou — se a animação nunca chega a rodar, o elemento fica no
+   PRIMEIRO quadro, opacidade 0, e a página inteira some.
+
+   Com `backwards` + `opacity: 1` declarada, o repouso é a regra CSS, não o
+   resultado da animação: navegador que não anima (impressão, `data-saver`,
+   robô que renderiza sem compositar) desenha a página visível. A animação
+   continua igual para quem a vê.
+
+   A mesma lição que o herói da página de venda deixou escrita mais acima:
+   animação de entrada por JS já falhou em silêncio nesta casa e deixou 14
+   elementos invisíveis. A versão em CSS não pode repetir o erro.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.entra,
+.entra-2,
+.entra-3,
+.entra-4 {
+  opacity: 1;
+}
+.entra {
+  animation: fade-up 0.5s ease-out backwards;
+}
+.entra-2 {
+  animation: fade-up 0.5s ease-out 0.1s backwards;
+}
+.entra-3 {
+  animation: fade-up 0.5s ease-out 0.2s backwards;
+}
+.entra-4 {
+  animation: fade-up 0.5s ease-out 0.3s backwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entra,
+  .entra-2,
+  .entra-3,
+  .entra-4 {
+    animation: none;
+  }
+}

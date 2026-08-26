@@ -1,9 +1,7 @@
-"use client";
-import { useT } from "@/i18n/dicionario";
+import { obterT } from "@/i18n/dicionario-servidor";
 
 import { FaixaDeVideo } from "@/components/ui/FaixaDeVideo";
-import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
+import { getTranslations } from "next-intl/server";
 import { 
   HelpCircle, 
   BookOpen, 
@@ -33,9 +31,14 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   MessageCircle,
 };
 
-export default function HelpCenterPage() {
-  const T = useT();
-  const t = useTranslations("HelpCenter");
+export default async function HelpCenterPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const T = await obterT(locale);
+  const t = await getTranslations({ locale, namespace: "HelpCenter" });
   const categories = t.raw("categories") as HelpCategory[];
 
   return (
@@ -44,9 +47,7 @@ export default function HelpCenterPage() {
       <main className="pt-32 pb-20">
         {/* Hero */}
         <section className="container mx-auto px-4 text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <div className="entra"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6">
               <HelpCircle size={16} className="text-amber-400" />
@@ -54,7 +55,7 @@ export default function HelpCenterPage() {
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("title")}</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{t("description")}</p>
-          </motion.div>
+          </div>
 
           {/* A boia — `AJU-01-boia`. Estava pronto e sem destino no código. */}
           <FaixaDeVideo
@@ -70,12 +71,8 @@ export default function HelpCenterPage() {
             {categories.map((category, idx) => {
               const Icon = iconMap[category.icon] || BookOpen;
               return (
-                <motion.div
+                <div className="entra-2"
                   key={category.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
                 >
                   <Link href={category.href}>
                     <div className="group h-full bg-secondary border border-border rounded-xl p-6 hover:bg-white/10 hover:border-amber-500/50 transition-all">
@@ -89,7 +86,7 @@ export default function HelpCenterPage() {
                       </span>
                     </div>
                   </Link>
-                </motion.div>
+                </div>
               );
             })}
           </div>
@@ -134,11 +131,8 @@ export default function HelpCenterPage() {
 
         {/* Contact Support */}
         <section className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-3xl mx-auto"
+          <div
+            className="entra-3 max-w-3xl mx-auto"
           >
             <div className="bg-gradient-to-r from-amber-900/30 to-blue-900/20 border border-border rounded-2xl p-10 text-center">
               <Mail className="w-12 h-12 text-amber-400 mx-auto mb-4" />
@@ -160,7 +154,7 @@ export default function HelpCenterPage() {
                 </Link>
               </div>
             </div>
-          </motion.div>
+          </div>
         </section>
       </main>
       

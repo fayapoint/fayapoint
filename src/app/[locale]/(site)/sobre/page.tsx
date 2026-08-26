@@ -1,7 +1,5 @@
-"use client";
-import { useT } from "@/i18n/dicionario";
+import { obterT } from "@/i18n/dicionario-servidor";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 import {
@@ -18,7 +16,7 @@ import {
   Instagram,
   Twitter,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -45,9 +43,14 @@ type ValueItem = {
   description: string;
 };
 
-export default function AboutPage() {
-  const T = useT();
-  const t = useTranslations("About");
+export default async function AboutPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const T = await obterT(locale);
+  const t = await getTranslations({ locale, namespace: "About" });
 
   const heroHighlights = t.raw("hero.highlights") as string[];
   const stats = t.raw("stats") as Stat[];
@@ -79,10 +82,8 @@ export default function AboutPage() {
           </div>
           
           <div className="container mx-auto px-4 relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center max-w-4xl mx-auto"
+            <div
+              className="entra text-center max-w-4xl mx-auto"
             >
               <Badge className="mb-4 bg-amber-600/20 text-amber-400 border-amber-500/50">
                 {t("hero.badge")}
@@ -102,7 +103,7 @@ export default function AboutPage() {
                   </Badge>
                 ))}
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
 
@@ -113,17 +114,14 @@ export default function AboutPage() {
               {stats.map((stat, i) => {
                 const Icon = statIcons[i] ?? Trophy;
                 return (
-                  <motion.div
+                  <div
                     key={stat.label}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                    className="text-center"
+                    className="entra-2 text-center"
                   >
                     <Icon className="w-8 h-8 mx-auto mb-2 text-amber-400" />
                     <div className="text-3xl font-bold mb-1">{T(stat.number)}</div>
                     <div className="text-muted-foreground">{T(stat.label)}</div>
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
@@ -134,10 +132,7 @@ export default function AboutPage() {
         <section className="py-20">
           <div className="container mx-auto px-4">
             <div className="grid lg:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+              <div className="entra-3"
               >
                 <div className="relative">
                   <div className="absolute -bottom-10 -left-12 hidden lg:block w-40 h-40 bg-amber-600/20 blur-3xl rounded-full" />
@@ -175,12 +170,9 @@ export default function AboutPage() {
                     </a>
                   </div>
                 </div>
-              </motion.div>
+              </div>
 
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+              <div className="entra-4"
               >
                 <h2 className="text-3xl font-bold mb-6">{t("aboutRicardo.title")}</h2>
                 <div className="space-y-4 text-muted-foreground">
@@ -200,7 +192,7 @@ export default function AboutPage() {
                     ))}
                   </div>
                 </div>
-              </motion.div>
+              </div>
             </div>
           </div>
         </section>
@@ -218,13 +210,9 @@ export default function AboutPage() {
 
             <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               {gallery.map((image, index) => (
-                <motion.div
+                <div
                   key={image.src}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="group relative overflow-hidden rounded-3xl border border-border bg-secondary"
+                  className="entra-4 group relative overflow-hidden rounded-3xl border border-border bg-secondary"
                 >
                   <div className="relative aspect-[4/3]">
                     <Image
@@ -240,7 +228,7 @@ export default function AboutPage() {
                       <p className="text-lg font-semibold text-white">{T(image.description)}</p>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -249,16 +237,13 @@ export default function AboutPage() {
         {/* Quote */}
         <section className="py-20 bg-gradient-to-r from-amber-900/30 to-yellow-900/20">
           <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="max-w-4xl mx-auto text-center"
+            <div
+              className="entra-4 max-w-4xl mx-auto text-center"
             >
               <Quote className="w-12 h-12 mx-auto mb-6 text-amber-400" />
               <blockquote className="text-2xl md:text-3xl font-medium mb-6">{t("quote.text")}</blockquote>
               <cite className="text-muted-foreground">{t("quote.cite")}</cite>
-            </motion.div>
+            </div>
           </div>
         </section>
 
@@ -272,12 +257,9 @@ export default function AboutPage() {
 
             <div className="max-w-4xl mx-auto">
               {timeline.map((item, i) => (
-                <motion.div
+                <div
                   key={i}
-                  initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  className="flex gap-8 mb-12 relative"
+                  className="entra-4 flex gap-8 mb-12 relative"
                 >
                   {/* Line */}
                   {i < timeline.length - 1 && (
@@ -297,7 +279,7 @@ export default function AboutPage() {
                     <h3 className="text-xl font-semibold mb-2">{T(item.title)}</h3>
                     <p className="text-muted-foreground">{T(item.description)}</p>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -315,12 +297,8 @@ export default function AboutPage() {
               {values.map((value, i) => {
                 const Icon = valueIcons[i] ?? Target;
                 return (
-                  <motion.div
+                  <div className="entra-4"
                     key={value.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.1 }}
-                    viewport={{ once: true }}
                   >
                     <Card className="bg-secondary backdrop-blur border-border p-6 h-full">
                       <div className="text-amber-400 mb-4">
@@ -329,7 +307,7 @@ export default function AboutPage() {
                       <h3 className="text-xl font-semibold mb-2">{T(value.title)}</h3>
                       <p className="text-muted-foreground">{T(value.description)}</p>
                     </Card>
-                  </motion.div>
+                  </div>
                 );
               })}
             </div>
@@ -339,11 +317,8 @@ export default function AboutPage() {
         {/* CTA */}
         <section className="py-20">
           <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-center max-w-3xl mx-auto"
+            <div
+              className="entra-4 text-center max-w-3xl mx-auto"
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-6">{t("cta.title")}</h2>
               <p className="text-xl text-muted-foreground mb-8">{t("cta.description")}</p>
@@ -366,7 +341,7 @@ export default function AboutPage() {
                   </Button>
                 </Link>
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
       </main>

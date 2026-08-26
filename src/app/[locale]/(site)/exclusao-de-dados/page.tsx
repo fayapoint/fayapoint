@@ -1,13 +1,16 @@
-"use client";
-import { useT } from "@/i18n/dicionario";
+import { obterT } from "@/i18n/dicionario-servidor";
 
-import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
+import { getTranslations } from "next-intl/server";
 import { Trash2, Mail, Clock, CheckCircle } from "lucide-react";
 
-export default function DataDeletionPage() {
-  const T = useT();
-  const t = useTranslations("DataDeletion");
+export default async function DataDeletionPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const T = await obterT(locale);
+  const t = await getTranslations({ locale, namespace: "DataDeletion" });
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -15,9 +18,7 @@ export default function DataDeletionPage() {
       <main className="pt-32 pb-20">
         {/* Hero */}
         <section className="container mx-auto px-4 text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <div className="entra"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/20 mb-6">
               <Trash2 size={16} className="text-red-400" />
@@ -27,16 +28,13 @@ export default function DataDeletionPage() {
               {t("title")}
             </h1>
             <p className="text-muted-foreground">{t("lastUpdated")}</p>
-          </motion.div>
+          </div>
         </section>
 
         {/* Content */}
         <section className="container mx-auto px-4 max-w-3xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-secondary border border-border rounded-2xl p-8 md:p-12"
+          <div
+            className="entra-2 bg-secondary border border-border rounded-2xl p-8 md:p-12"
           >
             <div className="prose prose-invert prose-lg max-w-none">
               <p className="text-muted-foreground mb-8">{t("intro")}</p>
@@ -108,7 +106,7 @@ export default function DataDeletionPage() {
                 <p className="text-muted-foreground">{t("lgpd.description")}</p>
               </div>
             </div>
-          </motion.div>
+          </div>
         </section>
       </main>
 

@@ -1,12 +1,9 @@
-"use client";
-
-import { use } from "react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Coins, FileCode2, Image as ImageIcon, Lock, Wallet } from "lucide-react";
 
-import { useT } from "@/i18n/dicionario";
+import { obterT } from "@/i18n/dicionario-servidor";
 import { comIdioma } from "@/lib/rota-idioma";
 
 /**
@@ -48,13 +45,13 @@ import { comIdioma } from "@/lib/rota-idioma";
  *
  * O plano completo está em `autoresearch/PLANO_ABERTURA_E_API_2026-08-26.md`.
  */
-export default function APIDocsPage({
+export default async function APIDocsPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  const { locale } = use(params);
-  const T = useT();
+  const { locale } = await params;
+  const T = await obterT(locale);
   /** Link interno SEMPRE com prefixo de idioma — ver `lib/rota-idioma.ts`. */
   const rota = (h: string) => comIdioma(h, locale);
 

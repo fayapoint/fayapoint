@@ -1,8 +1,6 @@
-"use client";
-import { useT } from "@/i18n/dicionario";
+import { obterT } from "@/i18n/dicionario-servidor";
 
-import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
+import { getTranslations } from "next-intl/server";
 import { HelpCircle, Search, MessageCircle } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import {
@@ -22,9 +20,14 @@ type FAQCategory = {
   items: FAQItem[];
 };
 
-export default function FAQPage() {
-  const T = useT();
-  const t = useTranslations("FAQ");
+export default async function FAQPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const T = await obterT(locale);
+  const t = await getTranslations({ locale, namespace: "FAQ" });
   const categories = t.raw("categories") as FAQCategory[];
 
   return (
@@ -33,9 +36,7 @@ export default function FAQPage() {
       <main className="pt-32 pb-20">
         {/* Hero */}
         <section className="container mx-auto px-4 text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <div className="entra"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6">
               <HelpCircle size={16} className="text-amber-400" />
@@ -43,19 +44,15 @@ export default function FAQPage() {
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("title")}</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{t("description")}</p>
-          </motion.div>
+          </div>
         </section>
 
         {/* FAQ Categories */}
         <section className="container mx-auto px-4 max-w-4xl">
           <div className="space-y-12">
             {categories.map((category, catIdx) => (
-              <motion.div
+              <div className="entra-2"
                 key={category.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: catIdx * 0.1 }}
               >
                 <h2 className="text-2xl font-bold mb-6 text-amber-400">{T(category.title)}</h2>
                 <Accordion type="single" collapsible className="space-y-3">
@@ -74,18 +71,15 @@ export default function FAQPage() {
                     </AccordionItem>
                   ))}
                 </Accordion>
-              </motion.div>
+              </div>
             ))}
           </div>
         </section>
 
         {/* CTA */}
         <section className="container mx-auto px-4 mt-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-2xl mx-auto text-center bg-gradient-to-r from-amber-900/30 to-blue-900/20 border border-border rounded-2xl p-10"
+          <div
+            className="entra-3 max-w-2xl mx-auto text-center bg-gradient-to-r from-amber-900/30 to-blue-900/20 border border-border rounded-2xl p-10"
           >
             <MessageCircle className="w-12 h-12 text-amber-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-3">{t("cta.title")}</h2>
@@ -96,7 +90,7 @@ export default function FAQPage() {
             >
               {t("cta.button")}
             </Link>
-          </motion.div>
+          </div>
         </section>
       </main>
       

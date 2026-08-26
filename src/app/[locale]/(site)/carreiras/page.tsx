@@ -1,9 +1,7 @@
-"use client";
-import { useT } from "@/i18n/dicionario";
+import { obterT } from "@/i18n/dicionario-servidor";
 
 import { FaixaDeVideo } from "@/components/ui/FaixaDeVideo";
-import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
+import { getTranslations } from "next-intl/server";
 import { Briefcase, MapPin, Clock, Heart, Zap, Users, Coffee, Laptop } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 
@@ -29,9 +27,14 @@ const benefitIcons: Record<string, React.ComponentType<{ className?: string }>> 
   Clock,
 };
 
-export default function CareersPage() {
-  const T = useT();
-  const t = useTranslations("Careers");
+export default async function CareersPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const T = await obterT(locale);
+  const t = await getTranslations({ locale, namespace: "Careers" });
   const benefits = t.raw("benefits") as Benefit[];
   const positions = t.raw("positions") as Position[];
 
@@ -41,10 +44,8 @@ export default function CareersPage() {
       <main className="pt-32 pb-20">
         {/* Hero */}
         <section className="container mx-auto px-4 text-center mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-3xl mx-auto"
+          <div
+            className="entra max-w-3xl mx-auto"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6">
               <Briefcase size={16} className="text-amber-400" />
@@ -52,7 +53,7 @@ export default function CareersPage() {
             </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-6">{t("title")}</h1>
             <p className="text-xl text-muted-foreground">{t("description")}</p>
-          </motion.div>
+          </div>
 
           {/* O caminho que se abre — `CAR-01-caminho`, gerado em 03/08 e parado
               desde então porque nenhuma rota o referenciava. */}
@@ -70,18 +71,14 @@ export default function CareersPage() {
             {benefits.map((benefit, idx) => {
               const Icon = benefitIcons[benefit.icon] || Heart;
               return (
-                <motion.div
+                <div
                   key={benefit.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="bg-secondary border border-border rounded-xl p-6"
+                  className="entra-2 bg-secondary border border-border rounded-xl p-6"
                 >
                   <Icon className="w-10 h-10 text-amber-400 mb-4" />
                   <h3 className="text-lg font-semibold mb-2">{T(benefit.title)}</h3>
                   <p className="text-muted-foreground text-sm">{T(benefit.description)}</p>
-                </motion.div>
+                </div>
               );
             })}
           </div>
@@ -93,13 +90,9 @@ export default function CareersPage() {
           <div className="max-w-3xl mx-auto space-y-4">
             {positions.length > 0 ? (
               positions.map((position, idx) => (
-                <motion.div
+                <div
                   key={position.title}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="group bg-secondary border border-border rounded-xl p-6 hover:bg-white/10 hover:border-amber-500/50 transition-all cursor-pointer"
+                  className="entra-3 group bg-secondary border border-border rounded-xl p-6 hover:bg-white/10 hover:border-amber-500/50 transition-all cursor-pointer"
                 >
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
@@ -117,7 +110,7 @@ export default function CareersPage() {
                       </span>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))
             ) : (
               <div className="text-center py-12 bg-secondary border border-border rounded-xl">
@@ -130,11 +123,8 @@ export default function CareersPage() {
 
         {/* CTA */}
         <section className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-2xl mx-auto text-center bg-gradient-to-r from-amber-900/30 to-blue-900/20 border border-border rounded-2xl p-10"
+          <div
+            className="entra-4 max-w-2xl mx-auto text-center bg-gradient-to-r from-amber-900/30 to-blue-900/20 border border-border rounded-2xl p-10"
           >
             <h2 className="text-2xl font-bold mb-3">{t("cta.title")}</h2>
             <p className="text-muted-foreground mb-6">{t("cta.description")}</p>
@@ -144,7 +134,7 @@ export default function CareersPage() {
             >
               {t("cta.button")}
             </Link>
-          </motion.div>
+          </div>
         </section>
       </main>
       

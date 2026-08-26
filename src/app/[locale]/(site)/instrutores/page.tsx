@@ -1,8 +1,6 @@
-"use client";
-import { useT } from "@/i18n/dicionario";
+import { obterT } from "@/i18n/dicionario-servidor";
 
-import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
+import { getTranslations } from "next-intl/server";
 import { GraduationCap, Linkedin, Twitter, Globe, Award } from "lucide-react";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
@@ -18,9 +16,14 @@ type Instructor = {
   website?: string;
 };
 
-export default function InstructorsPage() {
-  const T = useT();
-  const t = useTranslations("Instructors");
+export default async function InstructorsPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const T = await obterT(locale);
+  const t = await getTranslations({ locale, namespace: "Instructors" });
   const instructors = t.raw("list") as Instructor[];
 
   return (
@@ -29,10 +32,8 @@ export default function InstructorsPage() {
       <main className="pt-32 pb-20">
         {/* Hero */}
         <section className="container mx-auto px-4 text-center mb-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="max-w-3xl mx-auto"
+          <div
+            className="entra max-w-3xl mx-auto"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6">
               <GraduationCap size={16} className="text-amber-400" />
@@ -40,20 +41,16 @@ export default function InstructorsPage() {
             </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-6">{t("title")}</h1>
             <p className="text-xl text-muted-foreground">{t("description")}</p>
-          </motion.div>
+          </div>
         </section>
 
         {/* Instructors Grid */}
         <section className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {instructors.map((instructor, idx) => (
-              <motion.div
+              <div
                 key={instructor.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="bg-secondary border border-border rounded-2xl overflow-hidden group"
+                className="entra-2 bg-secondary border border-border rounded-2xl overflow-hidden group"
               >
                 {/* Image */}
                 <div className="relative aspect-square bg-gradient-to-br from-amber-600/30 to-yellow-600/30">
@@ -106,7 +103,7 @@ export default function InstructorsPage() {
                     ))}
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </section>
@@ -150,11 +147,8 @@ export default function InstructorsPage() {
 
         {/* CTA */}
         <section className="container mx-auto px-4 mt-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-2xl mx-auto text-center bg-gradient-to-r from-amber-900/30 to-blue-900/20 border border-border rounded-2xl p-10"
+          <div
+            className="entra-3 max-w-2xl mx-auto text-center bg-gradient-to-r from-amber-900/30 to-blue-900/20 border border-border rounded-2xl p-10"
           >
             <Award className="w-12 h-12 text-amber-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-3">{t("cta.title")}</h2>
@@ -165,7 +159,7 @@ export default function InstructorsPage() {
             >
               {t("cta.button")}
             </Link>
-          </motion.div>
+          </div>
         </section>
       </main>
       

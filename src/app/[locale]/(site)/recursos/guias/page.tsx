@@ -1,8 +1,6 @@
-"use client";
-import { useT } from "@/i18n/dicionario";
+import { obterT } from "@/i18n/dicionario-servidor";
 
-import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
+import { getTranslations } from "next-intl/server";
 import { FileText, Download, Clock, Star } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 
@@ -15,9 +13,14 @@ type Guide = {
   featured: boolean;
 };
 
-export default function GuidesPage() {
-  const T = useT();
-  const t = useTranslations("Guides");
+export default async function GuidesPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const T = await obterT(locale);
+  const t = await getTranslations({ locale, namespace: "Guides" });
   const guides = t.raw("list") as Guide[];
 
   return (
@@ -26,9 +29,7 @@ export default function GuidesPage() {
       <main className="pt-32 pb-20">
         {/* Hero */}
         <section className="container mx-auto px-4 text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <div className="entra"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6">
               <FileText size={16} className="text-blue-400" />
@@ -36,20 +37,16 @@ export default function GuidesPage() {
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("title")}</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{t("description")}</p>
-          </motion.div>
+          </div>
         </section>
 
         {/* Guides Grid */}
         <section className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {guides.map((guide, idx) => (
-              <motion.div
+              <div
                 key={guide.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="group bg-secondary border border-border rounded-xl p-6 hover:bg-white/10 hover:border-blue-500/50 transition-all"
+                className="entra-2 group bg-secondary border border-border rounded-xl p-6 hover:bg-white/10 hover:border-blue-500/50 transition-all"
               >
                 {guide.featured && (
                   <div className="flex items-center gap-1 text-yellow-400 text-sm mb-3">
@@ -73,18 +70,15 @@ export default function GuidesPage() {
                     <Download size={14} /> {guide.downloads.toLocaleString()}
                   </span>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </section>
 
         {/* CTA */}
         <section className="container mx-auto px-4 mt-20">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="max-w-2xl mx-auto text-center bg-gradient-to-r from-blue-900/20 to-amber-900/20 border border-border rounded-2xl p-10"
+          <div
+            className="entra-3 max-w-2xl mx-auto text-center bg-gradient-to-r from-blue-900/20 to-amber-900/20 border border-border rounded-2xl p-10"
           >
             <h2 className="text-2xl font-bold mb-3">{t("cta.title")}</h2>
             <p className="text-muted-foreground mb-6">{t("cta.description")}</p>
@@ -94,7 +88,7 @@ export default function GuidesPage() {
             >
               {t("cta.button")}
             </Link>
-          </motion.div>
+          </div>
         </section>
       </main>
       

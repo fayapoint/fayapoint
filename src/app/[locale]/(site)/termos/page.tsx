@@ -1,8 +1,6 @@
-"use client";
-import { useT } from "@/i18n/dicionario";
+import { obterT } from "@/i18n/dicionario-servidor";
 
-import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
+import { getTranslations } from "next-intl/server";
 import { FileText, Scale } from "lucide-react";
 
 type Section = {
@@ -10,9 +8,14 @@ type Section = {
   content: string;
 };
 
-export default function TermsPage() {
-  const T = useT();
-  const t = useTranslations("Terms");
+export default async function TermsPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const T = await obterT(locale);
+  const t = await getTranslations({ locale, namespace: "Terms" });
   const sections = t.raw("sections") as Section[];
 
   return (
@@ -21,9 +24,7 @@ export default function TermsPage() {
       <main className="pt-32 pb-20">
         {/* Hero */}
         <section className="container mx-auto px-4 text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <div className="entra"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6">
               <Scale size={16} className="text-blue-400" />
@@ -31,16 +32,13 @@ export default function TermsPage() {
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("title")}</h1>
             <p className="text-muted-foreground">{t("lastUpdated")}</p>
-          </motion.div>
+          </div>
         </section>
 
         {/* Content */}
         <section className="container mx-auto px-4 max-w-3xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="bg-secondary border border-border rounded-2xl p-8 md:p-12"
+          <div
+            className="entra-2 bg-secondary border border-border rounded-2xl p-8 md:p-12"
           >
             <div className="prose prose-invert prose-lg max-w-none">
               <p className="text-muted-foreground mb-8">{t("intro")}</p>
@@ -54,7 +52,7 @@ export default function TermsPage() {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
         </section>
       </main>
       

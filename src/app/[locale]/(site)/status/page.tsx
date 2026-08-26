@@ -1,8 +1,6 @@
-"use client";
-import { useT } from "@/i18n/dicionario";
+import { obterT } from "@/i18n/dicionario-servidor";
 
-import { useTranslations } from "next-intl";
-import { motion } from "framer-motion";
+import { getTranslations } from "next-intl/server";
 import { Activity, CheckCircle, AlertCircle, Clock } from "lucide-react";
 
 type Service = {
@@ -11,9 +9,14 @@ type Service = {
   uptime: string;
 };
 
-export default function StatusPage() {
-  const T = useT();
-  const t = useTranslations("Status");
+export default async function StatusPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const T = await obterT(locale);
+  const t = await getTranslations({ locale, namespace: "Status" });
   const services = t.raw("services") as Service[];
 
   const statusConfig = {
@@ -30,9 +33,7 @@ export default function StatusPage() {
       <main className="pt-32 pb-20">
         {/* Hero */}
         <section className="container mx-auto px-4 text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+          <div className="entra"
           >
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 mb-6">
               <Activity size={16} className="text-amber-400" />
@@ -40,15 +41,13 @@ export default function StatusPage() {
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("title")}</h1>
             <p className="text-muted-foreground">{t("description")}</p>
-          </motion.div>
+          </div>
         </section>
 
         {/* Overall Status */}
         <section className="container mx-auto px-4 max-w-3xl mb-12">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className={`p-6 rounded-2xl border ${allOperational ? 'bg-green-500/10 border-green-500/20' : 'bg-yellow-500/10 border-yellow-500/20'}`}
+          <div
+            className={"entra-2 " + `p-6 rounded-2xl border ${allOperational ? 'bg-green-500/10 border-green-500/20' : 'bg-yellow-500/10 border-yellow-500/20'}`}
           >
             <div className="flex items-center justify-center gap-3">
               <CheckCircle className={allOperational ? 'text-green-400' : 'text-yellow-400'} size={28} />
@@ -56,7 +55,7 @@ export default function StatusPage() {
                 {allOperational ? t("allOperational") : t("someIssues")}
               </span>
             </div>
-          </motion.div>
+          </div>
         </section>
 
         {/* Services List */}
@@ -67,12 +66,9 @@ export default function StatusPage() {
               const config = statusConfig[service.status];
               const Icon = config.icon;
               return (
-                <motion.div
+                <div
                   key={service.name}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.05 }}
-                  className={`flex items-center justify-between p-5 rounded-xl border ${config.bg} ${config.border}`}
+                  className={"entra-3 " + `flex items-center justify-between p-5 rounded-xl border ${config.bg} ${config.border}`}
                 >
                   <div className="flex items-center gap-4">
                     <Icon className={config.color} size={24} />
@@ -87,7 +83,7 @@ export default function StatusPage() {
                       {t("uptime")}: {T(service.uptime)}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               );
             })}
           </div>
