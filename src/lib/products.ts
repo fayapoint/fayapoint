@@ -268,6 +268,23 @@ const CAMPOS_FORA_DA_VITRINE = [
   'courseContent',
   'detailedCurriculum',
   'canonModels',
+  // Peso morto na vitrine, medido em 26/08/2026 sobre os 22 cursos: 36 dos
+  // 120 KB que atravessavam a fronteira. Nenhum destes é lido pelo
+  // `CoursesCatalog`, pelo `AttractiveCourseCard` nem pelo `IndicePrevias` —
+  // conferido campo a campo. Eles pertencem à PÁGINA DE VENDA, que continua
+  // recebendo o produto inteiro, e lá o custo é de um curso e não de vinte e
+  // dois. Se um card passar a mostrar FAQ ou depoimento, tire da lista.
+  'seo',
+  'editorialVerification',
+  'faqs',
+  'cta',
+  'features',
+  'bonuses',
+  'guarantees',
+  'testimonials',
+  'targetAudience',
+  'digitalAssets',
+  'trailer',
   // A tradução inglesa do produto. Depois que `paraIdioma` resolveu o idioma,
   // ela é peso morto — e mandá-la junto faria a vitrine viajar com o catálogo
   // inteiro DUAS vezes, uma em cada língua. Rede de segurança: mesmo que
@@ -288,8 +305,46 @@ export function paraVitrine(produtos: Product[]): Product[] {
   return produtos.map((p) => {
     const copia = { ...p } as Record<string, unknown>;
     for (const campo of CAMPOS_FORA_DA_VITRINE) delete copia[campo];
-    return copia as unknown as Product;
+    return aplanar(copia) as unknown as Product;
   });
+}
+
+/**
+ * Tudo vira objeto simples antes de cruzar para o Client Component.
+ *
+ * O React só serializa objetos simples, e o documento do Mongo não é um: o
+ * `_id` é um ObjectId (um Buffer por dentro) e as datas são `Date`. Medido em
+ * 26/08/2026, a vitrine cuspia VINTE E DOIS avisos no console — um por curso:
+ *
+ *   Only plain objects can be passed to Client Components from Server
+ *   Components. Objects with toJSON methods are not supported.
+ *   {_id: {buffer: ...}, slug: ..., ...}
+ *
+ * Junto vinha `Hydration failed because the server rendered text didn't match
+ * the client`, que faz o React descartar a árvore e desenhar tudo de novo.
+ *
+ * `_id` vira string (nenhum componente da vitrine o usa como objeto — também
+ * conferido) e `Date` vira ISO, que é o que os cards já esperam quando leem
+ * `updatedAt` e `contentUpdatedAt`.
+ */
+export function paraObjetoSimples<T>(valor: T): T {
+  return aplanar(valor) as T;
+}
+
+function aplanar(valor: unknown): unknown {
+  if (valor === null || valor === undefined) return valor;
+  if (valor instanceof Date) return valor.toISOString();
+  if (Array.isArray(valor)) return valor.map(aplanar);
+  if (typeof valor === 'object') {
+    // ObjectId, Decimal128, Binary — qualquer coisa do driver que saiba se
+    // converter sozinha e não seja um objeto literal.
+    const proto = Object.getPrototypeOf(valor);
+    if (proto !== Object.prototype && proto !== null) return String(valor);
+    const saida: Record<string, unknown> = {};
+    for (const [k, v] of Object.entries(valor as Record<string, unknown>)) saida[k] = aplanar(v);
+    return saida;
+  }
+  return valor;
 }
 
 /**

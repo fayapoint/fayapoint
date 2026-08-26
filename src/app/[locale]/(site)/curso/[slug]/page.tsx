@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CourseSalesPage from "./CourseSalesPage";
 import { allCourses } from "@/data/courses";
-import { getProductBySlug, paraIdioma } from "@/lib/products";
+import { getProductBySlug, paraIdioma, paraObjetoSimples } from "@/lib/products";
 import { generatePageMetadata } from "@/lib/metadata";
 import { schemaCurso, schemaTrilha } from "@/lib/structured-data";
 import { ogDaCapa } from "@/lib/capa-og";
@@ -128,7 +128,13 @@ export default async function Page({ params }: Props) {
         />
       ))}
       <AvisoTraducao slug={slug} locale={locale} />
-      <CourseSalesPage initialProduct={product} />
+      {/* `paraObjetoSimples` na fronteira: o documento do Mongo traz `_id`
+          como ObjectId e as datas como `Date`, e nenhum dos dois é objeto
+          simples. Sem isto, a página de venda cuspia o aviso "Only plain
+          objects can be passed to Client Components" a cada carregamento
+          (26/08/2026). Aqui NÃO se usa `paraVitrine`: esta página precisa do
+          currículo, dos bônus e do FAQ, e o custo é de um curso só. */}
+      <CourseSalesPage initialProduct={paraObjetoSimples(product)} />
     </>
   );
 }
