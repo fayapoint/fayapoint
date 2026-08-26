@@ -342,6 +342,59 @@ const config: NextConfig = {
         destination: '/:locale/noticias',
         permanent: true,
       },
+      /**
+       * ⚠️ A MESMA DOENÇA DO `/blog`, MULTIPLICADA POR 44 (26/08/2026)
+       *
+       * `src/app/[locale]/(site)/cursos/[slug]/page.tsx` chama
+       * `permanentRedirect` desde 28/07 para mandar a URL legada (plural) à
+       * canônica (singular). Medido em produção em 26/08:
+       * `/pt-BR/cursos/chatgpt-zero` responde **200** com 212 KB, zero `<h1>`,
+       * o título do CATÁLOGO ("Cursos de Inteligência Artificial com
+       * Certificado") e o `<meta http-equiv="refresh">` dentro do corpo.
+       *
+       * São 22 cursos em dois idiomas: **44 duplicatas magras** competindo com
+       * as páginas de venda reais. E o cabeçalho `Link` dessas respostas ainda
+       * anunciava a própria URL legada como `hreflang` — ou seja, o site
+       * convidava o Google a indexá-las.
+       *
+       * ⚠️ `:slug` NÃO pode casar as rotas de verdade que moram sob `/cursos`.
+       * `por-ferramenta` e `por-setor` são um segmento só, exatamente como um
+       * slug — sem a exclusão abaixo, as duas viravam `/curso/por-ferramenta`
+       * e sumiam do ar. É a lei de [[reference_casar_segmento_nao_prefixo]]:
+       * casar por SEGMENTO, e nomear os segmentos que não são slug.
+       */
+      {
+        source: '/:locale(pt-BR|en)/cursos/:slug((?!por-ferramenta$|por-setor$|categoria$)[^/]+)',
+        destination: '/:locale/curso/:slug',
+        permanent: true,
+      },
+      /**
+       * `/configuracoes` tinha a mesma doença: `redirect()` numa página SEM
+       * parâmetro nenhum, portanto totalmente estática. Medido em 26/08:
+       * **200 com 210 KB**. E o destino não tinha idioma, então quem escapasse
+       * do meta-refresh ainda pagava mais um salto no proxy.
+       *
+       * (Uma página que usa `params` — como `/nova` — escapa disto por
+       * acidente: `await params` a torna dinâmica e o 308 sai de verdade.
+       * Acidente não é projeto; regra estrutural mora aqui.)
+       */
+      {
+        source: '/:locale(pt-BR|en)/configuracoes',
+        destination: '/:locale/portal/conta?tab=preferencias',
+        permanent: true,
+      },
+      /**
+       * `/noticias?tag=X` virou `/noticias/tag/X` em 26/08/2026 (item 21 do
+       * laudo: ler `searchParams` desligava o ISR do hub). Os links antigos
+       * seguem vivos em histórico e em quem compartilhou — mandados ao lugar
+       * novo com o valor da query virando segmento.
+       */
+      {
+        source: '/:locale(pt-BR|en)/noticias',
+        has: [{ type: 'query', key: 'tag', value: '(?<tag>.+)' }],
+        destination: '/:locale/noticias/tag/:tag',
+        permanent: true,
+      },
       {
         source: '/:locale(pt-BR|en)/noticias/anthropic-lanca-opus-5',
         destination: '/:locale/noticias/claude-opus-5',
