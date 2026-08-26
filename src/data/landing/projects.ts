@@ -31,7 +31,9 @@ export const FAY_PROJECTS: FayProject[] = [
   {
     id: "cursos",
     name: "Cursos FayAI",
-    tagline: "18 cursos de IA com certificação verificável",
+    // ⚠️ Sem número aqui de propósito: o catálogo cresce e esta linha não é
+    // lida de lugar nenhum — dizia "18" quando já eram 22 (item 14 do laudo).
+    tagline: "Cursos de IA com certificação verificável",
     description:
       "ChatGPT, Claude, Midjourney, n8n, agentes de IA e muito mais — do zero ao avançado, 100% em português. Quiz avaliativo de verdade e certificado com código de verificação público que qualquer empregador pode conferir.",
     image: "/landing/proj-cursos.webp",

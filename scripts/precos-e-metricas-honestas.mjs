@@ -20,7 +20,16 @@
  * R$ 97/mês, Expert R$ 167/mês. O avulso é vitalício, então tem de ficar abaixo
  * de um mês de assinatura para a conta fechar dos dois lados.
  *
- * ⚠️⚠️ NÃO RODE COM `--gravar` SEM LER ISTO (26/08/2026, no mesmo dia)
+ * ⚠️⚠️ A PARTE DO PREÇO DESTE SCRIPT ESTÁ APOSENTADA (26/08/2026)
+ * ─────────────────────────────────────────────────────────────────────────────
+ *
+ * Quem define preço hoje é **`scripts/precos-por-prontidao.mjs`**. Este aqui
+ * continua servindo para a prova social (zerar aluno, nota e avaliação
+ * inventados), que é idempotente e já rodou.
+ *
+ * ⚠️⚠️ NÃO RODE COM `--gravar`: a escada abaixo lê `metrics.lessons` e foi ela
+ * que produziu a inversão descrita a seguir. Rodá-la hoje desfaria a decisão do
+ * Ricardo e devolveria R$ 29 ao catálogo inteiro.
  * ─────────────────────────────────────────────────────────────────────────────
  *
  * A faixa abaixo lê `metrics.lessons`, e **o campo estava inflado** — em 18 dos
@@ -35,10 +44,12 @@
  * R$ 79 fica VAZIA e todo o catálogo desaba para R$ 29 — o que não é decisão
  * deste script.
  *
- * Antes de rodar de novo, a escada precisa de uma unidade nova. A candidata
- * medida é o tamanho do texto (caracteres), que é o que o aluno recebe; a
- * tabela está no handoff de 26/08. Rodar como está hoje é dar 63% de desconto
- * em seis cursos sem querer.
+ * A escada nova saiu em 26/08, e o critério é do Ricardo: *"os mais novos
+ * devem ser os que mais geram valor; os que ainda não estão prontos estarem
+ * mais caros é uma forma de afastar quem possa comprar algo de baixa
+ * qualidade."* Ela mede prontidão — capítulos e mídia — em vez de tamanho
+ * declarado. Está em `precos-por-prontidao.mjs`, com a medida das duas
+ * gerações do catálogo.
  *
  * Uso:
  *   node scripts/precos-e-metricas-honestas.mjs           (simula, não grava)
