@@ -11,6 +11,7 @@ import {
   Hash,
   Gamepad2,
   Radar,
+  Hourglass,
 } from "lucide-react";
 import type { GameCopy } from "@/lib/game/copy";
 import type { ClubSearchResult, EaPlatform } from "@/lib/game/ea-api";
@@ -52,7 +53,17 @@ export function BuscaClube({ copy }: { copy: GameCopy }) {
   const [resposta, setResposta] = useState<Resposta | null>(null);
   const [buscando, setBuscando] = useState(false);
   const [ajuda, setAjuda] = useState(false);
+  /** Segundos que faltam para o teto de consultas liberar. 0 = liberado. */
+  const [espera, setEspera] = useState(0);
   const abortRef = useRef<AbortController | null>(null);
+
+  // A contagem regressiva do teto. Sem ela o botão destravaria sozinho sem
+  // dizer quando — e a pessoa ficaria clicando para descobrir.
+  useEffect(() => {
+    if (espera <= 0) return;
+    const t = setTimeout(() => setEspera((s) => s - 1), 1000);
+    return () => clearTimeout(t);
+  }, [espera]);
 
   const c = copy.search;
   const ehId = /^\d{4,12}$/.test(nome.trim());
@@ -67,7 +78,7 @@ export function BuscaClube({ copy }: { copy: GameCopy }) {
   async function buscar(e?: React.FormEvent) {
     e?.preventDefault();
     const termo = nome.trim();
-    if (termo.length < 2) return;
+    if (termo.length < 2 || espera > 0) return;
 
     abortRef.current?.abort();
     const ctrl = new AbortController();
@@ -79,6 +90,16 @@ export function BuscaClube({ copy }: { copy: GameCopy }) {
         `/api/game/ea/busca?nome=${encodeURIComponent(termo)}&plataforma=${piscina}`,
         { signal: ctrl.signal }
       );
+
+      // 429 é o teto de consultas, não "não achei". Dizer "nenhum clube" aqui
+      // mandaria a pessoa procurar de novo — exatamente o que o teto pede que
+      // ela não faça. A espera é declarada e o botão fica travado até passar.
+      if (res.status === 429) {
+        const seg = Number(res.headers.get("Retry-After") ?? 30);
+        setEspera(seg);
+        return;
+      }
+
       const data = await res.json();
       setResposta({
         clubs: Array.isArray(data.clubs) ? data.clubs : [],
@@ -158,16 +179,26 @@ export function BuscaClube({ copy }: { copy: GameCopy }) {
         </div>
         <button
           type="submit"
-          disabled={buscando || nome.trim().length < 2}
+          disabled={buscando || espera > 0 || nome.trim().length < 2}
           className="inline-flex items-center justify-center gap-2 rounded-xl px-8 py-4 font-bold transition-transform disabled:cursor-not-allowed disabled:opacity-40 enabled:hover:-translate-y-0.5"
-          style={{ background: LIMA, color: FUNDO }}
+          style={{ background: espera > 0 ? OURO : LIMA, color: FUNDO }}
         >
           {buscando && <Loader2 size={16} className="animate-spin" />}
-          {buscando ? c.searching : c.button}
+          {espera > 0 ? `${espera}s` : buscando ? c.searching : c.button}
         </button>
       </form>
 
-      <p className="mt-2 text-[11px] text-white/40">{c.idHint}</p>
+      {espera > 0 ? (
+        <p
+          className="mt-2 flex items-center gap-1.5 text-[11.5px] font-semibold"
+          style={{ color: OURO }}
+        >
+          <Hourglass size={12} />
+          {c.throttled.replace("{n}", String(espera))}
+        </p>
+      ) : (
+        <p className="mt-2 text-[11px] text-white/40">{c.idHint}</p>
+      )}
 
       {/* ---------------- Resultados ---------------- */}
       {resposta && (

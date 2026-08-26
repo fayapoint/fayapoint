@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { TIPOS_PARTIDA, type EaPlatform, type MatchType } from "@/lib/game/ea-api";
 import { partidasComEspelho } from "@/lib/game/espelho";
+import { cobrar } from "@/lib/game/limite";
 
 /**
  * GET /api/game/ea/clube/[clubId]/partidas?tipo=todas|leagueMatch|playoffMatch|friendlyMatch
@@ -32,6 +33,9 @@ export async function GET(
   if (!/^\d{1,12}$/.test(clubId)) {
     return NextResponse.json({ error: "clubId inválido" }, { status: 400 });
   }
+
+  const teto = await cobrar(req, "partidas", clubId);
+  if (!teto.ok) return teto.resposta!;
 
   const r = await partidasComEspelho(clubId, plataforma);
   const matches = TIPOS_PARTIDA.includes(tipoParam as MatchType)

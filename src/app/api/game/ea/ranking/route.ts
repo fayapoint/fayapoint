@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { type EaPlatform } from "@/lib/game/ea-api";
 import { rankingComEspelho, divisoesComEspelho } from "@/lib/game/espelho";
+import { cobrar } from "@/lib/game/limite";
 
 /**
  * GET /api/game/ea/ranking?plataforma=common-gen5
@@ -20,6 +21,9 @@ import { rankingComEspelho, divisoesComEspelho } from "@/lib/game/espelho";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
+  const teto = await cobrar(req, "ranking");
+  if (!teto.ok) return teto.resposta!;
+
   const url = new URL(req.url);
   const pedida = url.searchParams.get("plataforma");
   const plataforma: EaPlatform = pedida === "common-gen4" ? "common-gen4" : "common-gen5";

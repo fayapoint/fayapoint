@@ -47,6 +47,8 @@ export interface GameCopy {
     helpTitle: string;
     helpItems: string[];
     idHint: string;
+    /** Teto de consultas estourou. `{n}` vira os segundos que faltam. */
+    throttled: string;
     /** `{n}` vira o número de clubes varridos na consulta. */
     scanned: string;
     approxTitle: string;
@@ -301,6 +303,7 @@ const pt: GameCopy = {
       'Clube recém-criado, que ainda não terminou uma temporada, pode não estar no índice público da EA. Nesse caso só o número resolve.',
     ],
     idHint: 'Dica: digitar só números busca pelo ID do clube.',
+    throttled: 'Muitas buscas seguidas. Aguarde {n}s — o teto existe para não sobrecarregar a fonte da EA.',
     scanned: '{n} clubes varridos na fonte da EA',
     approxTitle: 'Nenhum casou exatamente. Os mais próximos que apareceram:',
     divisionShort: 'Div',
@@ -677,6 +680,7 @@ const en: GameCopy = {
       "A brand-new club that hasn't finished a season yet may be missing from EA's public index. Only the number finds it then.",
     ],
     idHint: 'Tip: typing digits only searches by club ID.',
+    throttled: 'Too many searches in a row. Wait {n}s — the cap keeps us from hammering EA’s source.',
     scanned: '{n} clubs swept in the EA source',
     approxTitle: 'None matched exactly. The closest ones that came up:',
     divisionShort: 'Div',

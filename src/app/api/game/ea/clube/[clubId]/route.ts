@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { type EaPlatform } from "@/lib/game/ea-api";
 import { clubeComEspelho, divisoesComEspelho } from "@/lib/game/espelho";
+import { cobrar } from "@/lib/game/limite";
 
 /**
  * GET /api/game/ea/clube/[clubId]?plataforma=common-gen5
@@ -35,6 +36,11 @@ export async function GET(
   if (!/^\d{1,12}$/.test(clubId)) {
     return NextResponse.json({ error: "clubId inválido" }, { status: 400 });
   }
+
+  // O sufixo separa o orçamento por clube: um clube movimentado não gasta o
+  // teto de quem está olhando outro.
+  const teto = await cobrar(req, "clube", clubId);
+  if (!teto.ok) return teto.resposta!;
 
   const [r, divs] = await Promise.all([clubeComEspelho(clubId, plataforma), divisoesComEspelho()]);
 

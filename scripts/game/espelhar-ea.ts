@@ -242,6 +242,7 @@ async function capturarFundo(clubId: string, plataforma: EaPlatform) {
  * o arquivo inteiro com "Top-level await is currently not supported".
  */
 async function main() {
+  const comecou = Date.now();
   await client.connect();
 
   console.log(simular ? "SIMULAÇÃO (nada será gravado)\n" : "ESPELHANDO\n");
@@ -348,6 +349,39 @@ async function main() {
   console.log(
     `\nResumo — índice: ${contas.indice} · captura funda: ${contas.fundo} · partidas: ${contas.partidas} · falhas: ${contas.falhas}`
   );
+
+  /**
+   * O PULSO do coletor.
+   *
+   * Uma tarefa agendada do Windows pode dizer `Ready` e estar morta há dias —
+   * já custou três dias de publicação parada sem ninguém notar
+   * (`reference_tarefa_windows_morta_de_pe`). O sinal confiável não é o estado
+   * da tarefa: é **alguém ter escrito alguma coisa recentemente**.
+   *
+   * Por isso toda rodada grava aqui quando rodou e quanto trouxe. O
+   * `/api/game/ea/diagnostico` lê este documento e diz, em uma linha, se o
+   * espelho está sendo alimentado ou se parou — e a idade do dado na tela já
+   * denuncia sozinha quando o pulso some.
+   */
+  if (!simular) {
+    await db.collection("game_ea_config").updateOne(
+      { chave: "coletor" },
+      {
+        $set: {
+          valor: {
+            ...contas,
+            duracaoMs: Date.now() - comecou,
+            modo: clubeAlvo ? "clube" : nomeAlvo || nomesEmLote.length ? "nome" : "ranking",
+            argumentos: args.join(" "),
+          },
+          capturedAt: new Date(),
+          updatedAt: new Date(),
+        },
+        $setOnInsert: { createdAt: new Date() },
+      },
+      { upsert: true }
+    );
+  }
   if (contas.indice === 0 && contas.fundo === 0) {
     console.error(
       "\n⚠️ NADA foi espelhado. Se todas as idas à EA deram 403, este computador está\n" +

@@ -1,6 +1,9 @@
 "use client";
 
 import { Trophy, Database, Brain, ArrowRightLeft, Target, ShieldCheck, ArrowDown } from "lucide-react";
+import { Link } from "@/i18n/navigation";
+import { PRESETS } from "@/lib/game/campeonato";
+import type { CopyCampeonato } from "@/lib/game/copy-campeonato";
 import type { GameCopy } from "@/lib/game/copy";
 import { BuscaClube } from "./BuscaClube";
 import { FormInteresse } from "./FormInteresse";
@@ -40,7 +43,15 @@ const PILLAR_ICONS = [Trophy, Database, Brain, ArrowRightLeft, Target, ShieldChe
  */
 const PILLAR_CORES = [LIMA, CIANO, VIOLETA, ROSA, LARANJA, OURO];
 
-export function GameLanding({ copy, locale }: { copy: GameCopy; locale: string }) {
+export function GameLanding({
+  copy,
+  copyCamp,
+  locale,
+}: {
+  copy: GameCopy;
+  copyCamp: CopyCampeonato;
+  locale: string;
+}) {
   return (
     <main
       className="min-h-dvh overflow-x-clip px-4 pb-20 pt-24 sm:px-8 sm:pt-28"
@@ -191,6 +202,65 @@ export function GameLanding({ copy, locale }: { copy: GameCopy; locale: string }
           <p className="mt-2 text-sm leading-relaxed text-white/60">{copy.search.subtitle}</p>
           <div className="mt-5">
             <BuscaClube copy={copy} />
+          </div>
+        </div>
+      </section>
+
+      {/* ============================== CAMPEONATOS ==============================
+          Vem logo depois da busca e ANTES do ranking, de propósito: buscar o
+          clube é curiosidade, montar campeonato é o que a seção existe para
+          fazer. Deixar isso no rodapé seria esconder o produto atrás da
+          demonstração. */}
+      <section className="relative mx-auto mt-16 max-w-5xl">
+        <div
+          className="overflow-hidden rounded-3xl border p-6 sm:p-8"
+          style={superficie(OURO, "forte")}
+        >
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
+            <div className="min-w-0 flex-1">
+              <h2 className="text-2xl sm:text-3xl" style={bebas}>
+                {copyCamp.hub.title.toUpperCase()}
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/65">
+                {copyCamp.hub.subtitle}
+              </p>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <Link
+                  href="/game/campeonatos"
+                  className="inline-flex items-center gap-2 rounded-xl px-6 py-3 font-bold transition-transform hover:-translate-y-0.5"
+                  style={{ background: OURO, color: FUNDO, boxShadow: `0 12px 34px -14px ${OURO}` }}
+                >
+                  <Trophy size={16} />
+                  {copyCamp.hub.create}
+                </Link>
+              </div>
+            </div>
+
+            {/* Os formatos, como fichas. É o que responde "dá para montar o
+                MEU torneio?" antes de a pessoa clicar em qualquer coisa. */}
+            <ul className="grid shrink-0 gap-2 sm:grid-cols-2 lg:w-[420px]">
+              {PRESETS.map((p, i) => {
+                const cor = [LIMA, CIANO, VIOLETA, ROSA, OURO][i % 5];
+                const t = copyCamp.presets[p.id];
+                return (
+                  <li
+                    key={p.id}
+                    className="flex items-center gap-2 rounded-xl border px-3 py-2"
+                    style={{ borderColor: `${cor}2e`, background: `${cor}0d` }}
+                  >
+                    <span
+                      className="rounded px-1.5 py-px text-[10px] font-black"
+                      style={{ background: `${cor}22`, color: cor }}
+                    >
+                      {p.vagas}
+                    </span>
+                    <span className="truncate text-[12.5px] font-semibold text-white/80">
+                      {t?.nome ?? p.id}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         </div>
       </section>

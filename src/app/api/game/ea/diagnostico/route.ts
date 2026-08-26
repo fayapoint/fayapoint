@@ -89,7 +89,36 @@ async function sondar(nome: string, url: string) {
   }
 }
 
+/**
+ * O pulso do coletor. `State: Ready` de uma tarefa agendada não é sinal de
+ * vida — uma tarefa morta também diz Ready. O sinal é alguém ter escrito
+ * recentemente, e é isso que este bloco lê.
+ */
+async function pulsoDoColetor() {
+  try {
+    const { default: dbConnect } = await import("@/lib/mongodb");
+    const { default: GameEaConfig } = await import("@/models/GameEaConfig");
+    await dbConnect();
+    const doc = (await GameEaConfig.findOne({ chave: "coletor" }).lean()) as unknown as {
+      valor?: Record<string, unknown>;
+      capturedAt?: Date;
+    } | null;
+    if (!doc?.capturedAt) return { vivo: false, ultimaRodada: null, idadeMin: null, resumo: null };
+    const idadeMin = Math.round((Date.now() - doc.capturedAt.getTime()) / 60000);
+    return {
+      // Roda de hora em hora; acima de 3 horas alguma coisa parou.
+      vivo: idadeMin <= 180,
+      ultimaRodada: doc.capturedAt.toISOString(),
+      idadeMin,
+      resumo: doc.valor ?? null,
+    };
+  } catch (err) {
+    return { vivo: false, erro: err instanceof Error ? err.message : String(err) };
+  }
+}
+
 export async function GET() {
+  const coletor = await pulsoDoColetor();
   const sondas = await Promise.all([
     sondar(
       "busca",
@@ -112,6 +141,7 @@ export async function GET() {
       runtime: process.env.NEXT_RUNTIME ?? "node",
       regiao: process.env.AWS_REGION ?? process.env.NETLIFY_REGION ?? null,
       quando: new Date().toISOString(),
+      coletor,
       sondas,
     },
     { headers: { "Cache-Control": "no-store" } }

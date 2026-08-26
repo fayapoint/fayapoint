@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { PLATAFORMAS, type EaPlatform } from "@/lib/game/ea-api";
 import { buscarComEspelho, clubeComEspelho } from "@/lib/game/espelho";
+import { cobrar } from "@/lib/game/limite";
 
 /**
  * GET /api/game/ea/busca?nome=<clube|id>&plataforma=todas|common-gen5|common-gen4
@@ -29,6 +30,10 @@ const CACHE = {
 };
 
 export async function GET(req: Request) {
+  // A rota mais cara da seção: uma busca em leque chega a 8 idas à EA.
+  const teto = await cobrar(req, "busca");
+  if (!teto.ok) return teto.resposta!;
+
   const url = new URL(req.url);
   const nome = (url.searchParams.get("nome") ?? "").trim();
   const pedida = url.searchParams.get("plataforma") ?? "todas";

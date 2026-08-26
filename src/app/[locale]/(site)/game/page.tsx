@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { GameLanding } from "@/components/game/GameLanding";
 import { generatePageMetadata, ROUTE_SEO } from "@/lib/metadata";
 import { getGameCopy } from "@/lib/game/copy";
+import { getCopyCampeonato } from "@/lib/game/copy-campeonato";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -25,5 +26,11 @@ export const dynamic = "force-static";
 
 export default async function GamePage({ params }: Props) {
   const { locale } = await params;
-  return <GameLanding copy={getGameCopy(locale)} locale={locale} />;
+  return (
+    <GameLanding
+      copy={getGameCopy(locale)}
+      copyCamp={getCopyCampeonato(locale)}
+      locale={locale}
+    />
+  );
 }
