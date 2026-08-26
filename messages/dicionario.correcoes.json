@@ -36,6 +36,91 @@
       "en": "Before moving on",
       "_onde": "legenda do slot de mídia 'checklist' no leitor de curso (mesmo Record acima)",
       "_porque": "Mesma causa. 'Before you continue' também serve; 'Before moving on' é o que se lê antes de virar a página."
+    },
+    "Trinta e quatro anos": {
+      "en": "Thirty-four years",
+      "_onde": "página /casos — o dossiê de trabalhos de Ricardo Faya — primeira linha do <h1>",
+      "_porque": "O tradutor devolveu o português intacto (o \"eco\" que o interface.mjs conta e não grava). Palavra curta e sem acento engana o modelo: ele conclui que já está em inglês."
+    },
+    "Falar comigo": {
+      "en": "Talk to me",
+      "_onde": "página /casos — o dossiê de trabalhos de Ricardo Faya — botão secundário do herói",
+      "_porque": "O tradutor devolveu o português intacto (o \"eco\" que o interface.mjs conta e não grava). Palavra curta e sem acento engana o modelo: ele conclui que já está em inglês."
+    },
+    "Trabalhos": {
+      "en": "Works",
+      "_onde": "página /casos — o dossiê de trabalhos de Ricardo Faya — rótulo do primeiro número do herói",
+      "_porque": "O tradutor devolveu o português intacto (o \"eco\" que o interface.mjs conta e não grava). Palavra curta e sem acento engana o modelo: ele conclui que já está em inglês."
+    },
+    "Peças no acervo": {
+      "en": "Pieces in the archive",
+      "_onde": "página /casos — o dossiê de trabalhos de Ricardo Faya — rótulo do segundo número",
+      "_porque": "O tradutor devolveu o português intacto (o \"eco\" que o interface.mjs conta e não grava). Palavra curta e sem acento engana o modelo: ele conclui que já está em inglês."
+    },
+    "Anos de corte": {
+      "en": "Years of editing",
+      "_onde": "página /casos — o dossiê de trabalhos de Ricardo Faya — rótulo do quarto número",
+      "_porque": "Corte aqui é montagem de vídeo, não corte de tecido nem desconto. \"Years of cutting\" é ambíguo em inglês; \"editing\" é o ofício."
+    },
+    "Trinta e dois trabalhos em seis atos. Clique em qualquer um para ir direto — ou use a moviola no rodapé.": {
+      "en": "Thirty-two works in six acts. Click any of them to jump straight there — or use the timeline at the bottom.",
+      "_onde": "página /casos — o dossiê de trabalhos de Ricardo Faya — abertura do índice",
+      "_porque": "O tradutor devolveu o português intacto (o \"eco\" que o interface.mjs conta e não grava). Palavra curta e sem acento engana o modelo: ele conclui que já está em inglês. \"Moviola\" é a mesa de montagem antiga; em inglês o controle chama-se timeline."
+    },
+    "Foto real.": {
+      "en": "Real photo.",
+      "_onde": "página /casos — o dossiê de trabalhos de Ricardo Faya — selo que distingue fotografia de arte gerada",
+      "_porque": "É a distinção que a página inteira sustenta: o que aconteceu contra o que foi ilustrado."
+    },
+    "A ferramenta muda.": {
+      "en": "The tool changes.",
+      "_onde": "página /casos — o dossiê de trabalhos de Ricardo Faya — fecho da página",
+      "_porque": "O tradutor devolveu o português intacto (o \"eco\" que o interface.mjs conta e não grava). Palavra curta e sem acento engana o modelo: ele conclui que já está em inglês."
+    },
+    "A curiosidade é a mesma.": {
+      "en": "The curiosity does not.",
+      "_onde": "página /casos — o dossiê de trabalhos de Ricardo Faya — fecho da página, segunda linha",
+      "_porque": "A tradução literal (\"The curiosity is the same\") perde o paralelismo com a linha anterior. Em inglês o par natural é \"changes / does not\"."
+    },
+    "peça": {
+      "en": "piece",
+      "_onde": "página /casos — o dossiê de trabalhos de Ricardo Faya — contagem de peças do acervo",
+      "_porque": "O tradutor devolveu o português intacto (o \"eco\" que o interface.mjs conta e não grava). Palavra curta e sem acento engana o modelo: ele conclui que já está em inglês."
+    },
+    "peças": {
+      "en": "pieces",
+      "_onde": "página /casos — o dossiê de trabalhos de Ricardo Faya — contagem de peças do acervo (plural)",
+      "_porque": "O tradutor devolveu o português intacto (o \"eco\" que o interface.mjs conta e não grava). Palavra curta e sem acento engana o modelo: ele conclui que já está em inglês."
+    },
+    "trabalho": {
+      "en": "work",
+      "_onde": "página /casos — o dossiê de trabalhos de Ricardo Faya — contagem de trabalhos",
+      "_porque": "O tradutor devolveu o português intacto (o \"eco\" que o interface.mjs conta e não grava). Palavra curta e sem acento engana o modelo: ele conclui que já está em inglês."
+    },
+    "trabalhos": {
+      "en": "works",
+      "_onde": "página /casos — o dossiê de trabalhos de Ricardo Faya — contagem de trabalhos (plural)",
+      "_porque": "O tradutor devolveu o português intacto (o \"eco\" que o interface.mjs conta e não grava). Palavra curta e sem acento engana o modelo: ele conclui que já está em inglês."
+    },
+    "fechada": {
+      "en": "closed",
+      "_onde": "página /casos — o dossiê de trabalhos de Ricardo Faya — estado da gaveta de detalhes",
+      "_porque": "O tradutor devolveu o português intacto (o \"eco\" que o interface.mjs conta e não grava). Palavra curta e sem acento engana o modelo: ele conclui que já está em inglês."
+    },
+    "fechadas": {
+      "en": "closed",
+      "_onde": "página /casos — o dossiê de trabalhos de Ricardo Faya — estado da gaveta de detalhes (plural)",
+      "_porque": "O tradutor devolveu o português intacto (o \"eco\" que o interface.mjs conta e não grava). Palavra curta e sem acento engana o modelo: ele conclui que já está em inglês."
+    },
+    "O ROTEIRO": {
+      "en": "THE SCRIPT",
+      "_onde": "página /casos — o dossiê de trabalhos de Ricardo Faya — título do índice dos seis atos",
+      "_porque": "Roteiro aqui é o roteiro de cinema (a página é montada como um filme em atos), não itinerário."
+    },
+    "Vídeos que tocam aqui": {
+      "en": "Videos that play here",
+      "_onde": "página /casos — rótulo do terceiro número do herói",
+      "_porque": "\"Tocar\" aqui é REPRODUZIR o vídeo na própria página (os 210 que têm player embutido). O automático deu \"Videos that hit home\", que é tocar no sentido de comover — vira elogio ao conteúdo em vez de informação sobre o acervo."
     }
   },
   "naoTraduzir": {
