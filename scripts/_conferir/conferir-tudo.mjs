@@ -8,18 +8,38 @@
  * sido engolido por um `set VAR=valor && …` do cmd, que guarda o espaço antes
  * do `&&` DENTRO do valor. Este script começa comparando o `BUILD_ID`.
  *
- *   node scripts/_conferir/conferir-tudo.mjs [porta] [distDir]
+ *   node scripts/_conferir/conferir-tudo.mjs                     (local, 3002)
+ *   node scripts/_conferir/conferir-tudo.mjs 3002 .next-verificacao
+ *   node scripts/_conferir/conferir-tudo.mjs https://fayai.com.br  (produção)
+ *
+ * ⚠️ CONTRA PRODUÇÃO A VARREDURA SAI PELO IP DA CASA. São ~50 requisições, e
+ * o limitador corta em 250/min por IP — foi assim que o Ricardo levou 429
+ * navegando no próprio site em 26/08/2026. Por isso há uma pausa de 400 ms
+ * entre pedidos quando o alvo não é localhost, e um 429 PARA a varredura em
+ * vez de virar cinquenta falhas que não existem.
+ * Ver `reference_429_por_ip_netlify`.
  */
 import fs from 'fs';
 
-const PORTA = process.argv[2] || '3002';
+const ARG = process.argv[2] || '3002';
+const REMOTO = /^https?:\/\//.test(ARG);
+const BASE = REMOTO ? ARG.replace(/\/$/, '') : `http://localhost:${ARG}`;
 const DIST = process.argv[3] || '.next-verificacao';
-const BASE = `http://localhost:${PORTA}`;
+const PAUSA = Number(process.env.PAUSA ?? (REMOTO ? 400 : 0));
 const UA = { 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/126.0 Safari/537.36' };
 
+const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
+
 const pegar = async (rota, opcoes = {}) => {
+  if (PAUSA) await esperar(PAUSA);
   const res = await fetch(BASE + rota, { headers: UA, redirect: 'manual', ...opcoes });
-  return { res, corpo: await res.text() };
+  const corpo = await res.text();
+  if (res.status === 429) {
+    console.log(`\n⛔ ${rota} respondeu 429 — o limitador cortou a varredura, não o site.`);
+    console.log('   Espere um minuto e rode com PAUSA=1000, ou meça no build local.');
+    process.exit(2);
+  }
+  return { res, corpo };
 };
 
 let falhas = 0;
@@ -29,14 +49,22 @@ const conferir = (nome, ok, detalhe = '') => {
 };
 
 // 0. o servidor está servindo o build certo?
+console.log(`\nalvo: ${BASE}${PAUSA ? `  (pausa de ${PAUSA} ms entre pedidos)` : ''}`);
+if (REMOTO) {
+  // Em produção não há `BUILD_ID` em disco para comparar; o que dá para
+  // afirmar é que o alvo responde. As medidas abaixo falam por si.
+  const { res } = await pegar('/pt-BR');
+  conferir('o alvo responde', res.status === 200, String(res.status));
+} else {
 const buildId = fs.readFileSync(`${DIST}/BUILD_ID`, 'utf8').trim();
 const { corpo: home } = await pegar('/pt-BR');
-console.log(`\nbuild em ${DIST}: ${buildId}`);
+console.log(`build em ${DIST}: ${buildId}`);
 conferir('o servidor serve ESTE build', home.includes(buildId),
   home.includes(buildId) ? '' : 'o HTML não cita este BUILD_ID — está servindo outra pasta');
 if (!home.includes(buildId)) {
   console.log('\n⛔ pare aqui: qualquer medida abaixo é sobre outro build.');
   process.exit(1);
+}
 }
 
 // 1. redirecionamentos estruturais (item 26 e 21)
