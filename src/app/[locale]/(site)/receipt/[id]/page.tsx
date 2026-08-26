@@ -3,6 +3,7 @@ import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import { motion } from "framer-motion";
 import {
   Download,
@@ -91,6 +92,7 @@ export default function ReceiptPage() {
   const T = useT();
   const params = useParams();
   const router = useRouter();
+  const locale = useLocale();
   const [receipt, setReceipt] = useState<Receipt | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -177,7 +179,7 @@ export default function ReceiptPage() {
           <Button
             variant="ghost"
             className="text-muted-foreground hover:text-white"
-            onClick={() => router.push("/pt-BR/portal")}
+            onClick={() => router.push(`/${locale}/portal`)}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             

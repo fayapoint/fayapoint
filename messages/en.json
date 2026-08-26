@@ -2058,7 +2058,9 @@
       "acceptTerms": "You need to accept the terms of use",
       "success": "Account created successfully! Welcome to FayAi!",
       "googleInDev": "Google sign-up coming soon",
-      "githubInDev": "GitHub sign-up coming soon"
+      "githubInDev": "GitHub sign-up coming soon",
+      "registerError": "We couldn't create the account. Check the details and try again.",
+      "unexpectedError": "Something went wrong on our side. Try again in a moment."
     }
   },
   "Onboarding": {

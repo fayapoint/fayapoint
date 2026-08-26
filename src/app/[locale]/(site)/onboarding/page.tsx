@@ -258,40 +258,32 @@ const Step1 = ({ next, t }: { next: () => void; t: Translator }) => (
       transition={{ delay: 0.5 }}
       className="text-lg text-muted-foreground max-w-md mx-auto"
     >
+      {/* A tag tem de ser a MESMA que a tradução usa. O dicionário escreve
+          `<highlight>`; enquanto aqui se passava `bold`, o next-intl não achava o
+          handler e devolvia a chave crua — a tela abria com
+          "Onboarding.step1.description" no lugar do texto (26/08/2026). */}
       {t.rich("step1.description", {
-          bold: (chunks: ReactNode) => <span className="font-bold text-amber-400">{chunks}</span>
+          highlight: (chunks: ReactNode) => <span className="font-bold text-amber-400">{chunks}</span>
       })}
     </motion.p>
-    
+
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.7 }}
       className="flex flex-col gap-3 items-center"
     >
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        <div className="flex -space-x-2">
-          {['🎨', '💻', '🚀', '⚡'].map((emoji, i) => (
-            <div key={i} className="w-8 h-8 rounded-full bg-secondary border-2 border-border flex items-center justify-center text-xs">
-              {emoji}
-            </div>
-          ))}
-        </div>
-        <span>{t.rich("step1.joinCount", {
-            count: "2.847+",
-            strong: (chunks: ReactNode) => <strong className="text-white">{chunks}</strong>
-        })}</span>
-      </div>
-      
-      <Button 
-        onClick={next} 
+      {/* Aqui vivia "Junte-se a 2.847+ pioneiros" — um número que ninguém contou.
+          Saiu junto com o resto da prova social inventada (26/08/2026). */}
+      <Button
+        onClick={next}
         size="lg"
         className="mt-4 h-14 px-8 text-lg bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800"
       >
-        {t("step1.button")} <ArrowRight className="ml-2" />
+        {t("step1.cta")} <ArrowRight className="ml-2" />
       </Button>
-      
-      <p className="text-xs text-muted-foreground mt-2">{t("step1.timeEstimate")}</p>
+
+      <p className="text-xs text-muted-foreground mt-2">{t("step1.hint")}</p>
     </motion.div>
   </div>
 );

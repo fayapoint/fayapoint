@@ -2058,7 +2058,9 @@
       "acceptTerms": "Você precisa aceitar os termos de uso",
       "success": "Conta criada com sucesso! Bem-vindo à FayAi!",
       "googleInDev": "Cadastro com Google em desenvolvimento",
-      "githubInDev": "Cadastro com GitHub em desenvolvimento"
+      "githubInDev": "Cadastro com GitHub em desenvolvimento",
+      "registerError": "Não foi possível criar a conta. Confira os dados e tente de novo.",
+      "unexpectedError": "Algo saiu errado por aqui. Tente de novo em instantes."
     }
   },
   "Onboarding": {

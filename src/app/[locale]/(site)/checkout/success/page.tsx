@@ -3,6 +3,7 @@ import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -23,6 +24,7 @@ function CheckoutSuccessContent() {
   const T = useT();
   const searchParams = useSearchParams();
   const router = useRouter();
+  const locale = useLocale();
   const orderNumber = searchParams.get("order");
   
   const [showConfetti, setShowConfetti] = useState(false);
@@ -211,7 +213,7 @@ function CheckoutSuccessContent() {
           <div className="flex flex-col sm:flex-row gap-4">
             <Button
               className="flex-1 bg-amber-600 hover:bg-amber-700 py-6"
-              onClick={() => router.push("/pt-BR/portal")}
+              onClick={() => router.push(`/${locale}/portal`)}
             >
               
               {T("Acessar Meu Portal")}
@@ -233,7 +235,7 @@ function CheckoutSuccessContent() {
             <Button
               variant="outline"
               className="flex-1 border-border py-6"
-              onClick={() => router.push("/pt-BR/portal?tab=carrinho")}
+              onClick={() => router.push(`/${locale}/portal?tab=carrinho`)}
             >
               <Download className="w-4 h-4 mr-2" />
               

@@ -3,6 +3,7 @@ import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useState, useCallback, useMemo } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { useUser } from "@/contexts/UserContext";
 import { useServiceCart } from "@/contexts/ServiceCartContext";
@@ -261,6 +262,7 @@ export default function CheckoutPage() {
   const T = useT();
   const params = useParams();
   const router = useRouter();
+  const locale = useLocale();
   const planName = params.plan as string;
   const { user, isLoggedIn } = useUser();
   const { items, cartTotal, clearCart } = useServiceCart();
@@ -460,7 +462,7 @@ export default function CheckoutPage() {
     setLoading(true);
     try {
       const token = getClientBearerToken();
-      if (!isLoggedIn && !token) { toast.error(T("Faça login para continuar.")); router.push("/pt-BR/login"); return; }
+      if (!isLoggedIn && !token) { toast.error(T("Faça login para continuar.")); router.push(`/${locale}/login`); return; }
 
       // Send identifiers and the displayed price snapshot. The server resolves
       // the actual name, availability and charge amount from its own catalog.
@@ -509,7 +511,7 @@ export default function CheckoutPage() {
         }
         clearCart();
         toast.success(cartItems.length === 1 ? "Curso liberado!" : "Cursos liberados!");
-        router.push("/pt-BR/portal?tab=cursos");
+        router.push(`/${locale}/portal?tab=cursos`);
         return;
       }
 
@@ -653,8 +655,48 @@ export default function CheckoutPage() {
               <div className="h-px bg-gray-100 my-6" />
               <div className="flex gap-4">
                 <Button variant="outline" className="flex-1 border-gray-200 text-gray-700 hover:bg-gray-50 rounded-xl" onClick={() => setPaymentResult(null)}>{T("Voltar")}</Button>
-                <Button className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-md" onClick={() => router.push("/pt-BR/portal")}>{T("Meu Portal")}</Button>
+                <Button className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-md" onClick={() => router.push(`/${locale}/portal`)}>{T("Meu Portal")}</Button>
               </div>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  // ─── Plano desconhecido ─────────────────────────────────────────────
+  //
+  // Sem esta guarda, QUALQUER coisa depois de /checkout/ virava um checkout de
+  // verdade: `/checkout/plano-inexistente-xyz` respondia 200, escrevia "Plano
+  // plano-inexistente-xyz — comece a aprender hoje" e oferecia o botão "Pagar
+  // R$ 0,00", porque `planInfo` era `null` e o total caía em zero
+  // (26/08/2026). O carrinho (`cart`) é o único nome que não está no PLAN_DATA
+  // e ainda assim é legítimo.
+  if (!planInfo && !isCartCheckout) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
+        <main className="pt-24 pb-16">
+          <div className="container mx-auto px-4 max-w-lg text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-3">
+              {T("Esse plano não existe")}
+            </h1>
+            <p className="text-muted-foreground text-lg mb-8">
+              {T("O endereço que você abriu não corresponde a nenhum plano nosso. Veja os planos disponíveis ou escolha um curso avulso.")}
+            </p>
+            <div className="flex flex-wrap gap-3 justify-center">
+              <Button
+                onClick={() => router.push(`/${locale}/precos`)}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl px-6"
+              >
+                {T("Ver os planos")}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => router.push(`/${locale}/cursos`)}
+                className="rounded-xl px-6"
+              >
+                {T("Ver os cursos")}
+              </Button>
             </div>
           </div>
         </main>

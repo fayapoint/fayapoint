@@ -34,6 +34,7 @@ import { cn } from "@/lib/utils";
 import { useServiceCart, CartItem } from "@/contexts/ServiceCartContext";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import { getClientAuthHeaders } from "@/lib/client-auth";
 
 interface OrderItem {
@@ -72,6 +73,7 @@ const statusLabels: Record<string, string> = {
 export function CartPanel() {
   const T = useT();
   const router = useRouter();
+  const locale = useLocale();
   const { items, setItemQuantity, removeItem, clearCart, itemCount, cartTotal } = useServiceCart();
   const [activeTab, setActiveTab] = useState("cart");
   const [couponCode, setCouponCode] = useState("");
@@ -363,7 +365,7 @@ export function CartPanel() {
         <Button 
           className="w-full h-12 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-base font-bold rounded-xl"
           disabled={cartItems.length === 0}
-          onClick={() => router.push("/pt-BR/checkout/cart")}
+          onClick={() => router.push(`/${locale}/checkout/cart`)}
         >
           <CreditCard size={18} className="mr-2" />
           
