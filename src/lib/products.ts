@@ -383,7 +383,43 @@ function aplanar(valor: unknown): unknown {
  * `getConteudoTraduzido` ou a rota `/api/courses/[slug]/content`, todas com a
  * própria projeção. Lá o custo é de um curso, não de vinte e dois.
  */
-const PROJECAO_DE_LISTA = { courseContent: 0, detailedCurriculum: 0 } as const;
+const PROJECAO_DE_LISTA = {
+  courseContent: 0,
+  detailedCurriculum: 0,
+  /**
+   * A segunda camada, medida em 26/08/2026 (item 29 do laudo:
+   * `/api/products?limit=50` devolvia 150 KB para desenhar 22 cartões).
+   *
+   * Tirado o `courseContent`, sobravam 131 KB — e 56 deles eram texto de
+   * PÁGINA DE VENDA viajando dentro da lista:
+   *
+   *     curriculum.modules ..... 21 KB   (a lista mostra só o moduleCount)
+   *     copy.fullDescription ... 14 KB
+   *     copy.benefits ..........  9 KB
+   *     copy.impact* ........... 12 KB
+   *
+   * Conferido consumidor a consumidor: `AttractiveCourseCard`,
+   * `CoursesCatalog`, `CoursesPanel`, `sitemap.ts`, `monthly-course-offers` e
+   * a home leem `copy.shortDescription`, `copy.subheadline` e
+   * `curriculum.moduleCount` — nenhum destes. Quem os lê é o
+   * `CourseSalesPage`, que pede UM curso por `getProductBySlug`, com projeção
+   * própria.
+   *
+   * ⚠️ Isto é projeção do Mongo, e por isso vale para o que é GRAVADO NO
+   * REDIS também. O `paraVitrine` não resolve o mesmo problema: ele age na
+   * fronteira do Client Component, quando os quilobytes já vieram do Atlas e
+   * já foram para o cache.
+   *
+   * Se um cartão passar a mostrar benefício ou lista de módulos, tire daqui —
+   * o defeito aparece como campo vazio, não como tela quebrada.
+   */
+  'curriculum.modules': 0,
+  'copy.fullDescription': 0,
+  'copy.benefits': 0,
+  'copy.impactIndividuals': 0,
+  'copy.impactEntrepreneurs': 0,
+  'copy.impactCompanies': 0,
+} as const;
 
 // ---------------------------------------------------------------------------
 // IDIOMA

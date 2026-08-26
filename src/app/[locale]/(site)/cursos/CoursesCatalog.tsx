@@ -361,7 +361,7 @@ export default function CoursesCatalog({
                     </Badge>
                     {monthlyOffers.freeCourse.metrics?.lessons != null && (
                       <Badge className="bg-secondary text-gray-200 border-border">
-                        {monthlyOffers.freeCourse.metrics.lessons} {isPtBr ? T("aulas") : T("lessons")}
+                        {monthlyOffers.freeCourse.metrics.lessons} {isPtBr ? T("capítulos") : T("chapters")}
                       </Badge>
                     )}
                     {monthlyOffers.freeCourse.metrics?.duration && (

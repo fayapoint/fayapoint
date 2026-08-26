@@ -254,7 +254,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               <div className="flex items-center gap-1.5">
                 <Play className="text-amber-400" size={16} />
                 <span className="font-semibold text-white">
-                  {product.metrics.lessons} {isPtBr ? T("aulas") : T("lessons")}
+                  {product.metrics.lessons} {isPtBr ? T("capítulos") : T("chapters")}
                 </span>
               </div>
               <div className="flex items-center gap-1.5">
@@ -271,7 +271,7 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Check size={16} className="text-green-400" />
-                  <span>{product.metrics.lessons} {isPtBr ? T("aulas") : T("lessons")}</span>
+                  <span>{product.metrics.lessons} {isPtBr ? T("capítulos") : T("chapters")}</span>
                 </div>
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Check size={16} className="text-green-400" />
