@@ -116,9 +116,24 @@ export function formatEditorialDate(dateLike: string, locale = "pt-BR") {
     return dateLike;
   }
 
+  /**
+   * ⚠️ O fuso é FIXO, e isso não é detalhe.
+   *
+   * Sem `timeZone`, o `Intl` usa o fuso de quem está formatando: o servidor
+   * roda em UTC na Netlify e o leitor está em UTC−3. Um `updatedAt` como
+   * `2026-08-26T02:30:00Z` vira "26 de ago." no servidor e "25 de ago." no
+   * navegador — texto diferente no mesmo lugar, que é exatamente o que o React
+   * chama de erro de hidratação. Em produção ele aparece minificado como
+   * `Minified React error #418` na página de venda (medido em 26/08/2026), e o
+   * preço de um mismatch é o React descartar a árvore e desenhar tudo de novo.
+   *
+   * São Paulo porque o público é brasileiro e a data editorial é a nossa, não
+   * a de quem lê.
+   */
   return new Intl.DateTimeFormat(locale, {
     day: "2-digit",
     month: "short",
     year: "numeric",
+    timeZone: "America/Sao_Paulo",
   }).format(parsed);
 }
