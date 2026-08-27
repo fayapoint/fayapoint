@@ -59,8 +59,20 @@ export default async function Home({
   const complemento = ORDEM_POR_VARIACAO_DE_CAPA.map((s) => porSlug.get(s)).filter(
     (c): c is NonNullable<typeof c> => Boolean(c) && !jaEntrou.has(c!.slug),
   );
+  /**
+   * ⚠️ E o que a lista de variação não cobre entra no fim.
+   *
+   * `ORDEM_POR_VARIACAO_DE_CAPA` foi medida quando o catálogo era menor, e curso
+   * que entra depois não aparece nela. O efeito era mudo: o trilho mostrava 18
+   * dos 22 cursos, e a frase logo acima dizia *"depois deles, o catálogo
+   * inteiro: 18 cursos"* — o número saía do próprio trilho, então ele nunca se
+   * contradizia e nunca estava certo. Quatro cursos ficavam fora da home sem
+   * ninguém notar.
+   */
+  const cobertos = new Set([...jaEntrou, ...complemento.map((c) => c.slug)]);
+  const restantes = ativos.filter((c) => !cobertos.has(c.slug));
 
-  const featuredCourses = [...destaques, ...complemento].map((course) => ({
+  const featuredCourses = [...destaques, ...complemento, ...restantes].map((course) => ({
     revisado: jaEntrou.has(course.slug),
     slug: course.slug,
     tool: course.tool,
