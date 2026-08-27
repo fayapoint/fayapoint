@@ -14,7 +14,6 @@ import {
   MessageSquare,
   Target,
   Settings,
-  Clapperboard,
   Crown,
   Flame,
   Star,
@@ -103,10 +102,17 @@ const MENU_ITEMS = [
   // (10/08/2026). Agora tem porta própria: `rota` faz este item navegar em vez
   // de trocar de aba.
   { id: "persona", icon: Sparkles, label: "Minha Persona", proOnly: false, badge: "NOVO", rota: "/portal/persona" },
-  // O Storyboard usa a persona para planejar a peça inteira — quadro a quadro,
-  // com o prompt de imagem já montado. Fica ao lado da persona de propósito:
-  // é ela que alimenta o resultado, e a vizinhança ensina isso sem texto.
-  { id: "storyboard", icon: Clapperboard, label: "Storyboard", proOnly: false, badge: "NOVO", rota: "/portal/storyboard" },
+  // A Forja usa a persona para planejar a peça inteira — quadro a quadro — e
+  // depois GERA as imagens e os vídeos de cada quadro na GPU da casa. Fica ao
+  // lado da persona de propósito: é ela que alimenta o resultado, e a
+  // vizinhança ensina isso sem texto.
+  //
+  // ⚠️ Sucedeu o item "Storyboard" em 27/08/2026. A rota antiga
+  // (`/portal/storyboard`) continua no ar para não quebrar link salvo, mas saiu
+  // do menu: as peças dela são MIGRADAS para a Forja na primeira leitura, e
+  // deixar as duas portas abertas significaria duas telas escrevendo em
+  // coleções diferentes sobre o mesmo trabalho.
+  { id: "forja", icon: Flame, label: "A Forja", proOnly: false, badge: "NOVO", rota: "/portal/forja" },
   { id: "profile", icon: Crown, label: "Meu Perfil", proOnly: false },
   { id: "courses", icon: BookOpen, label: "Meus Cursos", proOnly: false },
   // O Ateliê é o coração do produto e não tinha porta no menu: só dava para

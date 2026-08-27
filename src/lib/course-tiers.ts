@@ -516,6 +516,47 @@ export const CREDIT_COSTS = {
   curso_ilustrado: 45,
   curso_narrado: 70,
   curso_completo: 100,
+
+  // ─── A FORJA (27/08/2026) ────────────────────────────────
+  //
+  // Ricardo: *"para as gerações 'grátis' que serão feitas com meu computador
+  // local, isso tem que ser o padrão, vai ter uma fila."*
+  //
+  // A consequência dessa frase está em `forja_local: 0`, e ela é a decisão
+  // inteira: a GPU da casa não emite fatura, então cobrar por rodar nela seria
+  // cobrar por nada. O preço do caminho grátis é o TEMPO.
+  //
+  // O que sobra para vender é a remoção das três restrições reais — a espera, o
+  // teto de uso justo e a máquina estar desligada. Cada uma é uma linha abaixo,
+  // e cada uma entrega exatamente o que o nome diz.
+  //
+  // ⚠️ Toda linha aqui é editável na tabela viva (`/precos-creditos`), e a
+  // cobrança acontece na CONCLUSÃO do trabalho, nunca no enfileiramento: quem
+  // teve o trabalho falhando na GPU não paga nada.
+
+  /** O padrão. Zero, e é o ponto. */
+  forja_local: 0,
+  /** Uma imagem num servidor pago — quando a máquina da casa está desligada. Ancorado no `image_generation`. */
+  forja_imagem_nuvem: 1,
+  /** Um clipe num servidor pago. Um vídeo de 5s custa US$0,20–0,50 de verdade; 12 cobre com folga de câmbio. */
+  forja_video_nuvem: 12,
+  /**
+   * A frente da fila.
+   *
+   * Barato de propósito: se doer, ninguém compra e a fila continua do mesmo
+   * tamanho. O item existe para ser usado, não para ser admirado.
+   */
+  forja_furar_fila: 2,
+  /** Continuar gerando depois do teto diário — mesma GPU, mesma qualidade, só a continuação. */
+  forja_extra_do_dia: 1,
+  //
+  // ⚠️ Não há linha de "personagem extra" na Forja, e a ausência é deliberada.
+  // O `character_sheet_extra: 20` acima continua valendo para o caderno da
+  // NUVEM (a rota `/api/user/caderno`), que gasta API paga. O caderno da Forja
+  // roda na GPU da casa e custa zero — cobrar 20 por um recurso que não custa
+  // nada seria inventar escassez, e a ficha de personagem é um formulário:
+  // cobrar por preencher formulário faz a pessoa desconfiar do resto da tabela.
+  // Quem protege a placa é o teto diário de uso justo, não o preço.
 } as const;
 
 export type CreditAction = keyof typeof CREDIT_COSTS;
