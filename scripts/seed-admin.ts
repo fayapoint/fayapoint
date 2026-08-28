@@ -13,12 +13,21 @@ import { uriDoMongo } from "./lib/mongo.mjs";
 // um padrão.
 const ADMIN_EMAIL = process.env.ADMIN_SEED_EMAIL || 'ricardofaya@gmail.com';
 const ADMIN_NAME = process.env.ADMIN_SEED_NAME || 'Ricardo Faya';
-const ADMIN_PASSWORD = process.env.ADMIN_SEED_PASSWORD;
-if (!ADMIN_PASSWORD) {
-  throw new Error(
-    'Sem ADMIN_SEED_PASSWORD no ambiente. Defina-a antes de rodar seed-admin.',
-  );
+// A checagem vive numa função para o tipo sair `string`, e não
+// `string | undefined`: o `bcrypt.hash` exige `string`, e um `if` no topo do
+// módulo não estreita o tipo lá dentro do `seedAdmin()`. Foi assim que este
+// arquivo quebrou o build da Netlify em 28/08/2026.
+function senhaDoAdmin(): string {
+  const senha = process.env.ADMIN_SEED_PASSWORD;
+  if (!senha) {
+    throw new Error(
+      'Sem ADMIN_SEED_PASSWORD no ambiente. Defina-a antes de rodar seed-admin.',
+    );
+  }
+  return senha;
 }
+
+const ADMIN_PASSWORD = senhaDoAdmin();
 
 const MONGODB_URI = uriDoMongo();
 
