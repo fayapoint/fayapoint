@@ -47,10 +47,10 @@ const processSteps = [
 ];
 
 const metrics = [
-  { label: "Aumento em ligações", value: "+150%" },
-  { label: "Visitas ao perfil", value: "3x" },
-  { label: "Avaliações positivas", value: "4.9/5" },
-  { label: "Tempo até resultados", value: "2-6 semanas" },
+  { label: "Perfil do Google", value: "Otimizado" },
+  { label: "Avaliações de clientes", value: "Fluxo de solicitação" },
+  { label: "Conteúdo local", value: "Páginas por região" },
+  { label: "Acompanhamento", value: "Relatório mensal" },
 ];
 
 const packages = [

@@ -30,6 +30,7 @@ import {
 import { createPrintifyOrder, getPrintifyShopId } from './printify-api';
 import dbConnect from './mongodb';
 import { TIER_CONFIGS, resolvePlan } from './course-tiers';
+import { montarMatricula } from './matricula';
 
 // =============================================================================
 // TYPES
@@ -253,20 +254,31 @@ async function fulfillCourse(
     
     // Grant enrollment
     if (!user.enrolledCourses) user.enrolledCourses = [];
-    
+
+    // `courseSlug` e `courseId` são obrigatórios no schema. Sem eles a
+    // matrícula seria rejeitada na validação e derrubaria a entrega inteira —
+    // exatamente o defeito que este caminho já teve uma vez. Falhar aqui, com
+    // mensagem legível, é melhor que falhar dentro do `user.save()`.
+    if (!item.productSlug || !item.productId) {
+      return {
+        success: false,
+        message: `Item sem productSlug/productId — matrícula impossível (pedido ${fulfillmentOrder.orderNumber})`,
+      };
+    }
+
     const alreadyEnrolled = user.enrolledCourses.some(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (c: any) => c.courseSlug === item.productSlug
     );
-    
+
     if (!alreadyEnrolled) {
-      user.enrolledCourses.push({
-        courseId: item.productId,
-        courseSlug: item.productSlug,
-        enrolledAt: new Date(),
-        isActive: true,
-        source: 'purchase',
-      });
+      user.enrolledCourses.push(
+        await montarMatricula({
+          courseId: item.productId,
+          courseSlug: item.productSlug,
+          source: 'purchase',
+        }),
+      );
     }
     
     await user.save();

@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
-import { Menu, X, ChevronDown, LogOut, UserCircle, BookOpen, Wrench, Newspaper, Users, Briefcase, Info, DollarSign, GraduationCap, Sparkles, Trophy } from "lucide-react";
+import { Menu, X, ChevronDown, LogOut, UserCircle, BookOpen, Wrench, Newspaper, Users, Briefcase, Info, DollarSign, GraduationCap, Sparkles, Trophy, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 import { LocaleSwitcher } from "@/components/layout/LocaleSwitcher";
@@ -246,6 +246,17 @@ export function Header() {
 
                 {/* Simple Links */}
                 <NavigationMenuItem>
+                  <Link href={rota("/servicos")} className={cn(
+                    "px-2 py-2 text-sm font-medium transition",
+                    pathname === "/servicos"
+                      ? "text-primary"
+                      : "text-foreground/90 hover:text-primary"
+                  )}>
+                    {t("nav.services")}
+                  </Link>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
                   {/* /noticias é o hub real. `/blog` responde 308 para cá, e o
                       link ficava a dois saltos do destino em toda página. */}
                   <Link href={rota("/noticias")} className={cn(
@@ -462,6 +473,13 @@ export function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t("nav.tools")}
+              </MobileNavLink>
+              <MobileNavLink
+                href={rota("/servicos")}
+                icon={Rocket}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {t("nav.services")}
               </MobileNavLink>
               <MobileNavLink
                 href={rota("/ferramentaria")}

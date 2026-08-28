@@ -12,6 +12,7 @@ import {
 } from '@/lib/asaas';
 import { processFulfillment } from '@/lib/fulfillment';
 import { CREDIT_PACKS, TIER_CONFIGS, resolvePlan } from '@/lib/course-tiers';
+import { montarMatricula } from '@/lib/matricula';
 import { generateReceiptFromPayment, generateReceiptFromSubscription } from '@/lib/receipt-generator';
 
 // Disable body parsing for webhook verification
@@ -322,13 +323,13 @@ async function grantUserAccess(payment: any) {
           );
 
           if (!alreadyEnrolled) {
-            user.enrolledCourses.push({
-              courseId: item.productId,
-              courseSlug: item.productSlug,
-              enrolledAt: new Date(),
-              isActive: true,
-              source: 'purchase',
-            });
+            user.enrolledCourses.push(
+              await montarMatricula({
+                courseId: item.productId,
+                courseSlug: item.productSlug,
+                source: 'purchase',
+              }),
+            );
           }
           break;
 

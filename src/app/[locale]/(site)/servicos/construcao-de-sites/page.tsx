@@ -30,10 +30,10 @@ import { WebsiteToolbox } from "@/components/services/WebsiteToolbox";
 import Script from "next/script";
 
 const stats = [
-  { icon: TrendingUp, value: "+43%", label: "Conversão média" },
-  { icon: Globe, value: "12", label: "Países atendidos" },
-  { icon: Zap, value: "95", label: "Performance Lighthouse" },
-  { icon: Shield, value: "100%", label: "Uptime monitorado" },
+  { icon: TrendingUp, value: "Foco em conversão", label: "Copy e CTA no briefing" },
+  { icon: Globe, value: "PT e EN", label: "Site multi-idioma" },
+  { icon: Zap, value: "Core Web Vitals", label: "Medidos na entrega" },
+  { icon: Shield, value: "Alertas configurados", label: "Monitoramento ativo" },
 ];
 
 const showcases = [
@@ -193,7 +193,7 @@ const packages = [
     title: "Plataformas & portais",
     description: "Áreas logadas, multi-idioma, integrações complexas e governança.",
     highlights: [
-      "Squad dedicado",
+      "Prioridade de atendimento",
       "Roadmap trimestral",
       "SLOs e suporte 24/7",
       "Playbooks de evolução",
@@ -283,7 +283,7 @@ export default async function WebsiteBuildingPage({
                 </Link>
               </div>
               <div className="mt-12 flex flex-wrap justify-center gap-8 text-sm text-muted-foreground">
-                {["Stack moderna", "Squad plug-and-play", T("Time to value < 30 dias")].map((item) => (
+                {["Stack moderna", "Execução direta comigo", T("Time to value < 30 dias")].map((item) => (
                   <div key={item} className="flex items-center gap-2">
                     <CheckCircle className="w-5 h-5 text-green-500" />
                     <span>{T(item)}</span>
@@ -366,7 +366,7 @@ export default async function WebsiteBuildingPage({
               <h2 className="text-3xl md:text-5xl font-bold mb-4 text-balance">{T("Trabalhos recentes")}</h2>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto text-pretty">
                 
-                {T("Seleção de produtos digitais lançados pela squad FayAi — landing pages, portais e lojas completos.")}
+                {T("Seleção de produtos digitais lançados pela FayAi — landing pages, portais e lojas completos.")}
               </p>
             </div>
             <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">

@@ -154,7 +154,7 @@ const packages = [
   {
     tier: "Pro",
     title: "Content Lab",
-    description: "Squad dedicado para creators, squads de marketing e executivos porta-voz.",
+    description: "Produção contínua para creators, times de marketing e executivos porta-voz.",
     highlights: [
       "30 assets/mês entre cortes e hero videos",
       "Direção remota + roteiro semanal",
@@ -471,7 +471,7 @@ export default async function VideoEditingPage({
               </ScheduleConsultationButton>
               <p className="text-sm text-muted-foreground mt-6">
                 
-                {T("Inclui diagnóstico gratuito • roadmap de 30 dias • squad dedicado")}
+                {T("Inclui diagnóstico gratuito • roadmap de 30 dias • acompanhamento direto comigo")}
               </p>
             </Card>
           </div>

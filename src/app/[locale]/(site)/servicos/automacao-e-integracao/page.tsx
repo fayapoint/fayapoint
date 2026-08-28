@@ -57,9 +57,9 @@ const integrations = [
 ];
 
 const metrics = [
-  { label: "Processos auditados", value: "120+" },
-  { label: "Horas economizadas", value: "20h/sem" },
-  { label: "Integrações concluídas", value: "300+" },
+  { label: "Entrega", value: "Fluxo em produção" },
+  { label: "Rastreabilidade", value: "Logs e retentativas" },
+  { label: "Handoff", value: "Documentação inclusa" },
 ];
 
 const packages = [
@@ -97,7 +97,7 @@ const packages = [
       "Roadmap mensal",
       "Observabilidade completa",
       "Segurança + governança",
-      "Squad dedicado",
+      "Prioridade de atendimento",
     ],
     featured: false,
     source: "automation-package-enterprise",

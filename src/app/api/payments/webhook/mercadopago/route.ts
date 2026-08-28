@@ -8,6 +8,7 @@ import {
   mapMPMethodToPaymentMethod,
 } from '@/lib/mercadopago';
 import { processFulfillment } from '@/lib/fulfillment';
+import { montarMatricula } from '@/lib/matricula';
 
 export const runtime = 'nodejs';
 
@@ -188,13 +189,13 @@ async function grantUserAccess(payment: any) {
             (c: any) => c.courseSlug === item.productSlug
           );
           if (!enrolled) {
-            user.enrolledCourses.push({
-              courseId: item.productId,
-              courseSlug: item.productSlug,
-              enrolledAt: new Date(),
-              isActive: true,
-              source: 'purchase',
-            });
+            user.enrolledCourses.push(
+              await montarMatricula({
+                courseId: item.productId,
+                courseSlug: item.productSlug,
+                source: 'purchase',
+              }),
+            );
           }
           break;
         case 'subscription': {
