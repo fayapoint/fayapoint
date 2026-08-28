@@ -1,0 +1,23 @@
+name: segredos
+
+# O portão que ninguém esquece de instalar. O hook de pre-commit em
+# `.githooks/` depende de um `npm run hooks` na máquina de cada um; este passo
+# roda sempre, em todo push e em todo PR.
+on:
+  push:
+  pull_request:
+
+jobs:
+  varrer:
+    runs-on: ubuntu-latest
+    steps:
+      # Todo o histórico, não só o último commit: o objetivo é que a árvore
+      # rastreada esteja limpa, e um PR pode reintroduzir a credencial num
+      # commit do meio.
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/_conferir/varrer-segredos.mjs

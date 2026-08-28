@@ -1,12 +1,26 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
+import { uriDoMongo } from "./lib/mongo.mjs";
 
-// Admin credentials
-const ADMIN_EMAIL = 'ricardofaya@gmail.com';
-const ADMIN_PASSWORD = 'dBwc17ooo';
-const ADMIN_NAME = 'Ricardo Faya';
+// Credenciais do admin.
+//
+// ⚠️ A senha NUNCA volta para cá. `github.com/fayapoint/fayapoint` é público:
+// senha escrita no fonte é senha publicada. A que estava aqui vazou junto com
+// a MONGODB_URI (27/08/2026) — e nem depois de rotacionada ela volta para o
+// comentário, porque quem lê um exemplo copia o exemplo.
+//
+// Sem `ADMIN_SEED_PASSWORD` no ambiente, o script não roda; ele não inventa
+// um padrão.
+const ADMIN_EMAIL = process.env.ADMIN_SEED_EMAIL || 'ricardofaya@gmail.com';
+const ADMIN_NAME = process.env.ADMIN_SEED_NAME || 'Ricardo Faya';
+const ADMIN_PASSWORD = process.env.ADMIN_SEED_PASSWORD;
+if (!ADMIN_PASSWORD) {
+  throw new Error(
+    'Sem ADMIN_SEED_PASSWORD no ambiente. Defina-a antes de rodar seed-admin.',
+  );
+}
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://ricardofaya:3VJKNjK65tn5srSC@aicornercluster.2kiwt1o.mongodb.net/';
+const MONGODB_URI = uriDoMongo();
 
 async function seedAdmin() {
   try {

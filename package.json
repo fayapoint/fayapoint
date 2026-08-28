@@ -13,7 +13,9 @@
     "seed:admin": "tsx scripts/seed-admin.ts",
     "enrich": "tsx scripts/enrich-curriculum.ts",
     "radar:seed": "tsx scripts/radar-seed.ts",
-    "radar:historico": "node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/radar-historico-backfill.ts"
+    "radar:historico": "node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/radar-historico-backfill.ts",
+    "hooks": "git config core.hooksPath .githooks",
+    "varrer-segredos": "node scripts/_conferir/varrer-segredos.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

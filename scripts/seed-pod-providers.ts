@@ -4,9 +4,10 @@
  */
 
 import mongoose from 'mongoose';
+import { uriDoMongo } from "./lib/mongo.mjs";
 import PODProvider, { DEFAULT_POD_PROVIDERS } from '../src/models/PODProvider';
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://ricardofaya:3VJKNjK65tn5srSC@aicornercluster.2kiwt1o.mongodb.net/fayapoint';
+const MONGODB_URI = uriDoMongo();
 
 async function seedPODProviders() {
   try {

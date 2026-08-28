@@ -1,0 +1,7 @@
+#!/bin/sh
+# Recusa commit que carregue credencial. Ver scripts/_conferir/varrer-segredos.mjs.
+#
+# Este hook só existe para quem rodou `npm run hooks` uma vez (ele aponta
+# core.hooksPath para cá). Por isso ele NÃO é a única defesa: o mesmo script
+# roda no CI, onde ninguém esquece de instalar.
+exec node scripts/_conferir/varrer-segredos.mjs --staged

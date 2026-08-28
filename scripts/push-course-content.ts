@@ -11,7 +11,7 @@ import { MongoClient } from 'mongodb';
 // O teto do pool. Sem ele o driver assume maxPoolSize:100, e o cluster
 // grátis inteiro tem 500 — divididas com os outros projetos.
 // Ver `scripts/lib/mongo.cjs`.
-import { OPCOES_DE_SCRIPT } from "./lib/mongo.mjs";
+import { OPCOES_DE_SCRIPT, uriDoMongo } from "./lib/mongo.mjs";
 import { invalidarCache } from "./lib/invalidar-cache.mjs";
 import * as fs from 'fs';
 import * as path from 'path';
@@ -20,7 +20,7 @@ import {
   sanitizeCourseContent,
 } from '../src/lib/course-content-sanitizer';
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://ricardofaya:3VJKNjK65tn5srSC@aicornercluster.2kiwt1o.mongodb.net/';
+const MONGODB_URI = uriDoMongo();
 const DATABASE_NAME = 'fayapointProdutos';
 const COLLECTION_NAME = 'products';
 
