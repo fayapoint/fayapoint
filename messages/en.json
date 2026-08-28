@@ -110,7 +110,8 @@
       "viewDashboard": "View Dashboard",
       "toolshed": "Toolshed",
       "inventing": "Inventing",
-      "game": "Winners 22"
+      "game": "Winners 22",
+      "store": "Store"
     },
     "menus": {
       "courses": {
@@ -4085,5 +4086,19 @@
         "description": "Editing for YouTube, Instagram, TikTok and corporate: smart cuts, automatic captions, colour grading and motion graphics."
       }
     }
+  },
+  "Store": {
+    "title": "Store",
+    "subtitle": "Products curated by FayAI — gear, exclusive items, all priced in BRL and sold right here.",
+    "allCategories": "All categories",
+    "emptyTitle": "We are stocking the shelves",
+    "emptySubtitle": "The first products are on their way. Check back soon — or explore the courses meanwhile.",
+    "addToCart": "Add to cart",
+    "addedToCart": "{name} added to cart!",
+    "variantLabel": "Options",
+    "backToStore": "Back to store",
+    "description": "Description",
+    "brand": "Brand",
+    "outOfStock": "Currently unavailable"
   }
 }

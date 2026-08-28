@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations, useLocale } from "next-intl";
-import { Menu, X, ChevronDown, LogOut, UserCircle, BookOpen, Wrench, Newspaper, Users, Briefcase, Info, DollarSign, GraduationCap, Sparkles, Trophy, Rocket } from "lucide-react";
+import { Menu, X, ChevronDown, LogOut, UserCircle, BookOpen, Wrench, Newspaper, Users, Briefcase, Info, DollarSign, GraduationCap, Sparkles, Trophy, Rocket, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeSwitcher } from "@/components/theme/ThemeSwitcher";
 import { LocaleSwitcher } from "@/components/layout/LocaleSwitcher";
@@ -366,6 +366,17 @@ export function Header() {
                     {t("nav.pricing")}
                   </Link>
                 </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <Link href={rota("/loja")} className={cn(
+                    "px-2 py-2 text-sm font-medium transition",
+                    pathname === "/loja"
+                      ? "text-primary"
+                      : "text-foreground/90 hover:text-primary"
+                  )}>
+                    {t("nav.store")}
+                  </Link>
+                </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
           </div>
@@ -538,6 +549,13 @@ export function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {t("nav.pricing")}
+              </MobileNavLink>
+              <MobileNavLink
+                href={rota("/loja")}
+                icon={ShoppingBag}
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                {t("nav.store")}
               </MobileNavLink>
             </nav>
 

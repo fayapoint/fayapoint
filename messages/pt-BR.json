@@ -110,7 +110,8 @@
       "viewDashboard": "Ver Painel",
       "toolshed": "Ferramentaria",
       "inventing": "Inventando",
-      "game": "Winners 22"
+      "game": "Winners 22",
+      "store": "Loja"
     },
     "menus": {
       "courses": {
@@ -4175,5 +4176,19 @@
         "description": "Edição para YouTube, Instagram, TikTok e corporativo: cortes inteligentes, legendas automáticas, color grading e motion graphics."
       }
     }
+  },
+  "Store": {
+    "title": "Loja",
+    "subtitle": "Produtos selecionados pela FayAI — equipamentos, itens exclusivos e tudo em reais, direto no site.",
+    "allCategories": "Todas as categorias",
+    "emptyTitle": "Estamos montando a vitrine",
+    "emptySubtitle": "Os primeiros produtos chegam em breve. Volte logo — ou explore os cursos enquanto isso.",
+    "addToCart": "Adicionar ao carrinho",
+    "addedToCart": "{name} adicionado ao carrinho!",
+    "variantLabel": "Opções",
+    "backToStore": "Voltar para a loja",
+    "description": "Descrição",
+    "brand": "Marca",
+    "outOfStock": "Indisponível no momento"
   }
 }
