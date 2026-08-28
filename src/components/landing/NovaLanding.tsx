@@ -465,6 +465,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
             ["/cursos", t("links.courses")],
             ["/precos", "Preços"],
             ["/servicos", "Serviços"],
+            ["/loja", "Loja"],
             ["/noticias", t("links.blog")],
           ].map(([href, rotulo]) => (
             <Link key={href} href={rota(href)} className="hover:text-white transition-colors">
