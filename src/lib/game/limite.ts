@@ -31,7 +31,12 @@ export type OrcamentoGame =
   | "ranking"
   | "vincular"
   | "campeonato-leitura"
-  | "campeonato-escrita";
+  | "campeonato-escrita"
+  | "mercado-leitura"
+  | "mercado-escrita"
+  | "presenca"
+  | "comunidade"
+  | "avaliar";
 
 /** Teto por IP, por minuto. O custo real de cada rota está no comentário. */
 const ORCAMENTOS: Record<OrcamentoGame, number> = {
@@ -48,6 +53,16 @@ const ORCAMENTOS: Record<OrcamentoGame, number> = {
   "campeonato-leitura": 60,
   // Criar competição, gerar tabela, registrar resultado.
   "campeonato-escrita": 20,
+  // Vitrine do mercado: 1 consulta agregada ao Mongo + enriquecimento em lote.
+  "mercado-leitura": 60,
+  // Publicar vaga, candidatar-se, marcar preenchida. Escrita autenticada.
+  "mercado-escrita": 20,
+  // Pulso de presença: o cliente pinga a cada ~20s. 12/min cobre reconexão.
+  presenca: 12,
+  // Nuvem + números da comunidade: 1 consulta, atualizada a cada ~30s.
+  comunidade: 30,
+  // Voto em jogador. Escrita autenticada, um por par.
+  avaliar: 30,
 };
 
 export interface Veredito {

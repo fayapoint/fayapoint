@@ -2,7 +2,8 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import { getAuthUser } from "@/lib/auth";
 import GamePlayer from "@/models/GamePlayer";
-import { clubInfo, clubMembersStats, type EaPlatform } from "@/lib/game/ea-api";
+import { type EaPlatform } from "@/lib/game/ea-api";
+import { clubeComEspelho } from "@/lib/game/espelho";
 
 /**
  * POST /api/game/jogador/vincular  { eaClubId, gamertag, plataforma? }
@@ -18,7 +19,21 @@ import { clubInfo, clubMembersStats, type EaPlatform } from "@/lib/game/ea-api";
  * qualquer nome inventado. A prova de posse vem na Fase 1.
  *
  * Nenhuma credencial da EA/PSN passa por aqui.
+ *
+ * ⚠️ LÊ PELO ESPELHO, não pela EA direto. A EA responde 403 para IP de
+ * datacenter (ver `lib/game/espelho.ts`), então em produção `clubMembersStats`
+ * vinha VAZIO e TODA reivindicação falhava com 404 — que é exatamente o erro
+ * que o Ricardo viu. O elenco tem de vir da mesma fonte que a página do clube
+ * usa (`clubeComEspelho`), senão o botão "Sou eu" nunca funciona na Netlify.
  */
+
+/** A EA manda os membros como objetos Mixed no espelho — coerções seguras. */
+function num(v: unknown): number | undefined {
+  return typeof v === "number" && Number.isFinite(v) ? v : undefined;
+}
+function txt(v: unknown): string | undefined {
+  return typeof v === "string" && v.trim() ? v.trim() : undefined;
+}
 export async function POST(req: Request) {
   const user = await getAuthUser();
   if (!user) {
@@ -40,12 +55,21 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "dados inválidos" }, { status: 400 });
   }
 
-  const [info, members] = await Promise.all([
-    clubInfo(eaClubId, plataforma),
-    clubMembersStats(eaClubId, plataforma),
-  ]);
+  // Fonte viva primeiro, espelho depois — a MESMA que a página do clube usa.
+  const ficha = await clubeComEspelho(eaClubId, plataforma);
+  const info = ficha.dados?.info ?? null;
+  const members = (ficha.dados?.members ?? []) as Array<Record<string, unknown>>;
 
-  const membro = members.find((m) => m.name === gamertag);
+  if (members.length === 0) {
+    // Sem elenco no acervo: o clube ainda não foi capturado por inteiro. Isso é
+    // diferente de "gamertag não encontrada" — e a mensagem tem de dizer qual.
+    return NextResponse.json(
+      { error: "ainda não temos o elenco deste clube no acervo. Abra a página do clube uma vez e tente de novo." },
+      { status: 409 }
+    );
+  }
+
+  const membro = members.find((m) => txt(m.name) === gamertag);
   if (!membro) {
     return NextResponse.json(
       { error: "essa gamertag não está no elenco que a EA publica para este clube" },
@@ -69,17 +93,17 @@ export async function POST(req: Request) {
       $set: {
         eaClubId,
         clubName: info?.name,
-        proName: membro.proName ?? undefined,
-        proOverall: membro.proOverall ?? undefined,
-        favoritePosition: membro.favoritePosition ?? undefined,
+        proName: txt(membro.proName),
+        proOverall: num(membro.proOverall),
+        favoritePosition: txt(membro.favoritePosition),
         ownerUserId: user.id,
         snapshot: {
-          gamesPlayed: membro.gamesPlayed,
-          goals: membro.goals,
-          assists: membro.assists,
-          ratingAve: membro.ratingAve ?? undefined,
-          manOfTheMatch: membro.manOfTheMatch,
-          winRate: membro.winRate ?? undefined,
+          gamesPlayed: num(membro.gamesPlayed) ?? 0,
+          goals: num(membro.goals) ?? 0,
+          assists: num(membro.assists) ?? 0,
+          ratingAve: num(membro.ratingAve),
+          manOfTheMatch: num(membro.manOfTheMatch) ?? 0,
+          winRate: num(membro.winRate),
           capturedAt: new Date(),
         },
         sourceGrade: "B",

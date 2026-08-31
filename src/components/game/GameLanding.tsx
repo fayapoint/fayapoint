@@ -5,12 +5,14 @@ import { Link } from "@/i18n/navigation";
 import { PRESETS } from "@/lib/game/campeonato";
 import type { CopyCampeonato } from "@/lib/game/copy-campeonato";
 import type { GameCopy } from "@/lib/game/copy";
+import { getCopyMercado } from "@/lib/game/copy-mercado";
 import { BuscaClube } from "./BuscaClube";
 import { FormInteresse } from "./FormInteresse";
 import { CalendarioTemporada } from "./CalendarioTemporada";
 import { TabelaClassificacao } from "./TabelaClassificacao";
 import { TabelaRanking } from "./TabelaRanking";
 import { VideoAmbiente } from "./VideoAmbiente";
+import { ComunidadeAoVivo } from "./ComunidadeAoVivo";
 import { LIMA, OURO, CIANO, VIOLETA, ROSA, LARANJA, FUNDO, bebas, superficie, TEXTO } from "@/lib/game/tema";
 
 /**
@@ -52,6 +54,7 @@ export function GameLanding({
   copyCamp: CopyCampeonato;
   locale: string;
 }) {
+  const copyMerc = getCopyMercado(locale);
   return (
     <main
       className="min-h-dvh overflow-x-clip px-4 pb-20 pt-24 sm:px-8 sm:pt-28"
@@ -190,6 +193,15 @@ export function GameLanding({
         </header>
       </section>
 
+      {/* ============================== COMUNIDADE AO VIVO ==============================
+          A área principal pedida pelo Ricardo: quem está online AGORA, a nuvem
+          de bonequinhos, os números da comunidade e o painel "você está aqui".
+          Vem logo abaixo do herói — é a prova viva de que o lugar tem gente,
+          antes de qualquer demonstração de dado. */}
+      <section className="relative mx-auto mt-14 max-w-5xl">
+        <ComunidadeAoVivo copy={copyMerc} locale={locale} />
+      </section>
+
       {/* ============================== BUSCA ============================== */}
       <section className="relative mx-auto mt-20 max-w-3xl">
         <div className="rounded-3xl border p-5 sm:p-7" style={superficie(LIMA, "forte")}>
@@ -260,6 +272,69 @@ export function GameLanding({
                   </li>
                 );
               })}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* ============================== MERCADO ==============================
+          O quadro de transferências. Vem logo depois de campeonatos porque é a
+          outra metade do que a comunidade faz nos grupos — montar torneio e
+          achar/oferecer jogador. É a resposta direta ao "quadro de requisições"
+          que hoje vive em post-imagem sem filtro. */}
+      <section className="relative mx-auto mt-16 max-w-5xl">
+        <div
+          className="overflow-hidden rounded-3xl border p-6 sm:p-8"
+          style={superficie(CIANO, "forte")}
+        >
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-center">
+            <div className="min-w-0 flex-1">
+              <span
+                className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-bold"
+                style={{ background: `${CIANO}14`, color: CIANO, border: `1px solid ${CIANO}33` }}
+              >
+                <ArrowRightLeft size={12} />
+                {copyMerc.hub.badge}
+              </span>
+              <h2 className="mt-3 text-2xl sm:text-3xl" style={bebas}>
+                {copyMerc.hub.title.toUpperCase()}
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-white/65">
+                {copyMerc.hub.subtitle}
+              </p>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <Link
+                  href="/game/mercado"
+                  className="inline-flex items-center gap-2 rounded-xl px-6 py-3 font-bold transition-transform hover:-translate-y-0.5"
+                  style={{ background: CIANO, color: FUNDO, boxShadow: `0 12px 34px -14px ${CIANO}` }}
+                >
+                  <ArrowRightLeft size={16} />
+                  {copyMerc.publicar.abrir}
+                </Link>
+                <Link
+                  href="/game/mercado"
+                  className="inline-flex items-center gap-2 rounded-xl border border-white/18 px-6 py-3 font-semibold text-white/90 transition-colors hover:border-white/40 hover:bg-white/[0.04]"
+                >
+                  {copyMerc.abas.clubes}
+                </Link>
+              </div>
+            </div>
+
+            {/* As duas pontas do mercado, como fichas — clube que recruta e
+                jogador que se oferece, do jeito que a vitrine separa. */}
+            <ul className="grid shrink-0 gap-2 sm:grid-cols-2 lg:w-[420px]">
+              <li className="rounded-xl border px-4 py-3" style={{ borderColor: `${LIMA}2e`, background: `${LIMA}0d` }}>
+                <span className="text-[10px] font-black uppercase tracking-wide" style={{ color: LIMA }}>
+                  {copyMerc.abas.clubes}
+                </span>
+                <p className="mt-1 text-[12.5px] leading-snug text-white/70">{copyMerc.card.precisa}: VOL · LAT · ZAG…</p>
+              </li>
+              <li className="rounded-xl border px-4 py-3" style={{ borderColor: `${CIANO}2e`, background: `${CIANO}0d` }}>
+                <span className="text-[10px] font-black uppercase tracking-wide" style={{ color: CIANO }}>
+                  {copyMerc.abas.jogadores}
+                </span>
+                <p className="mt-1 text-[12.5px] leading-snug text-white/70">{copyMerc.card.overall} · {copyMerc.card.horarioLivre}</p>
+              </li>
             </ul>
           </div>
         </div>

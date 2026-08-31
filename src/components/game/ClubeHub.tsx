@@ -14,8 +14,10 @@ import {
   Flame,
   UserCheck,
   Users,
+  ArrowRightLeft,
 } from "lucide-react";
 import type { GameCopy } from "@/lib/game/copy";
+import { getCopyMercado } from "@/lib/game/copy-mercado";
 import type {
   ClubMatch,
   ClubMemberCareer,
@@ -255,7 +257,7 @@ export function ClubeHub({
             )}
           </div>
 
-          <div className="shrink-0">
+          <div className="flex shrink-0 flex-col items-stretch gap-2">
             {vinculo === "ok" ? (
               <p
                 className="inline-flex items-center gap-1.5 rounded-xl border px-4 py-2.5 text-sm font-bold"
@@ -283,6 +285,17 @@ export function ClubeHub({
                 {vinculo === "enviando" ? c.linking : c.link}
               </button>
             )}
+
+            {/* Recrutar: leva ao mercado com a vaga já ligada a ESTE clube da
+                EA — nasce verificada (divisão e campanha reais), sem redigitar. */}
+            <Link
+              href={`/game/mercado?recrutar=${clubId}&nome=${encodeURIComponent(nome)}&plat=${dado.plataforma}`}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border px-5 py-2.5 text-sm font-bold transition-colors hover:brightness-110"
+              style={{ borderColor: `${CIANO}55`, color: CIANO, background: `${CIANO}12` }}
+            >
+              <ArrowRightLeft size={15} />
+              {getCopyMercado(locale).publicar.tituloClube}
+            </Link>
           </div>
         </div>
 
@@ -692,12 +705,14 @@ function ReivindicarJogador({
   const c = copy.club;
   const [escolhido, setEscolhido] = useState<string | null>(null);
   const [estado, setEstado] = useState<"idle" | "enviando" | "ok" | "login" | "erro">("idle");
+  const [erroMsg, setErroMsg] = useState<string | null>(null);
 
   if (membros.length === 0) return null;
 
   async function reivindicar() {
     if (!escolhido || estado === "enviando") return;
     setEstado("enviando");
+    setErroMsg(null);
     const res = await fetch("/api/game/jogador/vincular", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -705,7 +720,11 @@ function ReivindicarJogador({
     }).catch(() => null);
     if (res?.ok) setEstado("ok");
     else if (res?.status === 401) setEstado("login");
-    else setEstado("erro");
+    else {
+      // Mostra o motivo REAL do servidor, não o genérico do formulário de e-mail.
+      setErroMsg((await res?.json().catch(() => null))?.error ?? null);
+      setEstado("erro");
+    }
   }
 
   return (
@@ -784,7 +803,7 @@ function ReivindicarJogador({
             )}
             {estado === "erro" && (
               <span className="text-[12px] font-semibold" style={{ color: RUBRO }}>
-                {copy.join.error}
+                {erroMsg ?? copy.join.error}
               </span>
             )}
           </div>
