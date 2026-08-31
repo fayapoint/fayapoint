@@ -84,8 +84,11 @@ export function ComunidadeAoVivo({ copy, locale }: { copy: CopyMercado; locale: 
   posRef.current = posicao;
 
   // Pulso de presença — devolve o retrato de quem está online agora.
-  const pulsar = useCallback(async () => {
-    if (typeof document !== "undefined" && document.visibilityState === "hidden") return;
+  // `forcar` ignora a aba oculta: o PRIMEIRO pulso tem de rodar sempre (é ele
+  // que descobre se você está logado e mostra o painel certo). Os pulsos do
+  // intervalo respeitam a visibilidade para não contar aba de fundo eterna.
+  const pulsar = useCallback(async (forcar = false) => {
+    if (!forcar && typeof document !== "undefined" && document.visibilityState === "hidden") return;
     const res = await fetch("/api/game/presenca", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -108,14 +111,22 @@ export function ComunidadeAoVivo({ copy, locale }: { copy: CopyMercado; locale: 
         }
       })
       .catch(() => {});
-    pulsar();
-    const t = setInterval(pulsar, 20_000);
-    return () => clearInterval(t);
+    pulsar(true);
+    const t = setInterval(() => pulsar(), 20_000);
+    // Ao voltar para a aba, pulsa na hora — não espera o próximo ciclo de 20s.
+    const onVis = () => {
+      if (typeof document !== "undefined" && document.visibilityState === "visible") pulsar(true);
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => {
+      clearInterval(t);
+      document.removeEventListener("visibilitychange", onVis);
+    };
   }, [pulsar]);
 
   // Ao trocar status/posição, pulsa na hora para refletir sem esperar 20s.
   useEffect(() => {
-    if (logado) pulsar();
+    if (logado) pulsar(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, posicao]);
 
