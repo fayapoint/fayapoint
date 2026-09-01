@@ -131,6 +131,8 @@ async function resolveCourse(input: CheckoutItemInput): Promise<IPaymentItem> {
           name: 1,
           pricing: 1,
           'copy.shortDescription': 1,
+          aposentado: 1,
+          sucessor: 1,
         },
       },
     );
@@ -139,6 +141,40 @@ async function resolveCourse(input: CheckoutItemInput): Promise<IPaymentItem> {
     throw new CheckoutCatalogError(
       'Curso não encontrado ou indisponível',
       'COURSE_NOT_AVAILABLE',
+      409,
+    );
+  }
+
+  /**
+   * ⚠️ Curso aposentado não se vende — nem por URL direta (01/09/2026).
+   *
+   * `SEM_APOSENTADOS` (em `products.ts`) tira o aposentado de toda LISTA, e a
+   * consulta por slug de propósito NÃO leva o filtro: é o que mantém a página
+   * de pé para quem já comprou e impede que a URL indexada vire 404.
+   *
+   * Só que "sumir da lista" nunca foi o mesmo que "não vender". A página
+   * continuava resolvendo, o botão de compra continuava lá, e este resolvedor
+   * aceitava o pedido — pelo preço CONGELADO de antes da aposentadoria, porque
+   * `precos-por-prontidao.mjs` pula quem tem `aposentado: true`.
+   *
+   * O resultado media assim, nos quatro aposentados de 19/08:
+   *
+   *   chatgpt-masterclass  R$ 149 / 16 caps → sucessor chatgpt-zero    R$  5 / 30 caps
+   *   n8n-automacao-avancada R$ 199 / 16 caps → sucessor automacao-n8n R$ 79 / 31 caps
+   *   perplexity-pesquisa-inteligente R$ 147 / 13 caps → sucessor      R$ 79 / 31 caps
+   *   midjourney-arte-profissional R$ 79 / 16 caps → sucessor          R$ 79 / 31 caps
+   *
+   * Ou seja: quem chegasse da busca pagava **o dobro pelo terço do conteúdo**, e
+   * o substituto melhor e mais barato estava a um clique de distância. O portão
+   * é aqui no servidor porque o botão é do cliente e pode ser contornado.
+   */
+  if (product.aposentado === true) {
+    const sucessor = asNonEmptyString(product.sucessor);
+    throw new CheckoutCatalogError(
+      sucessor
+        ? `Este curso foi substituído por uma versão mais completa. Compre "${sucessor}".`
+        : 'Este curso saiu do catálogo e não está mais à venda.',
+      'COURSE_RETIRED',
       409,
     );
   }

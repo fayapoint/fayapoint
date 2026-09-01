@@ -57,6 +57,25 @@ export default function CourseSalesPage({
   const acesso = useAcessoDoAluno(slug);
   const jaTemOCurso = temAcessoTotal(acesso);
 
+  /**
+   * Curso aposentado não vende para quem ainda não tem — manda para o sucessor.
+   *
+   * `aposentado: true` tira o curso de toda LISTA, mas a página continua de pé
+   * de propósito: é o que mantém o livro de quem comprou e impede que a URL
+   * indexada vire 404 (ver `SEM_APOSENTADOS` em `lib/products.ts`). O efeito
+   * colateral era vender: quem chegasse da BUSCA — o único canal de tráfego que
+   * o site tem hoje — via a página de vendas inteira, com botão, pelo preço
+   * congelado de antes da aposentadoria.
+   *
+   * Nos quatro aposentados de 19/08 isso custava caro para o comprador:
+   * `chatgpt-masterclass` cobra R$ 149 por 16 capítulos enquanto o sucessor
+   * declarado, `chatgpt-zero`, entrega 30 capítulos por R$ 5.
+   *
+   * O campo `sucessor` já existia no tipo, documentado como "para onde mandar
+   * quem procurava este curso". Só nunca tinha sido ligado a nada.
+   */
+  const aposentadoParaVisitante = product?.aposentado === true && !jaTemOCurso;
+
   // O curso chega pronto do servidor (`initialProduct`) e só caímos no fetch se
   // ele faltar — banco fora do ar, essencialmente.
   //
@@ -253,6 +272,11 @@ export default function CourseSalesPage({
       return;
     }
 
+    if (aposentadoParaVisitante) {
+      router.push(product.sucessor ? `/${locale}/curso/${product.sucessor}` : `/${locale}/cursos`);
+      return;
+    }
+
     if (isFreeCourseOfMonth) {
       void handleFreeCourseClaim();
       return;
@@ -277,6 +301,11 @@ export default function CourseSalesPage({
   const handleSecondaryCourseAction = () => {
     if (jaTemOCurso) {
       router.push(`/${locale}/portal/learn/${product.slug}`);
+      return;
+    }
+
+    if (aposentadoParaVisitante) {
+      router.push(product.sucessor ? `/${locale}/curso/${product.sucessor}` : `/${locale}/cursos`);
       return;
     }
 
@@ -667,15 +696,17 @@ export default function CourseSalesPage({
                         size="lg"
                         onClick={handlePrimaryCourseAction}
                       >
-                        {jaTemOCurso ? <PlayCircle className="mr-2" size={20} /> : isFreeCourseOfMonth ? <Gift className="mr-2" size={20} /> : <ShoppingCart className="mr-2" size={20} />}
+                        {jaTemOCurso ? <PlayCircle className="mr-2" size={20} /> : aposentadoParaVisitante ? <ArrowRight className="mr-2" size={20} /> : isFreeCourseOfMonth ? <Gift className="mr-2" size={20} /> : <ShoppingCart className="mr-2" size={20} />}
                         {jaTemOCurso
                           ? (isPtBr ? T("Ler agora") : T("Read now"))
-                          : isFreeCourseOfMonth
-                            ? (isPtBr ? T("Liberar grátis") : T("Unlock free"))
-                            : t("sidebar.buyNow")}
+                          : aposentadoParaVisitante
+                            ? (isPtBr ? T("Ver a versão completa") : T("See the complete version"))
+                            : isFreeCourseOfMonth
+                              ? (isPtBr ? T("Liberar grátis") : T("Unlock free"))
+                              : t("sidebar.buyNow")}
                       </Button>
 
-                      {!isFreeCourseOfMonth && !jaTemOCurso && (
+                      {!isFreeCourseOfMonth && !jaTemOCurso && !aposentadoParaVisitante && (
                         <Button
                           variant="outline"
                           className="w-full border-2 border-amber-500 text-amber-400 hover:bg-amber-500/10"
@@ -1191,6 +1222,13 @@ export default function CourseSalesPage({
               <div className="text-sm font-bold text-amber-400">
                 {isPtBr ? T("Incluído no seu plano") : T("Included in your plan")}
               </div>
+            ) : aposentadoParaVisitante ? (
+              /* Preço de curso aposentado é o preço CONGELADO de antes da
+                 aposentadoria, e mostrá-lo ao lado de "ver a completa" venderia
+                 o número errado. */
+              <div className="text-sm font-bold text-amber-400">
+                {isPtBr ? T("Versão anterior") : T("Earlier version")}
+              </div>
             ) : (
               <>
                 {effectiveOriginalPrice > effectivePrice && (
@@ -1207,12 +1245,14 @@ export default function CourseSalesPage({
             className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-700 hover:to-yellow-800 text-white font-bold px-6"
             onClick={handlePrimaryCourseAction}
           >
-            {jaTemOCurso ? <PlayCircle className="mr-2" size={18} /> : isFreeCourseOfMonth ? <Gift className="mr-2" size={18} /> : <ShoppingCart className="mr-2" size={18} />}
+            {jaTemOCurso ? <PlayCircle className="mr-2" size={18} /> : aposentadoParaVisitante ? <ArrowRight className="mr-2" size={18} /> : isFreeCourseOfMonth ? <Gift className="mr-2" size={18} /> : <ShoppingCart className="mr-2" size={18} />}
             {jaTemOCurso
               ? (isPtBr ? T("Ler agora") : T("Read now"))
-              : isFreeCourseOfMonth
-                ? (isPtBr ? T("Liberar grátis") : T("Unlock free"))
-                : t("mobileCta.buy")}
+              : aposentadoParaVisitante
+                ? (isPtBr ? T("Ver a completa") : T("See complete"))
+                : isFreeCourseOfMonth
+                  ? (isPtBr ? T("Liberar grátis") : T("Unlock free"))
+                  : t("mobileCta.buy")}
           </Button>
         </div>
       </div>

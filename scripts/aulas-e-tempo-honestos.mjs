@@ -131,7 +131,28 @@ await cliente.connect();
 const db = cliente.db('fayapointProdutos');
 const col = db.collection('products');
 
-const filtro = { type: 'course', status: 'active', aposentado: { $ne: true } };
+/**
+ * ⚠️ O aposentado ENTRA aqui — de propósito (01/09/2026).
+ *
+ * Aposentar tira o curso das listas e (desde hoje) do checkout, mas a PÁGINA
+ * continua de pé por desenho: quem comprou lê, e a URL indexada não vira 404.
+ * Se a página continua sendo servida ao público, os números dela continuam
+ * sendo uma afirmação pública — e precisam ser verdade.
+ *
+ * Enquanto este filtro excluía o aposentado, os cinco que sobraram viraram um
+ * bolso de dado não-corrigido, ainda no ar:
+ *
+ *   chatgpt-masterclass ............ anunciava 250 aulas para  16 capítulos (15,6×)
+ *   midjourney-arte-profissional ... anunciava 200 aulas para  16 capítulos (12,5×)
+ *   n8n-automacao-avancada ......... anunciava 180 aulas para  16 capítulos (11,3×)
+ *   perplexity-pesquisa-inteligente  anunciava 100 aulas para  13 capítulos ( 7,7×)
+ *   banana-dev-deploy-ia ........... anunciava 120 aulas para  15 capítulos ( 8,0×)
+ *
+ * A regra que fica: **aposentar é parar de VENDER, não parar de dizer a
+ * verdade.** Todo script de manutenção que corrige o que a página EXIBE deve
+ * alcançar o aposentado; só os que decidem PREÇO e vitrine é que o pulam.
+ */
+const filtro = { type: 'course', status: { $in: ['active', 'draft'] } };
 const cursos = await col
   .find(filtro)
   .project({ slug: 1, courseContent: 1, contentChapters: 1, metrics: 1, curriculum: 1 })
