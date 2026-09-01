@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import type { CopyMercado } from "@/lib/game/copy-mercado";
 import { AvatarJogador } from "./AvatarJogador";
-import { SeloReputacao, AvaliarModal } from "./ReputacaoUI";
+import { SeloReputacao } from "./ReputacaoUI";
 import type { ResumoReputacao } from "@/lib/game/reputacao-meta";
 import type { StatusPresenca } from "@/lib/game/avatar";
 import { POSICOES, posicaoPorCode } from "@/lib/game/posicoes";
@@ -71,13 +71,12 @@ function clientId(): string {
   }
 }
 
-export function ComunidadeAoVivo({ copy, locale }: { copy: CopyMercado; locale: string }) {
+export function ComunidadeAoVivo({ copy }: { copy: CopyMercado }) {
   const [dados, setDados] = useState<DadosComunidade | null>(null);
   const [online, setOnline] = useState<DadosComunidade["online"] | null>(null);
   const [logado, setLogado] = useState(false);
   const [status, setStatus] = useState<StatusAtivo>("online");
   const [posicao, setPosicao] = useState<string>("");
-  const [avaliando, setAvaliando] = useState<{ gamertag: string; rep?: ResumoReputacao } | null>(null);
   const statusRef = useRef(status);
   const posRef = useRef(posicao);
   statusRef.current = status;
@@ -199,7 +198,7 @@ export function ComunidadeAoVivo({ copy, locale }: { copy: CopyMercado; locale: 
           ) : (
             <div className="flex flex-wrap gap-2.5">
               {nuvem.map((m) => (
-                <BonecoNaNuvem key={m.seed} membro={m} copy={copy} locale={locale} aoAvaliar={(g, rep) => setAvaliando({ gamertag: g, rep })} />
+                <BonecoNaNuvem key={m.seed} membro={m} copy={copy} />
               ))}
               {onlineNum && onlineNum.jogadores > nuvem.filter((m) => m.vivo).length && (
                 <span className="inline-flex items-center rounded-full bg-white/[0.06] px-3 text-xs font-bold text-white/60">
@@ -270,16 +269,6 @@ export function ComunidadeAoVivo({ copy, locale }: { copy: CopyMercado; locale: 
         </div>
       </div>
 
-      {avaliando && (
-        <AvaliarModal
-          gamertag={avaliando.gamertag}
-          reputacao={avaliando.rep}
-          copy={copy}
-          locale={locale}
-          aoFechar={() => setAvaliando(null)}
-          aoConcluir={() => setAvaliando(null)}
-        />
-      )}
     </div>
   );
 }
@@ -287,30 +276,17 @@ export function ComunidadeAoVivo({ copy, locale }: { copy: CopyMercado; locale: 
 function BonecoNaNuvem({
   membro,
   copy,
-  locale,
-  aoAvaliar,
 }: {
   membro: { seed: string; nome: string | null; posicao: string | null; status: StatusPresenca | null; overall: number | null; reputacao?: ResumoReputacao; vivo: boolean };
   copy: CopyMercado;
-  locale: string;
-  aoAvaliar: (gamertag: string, rep?: ResumoReputacao) => void;
 }) {
   const status = membro.status ?? "offline";
   const posNome = membro.posicao ? posicaoPorCode(membro.posicao)?.sigla : null;
-  const podeAvaliar = !!membro.nome;
-  return (
-    <div className="group relative">
-      <button
-        type="button"
-        onClick={() => podeAvaliar && aoAvaliar(membro.nome!, membro.reputacao)}
-        className="block transition-transform hover:-translate-y-1"
-        style={membro.status === "procurando" ? { animation: "w22bob 2.6s ease-in-out infinite" } : undefined}
-        aria-label={membro.nome ?? "jogador"}
-      >
-        <span style={{ opacity: membro.vivo ? 1 : 0.62, display: "block" }}>
-          <AvatarJogador seed={membro.seed} size={46} status={status} titulo={membro.nome ?? undefined} />
-        </span>
-      </button>
+  const conteudo = (
+    <>
+      <span style={{ opacity: membro.vivo ? 1 : 0.62, display: "block" }}>
+        <AvatarJogador seed={membro.seed} size={46} status={status} titulo={membro.nome ?? undefined} />
+      </span>
 
       {/* tooltip */}
       <div className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 hidden w-max max-w-[220px] -translate-x-1/2 rounded-xl border border-white/12 bg-[#12142a] p-3 text-left shadow-xl group-hover:block">
@@ -329,13 +305,25 @@ function BonecoNaNuvem({
           {membro.overall != null && <> · OVR {membro.overall}</>}
         </div>
         <div className="mt-1.5"><SeloReputacao reputacao={membro.reputacao} copy={copy} /></div>
-        {podeAvaliar && (
-          <div className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold" style={{ color: OURO }}>
-            <Star size={11} /> {copy.card.avaliar}
+        {membro.nome && (
+          <div className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold" style={{ color: CIANO }}>
+            <Star size={11} /> {copy.perfil.avaliar}
           </div>
         )}
       </div>
-    </div>
+    </>
+  );
+
+  const cls = "group relative block transition-transform hover:-translate-y-1";
+  const estilo = membro.status === "procurando" ? { animation: "w22bob 2.6s ease-in-out infinite" } : undefined;
+
+  // Tem gamertag → leva ao perfil (a casa dele, onde dá para avaliar).
+  return membro.nome ? (
+    <Link href={`/game/jogador/${encodeURIComponent(membro.nome)}`} className={cls} style={estilo} aria-label={membro.nome}>
+      {conteudo}
+    </Link>
+  ) : (
+    <div className={cls} style={estilo}>{conteudo}</div>
   );
 }
 

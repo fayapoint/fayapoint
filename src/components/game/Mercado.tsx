@@ -518,7 +518,16 @@ function CardVaga({
               </span>
             )}
           </div>
-          <h3 className="mt-1 truncate text-lg font-black text-white">{nome}</h3>
+          {!ehClube && vaga.gamertag ? (
+            <Link
+              href={`/game/jogador/${encodeURIComponent(vaga.gamertag)}`}
+              className="mt-1 block truncate text-lg font-black text-white transition-colors hover:text-white/80"
+            >
+              {nome}
+            </Link>
+          ) : (
+            <h3 className="mt-1 truncate text-lg font-black text-white">{nome}</h3>
+          )}
           {!ehClube && vaga.estilo && (
             <p className="text-[12px] font-semibold" style={{ color: cor }}>“{vaga.estilo}”</p>
           )}

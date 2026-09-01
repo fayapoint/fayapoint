@@ -175,6 +175,31 @@ export interface CopyMercado {
   };
   /** Dias da semana, curtos, na ordem seg→dom. */
   dias: string[];
+  /** A página de perfil do jogador. */
+  perfil: {
+    back: string;
+    verificado: string;
+    naoVerificado: string;
+    clube: string;
+    divisao: string;
+    plataforma: string;
+    semClube: string;
+    reputacaoTitulo: string;
+    semReputacao: string;
+    temporada: string;
+    carreira: string;
+    semStats: string;
+    cols: { jogos: string; gols: string; assist: string; nota: string; craques: string; aproveitamento: string };
+    comentarios: string;
+    semComentarios: string;
+    noMercado: string;
+    noMercadoSub: string;
+    verVaga: string;
+    avaliar: string;
+    naoEncontrado: string;
+    naoEncontradoSub: string;
+    procurando: string;
+  };
 }
 
 const pt: CopyMercado = {
@@ -335,6 +360,30 @@ const pt: CopyMercado = {
     contatoDeles: 'Contato do anunciante',
   },
   dias: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'],
+  perfil: {
+    back: 'Comunidade',
+    verificado: 'Reivindicado',
+    naoVerificado: 'Não reivindicado',
+    clube: 'Clube',
+    divisao: 'Divisão',
+    plataforma: 'Plataforma',
+    semClube: 'Sem clube conhecido',
+    reputacaoTitulo: 'Reputação da comunidade',
+    semReputacao: 'Ainda sem avaliação. Jogou com ele? Seja o primeiro a avaliar.',
+    temporada: 'Temporada',
+    carreira: 'Carreira',
+    semStats: 'Estatística ainda não disponível para este jogador.',
+    cols: { jogos: 'Jogos', gols: 'Gols', assist: 'Assist.', nota: 'Nota', craques: 'Craque', aproveitamento: 'Aproveit.' },
+    comentarios: 'O que dizem dele',
+    semComentarios: 'Sem comentários ainda.',
+    noMercado: 'Livre no mercado',
+    noMercadoSub: 'Este jogador está anunciado e procurando clube.',
+    verVaga: 'Ver no mercado',
+    avaliar: 'Avaliar jogador',
+    naoEncontrado: 'Jogador não encontrado',
+    naoEncontradoSub: 'Ainda não temos ficha, avaliação ou anúncio para essa gamertag.',
+    procurando: 'Procurando jogo',
+  },
 };
 
 const en: CopyMercado = {
@@ -495,6 +544,30 @@ const en: CopyMercado = {
     contatoDeles: 'Advertiser contact',
   },
   dias: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+  perfil: {
+    back: 'Community',
+    verificado: 'Claimed',
+    naoVerificado: 'Unclaimed',
+    clube: 'Club',
+    divisao: 'Division',
+    plataforma: 'Platform',
+    semClube: 'No known club',
+    reputacaoTitulo: 'Community reputation',
+    semReputacao: 'No ratings yet. Played with them? Be the first to rate.',
+    temporada: 'Season',
+    carreira: 'Career',
+    semStats: 'No stats available for this player yet.',
+    cols: { jogos: 'Games', gols: 'Goals', assist: 'Assists', nota: 'Rating', craques: 'MOTM', aproveitamento: 'Win %' },
+    comentarios: 'What people say',
+    semComentarios: 'No comments yet.',
+    noMercado: 'Free agent',
+    noMercadoSub: 'This player is listed and looking for a club.',
+    verVaga: 'See on the market',
+    avaliar: 'Rate player',
+    naoEncontrado: 'Player not found',
+    naoEncontradoSub: "We don't have a profile, rating or listing for that gamertag yet.",
+    procurando: 'Looking for a game',
+  },
 };
 
 export function getCopyMercado(locale: string): CopyMercado {

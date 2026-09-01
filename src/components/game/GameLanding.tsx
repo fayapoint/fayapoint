@@ -199,7 +199,7 @@ export function GameLanding({
           Vem logo abaixo do herói — é a prova viva de que o lugar tem gente,
           antes de qualquer demonstração de dado. */}
       <section className="relative mx-auto mt-14 max-w-5xl">
-        <ComunidadeAoVivo copy={copyMerc} locale={locale} />
+        <ComunidadeAoVivo copy={copyMerc} />
       </section>
 
       {/* ============================== BUSCA ============================== */}
