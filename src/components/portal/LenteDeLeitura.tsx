@@ -120,11 +120,14 @@ function acharFala(falas: FalaNaLinhaDoTempo[], t: number): number {
 export default function LenteDeLeitura({
   src,
   linhaDoTempo,
+  chave,
   aoFechar,
   T = (s: string) => s,
 }: {
   src: string;
   linhaDoTempo: LinhaDoTempo;
+  /** Identidade do capítulo. É o que faz a lente lembrar onde parou. */
+  chave?: string;
   aoFechar?: () => void;
   T?: (s: string) => string;
 }) {
@@ -288,6 +291,46 @@ export default function LenteDeLeitura({
     const a = audioRef.current;
     if (a) a.volume = volume;
   }, [volume]);
+
+  // ── ONDE VOCÊ PAROU (02/09/2026) ─────────────────────────────────────────
+  //
+  // Testado no celular: ouvindo o capítulo, abrir o índice e tocar num capítulo
+  // fazia o áudio PARAR — e voltar significava começar do zero, dez minutos
+  // atrás. Trocar de capítulo remonta o componente; sem memória, a posição
+  // morre junto.
+  //
+  // Guardar por capítulo (e não uma posição só) é o que permite ir ver outra
+  // aula e voltar exatamente para onde a voz estava.
+  const chaveMarca = chave ? `fayapoint_lente_pos_${chave}` : null;
+
+  useEffect(() => {
+    if (!chaveMarca) return;
+    const a = audioRef.current;
+    if (!a) return;
+    const retomar = () => {
+      try {
+        const s = Number(localStorage.getItem(chaveMarca));
+        // Perto do fim é "terminei", não "parei aqui": retomar nos últimos
+        // segundos devolveria o aluno ao encerramento toda vez.
+        if (s > 1 && a.duration && s < a.duration - 5) a.currentTime = s;
+      } catch { /* sem memória, começa do zero */ }
+    };
+    if (a.readyState >= 1) retomar();
+    else a.addEventListener("loadedmetadata", retomar, { once: true });
+  }, [chaveMarca]);
+
+  useEffect(() => {
+    if (!chaveMarca) return;
+    const guardar = () => {
+      try {
+        const a = audioRef.current;
+        if (a && a.currentTime > 1) localStorage.setItem(chaveMarca, String(a.currentTime));
+      } catch { /* idem */ }
+    };
+    const id = setInterval(guardar, 5000);
+    window.addEventListener("pagehide", guardar);
+    return () => { clearInterval(id); window.removeEventListener("pagehide", guardar); guardar(); };
+  }, [chaveMarca]);
 
   const secaoAtual = atual >= 0 ? falas[atual]?.secao : null;
   const progresso = total > 0 ? (agora / total) * 100 : 0;

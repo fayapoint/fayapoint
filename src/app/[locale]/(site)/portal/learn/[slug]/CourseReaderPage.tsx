@@ -1097,7 +1097,15 @@ export default function CourseReaderPage() {
   const [audiobookPorIndice, setAudiobookPorIndice] = useState<
     Record<string, { url: string; linhaDoTempo: LinhaDoTempo }>
   >({});
-  const [lenteAberta, setLenteAberta] = useState(false);
+  /**
+   * ABERTA POR PADRÃO quando o capítulo tem áudio sincronizado.
+   *
+   * Testado no celular em 02/09/2026: com a lente atrás de um botão, o aluno
+   * via o tocador simples no topo, ouvia dez minutos corridos e nunca descobria
+   * que existia leitura acompanhada. A lente NÃO é um extra — é a forma do
+   * audiobook. Quem quiser só o texto fecha, e o botão volta.
+   */
+  const [lenteAberta, setLenteAberta] = useState(true);
 
   /* ─── Access gating state ─── */
   const [courseAccess, setCourseAccess] = useState<CourseAccessDto | null>(null);
@@ -1536,12 +1544,21 @@ export default function CourseReaderPage() {
               // ÍNDICE (0-based). Errar isto desloca o áudio em um capítulo,
               // e o aluno ouve a aula errada sem nenhum erro na tela.
               const chave = String(c.numero - 1);
-              porIndice[chave] = {
-                audio: { url: c.url, source: "cloudinary" },
-              } as ChapterMediaData;
-              if (c.linhaDoTempo?.falas?.length) {
-                comLente[chave] = { url: c.url, linhaDoTempo: c.linhaDoTempo };
-              }
+              const temLente = !!c.linhaDoTempo?.falas?.length;
+
+              // ── UM TOCADOR SÓ (02/09/2026) ────────────────────────────
+              //
+              // Injetar o áudio aqui faz o `ChapterMediaHeader` desenhar o
+              // player simples dele. Com a lente logo abaixo, a página passava
+              // a ter DOIS tocadores — e no celular o de cima aparecia
+              // primeiro, tocava o capítulo inteiro de uma vez, e a lente
+              // ficava fora da tela sem ninguém descobrir que existia.
+              //
+              // Quando há linha do tempo, a lente é o tocador. O player
+              // simples continua sendo a resposta certa para capítulo com
+              // áudio mas sem sincronia.
+              if (temLente) comLente[chave] = { url: c.url, linhaDoTempo: c.linhaDoTempo! };
+              else porIndice[chave] = { audio: { url: c.url, source: "cloudinary" } } as ChapterMediaData;
             }
             setChapterMediaMap(anterior => fundirMedia(anterior, porIndice));
             if (Object.keys(comLente).length) setAudiobookPorIndice(comLente);
@@ -2718,6 +2735,7 @@ export default function CourseReaderPage() {
                         <LenteDeLeitura
                           src={lenteDoCapitulo.url}
                           linhaDoTempo={lenteDoCapitulo.linhaDoTempo}
+                          chave={`${slug}:${currentChapterIndex}`}
                           aoFechar={() => setLenteAberta(false)}
                           T={T}
                         />
