@@ -45,6 +45,17 @@ export interface Narrador {
 
 export const NARRADORES: Narrador[] = [
   {
+    id: 'ricardo',
+    nome: 'Ricardo Faya',
+    timbre: 'A voz de quem escreveu o curso — direta, sem pose de locutor',
+    boaPara: 'Quem quer ouvir o autor, e não um narrador contratado',
+    amostra: '/audio/platform/test_ricardo.mp3',
+    emoji: '👤',
+    cor: '#e8913a',
+    tipo: 'locucao',
+    disponivel: true,
+  },
+  {
     id: 'fernando_borges',
     nome: 'Fernando Borges',
     timbre: 'Calmo, elegante, ritmo de professor que não tem pressa',
@@ -123,15 +134,45 @@ export function acharNarrador(id: string | undefined | null): Narrador {
 /**
  * Cursos que JÁ têm narração completa gravada, por voz.
  *
- * ⚠️ Escrito à mão de propósito: ler `manifest.json` em tempo de requisição
- * colocaria o disco no caminho de uma tela que precisa abrir rápido, e a lista
- * muda uma vez por trimestre. Quando a produção de áudio voltar (ver
- * `public/audio/PRODUCTION_STATUS.md`), esta constante é o único lugar a mudar.
+ * ## Por que metade vem de arquivo e metade continua à mão
+ *
+ * A narração do livro sagrado é histórica: 34 arquivos gerados na ElevenLabs
+ * até a cota acabar em abril, servidos de `public/audio/`. Aquilo não volta a
+ * crescer, então continua escrito aqui.
+ *
+ * O acervo NOVO é outra coisa. Desde 02/09/2026 a narração sai da voz local
+ * (Higgs v3, clonada do Ricardo), é ilimitada e cresce a cada rodada da fila em
+ * `autoresearch/cursos/audio/`. Manter isso à mão garantia a lista errada: o
+ * áudio subiria e a tela continuaria dizendo "em breve" até alguém lembrar de
+ * editar este arquivo. Por isso o manifesto é GERADO por
+ * `scripts/publicar-audiobook.mjs` e lido aqui em tempo de build.
+ *
+ * ⚠️ Em tempo de BUILD, não de requisição — o import de JSON é estático. Depois
+ * de publicar áudio novo, é preciso um deploy para a tela enxergar.
  */
-export const NARRACAO_PRONTA: Record<string, string[]> = {
+import manifestoAudiobook from './audiobook-manifesto.json';
+
+const PRONTAS_HISTORICO: Record<string, string[]> = {
   'ia-sem-filtro-por-claude': ['fernando_borges', 'beto', 'sergio'],
 };
 
+function montarProntas(): Record<string, string[]> {
+  const saida: Record<string, string[]> = { ...PRONTAS_HISTORICO };
+  const cursos = (manifestoAudiobook as { cursos?: Record<string, { narrador?: string }> }).cursos ?? {};
+  for (const [slug, dados] of Object.entries(cursos)) {
+    const voz = dados?.narrador ?? 'ricardo';
+    saida[slug] = Array.from(new Set([...(saida[slug] ?? []), voz]));
+  }
+  return saida;
+}
+
+export const NARRACAO_PRONTA: Record<string, string[]> = montarProntas();
+
 export function temNarracaoPronta(slug: string, narrador: string): boolean {
   return (NARRACAO_PRONTA[slug] || []).includes(narrador);
+}
+
+/** Qualquer voz serve — é o que decide se o degrau "Com audiobook" sai de "em breve". */
+export function temAlgumaNarracao(slug: string): boolean {
+  return (NARRACAO_PRONTA[slug] || []).length > 0;
 }

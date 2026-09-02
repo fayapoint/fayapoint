@@ -38,6 +38,7 @@ import {
   ArrowUp,
   ArrowDown,
   Volume2,
+  ScanText,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "react-hot-toast";
@@ -57,6 +58,7 @@ import {
 import { useTabHiddenAtMount } from "@/hooks/useTabHiddenAtMount";
 import { usePostHog } from "posthog-js/react";
 import { mediaLocalDoCurso } from "@/lib/curso-media-local";
+import LenteDeLeitura, { type LinhaDoTempo } from "@/components/portal/LenteDeLeitura";
 
 /* ═══════════════════════════════════════════════════════════
    Types
@@ -1091,6 +1093,11 @@ export default function CourseReaderPage() {
   const [settings, setSettings] = useState<ReaderSettings>(DEFAULT_SETTINGS);
   const [showQuizModal, setShowQuizModal] = useState(false);
   const [chapterMediaMap, setChapterMediaMap] = useState<Record<string, ChapterMediaData>>({});
+  /** O audiobook por ÍNDICE de capítulo: link assinado + onde cada frase começa. */
+  const [audiobookPorIndice, setAudiobookPorIndice] = useState<
+    Record<string, { url: string; linhaDoTempo: LinhaDoTempo }>
+  >({});
+  const [lenteAberta, setLenteAberta] = useState(false);
 
   /* ─── Access gating state ─── */
   const [courseAccess, setCourseAccess] = useState<CourseAccessDto | null>(null);
@@ -1164,6 +1171,7 @@ export default function CourseReaderPage() {
     : settings.maxWidth + 120;
   const compactFloatingNavigation = isWideReadingMode;
   const currentChapterMedia = chapterMediaMap[String(currentChapterIndex)] || null;
+  const lenteDoCapitulo = audiobookPorIndice[String(currentChapterIndex)] || null;
 
   /* ─── Settings persistence ─── */
   useEffect(() => {
@@ -1500,6 +1508,45 @@ export default function CourseReaderPage() {
             }
           })
           .catch(() => { /* Media fetch is non-critical */ });
+
+        // ── O AUDIOBOOK VEM DE OUTRA ROTA, E ISSO NÃO É DUPLICAÇÃO ──────────
+        //
+        // `/media` devolve o que está no Content Forge e não confere nada — o
+        // que serve para ilustração, que já vai no HTML de qualquer jeito. O
+        // audiobook é um degrau PAGO, e um M4A é o produto inteiro num arquivo:
+        // link aberto é produto distribuído. Por isso o banco guarda só o
+        // `publicId` do Cloudinary, e quem transforma isso em som é
+        // `/audiobook`, que confere o acesso no servidor e assina com prazo.
+        //
+        // O resultado entra no MESMO mapa de mídia, então o player que já
+        // existe em `ChapterMediaHeader` toca sem saber de nada disso.
+        fetch(`/api/courses/${slug}/audiobook`, {
+          headers: authHeaders,
+          credentials: "include",
+        })
+          .then(res => (res.ok ? res.json() : null))
+          .then((data: {
+            capitulos?: { numero: number; url: string; segundos?: number; linhaDoTempo?: LinhaDoTempo | null }[];
+          } | null) => {
+            if (!data?.capitulos?.length) return;
+            const porIndice: Record<string, ChapterMediaData> = {};
+            const comLente: Record<string, { url: string; linhaDoTempo: LinhaDoTempo }> = {};
+            for (const c of data.capitulos) {
+              // A rota fala em NÚMERO de capítulo (1-based); o mapa é por
+              // ÍNDICE (0-based). Errar isto desloca o áudio em um capítulo,
+              // e o aluno ouve a aula errada sem nenhum erro na tela.
+              const chave = String(c.numero - 1);
+              porIndice[chave] = {
+                audio: { url: c.url, source: "cloudinary" },
+              } as ChapterMediaData;
+              if (c.linhaDoTempo?.falas?.length) {
+                comLente[chave] = { url: c.url, linhaDoTempo: c.linhaDoTempo };
+              }
+            }
+            setChapterMediaMap(anterior => fundirMedia(anterior, porIndice));
+            if (Object.keys(comLente).length) setAudiobookPorIndice(comLente);
+          })
+          .catch(() => { /* sem audiobook a página continua inteira */ });
 
         // 5. Fetch progress from server when possible, then fall back to local cache
         try {
@@ -2654,6 +2701,50 @@ export default function CourseReaderPage() {
                       media={currentChapterMedia}
                       chapterTitle={currentChapter.title}
                     />
+                  )}
+
+                  {/**
+                   * A LENTE — só aparece quando existe linha do tempo.
+                   *
+                   * Sem ela, o capítulo tem áudio mas não tem onde cada frase
+                   * começa, e a lente não teria o que seguir: o player simples
+                   * do `ChapterMediaHeader` acima continua sendo a resposta
+                   * certa. Oferecer a lente sem sincronia seria pior que não
+                   * oferecer — o texto ficaria parado enquanto a voz anda.
+                   */}
+                  {lenteDoCapitulo && (
+                    <div className="my-6">
+                      {lenteAberta ? (
+                        <LenteDeLeitura
+                          src={lenteDoCapitulo.url}
+                          linhaDoTempo={lenteDoCapitulo.linhaDoTempo}
+                          aoFechar={() => setLenteAberta(false)}
+                          T={T}
+                        />
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => setLenteAberta(true)}
+                          className="group w-full flex items-center gap-4 px-5 py-4 rounded-2xl bg-[rgba(var(--reader-tint),0.03)] ring-1 ring-[rgba(var(--reader-tint),0.07)] hover:ring-violet-400/30 hover:bg-[rgba(var(--reader-tint),0.05)] transition-all text-left"
+                        >
+                          <span className="flex-shrink-0 w-11 h-11 rounded-full bg-violet-600/20 group-hover:bg-violet-600/30 flex items-center justify-center transition-colors">
+                            <ScanText size={19} className="text-violet-300" />
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block text-sm font-medium text-[rgba(var(--reader-tint),0.9)]">
+                              {T("Ouvir e ler ao mesmo tempo")}
+                            </span>
+                            <span className="block text-xs text-[rgba(var(--reader-tint),0.45)] mt-0.5">
+                              {T("A página acompanha a narração, frase por frase")}
+                            </span>
+                          </span>
+                          <ChevronRight
+                            size={18}
+                            className="flex-shrink-0 text-[rgba(var(--reader-tint),0.3)] group-hover:text-violet-300 group-hover:translate-x-0.5 transition-all"
+                          />
+                        </button>
+                      )}
+                    </div>
                   )}
 
                   {/**

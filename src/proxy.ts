@@ -853,12 +853,14 @@ export const config = {
   matcher: [
     // Match all paths except static files.
     //
-    // ⚠️ Esta lista precisa crescer junto com os tipos de asset do site. Duas
-    // vezes em 26/07/2026 um arquivo estático novo voltou 404 sem explicação
-    // por não estar aqui: primeiro os GeoJSON do Radar (`json`), depois o
-    // ícone 3D (`glb`). Rotas de API não terminam nessas extensões, então
+    // ⚠️ Esta lista precisa crescer junto com os tipos de asset do site. TRÊS
+    // vezes um arquivo estático novo voltou 404 sem explicação por não estar
+    // aqui: em 26/07/2026 os GeoJSON do Radar (`json`) e o ícone 3D (`glb`), e
+    // em 02/09/2026 o audiobook (`m4a`) — o formato em que os capítulos
+    // narrados são entregues. Rotas de API não terminam nessas extensões, então
     // excluí-las não desprotege nada — mas esquecer de incluir custa uma hora
-    // de depuração no lugar errado.
-    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.webmanifest|.*\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|webm|mp4|m4v|mov|mp3|wav|ogg|woff|woff2|css|js|json|webmanifest|glb|gltf|hdr|ktx2|bin)$).*)"
+    // de depuração no lugar errado, porque o sintoma (404) aponta para o
+    // arquivo e a causa está aqui.
+    "/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml|manifest.webmanifest|.*\.(?:svg|png|jpg|jpeg|gif|webp|avif|ico|webm|mp4|m4v|mov|mp3|m4a|aac|wav|ogg|opus|woff|woff2|css|js|json|webmanifest|glb|gltf|hdr|ktx2|bin)$).*)"
   ]
 };
