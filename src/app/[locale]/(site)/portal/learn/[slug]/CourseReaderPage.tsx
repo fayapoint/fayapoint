@@ -59,6 +59,7 @@ import { useTabHiddenAtMount } from "@/hooks/useTabHiddenAtMount";
 import { usePostHog } from "posthog-js/react";
 import { mediaLocalDoCurso } from "@/lib/curso-media-local";
 import LenteDeLeitura, { type LinhaDoTempo } from "@/components/portal/LenteDeLeitura";
+import { falasDoCapitulo } from "@/lib/lente-falas";
 
 /* ═══════════════════════════════════════════════════════════
    Types
@@ -1098,14 +1099,17 @@ export default function CourseReaderPage() {
     Record<string, { url: string; linhaDoTempo: LinhaDoTempo }>
   >({});
   /**
-   * ABERTA POR PADRÃO quando o capítulo tem áudio sincronizado.
+   * ABERTA POR PADRÃO **SÓ COM ÁUDIO**.
    *
-   * Testado no celular em 02/09/2026: com a lente atrás de um botão, o aluno
-   * via o tocador simples no topo, ouvia dez minutos corridos e nunca descobria
-   * que existia leitura acompanhada. A lente NÃO é um extra — é a forma do
-   * audiobook. Quem quiser só o texto fecha, e o botão volta.
+   * Com narração, a lente É a forma do audiobook: escondê-la atrás de um botão
+   * fez o aluno ouvir dez minutos corridos sem descobrir que existia leitura
+   * acompanhada (testado no celular em 02/09/2026).
+   *
+   * Sem narração ela é MODO DE LEITURA — uma alternativa legítima, mas não a
+   * forma padrão de ler um capítulo. Abrir sozinha ali tomaria a tela de 24
+   * cursos para trocar um jeito de ler que ninguém pediu para trocar.
    */
-  const [lenteAberta, setLenteAberta] = useState(true);
+  const [lenteAberta, setLenteAberta] = useState(false);
 
   /* ─── Access gating state ─── */
   const [courseAccess, setCourseAccess] = useState<CourseAccessDto | null>(null);
@@ -1179,7 +1183,42 @@ export default function CourseReaderPage() {
     : settings.maxWidth + 120;
   const compactFloatingNavigation = isWideReadingMode;
   const currentChapterMedia = chapterMediaMap[String(currentChapterIndex)] || null;
+  /**
+   * A LENTE VALE COM OU SEM ÁUDIO.
+   *
+   * Com audiobook, ela segue a narração pela linha do tempo. Sem, ela vira
+   * MODO DE LEITURA e o foco segue a rolagem — o que a torna útil nos 24
+   * cursos que ainda não foram narrados, em vez de invisível neles.
+   *
+   * A linha do tempo sintética não tem tempo nenhum (`de`/`ate` em zero) e não
+   * precisa ter: no modo de leitura ninguém consulta esses campos. O que ela
+   * carrega de verdade são as FRASES e as MARCAS de seção.
+   */
   const lenteDoCapitulo = audiobookPorIndice[String(currentChapterIndex)] || null;
+
+  useEffect(() => {
+    if (lenteDoCapitulo) setLenteAberta(true);
+  }, [lenteDoCapitulo]);
+
+  const lenteDeLeitura = useMemo<LinhaDoTempo | null>(() => {
+    if (lenteDoCapitulo) return null;           // com áudio, a linha real manda
+    const md = currentChapter?.content;
+    if (!md) return null;
+    const falas = falasDoCapitulo(md);
+    if (falas.length < 3) return null;          // capítulo curto demais para valer a lente
+    const marcas: { segundos: number; titulo: string }[] = [];
+    let ultima: string | null = null;
+    for (const f of falas) {
+      if (f.secao && f.secao !== ultima) { marcas.push({ segundos: f.i, titulo: f.secao }); ultima = f.secao; }
+    }
+    return {
+      versao: 1,
+      titulo: currentChapter?.title,
+      segundos: 0,
+      marcas,
+      falas: falas.map((f) => ({ i: f.i, de: 0, ate: 0, texto: f.texto, tipo: f.tipo, secao: f.secao })),
+    };
+  }, [lenteDoCapitulo, currentChapter?.content, currentChapter?.title]);
 
   /* ─── Settings persistence ─── */
   useEffect(() => {
@@ -2729,12 +2768,12 @@ export default function CourseReaderPage() {
                    * certa. Oferecer a lente sem sincronia seria pior que não
                    * oferecer — o texto ficaria parado enquanto a voz anda.
                    */}
-                  {lenteDoCapitulo && (
+                  {(lenteDoCapitulo || lenteDeLeitura) && (
                     <div className="my-6">
                       {lenteAberta ? (
                         <LenteDeLeitura
-                          src={lenteDoCapitulo.url}
-                          linhaDoTempo={lenteDoCapitulo.linhaDoTempo}
+                          src={lenteDoCapitulo?.url ?? null}
+                          linhaDoTempo={(lenteDoCapitulo?.linhaDoTempo ?? lenteDeLeitura)!}
                           chave={`${slug}:${currentChapterIndex}`}
                           aoFechar={() => setLenteAberta(false)}
                           T={T}
@@ -2750,10 +2789,12 @@ export default function CourseReaderPage() {
                           </span>
                           <span className="min-w-0 flex-1">
                             <span className="block text-sm font-medium text-[rgba(var(--reader-tint),0.9)]">
-                              {T("Ouvir e ler ao mesmo tempo")}
+                              {lenteDoCapitulo ? T("Ouvir e ler ao mesmo tempo") : T("Modo leitura com lente")}
                             </span>
                             <span className="block text-xs text-[rgba(var(--reader-tint),0.45)] mt-0.5">
-                              {T("A página acompanha a narração, frase por frase")}
+                              {lenteDoCapitulo
+                                ? T("A página acompanha a narração, frase por frase")
+                                : T("Uma frase por vez em foco, para não se perder no texto")}
                             </span>
                           </span>
                           <ChevronRight

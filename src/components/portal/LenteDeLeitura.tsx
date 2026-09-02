@@ -124,7 +124,8 @@ export default function LenteDeLeitura({
   aoFechar,
   T = (s: string) => s,
 }: {
-  src: string;
+  /** Sem `src`, a lente vira MODO DE LEITURA: o foco segue a rolagem. */
+  src?: string | null;
   linhaDoTempo: LinhaDoTempo;
   /** Identidade do capítulo. É o que faz a lente lembrar onde parou. */
   chave?: string;
@@ -169,6 +170,19 @@ export default function LenteDeLeitura({
   const falas = linhaDoTempo.falas;
   const total = linhaDoTempo.segundos || 0;
 
+  /**
+   * ── SEM ÁUDIO, A LENTE CONTINUA VALENDO ────────────────────────────────
+   *
+   * Ela resolve DOIS problemas, e só um deles precisa de voz. O outro — não se
+   * perder num bloco de dez minutos de texto — existe em todo capítulo, e é
+   * por isso que a lente ficava invisível em 24 dos 25 cursos.
+   *
+   * No modo de leitura quem manda é a ROLAGEM: a frase mais próxima da linha
+   * de âncora entra em foco. É o mesmo desenho visual, com o dedo no lugar do
+   * relógio.
+   */
+  const comAudio = !!src;
+
   const semAnimacao = useMemo(
     () =>
       typeof window !== "undefined" &&
@@ -194,12 +208,37 @@ export default function LenteDeLeitura({
       }
       if (vivo) quadro = requestAnimationFrame(passo);
     };
-    quadro = requestAnimationFrame(passo);
+    if (comAudio) quadro = requestAnimationFrame(passo);
     return () => {
       vivo = false;
       cancelAnimationFrame(quadro);
     };
-  }, [falas]);
+  }, [falas, comAudio]);
+
+  // ── O FOCO NO MODO DE LEITURA ──────────────────────────────────────────
+  //
+  // Sem áudio não há relógio, então quem decide a frase em foco é a rolagem:
+  // a que estiver mais perto da linha de âncora ganha. É o gesto que o leitor
+  // já faz — ele rola, e a lente acompanha, em vez de exigir um controle novo.
+  const focarPelaRolagem = useCallback(() => {
+    const coluna = colunaRef.current;
+    if (!coluna) return;
+    const alvo = coluna.scrollTop + coluna.clientHeight * ANCORA;
+    let melhor = 0;
+    let menorDistancia = Infinity;
+    for (let i = 0; i < falaRefs.current.length; i++) {
+      const el = falaRefs.current[i];
+      if (!el) continue;
+      const d = Math.abs(el.offsetTop + el.clientHeight / 2 - alvo);
+      if (d < menorDistancia) { menorDistancia = d; melhor = i; }
+    }
+    setAtual((anterior) => (anterior === melhor ? anterior : melhor));
+  }, []);
+
+  useEffect(() => {
+    if (comAudio) return;
+    focarPelaRolagem();
+  }, [comAudio, focarPelaRolagem, zoom]);
 
   // ── O deslizar ───────────────────────────────────────────────────────────
   //
@@ -207,6 +246,9 @@ export default function LenteDeLeitura({
   // e respeita o gesto do usuário. Escrever uma mola à mão aqui daria menos
   // suavidade e mais código — e brigaria com o scroll nativo do dedo.
   useEffect(() => {
+    // No modo de leitura a página NÃO se move sozinha: quem rola é o leitor, e
+    // arrastar por baixo do dedo dele seria briga, não ajuda.
+    if (!comAudio) return;
     if (!seguindo || atual < 0) return;
     const alvo = falaRefs.current[atual];
     const coluna = colunaRef.current;
@@ -240,6 +282,7 @@ export default function LenteDeLeitura({
   // Quem rola com o dedo enquanto está seguindo, quer olhar outra coisa. A
   // lente solta sozinha em vez de brigar pelo scroll — e avisa como voltar.
   const aoRolar = useCallback(() => {
+    if (!comAudio) { focarPelaRolagem(); return; }
     if (!seguindo || atual < 0) return;
     if (Date.now() < ignorarAte.current) return;
     const alvo = falaRefs.current[atual];
@@ -251,7 +294,7 @@ export default function LenteDeLeitura({
       setSeguindo(false);
       setSaiuDoLugar(true);
     }
-  }, [seguindo, atual]);
+  }, [seguindo, atual, comAudio, focarPelaRolagem]);
 
   const irPara = useCallback((s: number) => {
     const a = audioRef.current;
@@ -344,7 +387,7 @@ export default function LenteDeLeitura({
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-[11px] uppercase tracking-[0.14em] text-[rgba(var(--reader-tint),0.35)]">
-            {T("Ouvindo e lendo")}
+            {comAudio ? T("Ouvindo e lendo") : T("Lendo com lente")}
           </p>
           <p className="text-sm font-medium text-[rgba(var(--reader-tint),0.85)] truncate">
             {secaoAtual || linhaDoTempo.titulo || T("Capítulo")}
@@ -369,13 +412,21 @@ export default function LenteDeLeitura({
                   <button
                     key={`${m.segundos}-${m.titulo}`}
                     type="button"
-                    onClick={() => { irPara(m.segundos); setIndiceAberto(false); }}
+                    onClick={() => {
+                      if (comAudio) irPara(m.segundos);
+                      else {
+                        // Sem áudio, `segundos` guarda o ÍNDICE da fala — é o
+                        // que a linha do tempo sintética tem para oferecer.
+                        falaRefs.current[m.segundos]?.scrollIntoView({ block: "center", behavior: semAnimacao ? "auto" : "smooth" });
+                      }
+                      setIndiceAberto(false);
+                    }}
                     className="w-full flex items-center justify-between gap-3 px-4 py-2 text-left text-[13px] text-[rgba(var(--reader-tint),0.7)] hover:text-[rgba(var(--reader-tint),1)] hover:bg-[rgba(var(--reader-tint),0.06)] transition-colors"
                   >
                     <span className="truncate">{m.titulo}</span>
-                    <span className="tabular-nums text-[11px] text-[rgba(var(--reader-tint),0.35)]">
+                    {comAudio && <span className="tabular-nums text-[11px] text-[rgba(var(--reader-tint),0.35)]">
                       {tempoHumano(m.segundos)}
-                    </span>
+                    </span>}
                   </button>
                 ))}
               </div>
@@ -561,7 +612,7 @@ export default function LenteDeLeitura({
           </div>
         </div>
 
-        <div className="relative h-1 bg-[rgba(var(--reader-tint),0.07)] group cursor-pointer"
+        {comAudio && <div className="relative h-1 bg-[rgba(var(--reader-tint),0.07)] group cursor-pointer"
              onClick={(e) => {
                const r = e.currentTarget.getBoundingClientRect();
                irPara(((e.clientX - r.left) / r.width) * total);
@@ -573,9 +624,10 @@ export default function LenteDeLeitura({
                   className="absolute top-0 bottom-0 w-px bg-[rgba(var(--reader-tint),0.22)]"
                   style={{ left: `${total ? (m.segundos / total) * 100 : 0}%` }} />
           ))}
-        </div>
+        </div>}
 
         <div className="flex items-center gap-2 px-4 sm:px-5 py-3">
+          {comAudio && (<>
           <button type="button" onClick={() => irPara(agora - PULO)} title={T("Voltar 15 segundos")}
                   className="p-2 rounded-full text-[rgba(var(--reader-tint),0.55)] hover:text-[rgba(var(--reader-tint),0.95)] hover:bg-[rgba(var(--reader-tint),0.07)] transition-colors">
             <RotateCcw size={17} />
@@ -594,6 +646,13 @@ export default function LenteDeLeitura({
           <span className="ml-1 text-xs tabular-nums text-[rgba(var(--reader-tint),0.4)]">
             {tempoHumano(agora)} <span className="opacity-50">/ {tempoHumano(total)}</span>
           </span>
+          </>)}
+
+          {!comAudio && (
+            <span className="text-xs text-[rgba(var(--reader-tint),0.45)]">
+              {T("Modo leitura")} · <span className="tabular-nums">{atual + 1}/{falas.length}</span>
+            </span>
+          )}
 
           <div className="flex-1" />
 
@@ -615,7 +674,7 @@ export default function LenteDeLeitura({
 
           {/* O cadeado é o controle que o Ricardo pediu: destrancar a vista.
               Fechado = a página anda sozinha. Aberto = você manda no scroll. */}
-          <button
+          {comAudio && <button
             type="button"
             onClick={() => { setSeguindo((v) => !v); setSaiuDoLugar(false); }}
             aria-pressed={seguindo}
@@ -629,19 +688,19 @@ export default function LenteDeLeitura({
           >
             {seguindo ? <Lock size={13} /> : <LockOpen size={13} />}
             <span className="hidden sm:inline">{seguindo ? T("Seguindo") : T("Solto")}</span>
-          </button>
+          </button>}
         </div>
       </div>
 
-      <audio
+      {comAudio && <audio
         ref={audioRef}
-        src={src}
+        src={src ?? undefined}
         preload="metadata"
         onPlay={() => setTocando(true)}
         onPause={() => setTocando(false)}
         onEnded={() => setTocando(false)}
         className="hidden"
-      />
+      />}
     </div>
   );
 }

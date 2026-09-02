@@ -14,6 +14,8 @@ import type { Product } from "@/lib/products";
 import { useLocale } from "next-intl";
 import { formatEditorialDate } from "@/lib/editorial-verification";
 import { CapaDoCurso } from "@/components/courses/CapaDoCurso";
+import { SeloDeFormato, type Formato } from "@/components/courses/SeloDeFormato";
+import { temAlgumaNarracao } from "@/data/narradores";
 
 interface AttractiveCourseCardProps {
   product: Product;
@@ -52,6 +54,15 @@ const courseStyles: Record<string, { gradient: string; icon: React.ComponentType
 export function AttractiveCourseCard({ product, index }: AttractiveCourseCardProps) {
   const T = useT();
   const style = courseStyles[product.slug] || courseStyles['default'];
+
+  /**
+   * O que este curso oferece HOJE. Texto todo curso tem; áudio sai do manifesto
+   * gerado pela publicação do audiobook (`src/data/audiobook-manifesto.json`),
+   * então o selo aparece no mesmo deploy em que o áudio fica disponível — não
+   * antes, não depois.
+   */
+  const formatos: Formato[] = ["texto"];
+  if (temAlgumaNarracao(product.slug)) formatos.push("audio");
   const Icon = style.icon;
   const locale = useLocale();
   const isPtBr = locale === 'pt-BR';
@@ -133,6 +144,12 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                     <span className="font-bold">{isPtBr ? T("Avançado") : T("Advanced")}</span>
                   </Badge>
                 )}
+              </div>
+
+              {/* Formatos disponíveis — texto sempre; áudio quando narrado.
+                  O vídeo entra sozinho quando `temVideo` virar verdade. */}
+              <div className="absolute bottom-3 left-3">
+                <SeloDeFormato formatos={formatos} ptBr={isPtBr} />
               </div>
 
               {/* Discount Badge */}
