@@ -1095,8 +1095,12 @@ export default function CourseReaderPage() {
   const [showQuizModal, setShowQuizModal] = useState(false);
   const [chapterMediaMap, setChapterMediaMap] = useState<Record<string, ChapterMediaData>>({});
   /** O audiobook por ÍNDICE de capítulo: link assinado + onde cada frase começa. */
-  const [audiobookPorIndice, setAudiobookPorIndice] = useState<
+  const [audiobookPorNumero, setAudiobookPorNumero] = useState<
     Record<string, { url: string; linhaDoTempo: LinhaDoTempo }>
+  >({});
+  /** Capítulo com áudio mas sem sincronia: cai no player simples. */
+  const [audioSemLentePorNumero, setAudioSemLentePorNumero] = useState<
+    Record<string, ChapterMediaData>
   >({});
   /**
    * ABERTA POR PADRÃO **SÓ COM ÁUDIO**.
@@ -1182,7 +1186,28 @@ export default function CourseReaderPage() {
     ? Math.min(settings.maxWidth + 320, 1240)
     : settings.maxWidth + 120;
   const compactFloatingNavigation = isWideReadingMode;
-  const currentChapterMedia = chapterMediaMap[String(currentChapterIndex)] || null;
+  /**
+   * QUE NÚMERO DE CAPÍTULO É O QUE ESTÁ ABERTO.
+   *
+   * O leitor conta a "Apresentação" como um capítulo; a geração de áudio, não.
+   * Em vez de assumir um deslocamento fixo, conta-se a posição do capítulo
+   * atual ENTRE OS CAPÍTULOS DE VERDADE — assim o encaixe continua certo com
+   * ou sem apresentação, e em curso que um dia venha sem ela.
+   */
+  const numeroDoCapitulo = useMemo(() => {
+    let n = 0;
+    for (let i = 0; i <= currentChapterIndex && i < chapters.length; i++) {
+      if (chapters[i]?.id !== "introducao") n++;
+    }
+    return chapters[currentChapterIndex]?.id === "introducao" ? null : n;
+  }, [chapters, currentChapterIndex]);
+
+  const currentChapterMedia = useMemo(() => {
+    const doDisco = chapterMediaMap[String(currentChapterIndex)] || null;
+    const semLente = numeroDoCapitulo ? audioSemLentePorNumero[String(numeroDoCapitulo)] : null;
+    if (!semLente) return doDisco;
+    return { ...(doDisco ?? {}), audio: semLente.audio } as ChapterMediaData;
+  }, [chapterMediaMap, currentChapterIndex, audioSemLentePorNumero, numeroDoCapitulo]);
   /**
    * A LENTE VALE COM OU SEM ÁUDIO.
    *
@@ -1194,7 +1219,7 @@ export default function CourseReaderPage() {
    * precisa ter: no modo de leitura ninguém consulta esses campos. O que ela
    * carrega de verdade são as FRASES e as MARCAS de seção.
    */
-  const lenteDoCapitulo = audiobookPorIndice[String(currentChapterIndex)] || null;
+  const lenteDoCapitulo = numeroDoCapitulo ? audiobookPorNumero[String(numeroDoCapitulo)] ?? null : null;
 
   useEffect(() => {
     if (lenteDoCapitulo) setLenteAberta(true);
@@ -1576,13 +1601,22 @@ export default function CourseReaderPage() {
             capitulos?: { numero: number; url: string; segundos?: number; linhaDoTempo?: LinhaDoTempo | null }[];
           } | null) => {
             if (!data?.capitulos?.length) return;
-            const porIndice: Record<string, ChapterMediaData> = {};
+            const porNumeroSemLente: Record<string, ChapterMediaData> = {};
             const comLente: Record<string, { url: string; linhaDoTempo: LinhaDoTempo }> = {};
             for (const c of data.capitulos) {
-              // A rota fala em NÚMERO de capítulo (1-based); o mapa é por
-              // ÍNDICE (0-based). Errar isto desloca o áudio em um capítulo,
-              // e o aluno ouve a aula errada sem nenhum erro na tela.
-              const chave = String(c.numero - 1);
+              // ── A CHAVE É O NÚMERO, NÃO O ÍNDICE (03/09/2026) ───────────
+              //
+              // A primeira versão usava `numero - 1` como índice do leitor. Mas
+              // o leitor cria um capítulo "Apresentação" no índice 0 — a
+              // abertura do curso, que a geração de áudio pula de propósito.
+              // Resultado: o áudio do capítulo 1 aparecia na Apresentação, o do
+              // 2 no capítulo 1, e assim por diante. O aluno ouvia a aula
+              // errada sem nenhum erro na tela.
+              //
+              // Guardar por NÚMERO e resolver o índice na hora de desenhar
+              // elimina o chute: quem sabe onde cada capítulo caiu é a lista de
+              // capítulos do próprio leitor.
+              const chave = String(c.numero);
               const temLente = !!c.linhaDoTempo?.falas?.length;
 
               // ── UM TOCADOR SÓ (02/09/2026) ────────────────────────────
@@ -1597,10 +1631,10 @@ export default function CourseReaderPage() {
               // simples continua sendo a resposta certa para capítulo com
               // áudio mas sem sincronia.
               if (temLente) comLente[chave] = { url: c.url, linhaDoTempo: c.linhaDoTempo! };
-              else porIndice[chave] = { audio: { url: c.url, source: "cloudinary" } } as ChapterMediaData;
+              else porNumeroSemLente[chave] = { audio: { url: c.url, source: "cloudinary" } } as ChapterMediaData;
             }
-            setChapterMediaMap(anterior => fundirMedia(anterior, porIndice));
-            if (Object.keys(comLente).length) setAudiobookPorIndice(comLente);
+            if (Object.keys(porNumeroSemLente).length) setAudioSemLentePorNumero(porNumeroSemLente);
+            if (Object.keys(comLente).length) setAudiobookPorNumero(comLente);
           })
           .catch(() => { /* sem audiobook a página continua inteira */ });
 
