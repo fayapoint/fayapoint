@@ -245,26 +245,69 @@ export default function LenteDeLeitura({
   // `scrollTo({behavior:"smooth"})` do navegador já tem curva de desaceleração
   // e respeita o gesto do usuário. Escrever uma mola à mão aqui daria menos
   // suavidade e mais código — e brigaria com o scroll nativo do dedo.
+  // ── A ROLAGEM CONTÍNUA ─────────────────────────────────────────────────
+  //
+  // A primeira versão rolava só na TROCA de fala. Com falas de dez segundos,
+  // isso é um salto a cada dez segundos: a página fica parada, pula, fica
+  // parada. O Ricardo descreveu exatamente isso — "pula mais do que precisava,
+  // fica pouco tempo e pula de novo".
+  //
+  // Agora o destino é interpolado pelo PROGRESSO dentro da fala: no começo dela
+  // o alvo é ela mesma, no fim já é a próxima. O texto desliza devagar o tempo
+  // todo, e a frase em foco vive na âncora em vez de saltar até ela.
+  //
+  // A perseguição é amortecida (aproxima uma fração da distância por quadro),
+  // que é o que dá a desaceleração natural sem biblioteca de animação.
   useEffect(() => {
-    // No modo de leitura a página NÃO se move sozinha: quem rola é o leitor, e
-    // arrastar por baixo do dedo dele seria briga, não ajuda.
-    if (!comAudio) return;
-    if (!seguindo || atual < 0) return;
+    if (!comAudio || !seguindo || semAnimacao) return;
+    let vivo = true;
+    let quadro = 0;
+
+    const passo = () => {
+      const coluna = colunaRef.current;
+      const a = audioRef.current;
+      if (!coluna || !a || atual < 0) { if (vivo) quadro = requestAnimationFrame(passo); return; }
+
+      const alvo = falaRefs.current[atual];
+      if (!alvo) { if (vivo) quadro = requestAnimationFrame(passo); return; }
+
+      const ondePousa = (el: HTMLElement) =>
+        el.offsetTop - coluna.clientHeight * ANCORA + el.clientHeight / 2;
+
+      const f = falas[atual];
+      const dur = Math.max(0.001, (f.ate ?? 0) - (f.de ?? 0));
+      const dentro = Math.min(1, Math.max(0, (a.currentTime - (f.de ?? 0)) / dur));
+
+      const seguinte = falaRefs.current[atual + 1];
+      const destino = seguinte
+        ? ondePousa(alvo) + (ondePousa(seguinte) - ondePousa(alvo)) * dentro
+        : ondePousa(alvo);
+
+      const falta = Math.max(0, destino) - coluna.scrollTop;
+      // 8% da distância por quadro: em ~60 quadros percorre quase tudo, e a
+      // velocidade cai perto do alvo. Abaixo de meio pixel não vale mexer —
+      // evita tremor e evita disparar o detector de "o usuário rolou".
+      if (Math.abs(falta) > 0.5) {
+        ignorarAte.current = Date.now() + 400;
+        coluna.scrollTop += falta * 0.08;
+      }
+      if (vivo) quadro = requestAnimationFrame(passo);
+    };
+
+    quadro = requestAnimationFrame(passo);
+    return () => { vivo = false; cancelAnimationFrame(quadro); };
+  }, [comAudio, seguindo, semAnimacao, atual, falas]);
+
+  // Quem pediu menos movimento recebe o salto seco, sem perseguição.
+  useEffect(() => {
+    if (!comAudio || !seguindo || !semAnimacao || atual < 0) return;
     const alvo = falaRefs.current[atual];
     const coluna = colunaRef.current;
     if (!alvo || !coluna) return;
-
-    const destino =
-      alvo.offsetTop - coluna.clientHeight * ANCORA + alvo.clientHeight / 2;
-    // A rolagem que a própria lente dispara não pode acionar o "soltou" —
-    // por isso a janela de silêncio cobre também a animação suave.
-    ignorarAte.current = Date.now() + 900;
-    coluna.scrollTo({
-      top: Math.max(0, destino),
-      behavior: semAnimacao ? "auto" : "smooth",
-    });
+    ignorarAte.current = Date.now() + 400;
+    coluna.scrollTop = Math.max(0, alvo.offsetTop - coluna.clientHeight * ANCORA + alvo.clientHeight / 2);
     setSaiuDoLugar(false);
-  }, [atual, seguindo, semAnimacao]);
+  }, [atual, seguindo, semAnimacao, comAudio]);
 
   // ── QUANDO O LAYOUT SE MEXE SOZINHO, NÃO FOI O USUÁRIO ──────────────────
   //
@@ -449,7 +492,7 @@ export default function LenteDeLeitura({
       <div
         ref={colunaRef}
         onScroll={aoRolar}
-        className="relative flex-1 overflow-y-auto px-6 sm:px-10 scroll-smooth"
+        className="relative flex-1 overflow-y-auto px-6 sm:px-10"
       >
         {/* As bordas desvanecem para o texto não “bater” no cabeçalho e na
             barra — é o que faz a coluna parecer uma janela, e não uma caixa. */}
@@ -510,15 +553,23 @@ export default function LenteDeLeitura({
                     <span
                       key={`${w.de}-${k}`}
                       className={cn(
-                        "transition-colors duration-200",
+                        "transition-[color,background-color] duration-150 rounded px-0.5 -mx-0.5",
+                        // A palavra que esta TOCANDO ganha fundo, nao so cor:
+                        // num paragrafo de trinta palavras, mudar o tom de uma
+                        // delas nao se enxerga de relance.
                         agora >= w.de && agora <= w.ate
-                          ? "text-violet-200"
+                          ? "bg-violet-400/25 text-white"
                           : agora > w.ate
-                            ? "text-[rgba(var(--reader-tint),0.98)]"
-                            : "text-[rgba(var(--reader-tint),0.62)]",
+                            // Ja lida: cheia. O contraste entre o que passou e
+                            // o que vem e o que da a sensacao de leitura.
+                            ? "text-[rgba(var(--reader-tint),0.95)]"
+                            : "text-[rgba(var(--reader-tint),0.45)]",
                       )}
                     >
-                      {w.p}{" "}
+                      {/* O espaco vai ANTES e so quando cabe: o Whisper devolve
+                          "terca" e "-feira" como fichas separadas, e um espaco
+                          fixo depois de cada uma escrevia "terca -feira". */}
+                      {k > 0 && !/^[-–—,.;:!?)\]}%]/.test(w.p) ? " " : ""}{w.p}
                     </span>
                   ))
                 ) : (
