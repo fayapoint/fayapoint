@@ -58,6 +58,12 @@ import {
 import { useTabHiddenAtMount } from "@/hooks/useTabHiddenAtMount";
 import { usePostHog } from "posthog-js/react";
 import { mediaLocalDoCurso } from "@/lib/curso-media-local";
+import {
+  planoDeCenas,
+  cenasDaSecao,
+  titulosDeSecao,
+  type PlanoDeCenas,
+} from "@/lib/cena-por-secao";
 import LenteDeLeitura, { type LinhaDoTempo } from "@/components/portal/LenteDeLeitura";
 import { falasDoCapitulo } from "@/lib/lente-falas";
 
@@ -123,6 +129,14 @@ type MediaAsset = {
   caption?: string;
   /** O mesmo quadro animado, quando a cena tem versão em movimento. */
   loop?: string;
+  /**
+   * Para que serve esta cena dentro do capítulo — `sistema`, `fluxo`,
+   * `cenario`, `validacao`, `dica`… É o que permite desenhá-la ABAIXO DA SEÇÃO
+   * que ela ilustra em vez de empilhar tudo antes do texto. Ver
+   * `cena-por-secao.ts`. Vem do disco; o banco ainda não manda papel, e cena
+   * sem papel continua aparecendo, no fim do capítulo.
+   */
+  papel?: string;
 };
 
 type ChapterMediaData = {
@@ -412,12 +426,47 @@ function CenaDoCapitulo({ asset, indice }: { asset: MediaAsset; indice: number }
   );
 }
 
-function ChapterMediaHeader({ media, chapterTitle }: { media: ChapterMediaData; chapterTitle: string }) {
+/**
+ * As cenas de UMA seção, logo abaixo do título dela.
+ *
+ * Larga o texto de propósito (`-mx-*`): a coluna de leitura tem 68 caracteres e
+ * uma ilustração dentro dela fica do tamanho de um selo. Sangrando um pouco
+ * para fora, a imagem ganha presença sem empurrar a linha de texto — e a
+ * legenda continua alinhada com o parágrafo, porque é ela que amarra a imagem
+ * ao que se está lendo.
+ */
+function CenasDaSecao({ cenas }: { cenas: MediaAsset[] }) {
+  if (!cenas.length) return null;
+  return (
+    <div className={cn("not-prose my-7 grid gap-4", cenas.length > 1 ? "sm:grid-cols-2" : "grid-cols-1")}>
+      {cenas.map((cena, i) => (
+        <CenaDoCapitulo key={cena.url ?? i} asset={cena} indice={i} />
+      ))}
+    </div>
+  );
+}
+
+function ChapterMediaHeader({
+  media,
+  chapterTitle,
+  cenasNoTopo,
+}: {
+  media: ChapterMediaData;
+  chapterTitle: string;
+  /**
+   * O que sobrou depois que cada cena foi para a sua seção. Em capítulo no
+   * padrão isso é vazio, e o topo fica só com abertura, vídeo e áudio — que é
+   * o ponto: o mural de seis imagens antes da primeira linha some.
+   */
+  cenasNoTopo?: MediaAsset[];
+}) {
   const T = useT();
   const videoAsset = media.video;
   const heroAsset = media.heroImage;
   const audioAsset = media.audio;
-  const galleryAssets = media.gallery?.filter(g => g.url) || [];
+  // `cenasNoTopo` vem do plano de seções: só o que NÃO achou lugar no texto.
+  // Sem plano (curso sem papel na arte), o comportamento antigo vale inteiro.
+  const galleryAssets = (cenasNoTopo ?? media.gallery ?? []).filter(g => g.url);
 
   const hasVideo = videoAsset?.url;
   const hasHero = heroAsset?.url;
@@ -908,6 +957,43 @@ function splitIntoChapters(markdown: string): Chapter[] {
   return chapters;
 }
 
+/**
+ * ── A PRIMEIRA TELA É A ABERTURA DO CURSO, E NÃO O CAPÍTULO 1 ─────────────
+ *
+ * `courseContent` é um Markdown só, cortado nos `#`. A primeira fatia é a
+ * abertura — título do curso, promessa, para quem é. A geração de áudio e o
+ * manifesto de arte sabem disso e numeram a partir da SEGUNDA fatia.
+ *
+ * O leitor sabia disso pela metade. Ele marcava `id: "introducao"` só quando a
+ * fatia de abertura vinha SEM `#` nenhum — e nenhum curso do acervo é assim: a
+ * abertura tem H1 (`# IA para Criar Vídeos: do texto ao vídeo pronto`), casa com
+ * o extrator de título como qualquer capítulo, e entrava na contagem.
+ *
+ * O estrago, medido em 04/09/2026 no primeiro capítulo de "ia-para-criar-videos":
+ *
+ *     texto na tela:  "Capítulo 1: Gerar não é editar"
+ *     selo na tela:   "CAPÍTULO 2 DE 31"
+ *     áudio tocando:  cap02.m4a          ← a narração do capítulo SEGUINTE
+ *     arte no topo:   cap02-*.webp       ← as cenas do capítulo SEGUINTE
+ *
+ * Uma aula inteira lendo um texto e ouvindo outro, sem nenhum erro na tela.
+ *
+ * O teste é o título: capítulo de verdade se anuncia ("Capítulo 3:", "Chapter
+ * 3:", "Aula 3:"); abertura não. Vale para pt-BR e /en, e um curso que um dia
+ * venha sem abertura continua certo — a primeira fatia dele DIZ que é capítulo.
+ */
+const TITULO_DE_CAPITULO = /^\s*(?:cap[íi]tulo|chapter|aula|lesson|m[óo]dulo|module|parte|part)\s*\d+/i;
+
+function ehAbertura(chapters: Chapter[], indice: number): boolean {
+  if (indice !== 0) return false;
+  const c = chapters[0];
+  if (!c) return false;
+  if (c.id === "introducao") return true;
+  // Uma fatia só: é o curso inteiro numa tela, não uma abertura.
+  if (chapters.length < 2) return false;
+  return !TITULO_DE_CAPITULO.test(c.title);
+}
+
 /* Leitura 2.0 (item 2.3): seções de ~5-7 min. Capítulo curto fica inteiro;
    capítulo longo é dividido nos limites de "##" em blocos de leitura.
    (Substitui o agrupamento antigo em "Partes" de 12+ min.) */
@@ -1197,17 +1283,120 @@ export default function CourseReaderPage() {
   const numeroDoCapitulo = useMemo(() => {
     let n = 0;
     for (let i = 0; i <= currentChapterIndex && i < chapters.length; i++) {
-      if (chapters[i]?.id !== "introducao") n++;
+      if (!ehAbertura(chapters, i)) n++;
     }
-    return chapters[currentChapterIndex]?.id === "introducao" ? null : n;
+    return ehAbertura(chapters, currentChapterIndex) ? null : n;
   }, [chapters, currentChapterIndex]);
 
-  const currentChapterMedia = useMemo(() => {
-    const doDisco = chapterMediaMap[String(currentChapterIndex)] || null;
+  /** Quantas AULAS o curso tem — a Apresentação não é uma delas. */
+  const totalDeCapitulos = useMemo(
+    () => chapters.reduce((n, _, i) => n + (ehAbertura(chapters, i) ? 0 : 1), 0),
+    [chapters],
+  );
+
+  /**
+   * ── A ARTE DE CADA CAPÍTULO ERA A DO CAPÍTULO SEGUINTE ─────────────────
+   *
+   * As duas fontes de mídia — o manifesto do disco (`curso-media-local.ts`) e a
+   * rota `/api/courses/<slug>/media` — guardam o capítulo N na chave `N-1`. Elas
+   * contam CAPÍTULOS. O leitor conta TELAS, e a tela 0 é a Apresentação: a
+   * abertura do curso, que não é aula.
+   *
+   * Buscar por `currentChapterIndex` alinhava as duas contagens erradas. O
+   * resultado, medido em 04/09/2026 no capítulo 1 de "ia-para-criar-videos":
+   * as seis cenas do CAPÍTULO 2 desenhadas no topo do capítulo 1 — por cima das
+   * cenas certas, que o próprio Markdown já posiciona no lugar delas.
+   *
+   * É o mesmo defeito que o audiobook teve e que foi corrigido em 03/09 pelo
+   * mesmo caminho: `numeroDoCapitulo` já conta só as aulas de verdade e devolve
+   * `null` na Apresentação. Usar ele aqui alinha as três contagens.
+   *
+   * ⚠️ A Apresentação fica com a ABERTURA do capítulo 1 e mais nada. Ela não tem
+   * arte própria; herdar a imagem de abertura dá uma capa ao texto de abertura,
+   * enquanto herdar a galeria inteira era o defeito.
+   */
+  const currentChapterMedia = useMemo<ChapterMediaData | null>(() => {
+    const doDisco: ChapterMediaData | null =
+      numeroDoCapitulo != null
+        ? chapterMediaMap[String(numeroDoCapitulo - 1)] ?? null
+        : chapterMediaMap["0"]?.heroImage
+          ? { heroImage: chapterMediaMap["0"].heroImage }
+          : null;
     const semLente = numeroDoCapitulo ? audioSemLentePorNumero[String(numeroDoCapitulo)] : null;
     if (!semLente) return doDisco;
     return { ...(doDisco ?? {}), audio: semLente.audio } as ChapterMediaData;
-  }, [chapterMediaMap, currentChapterIndex, audioSemLentePorNumero, numeroDoCapitulo]);
+  }, [chapterMediaMap, audioSemLentePorNumero, numeroDoCapitulo]);
+
+  /**
+   * O capítulo já coloca a arte no texto por conta própria?
+   *
+   * 296 dos 746 capítulos do acervo trazem marcadores `media:img` no Markdown,
+   * escritos pelo gerador junto com o conteúdo — e o leitor já os desenha no
+   * parágrafo certo. Nesses, repetir as mesmas cenas numa grade no topo é
+   * duplicata pura: a mesma imagem duas vezes, uma sem contexto nenhum.
+   *
+   * Quando há marcador, o topo fica só com abertura, vídeo e áudio.
+   */
+  const capituloPosicionaSozinho = useMemo(
+    () => chapterSegments.some((s) => s.kind === "media"),
+    [chapterSegments],
+  );
+
+  /**
+   * ── A ABERTURA NÃO PODE SER UMA CENA QUE JÁ ESTÁ NO TEXTO ──────────────
+   *
+   * Só o `chatgpt-zero` tem arte de abertura própria (`cap-NN.webp`). Nos
+   * outros nove cursos ilustrados, o manifesto empresta uma das cenas do
+   * capítulo para abrir — e quando o Markdown daquele capítulo já posiciona
+   * aquela MESMA cena no parágrafo dela, a imagem aparece duas vezes: uma no
+   * topo, sem contexto, e outra no lugar certo.
+   *
+   * Se a URL do herói aparece no conteúdo, o herói sai. O capítulo abre pelo
+   * título e a arte fica onde ela explica alguma coisa.
+   */
+  const midiaDoCapitulo = useMemo<ChapterMediaData | null>(() => {
+    const m = currentChapterMedia;
+    const url = m?.heroImage?.url;
+    if (!m || !url || !capituloPosicionaSozinho) return m;
+    const arquivo = url.split("/").pop();
+    if (!arquivo || !currentChapter?.content?.includes(arquivo)) return m;
+    const { heroImage: _fora, ...resto } = m;
+    return Object.keys(resto).length ? resto : null;
+  }, [currentChapterMedia, capituloPosicionaSozinho, currentChapter]);
+
+
+  /**
+   * ── CADA CENA VOLTA PARA A SUA SEÇÃO ───────────────────────────────────
+   *
+   * A arte foi gerada com papel definido (`cursos/padrao.md`): `sistema`
+   * ilustra Conceitos-Chave, `fluxo` é o Fluxo de Execução, `validacao`
+   * acompanha Erros Comuns. O leitor descartava isso e desenhava as seis numa
+   * grade ANTES da primeira linha — capítulo abrindo com um mural e depois
+   * sete mil caracteres sem imagem nenhuma.
+   *
+   * O plano casa papel com os `##` que o capítulo REALMENTE tem. Capítulo fora
+   * do padrão não perde arte: o que não acha seção vira `sobras` e continua
+   * aparecendo. Nenhuma linha do conteúdo muda — o texto está amarrado ao áudio
+   * fala a fala, e mexer nele dessincronizaria a lente.
+   */
+  const planoCenas = useMemo<PlanoDeCenas<MediaAsset> | null>(() => {
+    // Capítulo que já traz marcador no Markdown não precisa de plano: a arte
+    // dele está posicionada no conteúdo, e colocar de novo seria duplicar.
+    if (capituloPosicionaSozinho) return { porSecao: new Map(), sobras: [] };
+    const cenas = (currentChapterMedia?.gallery ?? []).filter((c) => c?.url);
+    if (!cenas.length) return null;
+    return planoDeCenas(cenas, titulosDeSecao(currentChapter?.content ?? ""));
+  }, [currentChapterMedia, currentChapter, capituloPosicionaSozinho]);
+
+  /**
+   * ⚠️ REF, E NÃO DEPENDÊNCIA. O `markdownComponents` abaixo é um `useMemo`
+   * com lista de dependências VAZIA de propósito — são ~30 componentes e
+   * refazê-los a cada troca de capítulo remontaria a árvore inteira do texto,
+   * perdendo a posição de rolagem. A ref entrega o plano sempre atual sem
+   * tocar nessa decisão.
+   */
+  const planoCenasRef = useRef<PlanoDeCenas | null>(null);
+  planoCenasRef.current = planoCenas;
   /**
    * A LENTE VALE COM OU SEM ÁUDIO.
    *
@@ -1838,23 +2027,37 @@ export default function CourseReaderPage() {
           ];
 
           const section = H2_SECTIONS.find((s) => s.test(text));
+          // A cena que ilustra ESTA seção — desenhada logo abaixo do título,
+          // onde ela foi pedida para estar. Ver `cena-por-secao.ts`.
+          const cenas = cenasDaSecao(planoCenasRef.current, text);
           if (section) {
             const { Icon } = section;
             return (
-              <h2
-                id={id}
-                className={cn(
-                  "scroll-mt-24 flex items-center gap-3 pb-3 mb-2 border-b-2",
-                  section.border,
-                  cls
-                )}
-                {...props}
-              >
-                <span className={cn("flex items-center justify-center w-9 h-9 rounded-xl border shrink-0", section.chip)}>
-                  <Icon size={18} className={section.icon} />
-                </span>
-                <span>{children}</span>
-              </h2>
+              <>
+                <h2
+                  id={id}
+                  className={cn(
+                    "scroll-mt-24 flex items-center gap-3 pb-3 mb-2 border-b-2",
+                    section.border,
+                    cls
+                  )}
+                  {...props}
+                >
+                  <span className={cn("flex items-center justify-center w-9 h-9 rounded-xl border shrink-0", section.chip)}>
+                    <Icon size={18} className={section.icon} />
+                  </span>
+                  <span>{children}</span>
+                </h2>
+                <CenasDaSecao cenas={cenas} />
+              </>
+            );
+          }
+          if (cenas.length) {
+            return (
+              <>
+                <h2 id={id} className={cn("scroll-mt-24", cls)} {...props}>{children}</h2>
+                <CenasDaSecao cenas={cenas} />
+              </>
             );
           }
         }
@@ -2744,15 +2947,26 @@ export default function CourseReaderPage() {
                   className="relative mx-auto px-4 sm:px-10 lg:px-14 py-8 sm:py-14"
                   style={{ maxWidth: readerContentMaxWidth }}
                 >
-                  {/* Decorative chapter number */}
+                  {/**
+                   * O SELO CONTA CAPÍTULOS, NÃO TELAS.
+                   *
+                   * Era `currentChapterIndex + 1` de `chapters.length`, e a
+                   * Apresentação entrava na conta dos dois lados: o capítulo 1
+                   * aparecia como "Capítulo 2 de 31" num curso de 30 aulas. O
+                   * mesmo deslocamento que fazia o áudio e a arte virem do
+                   * capítulo seguinte — agora as três leituras usam a mesma
+                   * contagem (`numeroDoCapitulo`).
+                   */}
                   <div className="flex items-baseline gap-3 sm:gap-5 mb-6">
                     <span className="text-4xl sm:text-6xl md:text-7xl font-black bg-gradient-to-b from-violet-400/20 to-violet-400/[0.03] bg-clip-text text-transparent select-none leading-none tabular-nums shrink-0">
-                      {String(currentChapterIndex + 1).padStart(2, "0")}
+                      {numeroDoCapitulo == null ? "—" : String(numeroDoCapitulo).padStart(2, "0")}
                     </span>
                     <div className="flex flex-col gap-1.5 min-w-0">
                       <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-violet-400/40">
-                        
-                        {T("Capitulo")} {currentChapterIndex + 1}  {T("de")} {chapters.length}
+
+                        {numeroDoCapitulo == null
+                          ? T("Apresentacao")
+                          : `${T("Capitulo")} ${numeroDoCapitulo} ${T("de")} ${totalDeCapitulos}`}
                       </span>
                       <div className="flex items-center gap-3">
                         <span className="text-[11px] text-[var(--reader-fg)]/18 flex items-center gap-1">
@@ -2786,10 +3000,11 @@ export default function CourseReaderPage() {
                   style={{ maxWidth: readerContentMaxWidth }}
                 >
                   {/* Content Forge media (video, hero image, audio, gallery) */}
-                  {currentChapterMedia && (
+                  {midiaDoCapitulo && (
                     <ChapterMediaHeader
-                      media={currentChapterMedia}
+                      media={midiaDoCapitulo}
                       chapterTitle={currentChapter.title}
+                      cenasNoTopo={planoCenas ? planoCenas.sobras : undefined}
                     />
                   )}
 

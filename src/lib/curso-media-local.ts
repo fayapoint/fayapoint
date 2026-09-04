@@ -29,6 +29,23 @@ export type CenaLocal = {
   /** O mesmo quadro animado, quando existe — toca no hover, custa nada antes. */
   loop?: string;
   caption?: string;
+  /**
+   * ⚠️ O PAPEL É O DADO MAIS IMPORTANTE DESTA ESTRUTURA, e ele era descartado.
+   *
+   * A arte não foi gerada como "seis imagens bonitas do capítulo": cada uma foi
+   * pedida para um LUGAR do texto, e `cursos/padrao.md` registra o mapa desde o
+   * começo — `sistema` ilustra Conceitos-Chave, `fluxo` é o vídeo do Fluxo de
+   * Execução, `validacao` acompanha Erros Comuns, `dica` é a Dica Pro.
+   *
+   * O leitor jogava tudo numa grade de duas colunas no TOPO do capítulo, antes
+   * da primeira linha de texto. Seis ilustrações fora de contexto, e o capítulo
+   * inteiro depois delas sem imagem nenhuma — que é como o Ricardo descreveu ao
+   * ver: "as imagens só aparecem no começo dos capítulos".
+   *
+   * Carregar o papel até o leitor é o que permite devolver cada cena ao seu
+   * parágrafo. Ver `cena-por-secao.ts`.
+   */
+  papel?: string;
 };
 
 export type MediaLocal = {
@@ -92,19 +109,33 @@ export function mediaLocalDoCurso(slug: string): Record<string, MediaLocal> {
         url: `${base}/inline/cap${nn}-${papel}.webp`,
         ...(p.loop ? { loop: `${base}/inline/cap${nn}-${papel}.webm` } : {}),
         caption: LEGENDA[papel] || undefined,
+        papel,
       });
     }
 
-    // A abertura é a primeira cena quando não há um `cap-NN.webp` dedicado —
-    // só um curso tem esse arquivo, e sem esta linha os outros cinco abririam
-    // o capítulo sem imagem nenhuma.
+    // ── QUEM ABRE O CAPÍTULO, E POR QUE NÃO É MAIS O `cenario` ─────────────
+    //
+    // Sem um `cap-NN.webp` dedicado (só o `chatgpt-zero` tem), alguma cena
+    // precisa abrir o capítulo. Era a PRIMEIRA da ordem narrativa — `cenario` —
+    // e ela saía da galeria para não aparecer duas vezes. O preço disso ficou
+    // invisível enquanto tudo era uma grade no topo, mas agora cada cena tem um
+    // lugar no texto: gastar o `cenario` na abertura deixaria "Cenários
+    // Aplicados", a seção mais concreta do capítulo, sem imagem nenhuma.
+    //
+    // `intencao` abre no lugar dele. É a cena de menor custo: o padrão manda
+    // DUAS imagens para Conceitos-Chave (`sistema` e `intencao`), então gastar
+    // uma delas na abertura ainda deixa aquela seção ilustrada, e todas as
+    // outras — Fluxo, Cenários, Erros Comuns, Dica Pro — ficam com a sua.
     const aberturaDedicada = cap.abertura ? `${base}/${cap.abertura}` : null;
-    const heroUrl = aberturaDedicada || cenas[0]?.url;
+    const daAbertura = aberturaDedicada
+      ? null
+      : cenas.find((c) => c.papel === "intencao") ?? cenas[0];
+    const heroUrl = aberturaDedicada || daAbertura?.url;
     if (!heroUrl) continue;
 
     saida[String(n - 1)] = {
       heroImage: { url: heroUrl, source: "local" },
-      gallery: aberturaDedicada ? cenas : cenas.slice(1),
+      gallery: daAbertura ? cenas.filter((c) => c !== daAbertura) : cenas,
     };
   }
 
