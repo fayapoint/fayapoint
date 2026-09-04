@@ -2559,8 +2559,10 @@ export default function CourseReaderPage() {
 
           <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[rgba(var(--reader-tint),0.03)] border border-[rgba(var(--reader-tint),0.05)]">
             <span className="text-[10px] font-medium text-[rgba(var(--reader-tint),0.25)]">{T("Cap.")}</span>
+            {/* O terceiro contador. Mesma contagem dos outros dois: aula, e não
+                tela — a Apresentação não é o capítulo 1. */}
             <span className="text-[10px] font-bold text-violet-400 tabular-nums">
-              {currentChapterIndex + 1}/{chapters.length}
+              {numeroDoCapitulo == null ? "—" : numeroDoCapitulo}/{totalDeCapitulos}
             </span>
           </div>
 
@@ -2898,14 +2900,27 @@ export default function CourseReaderPage() {
                   className="relative mx-auto px-4 sm:px-10 lg:px-14 py-8 sm:py-14"
                   style={{ maxWidth: readerContentMaxWidth }}
                 >
+                  {/**
+                   * ⚠️ O SEGUNDO SELO — e ele existe (04/09/2026).
+                   *
+                   * São DOIS cabeçalhos de capítulo neste arquivo, um por modo
+                   * de leitura, e o conserto da contagem pegou só um. O outro
+                   * continuou dizendo "Capítulo 4 de 31" num curso de 30 aulas,
+                   * e foi ele que apareceu em produção — o `de 31` do build no
+                   * ar denunciou a metade que faltava.
+                   *
+                   * Se mexer em um, procure o irmão: `grep "T(\"Capitulo\")"`.
+                   */}
                   <div className="flex items-baseline gap-3 sm:gap-5 mb-6">
                     <span className="text-4xl sm:text-6xl md:text-7xl font-black bg-gradient-to-b from-[rgba(var(--reader-tint),0.1)] to-[rgba(var(--reader-tint),0.02)] bg-clip-text text-transparent select-none leading-none tabular-nums shrink-0">
-                      {String(currentChapterIndex + 1).padStart(2, "0")}
+                      {numeroDoCapitulo == null ? "—" : String(numeroDoCapitulo).padStart(2, "0")}
                     </span>
                     <div className="flex flex-col gap-1.5 min-w-0">
                       <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-amber-400/50">
-                        
-                        {T("Capitulo")} {currentChapterIndex + 1}  {T("de")} {chapters.length}
+
+                        {numeroDoCapitulo == null
+                          ? T("Apresentacao")
+                          : `${T("Capitulo")} ${numeroDoCapitulo} ${T("de")} ${totalDeCapitulos}`}
                       </span>
                       <span className="inline-flex items-center gap-1.5 text-[11px] text-amber-400/60">
                         <Lock size={10} className="shrink-0" />
