@@ -56,6 +56,7 @@ import {
   Volume2,
   VolumeX,
   X,
+  ZoomIn,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -179,6 +180,8 @@ export default function LenteSobreposta({
    * si tem a guarda de chave, e é ele que a gravação usa.
    */
   const falasRef = useRef<LinhaDoTempo["falas"]>(linhaDoTempo.falas);
+  /** O que a âncora de rolagem precisa saber, sem virar dependência de efeito. */
+  const ancoraRef = useRef({ tocando: false, atual: -1 });
   const capituloRef = useRef(capitulo);
   const aoAvancarRef = useRef(aoAvancar);
   const continuarAoCarregar = useRef(false);
@@ -503,6 +506,41 @@ export default function LenteSobreposta({
   const fonteBase = useRef<number | null>(null);
   useEffect(() => { fonteBase.current = null; }, [chave]);
 
+  /**
+   * ── O AUMENTO ACOMPANHA O FOCO ───────────────────────────────────────────
+   *
+   * Com narração e foco ligado, a coluna cresce quando a voz começa e volta ao
+   * corpo normal quando você pausa. É o gesto de uma lente: ela se aproxima do
+   * que está sendo lido e se afasta quando você para para pensar.
+   *
+   * ⚠️ Com o foco DESLIGADO, ou sem narração nenhuma, o aumento é constante.
+   * Sem isso, o A− / A+ não faria nada visível nesses dois casos — um botão
+   * que às vezes não responde é pior que um botão a menos.
+   */
+  /**
+   * ⚠️ MEXER NO CONTROLE MOSTRA O RESULTADO NA HORA.
+   *
+   * Sem isto, apertar A+ com a narração pausada não mudava um pixel — o
+   * aumento estava suspenso esperando a voz. Um botão que responde às vezes é
+   * pior que um botão a menos: quem aperta e não vê nada conclui que quebrou.
+   *
+   * A prévia dura o suficiente para julgar o tamanho e se apaga sozinha; ao
+   * dar play, o valor escolhido entra de vez.
+   */
+  const [previa, setPrevia] = useState(false);
+  const ajustarZoom = useCallback((delta: number) => {
+    setZoom((z) => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, +(z + delta).toFixed(2))));
+    setPrevia(true);
+  }, []);
+  useEffect(() => {
+    if (!previa) return;
+    const id = setTimeout(() => setPrevia(false), 2600);
+    return () => clearTimeout(id);
+  }, [previa, zoom]);
+
+  const aumentoSuspenso = comAudio && foco && !tocando && !previa;
+  const zoomAplicado = aumentoSuspenso ? 1 : zoom;
+
   useEffect(() => {
     const raiz = conteudoRef.current;
     if (!raiz) return;
@@ -519,18 +557,69 @@ export default function LenteSobreposta({
     // O observador devolve o aumento sempre que o leitor mexe no corpo, e
     // trata o valor que ele escreveu como a nova base — então mudar o tamanho
     // do texto nas preferências continua funcionando, com o aumento por cima.
+    /**
+     * ── MUDAR O TAMANHO NÃO PODE ARRASTAR O TEXTO EMBAIXO DO OLHO ─────────
+     *
+     * Crescer a coluna empurra tudo o que está abaixo do ponto de crescimento.
+     * Sem âncora, apertar A+ — ou a voz começar — joga a linha que você estava
+     * lendo para fora da tela, e o aumento passa a custar mais do que entrega.
+     *
+     * A âncora é a frase em foco (ou a primeira frase visível): guarda-se onde
+     * ela está na tela ANTES, e devolve-se a rolagem depois. Como há transição
+     * de 220 ms no corpo, a correção roda por alguns quadros em vez de uma vez.
+     *
+     * ⚠️ Não roda com a narração tocando: ali quem manda na rolagem é a
+     * perseguição, e duas mãos no mesmo scroll brigam.
+     */
+    const medirAncora = (): { faixa: Range; topo: number } | null => {
+      const m = faixasRef.current;
+      if (!m) return null;
+      const lista = falasRef.current;
+      const i = Math.max(0, ancoraRef.current.atual);
+      const preferida = m.faixas.get(lista[i]?.i);
+      const escolhida = preferida ?? [...m.faixas.values()].find((f) => f.getBoundingClientRect().top > 0);
+      if (!escolhida) return null;
+      return { faixa: escolhida, topo: escolhida.getBoundingClientRect().top };
+    };
+
+    const devolverRolagem = (ancora: { faixa: Range; topo: number }) => {
+      const quem = quemRola(rolagemRef.current);
+      const corrigir = () => {
+        const desvio = ancora.faixa.getBoundingClientRect().top - ancora.topo;
+        if (Math.abs(desvio) > 0.5) {
+          ignorarAte.current = Date.now() + 300;
+          andar(quem, desvio);
+        }
+      };
+
+      // A primeira passada é SÍNCRONA: `getBoundingClientRect` força o cálculo
+      // do layout na hora, então o grosso da correção acontece antes do próximo
+      // quadro — e continua acontecendo onde `requestAnimationFrame` não roda
+      // (aba escondida, que é metade do uso deste produto).
+      corrigir();
+
+      // As seguintes acompanham a transição de 220 ms do corpo do texto.
+      let quadros = 0;
+      const passo = () => { corrigir(); if (++quadros < 22) requestAnimationFrame(passo); };
+      requestAnimationFrame(passo);
+    };
+
     let nosso = "";
     const aplicar = () => {
       if (raiz.style.fontSize !== nosso) {
         fonteBase.current =
           parseFloat(raiz.style.fontSize) || parseFloat(getComputedStyle(raiz).fontSize) || 16;
       }
-      const alvo = `${((fonteBase.current ?? 16) * zoom).toFixed(2)}px`;
-      if (raiz.style.fontSize !== alvo) { nosso = alvo; raiz.style.fontSize = alvo; }
-      else nosso = alvo;
+      const alvo = `${((fonteBase.current ?? 16) * zoomAplicado).toFixed(2)}px`;
+      if (raiz.style.fontSize !== alvo) {
+        const ancora = ancoraRef.current.tocando ? null : medirAncora();
+        nosso = alvo;
+        raiz.style.fontSize = alvo;
+        if (ancora) devolverRolagem(ancora);
+      } else nosso = alvo;
     };
 
-    raiz.style.setProperty("--lente-zoom", String(zoom));
+    raiz.style.setProperty("--lente-zoom", String(zoomAplicado));
     raiz.classList.add("lente-ativa");
     aplicar();
 
@@ -543,7 +632,7 @@ export default function LenteSobreposta({
       raiz.style.removeProperty("--lente-zoom");
       raiz.style.fontSize = inlineOriginal;
     };
-  }, [conteudoRef, zoom, chave]);
+  }, [conteudoRef, rolagemRef, zoomAplicado, chave]);
 
   // ── O foco só recua o resto ENQUANTO a narração corre ────────────────────
   //
@@ -865,6 +954,8 @@ export default function LenteSobreposta({
     return () => window.removeEventListener("keydown", noTeclado);
   }, [alternar, irPara, agora]);
 
+  ancoraRef.current = { tocando, atual };
+
   const secaoAtual = atual >= 0 ? falas[atual]?.secao : null;
   const progresso = total > 0 ? (agora / total) * 100 : 0;
 
@@ -1144,33 +1235,56 @@ export default function LenteSobreposta({
                 </button>
               )}
 
-              {/* ── O AUMENTO SAI DE TRÁS DO ÍCONE ─────────────────────────
-                  Ele era um `range` dentro do painel de ajustes. Controle que
-                  precisa ser descoberto é controle que não existe — e "aumenta
-                  a área que estou" era metade do pedido original. */}
-              <div className="flex items-center rounded-full bg-[rgba(var(--reader-tint),0.06)]">
-                <button type="button" onClick={() => setZoom((z) => Math.max(ZOOM_MIN, +(z - PASSO_ZOOM).toFixed(2)))}
-                  disabled={zoom <= ZOOM_MIN} title={T("Diminuir o texto")}
-                  className="px-2 py-1.5 rounded-l-full text-[12px] font-semibold text-[rgba(var(--reader-tint),0.6)] enabled:hover:text-[rgba(var(--reader-tint),1)] enabled:hover:bg-[rgba(var(--reader-tint),0.09)] disabled:opacity-30 transition-colors">
-                  A<span className="text-[9px]">−</span>
+              {/* ── O AUMENTO, DITO COM TODAS AS LETRAS ────────────────────
+                  Ele já morou dentro do painel de ajustes, como um `range` sem
+                  nome — controle que precisa ser descoberto é controle que não
+                  existe, e "aumenta a área que estou" era metade do pedido.
+                  Aqui ele tem lupa, número e um rótulo que aparece quando cabe;
+                  e quando o aumento está esperando a narração, o número diz
+                  isso em vez de mentir um valor que não está na tela. */}
+              <div
+                title={aumentoSuspenso
+                  ? T("O texto cresce quando a narração começa — é o foco da lente")
+                  : T("Tamanho do texto na lente")}
+                className={cn(
+                  "flex items-center rounded-full ring-1 transition-colors",
+                  aumentoSuspenso
+                    ? "bg-[rgba(var(--reader-tint),0.04)] ring-[rgba(var(--reader-tint),0.06)]"
+                    : "bg-violet-500/15 ring-violet-400/25",
+                )}
+              >
+                <button type="button" onClick={() => ajustarZoom(-PASSO_ZOOM)}
+                  disabled={zoom <= ZOOM_MIN} aria-label={T("Diminuir o texto")}
+                  className="px-2 py-1.5 rounded-l-full text-[13px] font-bold leading-none text-[rgba(var(--reader-tint),0.7)] enabled:hover:text-[rgba(var(--reader-tint),1)] enabled:hover:bg-[rgba(var(--reader-tint),0.1)] disabled:opacity-25 transition-colors">
+                  −
                 </button>
-                <span className="px-1 text-[10px] tabular-nums text-[rgba(var(--reader-tint),0.42)] select-none">
+
+                <span className={cn(
+                  "flex items-center gap-1 px-1 text-[10px] font-semibold tabular-nums select-none transition-colors",
+                  aumentoSuspenso ? "text-[rgba(var(--reader-tint),0.35)]" : "text-violet-100",
+                )}>
+                  <ZoomIn size={11} className="shrink-0" />
+                  <span className="hidden lg:inline">{T("Texto")}</span>
                   {Math.round(zoom * 100)}%
                 </span>
-                <button type="button" onClick={() => setZoom((z) => Math.min(ZOOM_MAX, +(z + PASSO_ZOOM).toFixed(2)))}
-                  disabled={zoom >= ZOOM_MAX} title={T("Aumentar o texto")}
-                  className="px-2 py-1.5 rounded-r-full text-[14px] font-semibold text-[rgba(var(--reader-tint),0.6)] enabled:hover:text-[rgba(var(--reader-tint),1)] enabled:hover:bg-[rgba(var(--reader-tint),0.09)] disabled:opacity-30 transition-colors">
-                  A<span className="text-[10px]">+</span>
+
+                <button type="button" onClick={() => ajustarZoom(PASSO_ZOOM)}
+                  disabled={zoom >= ZOOM_MAX} aria-label={T("Aumentar o texto")}
+                  className="px-2 py-1.5 rounded-r-full text-[15px] font-bold leading-none text-[rgba(var(--reader-tint),0.7)] enabled:hover:text-[rgba(var(--reader-tint),1)] enabled:hover:bg-[rgba(var(--reader-tint),0.1)] disabled:opacity-25 transition-colors">
+                  +
                 </button>
               </div>
 
               {comAudio && (
                 <button type="button" onClick={() => setFoco((v) => !v)} aria-pressed={foco}
-                  title={foco ? T("O resto da página recua enquanto toca") : T("Página inteira em brilho cheio")}
-                  className={cn("flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors",
-                    foco ? "text-violet-200 bg-violet-500/20"
+                  title={foco
+                    ? T("Foco ligado: o texto cresce e o resto recua enquanto a narração corre")
+                    : T("Foco desligado: página inteira em brilho cheio, tamanho fixo")}
+                  className={cn("flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors",
+                    foco ? "text-violet-100 bg-violet-500/25 ring-1 ring-violet-400/30"
                       : "text-[rgba(var(--reader-tint),0.55)] bg-[rgba(var(--reader-tint),0.05)] hover:bg-[rgba(var(--reader-tint),0.1)]")}>
                   <Focus size={13} />
+                  <span className="hidden lg:inline">{T("Foco")}</span>
                 </button>
               )}
 
