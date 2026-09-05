@@ -66,6 +66,7 @@ import {
 } from "@/lib/cena-por-secao";
 import { type LinhaDoTempo } from "@/components/portal/LenteDeLeitura";
 import LenteSobreposta from "@/components/portal/LenteSobreposta";
+import type { VideoDaAula } from "@/lib/lente-fonte";
 import { porTopo, quemRola } from "@/lib/rolagem";
 import { falasDoCapitulo } from "@/lib/lente-falas";
 
@@ -1189,7 +1190,7 @@ export default function CourseReaderPage() {
   const [posicoesMaximas, setPosicoesMaximas] = useState<Record<string, { fala: number; de: number }>>({});
 
   const [audiobookPorNumero, setAudiobookPorNumero] = useState<
-    Record<string, { url: string; linhaDoTempo: LinhaDoTempo }>
+    Record<string, { url: string | null; video: VideoDaAula | null; linhaDoTempo: LinhaDoTempo }>
   >({});
   /** Capítulo com áudio mas sem sincronia: cai no player simples. */
   const [audioSemLentePorNumero, setAudioSemLentePorNumero] = useState<
@@ -1872,11 +1873,14 @@ export default function CourseReaderPage() {
         })
           .then(res => (res.ok ? res.json() : null))
           .then((data: {
-            capitulos?: { numero: number; url: string; segundos?: number; linhaDoTempo?: LinhaDoTempo | null }[];
+            capitulos?: {
+              numero: number; url: string; segundos?: number;
+              linhaDoTempo?: LinhaDoTempo | null; video?: VideoDaAula | null;
+            }[];
           } | null) => {
             if (!data?.capitulos?.length) return;
             const porNumeroSemLente: Record<string, ChapterMediaData> = {};
-            const comLente: Record<string, { url: string; linhaDoTempo: LinhaDoTempo }> = {};
+            const comLente: Record<string, { url: string | null; video: VideoDaAula | null; linhaDoTempo: LinhaDoTempo }> = {};
             for (const c of data.capitulos) {
               // ── A CHAVE É O NÚMERO, NÃO O ÍNDICE (03/09/2026) ───────────
               //
@@ -1904,7 +1908,7 @@ export default function CourseReaderPage() {
               // Quando há linha do tempo, a lente é o tocador. O player
               // simples continua sendo a resposta certa para capítulo com
               // áudio mas sem sincronia.
-              if (temLente) comLente[chave] = { url: c.url, linhaDoTempo: c.linhaDoTempo! };
+              if (temLente) comLente[chave] = { url: c.url, video: c.video ?? null, linhaDoTempo: c.linhaDoTempo! };
               else porNumeroSemLente[chave] = { audio: { url: c.url, source: "cloudinary" } } as ChapterMediaData;
             }
             if (Object.keys(porNumeroSemLente).length) setAudioSemLentePorNumero(porNumeroSemLente);
@@ -3682,6 +3686,7 @@ export default function CourseReaderPage() {
             conteudoRef={conteudoRef}
             rolagemRef={rolagemRef}
             src={lenteDoCapitulo?.url ?? null}
+            video={lenteDoCapitulo?.video ?? null}
             linhaDoTempo={(lenteDoCapitulo?.linhaDoTempo ?? lenteDeLeitura)!}
             chave={`${slug}:${currentChapterIndex}`}
             aoFechar={() => setLenteAberta(false)}

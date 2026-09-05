@@ -30,6 +30,18 @@
  * 3. **Verde é o que já passou, azul é o que vem.** Sublinhado, não fundo: num
  *    capítulo inteiro colorido, fundo vira mancha e cansa; a linha embaixo lê
  *    como progresso.
+ *
+ * ## OUVIR OU ASSISTIR: é a mesma lente, com outra fonte de tempo (05/09/2026)
+ *
+ * O vídeo da aula é montado a partir da MESMA narração (`aula_em_video.mjs`
+ * chama o mesmo `montar()` do audiobook), então o segundo 137 do vídeo é o
+ * segundo 137 do áudio — a régua é uma só, e é a mesma que a lente já segue.
+ *
+ * Por isso assistir NÃO é um segundo mecanismo: a lente deixou de falar com o
+ * `<audio>` e passou a falar com uma `FonteDeTempo` (`lente-fonte.ts`), que
+ * tanto o `<audio>` quanto o tocador do YouTube cumprem. Realce, perseguição,
+ * verde, gravação de progresso e memória de posição são exatamente o mesmo
+ * código nos dois modos — quem troca é só quem responde "que segundo é agora".
  */
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -53,6 +65,8 @@ import {
   SkipForward,
   SlidersHorizontal,
   Sparkles,
+  Headphones,
+  MonitorPlay,
   Volume2,
   VolumeX,
   X,
@@ -60,6 +74,8 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import TocadorDeVideo from "@/components/portal/TocadorDeVideo";
+import { fonteDeMidia, type FonteDeTempo, type VideoDaAula } from "@/lib/lente-fonte";
 import {
   acharFaixas,
   acharTrecho,
@@ -112,6 +128,7 @@ export default function LenteSobreposta({
   conteudoRef,
   rolagemRef,
   src,
+  video,
   linhaDoTempo,
   chave,
   aoFechar,
@@ -131,6 +148,11 @@ export default function LenteSobreposta({
   /** Quem rola de verdade (o `<main>` do leitor). */
   rolagemRef: React.RefObject<HTMLElement | null>;
   src?: string | null;
+  /**
+   * O MESMO capítulo em vídeo, na MESMA régua de tempo do `.tempos.json`.
+   * Existindo, a barra ganha o par ouvir/assistir; faltando, nada muda.
+   */
+  video?: VideoDaAula | null;
   linhaDoTempo: LinhaDoTempo;
   chave?: string;
   aoFechar?: () => void;
@@ -150,7 +172,17 @@ export default function LenteSobreposta({
   cursoSlug?: string;
   tituloDoCapitulo?: string;
 }) {
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  /**
+   * ── QUEM RESPONDE "QUE SEGUNDO É AGORA" ──────────────────────────────────
+   *
+   * Em estado E em ref, de propósito: os efeitos que ASSINAM eventos precisam
+   * rodar de novo quando a fonte troca (o tocador do YouTube só existe depois
+   * do `onReady`, alguns segundos depois do render); os laços por quadro e os
+   * callbacks estáveis precisam do valor atual sem virar dependência de nada.
+   */
+  const [fonte, setFonte] = useState<FonteDeTempo | null>(null);
+  const fonteRef = useRef<FonteDeTempo | null>(null);
+  fonteRef.current = fonte;
   const faixasRef = useRef<Faixas | null>(null);
   /** Os grifos deste capítulo, já achados no texto. */
   const grifosRef = useRef<Range[]>([]);
@@ -187,6 +219,12 @@ export default function LenteSobreposta({
   const continuarAoCarregar = useRef(false);
   /** Quem entrou em sequência começa do zero — não de onde parou da outra vez. */
   const pularRetomada = useRef(false);
+  /** O fim do capítulo chega pela FONTE; a ref evita assinar de novo a cada render. */
+  const aoTerminarRef = useRef<() => void>(() => {});
+  /** Onde o modo anterior parou, para o novo entrar no mesmo segundo. */
+  const retomarNoSegundo = useRef<number | null>(null);
+  /** Estava tocando quando trocou de modo: a troca não pode virar uma pausa. */
+  const retomarTocando = useRef(false);
 
   // ── Fase 4: selecionar e conversar ───────────────────────────────────────
   const [selecao, setSelecao] = useState<{ texto: string; x: number; y: number } | null>(null);
@@ -199,12 +237,28 @@ export default function LenteSobreposta({
   const [pensando, setPensando] = useState(false);
   const [guardados, setGuardados] = useState<string[]>([]);
   const [guardadosAbertos, setGuardadosAbertos] = useState(false);
+  /** A janela de vídeo encolhe sem desmontar — desmontar recomeça o vídeo. */
+  const [videoEncolhido, setVideoEncolhido] = useState(false);
   const [foco, setFoco] = useState(true);
   const retomarDepois = useRef(false);
 
   const falas = linhaDoTempo.falas;
   const total = linhaDoTempo.segundos || 0;
-  const comAudio = !!src;
+
+  /**
+   * ── OUVIR OU ASSISTIR ────────────────────────────────────────────────────
+   *
+   * `modo` escolhe a FONTE, não um segundo player. O padrão é ouvir quando há
+   * áudio, porque é o que já existia e o que consome menos banda; sem áudio e
+   * com vídeo, assistir é a única forma de haver relógio.
+   *
+   * A escolha fica gravada com as outras preferências: quem prefere assistir
+   * não quer reescolher a cada capítulo.
+   */
+  const [modo, setModo] = useState<"audio" | "video">(src ? "audio" : "video");
+  const modoEfetivo: "audio" | "video" = video ? (src ? modo : "video") : "audio";
+  /** Há relógio: existe uma fonte de tempo possível para este capítulo. */
+  const comNarracao = modoEfetivo === "audio" ? !!src : !!video;
 
   falasRef.current = falas;
   capituloRef.current = capitulo;
@@ -329,19 +383,19 @@ export default function LenteSobreposta({
   // rAF, quem ouvisse um capítulo inteiro no bolso voltaria com a lente
   // exatamente onde deixou: nada verde, nada gravado.
   //
-  // `timeupdate` continua disparando com a aba escondida (~4 vezes por
-  // segundo). Ele é grosso demais para a rolagem parecer contínua, mas é
-  // exatamente o suficiente para a frase atual, o verde e a gravação.
+  // O PULSO da fonte continua disparando com a aba escondida — no `<audio>` é
+  // o `timeupdate` (~4×/s), no YouTube é um intervalo de 250 ms. Ele é grosso
+  // demais para a rolagem parecer contínua, mas é exatamente o suficiente para
+  // a frase atual, o verde e a gravação. Ver `lente-fonte.ts`.
   //
   // O rAF fica para o que só importa com a tela acesa: o número do tempo
   // correndo e a interpolação da perseguição.
   useEffect(() => {
-    if (!comAudio) return;
+    if (!fonte) return;
     const bater = () => {
-      const a = audioRef.current;
-      if (!a) return;
-      setAgora(a.currentTime);
-      const i = acharFala(falas, a.currentTime);
+      const t = fonte.tempo();
+      setAgora(t);
+      const i = acharFala(falas, t);
       setAtual((ant) => (ant === i ? ant : i));
       setMaximo((m) => (i > m ? i : m));
     };
@@ -350,14 +404,30 @@ export default function LenteSobreposta({
     const passo = () => { if (!vivo) return; bater(); quadro = requestAnimationFrame(passo); };
     quadro = requestAnimationFrame(passo);
 
-    const a = audioRef.current;
-    a?.addEventListener("timeupdate", bater);
+    const soltar = fonte.ouvir("pulso", bater);
     return () => {
       vivo = false;
       cancelAnimationFrame(quadro);
-      a?.removeEventListener("timeupdate", bater);
+      soltar();
     };
-  }, [falas, comAudio, src]);
+  }, [falas, fonte]);
+
+  // ── Tocando ou parado, dito pela fonte ───────────────────────────────────
+  //
+  // Antes isto vinha dos `onPlay`/`onPause` do `<audio>` no JSX. Como agora a
+  // fonte pode ser um iframe do YouTube — onde o aluno também aperta play
+  // dentro do vídeo —, quem avisa é sempre a fonte, e os dois modos ficam com
+  // o mesmo caminho.
+  useEffect(() => {
+    if (!fonte) return;
+    const solturas = [
+      fonte.ouvir("tocou", () => setTocando(true)),
+      fonte.ouvir("pausou", () => setTocando(false)),
+      fonte.ouvir("terminou", () => aoTerminarRef.current()),
+    ];
+    setTocando(!fonte.pausado());
+    return () => { solturas.forEach((s) => s()); setTocando(false); };
+  }, [fonte]);
 
   // ── O realce, pintado pelo navegador ─────────────────────────────────────
   //
@@ -405,11 +475,11 @@ export default function LenteSobreposta({
     // — quem pausava para reler o parágrafo de cima era arrastado de volta, e o
     // botão de voltar ao topo era desfeito no quadro seguinte (medido: a página
     // ficava cravada em 977 px).
-    if (!comAudio || !tocando || !seguindo || semAnimacao || selecao || tutor) return;
+    if (!comNarracao || !tocando || !seguindo || semAnimacao || selecao || tutor) return;
     let vivo = true, quadro = 0;
     const passo = () => {
       const rol = rolagemRef.current;
-      const a = audioRef.current;
+      const a = fonteRef.current;
       const m = faixasRef.current;
       if (!rol || !a || !m || atual < 0) { if (vivo) quadro = requestAnimationFrame(passo); return; }
 
@@ -425,7 +495,7 @@ export default function LenteSobreposta({
 
       const f = falas[atual];
       const dur = Math.max(0.001, (f.ate ?? 0) - (f.de ?? 0));
-      const dentro = Math.min(1, Math.max(0, (a.currentTime - (f.de ?? 0)) / dur));
+      const dentro = Math.min(1, Math.max(0, (a.tempo() - (f.de ?? 0)) / dur));
       const seguinte = m.faixas.get(falas[atual + 1]?.i);
 
       const destino = seguinte
@@ -441,18 +511,18 @@ export default function LenteSobreposta({
     };
     quadro = requestAnimationFrame(passo);
     return () => { vivo = false; cancelAnimationFrame(quadro); };
-  }, [comAudio, tocando, seguindo, semAnimacao, atual, falas, rolagemRef, selecao, tutor]);
+  }, [comNarracao, tocando, seguindo, semAnimacao, atual, falas, rolagemRef, selecao, tutor]);
 
   // Rolar com o dedo solta o seguimento — a lente não briga pelo scroll.
   useEffect(() => {
     const rol = rolagemRef.current;
-    if (!comAudio) return;
+    if (!comNarracao) return;
     const aoRolar = () => {
       if (!seguindo || Date.now() < ignorarAte.current) return;
       setSeguindo(false);
     };
     return ouvirRolagem(quemRola(rol), aoRolar);
-  }, [rolagemRef, seguindo, comAudio]);
+  }, [rolagemRef, seguindo, comNarracao]);
 
   // ── SEM ÁUDIO, QUEM DÁ O FOCO É A ROLAGEM ───────────────────────────────
   //
@@ -462,7 +532,7 @@ export default function LenteSobreposta({
   // leitor já faz, com o dedo no lugar do relógio.
   useEffect(() => {
     const rol = rolagemRef.current;
-    if (comAudio) return;
+    if (comNarracao) return;
 
     const focar = () => {
       const m = faixasRef.current;
@@ -485,7 +555,7 @@ export default function LenteSobreposta({
 
     focar();
     return ouvirRolagem(quemRola(rol), focar);
-  }, [rolagemRef, comAudio, falas, casadas]);
+  }, [rolagemRef, comNarracao, falas, casadas]);
 
   /**
    * ── Zoom da coluna: é o "aumenta a área que estou" ───────────────────────
@@ -538,7 +608,7 @@ export default function LenteSobreposta({
     return () => clearTimeout(id);
   }, [previa, zoom]);
 
-  const aumentoSuspenso = comAudio && foco && !tocando && !previa;
+  const aumentoSuspenso = comNarracao && foco && !tocando && !previa;
   const zoomAplicado = aumentoSuspenso ? 1 : zoom;
 
   useEffect(() => {
@@ -642,57 +712,87 @@ export default function LenteSobreposta({
   useEffect(() => {
     const raiz = conteudoRef.current;
     if (!raiz) return;
-    const ligado = foco && tocando && comAudio;
+    const ligado = foco && tocando && comNarracao;
     raiz.classList.toggle("lente-foco", ligado);
     return () => { raiz.classList.remove("lente-foco"); };
-  }, [conteudoRef, foco, tocando, comAudio]);
+  }, [conteudoRef, foco, tocando, comNarracao]);
 
   useEffect(() => {
     try {
       const b = localStorage.getItem(CHAVE_PREFS);
       if (!b) return;
-      const p = JSON.parse(b) as { zoom?: number; velocidade?: number; volume?: number; emSequencia?: boolean; foco?: boolean };
+      const p = JSON.parse(b) as {
+        zoom?: number; velocidade?: number; volume?: number;
+        emSequencia?: boolean; foco?: boolean; modo?: "audio" | "video";
+      };
       if (typeof p.zoom === "number") setZoom(Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, p.zoom)));
       if (typeof p.velocidade === "number") setVelocidade(p.velocidade);
       if (typeof p.volume === "number") setVolume(Math.min(1, Math.max(0, p.volume)));
       if (typeof p.emSequencia === "boolean") setEmSequencia(p.emSequencia);
       if (typeof p.foco === "boolean") setFoco(p.foco);
+      if (p.modo === "audio" || p.modo === "video") setModo(p.modo);
     } catch { /* preferência é conforto, não estado crítico */ }
   }, []);
 
+  // ⚠️ GRAVA TUDO O QUE LÊ. A versão anterior gravava só zoom/velocidade/volume
+  // e lia cinco chaves: `emSequencia` e `foco` eram carregados de um objeto que
+  // nunca os continha, ou seja, nunca persistiam. `modo` entrou aqui junto para
+  // não repetir a assimetria.
   useEffect(() => {
-    try { localStorage.setItem(CHAVE_PREFS, JSON.stringify({ zoom, velocidade, volume })); }
+    try { localStorage.setItem(CHAVE_PREFS, JSON.stringify({ zoom, velocidade, volume, emSequencia, foco, modo })); }
     catch { /* modo privado */ }
-  }, [zoom, velocidade, volume]);
+  }, [zoom, velocidade, volume, emSequencia, foco, modo]);
 
-  useEffect(() => { const a = audioRef.current; if (a) a.playbackRate = velocidade; }, [velocidade]);
-  useEffect(() => { const a = audioRef.current; if (a) a.volume = volume; }, [volume]);
+  useEffect(() => { fonte?.velocidade(velocidade); }, [velocidade, fonte]);
+  useEffect(() => { fonte?.volume(volume); }, [volume, fonte]);
 
   // Onde parou, por capítulo — trocar de aula e voltar não recomeça do zero.
   const chaveMarca = chave ? `fayapoint_lente_pos_${chave}` : null;
   useEffect(() => {
-    if (!chaveMarca) return;
-    const a = audioRef.current;
-    if (!a) return;
+    if (!chaveMarca || !fonte) return;
+    let cancelado = false;
     const retomar = () => {
+      if (cancelado) return;
+      // A troca de modo devolve o play junto com o segundo. Fica ANTES dos
+      // vários `return` abaixo para valer em todos eles, e o `setTimeout(0)`
+      // garante que o `irPara` já rodou quando o play acontecer — senão o
+      // tocador parte do zero e só depois pula.
+      if (retomarTocando.current) {
+        retomarTocando.current = false;
+        setTimeout(() => fonte.tocar(), 0);
+      }
+      // ── TROCAR DE MODO NÃO É COMEÇAR DE NOVO ────────────────────────────
+      //
+      // A régua é a mesma, então quem estava no minuto 4 ouvindo tem de cair
+      // no minuto 4 assistindo. Sem isto, apertar "assistir" jogaria o aluno
+      // para o início do capítulo — e o botão viraria um castigo.
+      const doModoAnterior = retomarNoSegundo.current;
+      if (doModoAnterior != null) {
+        retomarNoSegundo.current = null;
+        if (doModoAnterior > 1) { fonte.irPara(doModoAnterior); return; }
+      }
       // Entrou tocando, vindo do capítulo anterior: começa no começo. Retomar
       // do meio aqui daria a impressão de que a lente pulou um pedaço.
       if (pularRetomada.current) { pularRetomada.current = false; return; }
       try {
         const s = Number(localStorage.getItem(chaveMarca));
-        if (s > 1 && a.duration && s < a.duration - 5) a.currentTime = s;
+        const dur = fonte.duracao();
+        if (s > 1 && dur && s < dur - 5) fonte.irPara(s);
       } catch { /* sem memória, começa do zero */ }
     };
-    if (a.readyState >= 1) retomar();
-    else a.addEventListener("loadedmetadata", retomar, { once: true });
-  }, [chaveMarca]);
+    if (fonte.pronta()) retomar();
+    else {
+      const soltar = fonte.ouvir("pronta", () => { soltar(); retomar(); });
+      return () => { cancelado = true; soltar(); };
+    }
+  }, [chaveMarca, fonte]);
 
   useEffect(() => {
     if (!chaveMarca) return;
     const guardar = () => {
       try {
-        const a = audioRef.current;
-        if (a && a.currentTime > 1) localStorage.setItem(chaveMarca, String(a.currentTime));
+        const a = fonteRef.current;
+        if (a && a.tempo() > 1) localStorage.setItem(chaveMarca, String(a.tempo()));
       } catch { /* idem */ }
     };
     const id = setInterval(guardar, 5000);
@@ -721,18 +821,52 @@ export default function LenteSobreposta({
     pularRetomada.current = proximoTemAudio;
     irParaCapitulo(1);
   }, [emSequencia, temProximo, proximoTemAudio, irParaCapitulo, falas.length]);
+  aoTerminarRef.current = aoTerminarCapitulo;
 
-  // Chegou o áudio do capítulo seguinte e viemos tocando: continua sozinho.
+  /**
+   * ── A TROCA DE FONTE, EM UM LUGAR SÓ ─────────────────────────────────────
+   *
+   * Guarda o segundo onde a fonte que sai estava e desliga a atual. Quem
+   * entrar — o `<audio>` ou o tocador do YouTube — cai nesse mesmo segundo
+   * assim que ficar pronto (ver o efeito de retomada), porque a régua é a
+   * mesma nos dois.
+   */
+  const trocarModo = useCallback((novo: "audio" | "video") => {
+    const a = fonteRef.current;
+    if (a) {
+      retomarNoSegundo.current = a.tempo();
+      // Quem estava ouvindo e apertou "assistir" quer continuar de onde estava,
+      // tocando. Parar seria transformar a troca de fonte numa pausa.
+      retomarTocando.current = !a.pausado();
+      a.pausar();
+    }
+    setFonte(null);
+    setModo(novo);
+  }, []);
+
+  /**
+   * O `<audio>` vira fonte no momento em que existe.
+   *
+   * ⚠️ ESTÁVEL (`useCallback` sem dependências). Um callback de `ref` recriado
+   * a cada render é chamado com `null` e de novo com o elemento em TODO render
+   * — a lente trocaria de fonte dezenas de vezes por segundo e nenhum efeito
+   * assinado sobreviveria.
+   */
+  const prenderAudio = useCallback((el: HTMLAudioElement | null) => {
+    setFonte(el ? fonteDeMidia(el) : null);
+  }, []);
+
+  // Chegou a fonte do capítulo seguinte e viemos tocando: continua sozinho.
   useEffect(() => {
-    if (!continuarAoCarregar.current || !src) return;
-    const a = audioRef.current;
-    if (!a) return;
+    if (!continuarAoCarregar.current || !fonte) return;
     continuarAoCarregar.current = false;
-    const partir = () => { a.currentTime = 0; void a.play().catch(() => { /* o navegador pode recusar */ }); };
-    if (a.readyState >= 2) partir();
-    else a.addEventListener("canplay", partir, { once: true });
-    return () => a.removeEventListener("canplay", partir);
-  }, [src]);
+    const partir = () => { fonte.irPara(0); fonte.tocar(); };
+    if (fonte.pronta()) partir();
+    else {
+      const soltar = fonte.ouvir("pronta", () => { soltar(); partir(); });
+      return soltar;
+    }
+  }, [fonte]);
 
   // ── Fase 4: SELECIONAR E CONVERSAR ───────────────────────────────────────
   //
@@ -778,8 +912,8 @@ export default function LenteSobreposta({
    */
   const perguntar = useCallback(async (pedido: "explicar" | "resumir", trecho: string) => {
     setSelecao(null);
-    const a = audioRef.current;
-    if (a && !a.paused) { retomarDepois.current = true; a.pause(); }
+    const a = fonteRef.current;
+    if (a && !a.pausado()) { retomarDepois.current = true; a.pausar(); }
 
     const rotulo = pedido === "explicar" ? T("Explicar melhor") : T("Resumir isto");
     setTutor({ trecho, pedido: rotulo, resposta: null, erro: null });
@@ -904,14 +1038,14 @@ export default function LenteSobreposta({
     setTutor(null);
     if (retomarDepois.current) {
       retomarDepois.current = false;
-      void audioRef.current?.play().catch(() => { /* o aluno reprende quando quiser */ });
+      fonteRef.current?.tocar();
     }
   }, []);
 
   const irPara = useCallback((s: number) => {
-    const a = audioRef.current;
+    const a = fonteRef.current;
     if (!a) return;
-    a.currentTime = Math.max(0, Math.min(s, a.duration || s));
+    a.irPara(Math.max(0, Math.min(s, a.duracao() || s)));
     setSeguindo(true);
   }, []);
 
@@ -924,7 +1058,7 @@ export default function LenteSobreposta({
    * de navegação ao lado da lente só para ter sumário.
    */
   const irParaSecao = useCallback((m: { segundos: number; titulo: string }) => {
-    if (comAudio) { irPara(m.segundos); return; }
+    if (comNarracao) { irPara(m.segundos); return; }
     const marc = faixasRef.current;
     if (!marc) return;
     const f = falas.find((x) => x.secao === m.titulo);
@@ -934,12 +1068,12 @@ export default function LenteSobreposta({
     const mold = moldura(quem);
     const r = faixa.getBoundingClientRect();
     porTopo(quem, topoDe(quem) + (r.top - mold.topo) - mold.altura * ANCORA, true);
-  }, [comAudio, irPara, falas, rolagemRef]);
+  }, [comNarracao, irPara, falas, rolagemRef]);
 
   const alternar = useCallback(() => {
-    const a = audioRef.current;
+    const a = fonteRef.current;
     if (!a) return;
-    if (a.paused) void a.play(); else a.pause();
+    if (a.pausado()) a.tocar(); else a.pausar();
   }, []);
 
   useEffect(() => {
@@ -1018,7 +1152,7 @@ export default function LenteSobreposta({
                   </p>
                 )}
               </div>
-              {comAudio && retomarDepois.current && (
+              {comNarracao && retomarDepois.current && (
                 <p className="px-4 pb-3 text-[11px] text-[rgba(var(--reader-tint),0.35)]">
                   {T("A narração volta quando você fechar.")}
                 </p>
@@ -1031,6 +1165,19 @@ export default function LenteSobreposta({
       {/* ── A barra flutuante: um lugar só, sem moldura em volta do texto ── */}
       <div className="fixed bottom-0 inset-x-0 z-40 pointer-events-none">
         <div className="relative mx-auto max-w-3xl px-3 pb-3 pointer-events-auto">
+          {/* ── A JANELA DE VÍDEO ───────────────────────────────────────────
+              Fica ACIMA da barra e encosta na direita: o texto continua
+              visível à esquerda, que é o ponto de ler acompanhando. Encolher
+              é `hidden`, nunca desmontar — desmontar destrói o tocador e o
+              vídeo recomeçaria do zero. */}
+          {modoEfetivo === "video" && video && (
+            <div className={cn("mb-2 flex justify-end", videoEncolhido && "hidden")}>
+              <div className="w-[min(22rem,70vw)] shadow-[0_18px_50px_-12px_rgba(0,0,0,0.75)]">
+                <TocadorDeVideo video={video} aoPronta={setFonte} T={T} />
+              </div>
+            </div>
+          )}
+
           {/* ── OS SUMÁRIOS MORAM FORA DA BARRA ────────────────────────────
               A barra tem `overflow-hidden` (é o que arredonda os cantos e
               recorta a animação do painel). Um popover que abre PARA CIMA de
@@ -1046,7 +1193,7 @@ export default function LenteSobreposta({
                     onClick={() => { irParaSecao(m); setIndiceAberto(false); }}
                     className="w-full flex items-center justify-between gap-3 px-4 py-2 text-left text-[13px] text-[rgba(var(--reader-tint),0.7)] hover:text-[rgba(var(--reader-tint),1)] hover:bg-[rgba(var(--reader-tint),0.06)] transition-colors">
                     <span className="truncate">{m.titulo}</span>
-                    {comAudio && (
+                    {comNarracao && (
                       <span className="tabular-nums text-[11px] text-[rgba(var(--reader-tint),0.35)]">{tempoHumano(m.segundos)}</span>
                     )}
                   </button>
@@ -1088,11 +1235,11 @@ export default function LenteSobreposta({
             {/* painel de som e sequência */}
             <div className={cn(
               "grid transition-[grid-template-rows,opacity] duration-300 ease-out",
-              painelAberto && comAudio ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+              painelAberto && comNarracao ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
             )}>
               <div className="overflow-hidden">
                 <div className="grid gap-4 sm:grid-cols-2 px-5 pt-4 pb-2 border-b border-[rgba(var(--reader-tint),0.06)]">
-                  {comAudio && (
+                  {comNarracao && (
                     <label className="flex flex-col gap-1.5">
                       <span className="flex items-center justify-between text-[11px] uppercase tracking-[0.12em] text-[rgba(var(--reader-tint),0.4)]">
                         <span className="flex items-center gap-1.5"><Gauge size={12} />{T("Velocidade")}</span>
@@ -1111,7 +1258,7 @@ export default function LenteSobreposta({
                     </label>
                   )}
 
-                  {comAudio && (
+                  {comNarracao && (
                     <label className="flex flex-col gap-1.5">
                       <span className="flex items-center justify-between text-[11px] uppercase tracking-[0.12em] text-[rgba(var(--reader-tint),0.4)]">
                         <span className="flex items-center gap-1.5">
@@ -1125,7 +1272,7 @@ export default function LenteSobreposta({
                     </label>
                   )}
 
-                  {comAudio && irParaCapitulo && (
+                  {comNarracao && irParaCapitulo && (
                     <label className="sm:col-span-2 flex items-center justify-between gap-3 cursor-pointer pt-1">
                       <span className="text-[12px] text-[rgba(var(--reader-tint),0.6)]">
                         {T("Seguir para o próximo capítulo sozinho")}
@@ -1144,7 +1291,7 @@ export default function LenteSobreposta({
             </div>
 
             {/* progresso */}
-            {comAudio && (
+            {comNarracao && (
               <div className="relative h-1 bg-[rgba(var(--reader-tint),0.07)] cursor-pointer"
                 onClick={(e) => {
                   const r = e.currentTarget.getBoundingClientRect();
@@ -1172,7 +1319,7 @@ export default function LenteSobreposta({
                 </button>
               )}
 
-              {comAudio && (
+              {comNarracao && (
                 <>
                   <button type="button" onClick={() => irPara(agora - PULO)} title={T("Voltar 15 segundos")}
                     className="p-2 rounded-full text-[rgba(var(--reader-tint),0.55)] hover:text-[rgba(var(--reader-tint),0.95)] hover:bg-[rgba(var(--reader-tint),0.07)] transition-colors">
@@ -1192,7 +1339,7 @@ export default function LenteSobreposta({
                 </>
               )}
 
-              {!comAudio && (
+              {!comNarracao && (
                 <span className="px-2 text-xs text-[rgba(var(--reader-tint),0.5)]">{T("Lente de leitura")}</span>
               )}
 
@@ -1275,7 +1422,43 @@ export default function LenteSobreposta({
                 </button>
               </div>
 
-              {comAudio && (
+              {/* ── OUVIR OU ASSISTIR ────────────────────────────────────
+                  Só aparece quando existem os dois. Um par de botões, e não
+                  um menu: são duas opções e a escolhida precisa ser visível
+                  de relance — o aluno tem de saber o que está tocando. */}
+              {src && video && (
+                <div className="flex items-center rounded-full bg-[rgba(var(--reader-tint),0.05)] ring-1 ring-[rgba(var(--reader-tint),0.07)]">
+                  <button type="button" onClick={() => trocarModo("audio")}
+                    aria-pressed={modoEfetivo === "audio"} title={T("Ouvir a narração")}
+                    className={cn("flex items-center gap-1 rounded-l-full px-2.5 py-1.5 text-xs font-medium transition-colors",
+                      modoEfetivo === "audio" ? "bg-violet-500/25 text-violet-100"
+                        : "text-[rgba(var(--reader-tint),0.55)] hover:bg-[rgba(var(--reader-tint),0.1)]")}>
+                    <Headphones size={13} />
+                    <span className="hidden lg:inline">{T("Ouvir")}</span>
+                  </button>
+                  <button type="button" onClick={() => { trocarModo("video"); setVideoEncolhido(false); }}
+                    aria-pressed={modoEfetivo === "video"} title={T("Assistir ao vídeo da aula")}
+                    className={cn("flex items-center gap-1 rounded-r-full px-2.5 py-1.5 text-xs font-medium transition-colors",
+                      modoEfetivo === "video" ? "bg-violet-500/25 text-violet-100"
+                        : "text-[rgba(var(--reader-tint),0.55)] hover:bg-[rgba(var(--reader-tint),0.1)]")}>
+                    <MonitorPlay size={13} />
+                    <span className="hidden lg:inline">{T("Assistir")}</span>
+                  </button>
+                </div>
+              )}
+
+              {modoEfetivo === "video" && video && (
+                <button type="button" onClick={() => setVideoEncolhido((v) => !v)}
+                  aria-pressed={!videoEncolhido}
+                  title={videoEncolhido ? T("Mostrar a imagem") : T("Esconder a imagem e só ouvir")}
+                  className={cn("flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors",
+                    videoEncolhido ? "text-[rgba(var(--reader-tint),0.55)] bg-[rgba(var(--reader-tint),0.05)] hover:bg-[rgba(var(--reader-tint),0.1)]"
+                      : "text-violet-200 bg-violet-500/15")}>
+                  <MonitorPlay size={13} />
+                </button>
+              )}
+
+              {comNarracao && (
                 <button type="button" onClick={() => setFoco((v) => !v)} aria-pressed={foco}
                   title={foco
                     ? T("Foco ligado: o texto cresce e o resto recua enquanto a narração corre")
@@ -1296,7 +1479,7 @@ export default function LenteSobreposta({
 
               {/* Sem áudio o painel ficaria vazio: o aumento mudou-se para a
                   barra, e velocidade/volume/sequência só existem com narração. */}
-              {comAudio && (
+              {comNarracao && (
               <button type="button" onClick={() => setPainelAberto((v) => !v)} aria-expanded={painelAberto}
                 title={T("Som e sequência")}
                 className={cn("flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors",
@@ -1306,7 +1489,7 @@ export default function LenteSobreposta({
               </button>
               )}
 
-              {comAudio && (
+              {comNarracao && (
                 <button type="button" onClick={() => setSeguindo((v) => !v)} aria-pressed={seguindo}
                   title={seguindo ? T("A página segue o áudio") : T("Vista solta")}
                   className={cn("flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors",
@@ -1343,7 +1526,7 @@ export default function LenteSobreposta({
 
           {/* Dizer que a narração vai parar antes de ela parar. O contrário —
               o silêncio sem explicação — lê como defeito. */}
-          {comAudio && emSequencia && temProximo && !proximoTemAudio && (
+          {comNarracao && emSequencia && temProximo && !proximoTemAudio && (
             <p className="mt-1.5 text-center text-[10px] text-[rgba(var(--reader-tint),0.35)]">
               {T("O próximo capítulo ainda não tem narração — a lente segue em leitura.")}
             </p>
@@ -1351,10 +1534,12 @@ export default function LenteSobreposta({
         </div>
       </div>
 
-      {comAudio && (
-        <audio ref={audioRef} src={src ?? undefined} preload="metadata"
-          onPlay={() => setTocando(true)} onPause={() => setTocando(false)}
-          onEnded={aoTerminarCapitulo} className="hidden" />
+      {/* ⚠️ `key={src}`: um elemento por capítulo, e não um elemento com o
+          `src` trocado. Sem isso a fonte seria a MESMA de um capítulo para o
+          outro, e o efeito que continua a narração no capítulo seguinte —
+          que depende da fonte trocar — nunca dispararia. */}
+      {modoEfetivo === "audio" && src && (
+        <audio key={src} ref={prenderAudio} src={src} preload="metadata" className="hidden" />
       )}
     </>
   );

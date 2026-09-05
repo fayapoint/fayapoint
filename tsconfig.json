@@ -43,7 +43,9 @@
     ".next-verificacao/types/**/*.ts",
     ".next-verificacao/dev/types/**/*.ts",
     ".next-forja/types/**/*.ts",
-    ".next-forja/dev/types/**/*.ts"
+    ".next-forja/dev/types/**/*.ts",
+    ".next-lente/types/**/*.ts",
+    ".next-lente/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

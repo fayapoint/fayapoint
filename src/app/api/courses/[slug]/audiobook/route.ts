@@ -33,6 +33,22 @@ import { isCourseFreeThisMonth } from '@/lib/monthly-course-offers';
  *
  * Prazo curto de propósito: o link serve para tocar agora, não para virar
  * acervo em pasta compartilhada.
+ *
+ * ## O VÍDEO DA AULA SAI POR AQUI, E NÃO POR `/media` (05/09/2026)
+ *
+ * O vídeo é montado a partir da MESMA narração, então ele anda na MESMA linha
+ * do tempo — e é essa linha que a lente segue. Servir os dois na mesma resposta
+ * é o que permite trocar de "ouvir" para "assistir" sem uma segunda ida à rede
+ * e sem uma segunda régua.
+ *
+ * ⚠️ E ele mora em `media.videoAula`, **não** em `media.video`. `media.video` é
+ * lido pela rota pública `/api/courses/<slug>/media`, que o `ChapterMediaHeader`
+ * usa para desenhar um player no topo do capítulo. Gravar ali produziria dois
+ * defeitos de uma vez: um SEGUNDO tocador, dessincronizado, por cima da lente
+ * (o mesmo defeito de 02/09 que fez o aluno ouvir o capítulo inteiro sem
+ * descobrir a leitura acompanhada); e no capítulo ERRADO, porque `/media`
+ * deduz o índice do sufixo numérico do `chapterSlug` — e o leitor tem uma
+ * "Apresentação" no índice 0 que a narração pula.
  */
 
 const BANCO_MC = 'mission-control';
@@ -51,6 +67,32 @@ type CapituloAudio = {
   narrador?: string;
   linhaDoTempo?: unknown;
 };
+
+/**
+ * O vídeo da aula, como o `publicar-video-aula.mjs` grava.
+ *
+ * `youtube` não listado é o caminho previsto: o vídeo não aparece em busca nem
+ * no canal, e quem chega nele chega pelo leitor, que já exige conta.
+ */
+type CapituloVideo = {
+  fonte?: 'youtube' | 'arquivo';
+  videoId?: string;
+  url?: string;
+  titulo?: string;
+  segundos?: number;
+};
+
+/** Devolve só o que a lente sabe tocar — e `null` para o resto. */
+function videoDoCapitulo(v: CapituloVideo | undefined) {
+  if (!v) return null;
+  if (v.fonte === 'youtube' && v.videoId) {
+    return { fonte: 'youtube' as const, videoId: v.videoId, titulo: v.titulo ?? null };
+  }
+  if (v.fonte === 'arquivo' && v.url) {
+    return { fonte: 'arquivo' as const, url: v.url, titulo: v.titulo ?? null };
+  }
+  return null;
+}
 
 export async function GET(
   _request: Request,
@@ -111,7 +153,7 @@ export async function GET(
     .collection(COLECAO)
     .find(
       { courseSlug: slug, 'media.audio.publicId': { $exists: true } },
-      { projection: { chapterSlug: 1, chapterNumber: 1, title: 1, 'media.audio': 1 } },
+      { projection: { chapterSlug: 1, chapterNumber: 1, title: 1, 'media.audio': 1, 'media.videoAula': 1 } },
     )
     .sort({ chapterNumber: 1 })
     .toArray();
@@ -139,7 +181,8 @@ export async function GET(
   const expiraEm = Math.floor(Date.now() / 1000) + VALIDADE_S;
 
   const capitulos = documentos.map((d) => {
-    const a = (d.media as { audio: CapituloAudio }).audio;
+    const midia = d.media as { audio: CapituloAudio; videoAula?: CapituloVideo };
+    const a = midia.audio;
     return {
       numero: d.chapterNumber ?? 0,
       slug: d.chapterSlug,
@@ -157,6 +200,8 @@ export async function GET(
       // MESMA resposta de propósito, para a leitura sincronizada não custar
       // uma segunda ida à rede na abertura da página.
       linhaDoTempo: a.linhaDoTempo ?? null,
+      // A mesma aula em vídeo, na mesma régua. `null` onde não houver.
+      video: videoDoCapitulo(midia.videoAula),
     };
   });
 
