@@ -31,6 +31,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
+  ArrowUpToLine,
   Bookmark,
   ChevronDown,
   Gauge,
@@ -56,6 +57,7 @@ import {
 
 import { cn } from "@/lib/utils";
 import { marcarFalas, type ResultadoDaMarcacao } from "@/lib/lente-spans";
+import { andar, moldura, ouvirRolagem, porTopo, quemRola, topoDe } from "@/lib/rolagem";
 import type { LinhaDoTempo } from "@/components/portal/LenteDeLeitura";
 
 /** Onde a frase atual pousa: acima do meio, para o que vem a seguir caber. */
@@ -146,6 +148,14 @@ export default function LenteSobreposta({
   /** O `maximoInicial` mais recente, sem virar dependência de efeito nenhum. */
   const maximoInicialRef = useRef(maximoInicial);
   maximoInicialRef.current = maximoInicial;
+  /**
+   * Estas seguem o render sem guarda nenhuma — são o capítulo ATUAL. Servem só
+   * para o efeito de reinício repor o retrato depois da descarga; o retrato em
+   * si tem a guarda de chave, e é ele que a gravação usa.
+   */
+  const falasRef = useRef<LinhaDoTempo["falas"]>(linhaDoTempo.falas);
+  const capituloRef = useRef(capitulo);
+  const aoAvancarRef = useRef(aoAvancar);
   const continuarAoCarregar = useRef(false);
   /** Quem entrou em sequência começa do zero — não de onde parou da outra vez. */
   const pularRetomada = useRef(false);
@@ -166,6 +176,10 @@ export default function LenteSobreposta({
   const falas = linhaDoTempo.falas;
   const total = linhaDoTempo.segundos || 0;
   const comAudio = !!src;
+
+  falasRef.current = falas;
+  capituloRef.current = capitulo;
+  aoAvancarRef.current = aoAvancar;
 
   const semAnimacao = useMemo(
     () => typeof window !== "undefined" &&
@@ -202,6 +216,15 @@ export default function LenteSobreposta({
     setAgora(0);
     setMaximo(maximoInicialRef.current);
     ultimoGravado.current = -1;   // outro capítulo, outra régua de gravação
+    // A descarga do capítulo anterior já rodou (limpeza vem antes do corpo).
+    // Agora o retrato pode passar a descrever o capítulo que entrou.
+    despachoRef.current = {
+      chave,
+      maximo: maximoInicialRef.current,
+      total: falasRef.current.length,
+      capitulo: capituloRef.current,
+      aoAvancar: aoAvancarRef.current,
+    };
     setSelecao(null);
     setTutor(null);
   }, [chave]);
@@ -225,8 +248,23 @@ export default function LenteSobreposta({
   // punha `maximo` na lista do efeito do `pagehide` e gravava na limpeza — só
   // que a limpeza roda a CADA mudança de dependência, então gravava uma vez por
   // frase e a estrangulação não valia nada.
-  const despachoRef = useRef({ maximo, total: falas.length, capitulo, aoAvancar });
-  despachoRef.current = { maximo, total: falas.length, capitulo, aoAvancar };
+  // ⚠️ O RETRATO SÓ É ATUALIZADO ENQUANTO A CHAVE NÃO MUDA.
+  //
+  // Sem esta guarda, `maximo` e `capitulo` vêm do MESMO render e mesmo assim
+  // pertencem a capítulos diferentes durante a troca: o React já renderizou o
+  // capítulo novo, mas `maximo` ainda é o do que acabou (o fim da narração
+  // acabou de marcá-lo como lido inteiro). A gravação pendente saía como
+  // "capítulo 2 ouvido até o fim" cinco segundos depois de ele começar —
+  // medido, com o capítulo 2 inteiro verde sem ninguém ter ouvido.
+  //
+  // Enquanto a chave difere, o retrato fica intacto: ele descreve o capítulo
+  // que saiu, que é exatamente o que a gravação pendente precisa gravar. Quem
+  // o repõe para o capítulo novo é o efeito de reinício, logo depois da
+  // descarga.
+  const despachoRef = useRef({ chave, maximo, total: falas.length, capitulo, aoAvancar });
+  if (despachoRef.current.chave === chave) {
+    despachoRef.current = { chave, maximo, total: falas.length, capitulo, aoAvancar };
+  }
 
   const gravarPosicao = useCallback(() => {
     const d = despachoRef.current;
@@ -287,7 +325,13 @@ export default function LenteSobreposta({
     // Perseguir a narração enquanto o aluno arrasta o dedo sobre um parágrafo
     // arranca a seleção da mão dele. Enquanto há seleção ou resposta na tela,
     // a página fica parada.
-    if (!comAudio || !seguindo || semAnimacao || selecao || tutor) return;
+    //
+    // ⚠️ E SÓ PERSEGUE ENQUANTO TOCA. Sem `tocando`, a perseguição continuava
+    // rodando com o áudio pausado e puxava a página de volta para a frase atual
+    // — quem pausava para reler o parágrafo de cima era arrastado de volta, e o
+    // botão de voltar ao topo era desfeito no quadro seguinte (medido: a página
+    // ficava cravada em 977 px).
+    if (!comAudio || !tocando || !seguindo || semAnimacao || selecao || tutor) return;
     let vivo = true, quadro = 0;
     const passo = () => {
       const rol = rolagemRef.current;
@@ -298,10 +342,11 @@ export default function LenteSobreposta({
       const alvo = m.spans.get(falas[atual]?.i);
       if (!alvo) { if (vivo) quadro = requestAnimationFrame(passo); return; }
 
+      const quem = quemRola(rol);
+      const mold = moldura(quem);
       const ondePousa = (el: HTMLElement) => {
         const r = el.getBoundingClientRect();
-        const rr = rol.getBoundingClientRect();
-        return rol.scrollTop + (r.top - rr.top) + r.height / 2 - rol.clientHeight * ANCORA;
+        return topoDe(quem) + (r.top - mold.topo) + r.height / 2 - mold.altura * ANCORA;
       };
 
       const f = falas[atual];
@@ -313,27 +358,26 @@ export default function LenteSobreposta({
         ? ondePousa(alvo) + (ondePousa(seguinte) - ondePousa(alvo)) * dentro
         : ondePousa(alvo);
 
-      const falta = Math.max(0, destino) - rol.scrollTop;
+      const falta = Math.max(0, destino) - topoDe(quem);
       if (Math.abs(falta) > 0.5) {
         ignorarAte.current = Date.now() + 400;
-        rol.scrollTop += falta * 0.08;
+        andar(quem, falta * 0.08);
       }
       if (vivo) quadro = requestAnimationFrame(passo);
     };
     quadro = requestAnimationFrame(passo);
     return () => { vivo = false; cancelAnimationFrame(quadro); };
-  }, [comAudio, seguindo, semAnimacao, atual, falas, rolagemRef, selecao, tutor]);
+  }, [comAudio, tocando, seguindo, semAnimacao, atual, falas, rolagemRef, selecao, tutor]);
 
   // Rolar com o dedo solta o seguimento — a lente não briga pelo scroll.
   useEffect(() => {
     const rol = rolagemRef.current;
-    if (!rol || !comAudio) return;
+    if (!comAudio) return;
     const aoRolar = () => {
       if (!seguindo || Date.now() < ignorarAte.current) return;
       setSeguindo(false);
     };
-    rol.addEventListener("scroll", aoRolar, { passive: true });
-    return () => rol.removeEventListener("scroll", aoRolar);
+    return ouvirRolagem(quemRola(rol), aoRolar);
   }, [rolagemRef, seguindo, comAudio]);
 
   // ── SEM ÁUDIO, QUEM DÁ O FOCO É A ROLAGEM ───────────────────────────────
@@ -344,12 +388,13 @@ export default function LenteSobreposta({
   // leitor já faz, com o dedo no lugar do relógio.
   useEffect(() => {
     const rol = rolagemRef.current;
-    if (!rol || comAudio) return;
+    if (comAudio) return;
 
     const focar = () => {
       const m = marcacaoRef.current;
       if (!m) return;
-      const alvoY = rol.getBoundingClientRect().top + rol.clientHeight * ANCORA;
+      const mold = moldura(quemRola(rol));
+      const alvoY = mold.topo + mold.altura * ANCORA;
       let melhor = -1, menor = Infinity;
       for (let i = 0; i < falas.length; i++) {
         const el = m.spans.get(falas[i].i);
@@ -365,8 +410,7 @@ export default function LenteSobreposta({
     };
 
     focar();
-    rol.addEventListener("scroll", focar, { passive: true });
-    return () => rol.removeEventListener("scroll", focar);
+    return ouvirRolagem(quemRola(rol), focar);
   }, [rolagemRef, comAudio, falas, casadas]);
 
   // ── Zoom da coluna: é o "aumenta a área que estou" ───────────────────────
@@ -622,6 +666,27 @@ export default function LenteSobreposta({
     a.currentTime = Math.max(0, Math.min(s, a.duration || s));
     setSeguindo(true);
   }, []);
+
+  /**
+   * O índice de seções serve nos DOIS modos.
+   *
+   * Com narração, ele salta no relógio. Sem, ele rola até a primeira frase
+   * daquela seção — que é o mesmo gesto para quem lê. A versão anterior só
+   * aparecia com áudio, e por isso o leitor precisava manter um segundo painel
+   * de navegação ao lado da lente só para ter sumário.
+   */
+  const irParaSecao = useCallback((m: { segundos: number; titulo: string }) => {
+    if (comAudio) { irPara(m.segundos); return; }
+    const marc = marcacaoRef.current;
+    if (!marc) return;
+    const f = falas.find((x) => x.secao === m.titulo);
+    const el = f ? marc.spans.get(f.i) : null;
+    if (!el) return;
+    const quem = quemRola(rolagemRef.current);
+    const mold = moldura(quem);
+    const r = el.getBoundingClientRect();
+    porTopo(quem, topoDe(quem) + (r.top - mold.topo) - mold.altura * ANCORA, true);
+  }, [comAudio, irPara, falas, rolagemRef]);
 
   const alternar = useCallback(() => {
     const a = audioRef.current;
@@ -887,7 +952,7 @@ export default function LenteSobreposta({
                 </span>
               )}
 
-              {linhaDoTempo.marcas.length > 0 && comAudio && (
+              {linhaDoTempo.marcas.length > 0 && (
                 <div className="relative">
                   <button type="button" onClick={() => setIndiceAberto((v) => !v)} aria-expanded={indiceAberto}
                     className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs text-[rgba(var(--reader-tint),0.6)] hover:text-[rgba(var(--reader-tint),0.9)] bg-[rgba(var(--reader-tint),0.05)] hover:bg-[rgba(var(--reader-tint),0.1)] transition-colors">
@@ -898,16 +963,24 @@ export default function LenteSobreposta({
                     <div className="absolute right-0 bottom-full mb-2 z-20 w-60 max-h-72 overflow-y-auto rounded-2xl bg-[var(--reader-popover)] ring-1 ring-[rgba(var(--reader-tint),0.1)] shadow-2xl shadow-black/50 py-1.5">
                       {linhaDoTempo.marcas.map((m) => (
                         <button key={`${m.segundos}-${m.titulo}`} type="button"
-                          onClick={() => { irPara(m.segundos); setIndiceAberto(false); }}
+                          onClick={() => { irParaSecao(m); setIndiceAberto(false); }}
                           className="w-full flex items-center justify-between gap-3 px-4 py-2 text-left text-[13px] text-[rgba(var(--reader-tint),0.7)] hover:text-[rgba(var(--reader-tint),1)] hover:bg-[rgba(var(--reader-tint),0.06)] transition-colors">
                           <span className="truncate">{m.titulo}</span>
-                          <span className="tabular-nums text-[11px] text-[rgba(var(--reader-tint),0.35)]">{tempoHumano(m.segundos)}</span>
+                          {comAudio && (
+                            <span className="tabular-nums text-[11px] text-[rgba(var(--reader-tint),0.35)]">{tempoHumano(m.segundos)}</span>
+                          )}
                         </button>
                       ))}
                     </div>
                   )}
                 </div>
               )}
+
+              <button type="button" onClick={() => porTopo(quemRola(rolagemRef.current), 0, true)}
+                title={T("Voltar ao topo")}
+                className="p-2 rounded-full text-[rgba(var(--reader-tint),0.5)] hover:text-[rgba(var(--reader-tint),0.95)] hover:bg-[rgba(var(--reader-tint),0.07)] transition-colors">
+                <ArrowUpToLine size={15} />
+              </button>
 
               <button type="button" onClick={() => setPainelAberto((v) => !v)} aria-expanded={painelAberto}
                 title={T("Tela e som")}

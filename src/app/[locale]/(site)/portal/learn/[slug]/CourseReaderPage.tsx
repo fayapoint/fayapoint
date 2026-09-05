@@ -66,6 +66,7 @@ import {
 } from "@/lib/cena-por-secao";
 import { type LinhaDoTempo } from "@/components/portal/LenteDeLeitura";
 import LenteSobreposta from "@/components/portal/LenteSobreposta";
+import { porTopo, quemRola } from "@/lib/rolagem";
 import { falasDoCapitulo } from "@/lib/lente-falas";
 
 /* ═══════════════════════════════════════════════════════════
@@ -1552,26 +1553,23 @@ export default function CourseReaderPage() {
   );
 
   /**
-   * ── QUEM ROLA É O `<main>`, NÃO A JANELA (04/09/2026) ─────────────────────
+   * ── QUEM ROLA É MEDIDO, NÃO DEDUZIDO (04/09/2026) ─────────────────────────
    *
-   * O leitor põe o texto num `<main className="flex-1 overflow-y-auto">` dentro
-   * de uma coluna de altura fixa. A janela, portanto, NUNCA rola — e as seis
-   * chamadas a `window.scrollTo({ top: 0 })` desta página não faziam nada.
+   * O texto mora num `<main className="flex-1 overflow-y-auto">`, o que sugere
+   * que o `<main>` rola sozinho. Ele não rola: a raiz é `min-h-screen` e não
+   * `h-screen`, então ela cresce com o conteúdo, o `<main>` cresce junto, e
+   * `scrollHeight` fica igual a `clientHeight`. Quem rola é a JANELA.
    *
-   * Duas consequências que pareciam outra coisa:
+   * Eu li o CSS, concluí o contrário, e cheguei a trocar os `window.scrollTo`
+   * desta página — que funcionavam — por chamadas no `<main>`, que não fariam
+   * nada. `quemRola` mede em vez de supor, e vale nos dois layouts.
    *
-   *  • trocar de capítulo deixava você na altura em que estava no anterior, ou
-   *    seja, no meio da aula nova. Isso soava como "a lente não acompanha o
-   *    texto", porque a lente abria com a página fora do lugar;
-   *  • os quatro botões de "voltar ao topo" eram enfeite.
-   *
-   * `behavior` fica de fora quando é a lente que pede: a rolagem suave briga
-   * com a perseguição da narração, que já é amortecida.
+   * O mesmo engano, do outro lado, é o que fazia a lente perseguir a narração
+   * mexendo em `main.scrollTop`: o realce andava e a página ficava parada. Ver
+   * `src/lib/rolagem.ts`.
    */
   const voltarAoTopo = useCallback((suave = true) => {
-    const rol = rolagemRef.current;
-    if (rol) rol.scrollTo({ top: 0, behavior: suave ? "smooth" : "auto" });
-    else window.scrollTo({ top: 0, behavior: suave ? "smooth" : "auto" });
+    porTopo(quemRola(rolagemRef.current), 0, suave);
   }, []);
 
   /* ─── Navigation ─── */
@@ -3230,8 +3228,17 @@ export default function CourseReaderPage() {
                 </div>
               </div>
 
-              {/* Floating navigation widget — higher on mobile to clear inline nav */}
-              <div className="fixed bottom-4 right-4 z-40 flex flex-col gap-3 lg:bottom-6 lg:right-6">
+              {/* ── FASE 5: UMA BARRA SÓ ──────────────────────────────────
+                  Com a lente aberta, este bloco some. Ele oferece Topo,
+                  página acima/abaixo, sumário de seções e capítulo
+                  anterior/próximo — tudo o que a barra da lente passou a
+                  oferecer, num painel que ainda por cima cobre o texto no
+                  canto direito. Duas barras disputando o rodapé era o que o
+                  Ricardo via como "tudo unificado" faltando. */}
+              <div className={cn(
+                "fixed bottom-4 right-4 z-40 flex-col gap-3 lg:bottom-6 lg:right-6",
+                lenteAberta ? "hidden" : "flex",
+              )}>
                 {compactFloatingNavigation ? (
                   <div className="hidden lg:block w-[220px] rounded-[24px] border border-[rgba(var(--reader-tint),0.08)] bg-[var(--reader-float)]/84 backdrop-blur-2xl shadow-[0_20px_80px_rgba(0,0,0,0.42)] overflow-hidden">
                     <div className="px-3.5 py-3 border-b border-[rgba(var(--reader-tint),0.06)] bg-gradient-to-r from-amber-500/[0.14] via-fuchsia-500/[0.06] to-cyan-500/[0.08]">
