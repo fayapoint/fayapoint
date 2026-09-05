@@ -1745,3 +1745,83 @@ html[data-virada-livro="tras"]::view-transition-new(pagina-direita) {
     animation: none;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   A LENTE — realce sobre o capítulo já renderizado
+   ═══════════════════════════════════════════════════════════════════════════
+
+   Os spans são criados em tempo de execução por `lib/lente-spans.ts`, dentro do
+   Markdown que o leitor já desenhou. Daqui para a frente é só CSS: nada é
+   redesenhado, nada muda de lugar quando a lente liga.
+
+   ⚠️ SUBLINHADO, E NÃO FUNDO, para o lido e o por vir.
+   Um capítulo inteiro com fundo colorido vira mancha e cansa em dois minutos.
+   A linha embaixo lê como progresso — é a mesma convenção do marcador de texto
+   no papel, e some quando o olho não a procura.
+
+   ⚠️ O AUMENTO É DA COLUNA, NÃO DA FRASE.
+   Ampliar só a frase atual reflui o parágrafo a cada troca, e o texto pula
+   embaixo do olho justamente enquanto a rolagem tenta segui-lo. A coluna
+   inteira cresce por `--lente-zoom`, o layout se acomoda UMA vez, e a frase em
+   foco se distingue por luz e contraste — não por tamanho. */
+
+.lente-ativa {
+  font-size: calc(1em * var(--lente-zoom, 1));
+  transition: font-size 220ms ease-out;
+}
+
+.lente-fala {
+  /* A transição cobre o que muda ao trocar de frase. `text-decoration-color`
+     entra na lista para o verde nascer, e não aparecer de estalo. */
+  transition:
+    color 260ms ease-out,
+    opacity 260ms ease-out,
+    text-decoration-color 400ms ease-out,
+    background-color 200ms ease-out;
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.22em;
+  text-decoration-color: transparent;
+  border-radius: 2px;
+}
+
+/* O que ainda não foi narrado: azul MUITO discreto.
+   Visto na tela cheia, a primeira versão (0.28) pintava o capítulo inteiro de
+   azul e a página virava um formulário. O que ainda não foi lido é a maior
+   parte do texto quase sempre — então ele tem que ser o mais silencioso dos
+   três estados, quase um fio. */
+.lente-fala.lente-porvir {
+  text-decoration-color: rgba(56, 189, 248, 0.16);
+  text-decoration-thickness: 1px;
+  opacity: 0.66;
+}
+
+/* O que já passou: verde presente, texto em contraste cheio.
+   Este é o estado que RECOMPENSA — mostra o caminho andado — então ele pode
+   falar mais alto que o azul sem cansar: ele cresce devagar, ao longo da aula. */
+.lente-fala.lente-lida {
+  text-decoration-color: rgba(52, 211, 153, 0.5);
+  opacity: 0.92;
+}
+
+/* A frase que está tocando. */
+.lente-fala.lente-atual {
+  opacity: 1;
+  color: var(--reader-fg);
+  background-color: rgba(167, 139, 250, 0.18);
+  text-decoration-color: rgba(167, 139, 250, 0.9);
+  text-decoration-thickness: 2.5px;
+  /* A sombra é o que dá o "aceso" sem mexer em uma medida de layout sequer. */
+  text-shadow: 0 0 22px rgba(167, 139, 250, 0.22);
+  /* Caixa um pouco maior que o texto, para o fundo não estrangular a linha. */
+  padding: 0.06em 0.12em;
+  margin: 0 -0.12em;
+}
+
+/* Quem pediu menos movimento recebe o realce, e nenhuma transição. */
+@media (prefers-reduced-motion: reduce) {
+  .lente-ativa,
+  .lente-fala {
+    transition: none;
+  }
+}

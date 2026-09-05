@@ -64,7 +64,8 @@ import {
   titulosDeSecao,
   type PlanoDeCenas,
 } from "@/lib/cena-por-secao";
-import LenteDeLeitura, { type LinhaDoTempo } from "@/components/portal/LenteDeLeitura";
+import { type LinhaDoTempo } from "@/components/portal/LenteDeLeitura";
+import LenteSobreposta from "@/components/portal/LenteSobreposta";
 import { falasDoCapitulo } from "@/lib/lente-falas";
 
 /* ═══════════════════════════════════════════════════════════
@@ -1200,6 +1201,9 @@ export default function CourseReaderPage() {
    * cursos para trocar um jeito de ler que ninguém pediu para trocar.
    */
   const [lenteAberta, setLenteAberta] = useState(false);
+  /** O `<main>` que rola de verdade, e o container do Markdown renderizado. */
+  const rolagemRef = useRef<HTMLElement | null>(null);
+  const conteudoRef = useRef<HTMLDivElement | null>(null);
 
   /* ─── Access gating state ─── */
   const [courseAccess, setCourseAccess] = useState<CourseAccessDto | null>(null);
@@ -2886,6 +2890,7 @@ export default function CourseReaderPage() {
 
         {/* ─── MAIN CONTENT ─── */}
         <main
+          ref={rolagemRef}
           className={cn(
             "flex-1 min-w-0 overflow-y-auto transition-all duration-300"
           )}
@@ -3024,50 +3029,34 @@ export default function CourseReaderPage() {
                   )}
 
                   {/**
-                   * A LENTE — só aparece quando existe linha do tempo.
+                   * O CONVITE DA LENTE.
                    *
-                   * Sem ela, o capítulo tem áudio mas não tem onde cada frase
-                   * começa, e a lente não teria o que seguir: o player simples
-                   * do `ChapterMediaHeader` acima continua sendo a resposta
-                   * certa. Oferecer a lente sem sincronia seria pior que não
-                   * oferecer — o texto ficaria parado enquanto a voz anda.
+                   * A lente em si NÃO mora aqui: ela é uma camada sobre o
+                   * capítulo inteiro, com barra flutuante no rodapé. Aqui fica
+                   * só o botão que a liga, no fluxo da leitura — é onde o aluno
+                   * está quando decide que quer ouvir.
                    */}
-                  {(lenteDoCapitulo || lenteDeLeitura) && (
-                    <div className="my-6">
-                      {lenteAberta ? (
-                        <LenteDeLeitura
-                          src={lenteDoCapitulo?.url ?? null}
-                          linhaDoTempo={(lenteDoCapitulo?.linhaDoTempo ?? lenteDeLeitura)!}
-                          chave={`${slug}:${currentChapterIndex}`}
-                          aoFechar={() => setLenteAberta(false)}
-                          T={T}
-                        />
-                      ) : (
-                        <button
-                          type="button"
-                          onClick={() => setLenteAberta(true)}
-                          className="group w-full flex items-center gap-4 px-5 py-4 rounded-2xl bg-[rgba(var(--reader-tint),0.03)] ring-1 ring-[rgba(var(--reader-tint),0.07)] hover:ring-violet-400/30 hover:bg-[rgba(var(--reader-tint),0.05)] transition-all text-left"
-                        >
-                          <span className="flex-shrink-0 w-11 h-11 rounded-full bg-violet-600/20 group-hover:bg-violet-600/30 flex items-center justify-center transition-colors">
-                            <ScanText size={19} className="text-violet-300" />
-                          </span>
-                          <span className="min-w-0 flex-1">
-                            <span className="block text-sm font-medium text-[rgba(var(--reader-tint),0.9)]">
-                              {lenteDoCapitulo ? T("Ouvir e ler ao mesmo tempo") : T("Modo leitura com lente")}
-                            </span>
-                            <span className="block text-xs text-[rgba(var(--reader-tint),0.45)] mt-0.5">
-                              {lenteDoCapitulo
-                                ? T("A página acompanha a narração, frase por frase")
-                                : T("Uma frase por vez em foco, para não se perder no texto")}
-                            </span>
-                          </span>
-                          <ChevronRight
-                            size={18}
-                            className="flex-shrink-0 text-[rgba(var(--reader-tint),0.3)] group-hover:text-violet-300 group-hover:translate-x-0.5 transition-all"
-                          />
-                        </button>
-                      )}
-                    </div>
+                  {(lenteDoCapitulo || lenteDeLeitura) && !lenteAberta && (
+                    <button
+                      type="button"
+                      onClick={() => setLenteAberta(true)}
+                      className="group my-6 w-full flex items-center gap-4 px-5 py-4 rounded-2xl bg-[rgba(var(--reader-tint),0.03)] ring-1 ring-[rgba(var(--reader-tint),0.07)] hover:ring-violet-400/30 hover:bg-[rgba(var(--reader-tint),0.05)] transition-all text-left not-prose"
+                    >
+                      <span className="flex-shrink-0 w-11 h-11 rounded-full bg-violet-600/20 group-hover:bg-violet-600/30 flex items-center justify-center transition-colors">
+                        <ScanText size={19} className="text-violet-300" />
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm font-medium text-[rgba(var(--reader-tint),0.9)]">
+                          {lenteDoCapitulo ? T("Ouvir e ler ao mesmo tempo") : T("Modo leitura com lente")}
+                        </span>
+                        <span className="block text-xs text-[rgba(var(--reader-tint),0.45)] mt-0.5">
+                          {lenteDoCapitulo
+                            ? T("A página acompanha a narração, frase por frase")
+                            : T("Uma frase por vez em foco, para não se perder no texto")}
+                        </span>
+                      </span>
+                      <ChevronRight size={18} className="flex-shrink-0 text-[rgba(var(--reader-tint),0.3)] group-hover:text-violet-300 group-hover:translate-x-0.5 transition-all" />
+                    </button>
                   )}
 
                   {/**
@@ -3105,6 +3094,7 @@ export default function CourseReaderPage() {
                   )}
 
                   <div
+                    ref={conteudoRef}
                     style={{
                       fontSize: `${settings.fontSize}px`,
                       lineHeight: String(settings.lineHeight),
@@ -3584,6 +3574,26 @@ export default function CourseReaderPage() {
             </div>
           )}
         </main>
+
+        {/**
+         * A LENTE, como CAMADA.
+         *
+         * Fica fora do `<main>` de propósito: ela não é conteúdo do capítulo, é
+         * um instrumento sobre ele. A barra flutua no rodapé, o realce mora nos
+         * spans dentro do texto, e nada disso ocupa espaço no fluxo — ligar a
+         * lente não empurra uma linha sequer.
+         */}
+        {lenteAberta && (lenteDoCapitulo || lenteDeLeitura) && (
+          <LenteSobreposta
+            conteudoRef={conteudoRef}
+            rolagemRef={rolagemRef}
+            src={lenteDoCapitulo?.url ?? null}
+            linhaDoTempo={(lenteDoCapitulo?.linhaDoTempo ?? lenteDeLeitura)!}
+            chave={`${slug}:${currentChapterIndex}`}
+            aoFechar={() => setLenteAberta(false)}
+            T={T}
+          />
+        )}
       </div>
 
       {/* Quiz Modal for Certificate */}
