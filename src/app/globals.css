@@ -826,6 +826,8 @@ body {
 /* DARK — flagship FayAI reader (current default) */
 [data-reader-theme="dark"] {
   --reader-bg: #0b0c13;
+  --lente-barra: #1e2231;
+  --lente-barra-anel: rgba(255,255,255,0.14);
   --reader-surface: #0d0e16;
   --reader-surface-alt: #0e1018;
   --reader-float: #0d0f18;
@@ -846,6 +848,8 @@ body {
 /* LIGHT — clean, bright, airy (reduces eye strain on mobile) */
 [data-reader-theme="light"] {
   --reader-bg: #fafaf8;
+  --lente-barra: #ffffff;
+  --lente-barra-anel: rgba(0,0,0,0.14);
   --reader-surface: #ffffff;
   --reader-surface-alt: #f5f5f0;
   --reader-float: #ffffff;
@@ -866,6 +870,8 @@ body {
 /* SEPIA — warm parchment, gentle on eyes for extended reading */
 [data-reader-theme="sepia"] {
   --reader-bg: #f4ecd8;
+  --lente-barra: #fffaf0;
+  --lente-barra-anel: rgba(61,48,34,0.20);
   --reader-surface: #ebe3cc;
   --reader-surface-alt: #e8e0c8;
   --reader-float: #ebe3cc;
@@ -886,6 +892,8 @@ body {
 /* HIGH-CONTRAST — maximum readability & accessibility */
 [data-reader-theme="high-contrast"] {
   --reader-bg: #ffffff;
+  --lente-barra: #f2f2f2;
+  --lente-barra-anel: rgba(0,0,0,0.35);
   --reader-surface: #f0f0f0;
   --reader-surface-alt: #e8e8e8;
   --reader-float: #f0f0f0;
@@ -1766,9 +1774,41 @@ html[data-virada-livro="tras"]::view-transition-new(pagina-direita) {
    inteira cresce por `--lente-zoom`, o layout se acomoda UMA vez, e a frase em
    foco se distingue por luz e contraste — não por tamanho. */
 
+/* ⚠️ O `font-size` NÃO mora aqui.
+   O container da prosa carrega `style={{fontSize}}` inline (é a escolha de
+   corpo do aluno), e inline vence folha de estilo. A regra que existia aqui
+   era calculada e descartada — o aumento não chegava à tela. Quem aplica é o
+   próprio componente, no estilo inline, a partir da base do leitor. */
 .lente-ativa {
-  font-size: calc(1em * var(--lente-zoom, 1));
   transition: font-size 220ms ease-out;
+}
+
+/* ── O FOCO: É ISTO QUE FAZ A LENTE PARECER UMA LENTE ─────────────────────
+   Aumentar a coluna sozinho não se nota — a página fica igual, um pouco
+   maior. O que se nota é o RESTO RECUAR: enquanto a narração corre, o texto
+   que não está sendo lido perde contraste e a frase em foco fica no brilho
+   cheio. Aí o olho vai sozinho para o lugar certo, sem procurar um risco.
+
+   Feito por VARIÁVEL, não por seletor. As cores da prosa saem de
+   `--reader-prose` e `--reader-fg` (é assim que o leitor já monta o
+   `prose-*`), então baixar a variável no container recua tudo de uma vez,
+   sem uma lista de seletores que envelhece à primeira mudança de layout. */
+.lente-ativa.lente-foco {
+  --reader-prose: rgba(var(--reader-tint), 0.34);
+  --reader-fg: rgba(var(--reader-tint), 0.42);
+  --reader-em: rgba(var(--reader-tint), 0.34);
+  --reader-muted: rgba(var(--reader-tint), 0.26);
+}
+
+/* A imagem também recua — senão ela vira o ponto mais claro da tela
+   justamente quando a atenção deveria estar na frase. Passar o cursor a
+   traz de volta inteira: recuar não é esconder. */
+.lente-ativa.lente-foco :is(img, figure, video) {
+  opacity: 0.45;
+  transition: opacity 300ms ease-out;
+}
+.lente-ativa.lente-foco :is(img, figure, video):hover {
+  opacity: 1;
 }
 
 /* ── O REALCE É PINTADO PELO NAVEGADOR, NÃO POR ELEMENTOS ──────────────────
@@ -1781,21 +1821,30 @@ html[data-virada-livro="tras"]::view-transition-new(pagina-direita) {
    transição: o realce nativo não anima, e é melhor assim — a troca de frase
    fica instantânea em vez de arrastada. */
 
-/* O que ainda não foi narrado: azul MUITO discreto.
+/* O que ainda não foi narrado: azul discreto.
+   ⚠️ Só é PUBLICADO quando o modo foco está desligado — ver o comentário em
+   `LenteSobreposta`. Com o foco ligado, quem diz "ainda não" é o recuo de
+   contraste, e os dois juntos riscam a página inteira.
    Visto na tela cheia, a primeira versão (0.28) pintava o capítulo inteiro de
    azul e a página virava um formulário. O que ainda não foi lido é a maior
    parte do texto quase sempre — então ele tem que ser o mais silencioso dos
    três estados, quase um fio. */
 ::highlight(lente-porvir) {
-  text-decoration: underline 1px rgba(56, 189, 248, 0.3);
+  text-decoration: underline 1px rgba(56, 189, 248, 0.28);
   text-underline-offset: 0.22em;
 }
 
 /* O que já passou: verde presente.
    Este é o estado que RECOMPENSA — mostra o caminho andado — então pode falar
    mais alto que o azul sem cansar: ele cresce devagar, ao longo da aula. */
+/* O que já passou.
+   ⚠️ QUIETO DE PROPÓSITO. O verde cresce até cobrir o capítulo inteiro — é o
+   estado que mais aparece ao fim de uma aula. Grosso, ele vira uma massa de
+   risco verde e cansa; fino, lê como caminho andado sem disputar com a frase
+   que está tocando, que é a única que precisa gritar. */
 ::highlight(lente-lida) {
-  text-decoration: underline 2px rgba(52, 211, 153, 0.62);
+  color: rgba(var(--reader-tint), 0.7);
+  text-decoration: underline 1.5px rgba(52, 211, 153, 0.42);
   text-underline-offset: 0.22em;
 }
 
@@ -1809,10 +1858,14 @@ html[data-virada-livro="tras"]::view-transition-new(pagina-direita) {
 }
 
 /* A frase que está tocando. */
+/* A frase que está tocando.
+   O `color` aqui é o que devolve o brilho cheio quando o resto recuou — por
+   isso ele é fixo e não `var(--reader-fg)`, que é justamente a variável que o
+   modo foco baixa. */
 ::highlight(lente-atual) {
-  background-color: rgba(167, 139, 250, 0.22);
-  color: var(--reader-fg);
-  text-decoration: underline 2.5px rgba(167, 139, 250, 0.95);
+  background-color: rgba(167, 139, 250, 0.28);
+  color: rgb(var(--reader-tint));
+  text-decoration: underline 2.5px rgba(167, 139, 250, 1);
   text-underline-offset: 0.22em;
 }
 

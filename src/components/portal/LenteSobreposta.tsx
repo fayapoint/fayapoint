@@ -36,6 +36,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowUpToLine,
   Bookmark,
+  Focus,
   ChevronDown,
   Gauge,
   Highlighter,
@@ -55,7 +56,6 @@ import {
   Volume2,
   VolumeX,
   X,
-  ZoomIn,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -76,6 +76,19 @@ const VELOCIDADES = [0.75, 1, 1.25, 1.5, 1.75] as const;
 const PULO = 15;
 const ZOOM_MIN = 1;
 const ZOOM_MAX = 1.6;
+/**
+ * ── A LENTE ABRE AUMENTANDO ──────────────────────────────────────────────
+ *
+ * O padrão era 1,0: ligar a lente não mudava um pixel do tamanho do texto, e
+ * o controle de aumento morava atrás de um ícone de ajustes. O Ricardo abriu,
+ * olhou e disse "não vi nada aumentado" — e estava certo, porque não havia.
+ *
+ * 1,18 é o passo que se NOTA sem reflowar o capítulo a ponto de desorientar
+ * quem estava lendo. Quem preferir o tamanho original desce no A− e a
+ * preferência fica gravada.
+ */
+const ZOOM_PADRAO = 1.18;
+const PASSO_ZOOM = 0.06;
 const CHAVE_PREFS = "fayapoint_lente_v2";
 
 function tempoHumano(s: number) {
@@ -148,7 +161,7 @@ export default function LenteSobreposta({
   const [maximo, setMaximo] = useState(maximoInicial);
   const [seguindo, setSeguindo] = useState(true);
   const [velocidade, setVelocidade] = useState(1);
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(ZOOM_PADRAO);
   const [volume, setVolume] = useState(1);
   const [painelAberto, setPainelAberto] = useState(false);
   const [indiceAberto, setIndiceAberto] = useState(false);
@@ -183,6 +196,7 @@ export default function LenteSobreposta({
   const [pensando, setPensando] = useState(false);
   const [guardados, setGuardados] = useState<string[]>([]);
   const [guardadosAbertos, setGuardadosAbertos] = useState(false);
+  const [foco, setFoco] = useState(true);
   const retomarDepois = useRef(false);
 
   const falas = linhaDoTempo.falas;
@@ -361,11 +375,21 @@ export default function LenteSobreposta({
     });
     publicarRealces({
       "lente-lida": lidas,
-      "lente-porvir": porvir,
+      // ── O AZUL SÓ EXISTE QUANDO O FOCO NÃO EXISTE ──────────────────────
+      //
+      // "sublinhado azul no que ainda não foi lido" era o pedido, e literalmente
+      // atendido ele pinta o capítulo INTEIRO de risco: o não lido é quase todo
+      // o texto quase sempre, e a página vira formulário — foi o que o Ricardo
+      // viu na tela.
+      //
+      // Com o modo foco ligado, quem diz "ainda não" é o recuo de contraste, que
+      // é mais forte e não risca nada. Os dois juntos são redundantes e feios.
+      // Desligando o foco, o azul volta a ser a única marca e reaparece.
+      "lente-porvir": foco ? [] : porvir,
       "lente-atual": atuais,
       "lente-guardado": grifosRef.current,
     });
-  }, [atual, maximo, falas, casadas]);
+  }, [atual, maximo, falas, casadas, foco]);
 
   // ── A rolagem que persegue ───────────────────────────────────────────────
   useEffect(() => {
@@ -460,24 +484,90 @@ export default function LenteSobreposta({
     return ouvirRolagem(quemRola(rol), focar);
   }, [rolagemRef, comAudio, falas, casadas]);
 
-  // ── Zoom da coluna: é o "aumenta a área que estou" ───────────────────────
+  /**
+   * ── Zoom da coluna: é o "aumenta a área que estou" ───────────────────────
+   *
+   * ⚠️ TEM DE SER ESTILO INLINE, NÃO CLASSE.
+   *
+   * O leitor escreve `style={{ fontSize: settings.fontSize + "px" }}` no
+   * container da prosa — é assim que o aluno escolhe o corpo do texto. Estilo
+   * inline VENCE regra de folha de estilo, então a `.lente-ativa { font-size:
+   * calc(1em * var(--lente-zoom)) }` que eu tinha escrito era calculada e
+   * jogada fora. O aumento existia no código e não existia na tela: o Ricardo
+   * abriu e disse "não vi nada aumentado", e não havia mesmo.
+   *
+   * A base é lida UMA vez por capítulo e guardada. Sem isso, cada mudança de
+   * aumento multiplicaria em cima do valor já aumentado e o texto explodiria
+   * em três cliques.
+   */
+  const fonteBase = useRef<number | null>(null);
+  useEffect(() => { fonteBase.current = null; }, [chave]);
+
   useEffect(() => {
     const raiz = conteudoRef.current;
     if (!raiz) return;
+    const inlineOriginal = raiz.style.fontSize;
+
+    // ⚠️ O REACT REESCREVE ESTE ESTILO DEPOIS DO EFEITO.
+    //
+    // O leitor carrega as preferências de leitura do `localStorage` num efeito
+    // próprio; quando o corpo do texto chega (16 → 17px), o React escreve
+    // `style.fontSize` de novo e apaga o aumento — sem erro, sem aviso, e sem
+    // que este efeito volte a rodar, porque nem `zoom` nem `chave` mudaram.
+    // Foi por isso que a primeira correção do aumento também não apareceu.
+    //
+    // O observador devolve o aumento sempre que o leitor mexe no corpo, e
+    // trata o valor que ele escreveu como a nova base — então mudar o tamanho
+    // do texto nas preferências continua funcionando, com o aumento por cima.
+    let nosso = "";
+    const aplicar = () => {
+      if (raiz.style.fontSize !== nosso) {
+        fonteBase.current =
+          parseFloat(raiz.style.fontSize) || parseFloat(getComputedStyle(raiz).fontSize) || 16;
+      }
+      const alvo = `${((fonteBase.current ?? 16) * zoom).toFixed(2)}px`;
+      if (raiz.style.fontSize !== alvo) { nosso = alvo; raiz.style.fontSize = alvo; }
+      else nosso = alvo;
+    };
+
     raiz.style.setProperty("--lente-zoom", String(zoom));
     raiz.classList.add("lente-ativa");
-    return () => { raiz.classList.remove("lente-ativa"); raiz.style.removeProperty("--lente-zoom"); };
-  }, [conteudoRef, zoom]);
+    aplicar();
+
+    const observador = new MutationObserver(aplicar);
+    observador.observe(raiz, { attributes: true, attributeFilter: ["style"] });
+
+    return () => {
+      observador.disconnect();
+      raiz.classList.remove("lente-ativa");
+      raiz.style.removeProperty("--lente-zoom");
+      raiz.style.fontSize = inlineOriginal;
+    };
+  }, [conteudoRef, zoom, chave]);
+
+  // ── O foco só recua o resto ENQUANTO a narração corre ────────────────────
+  //
+  // Apagar o capítulo enquanto o aluno lê no próprio ritmo seria hostil: ali
+  // ele quer varrer a página, comparar parágrafos, voltar. O recuo pertence ao
+  // momento em que existe uma frase sendo dita — aí sim o resto é ruído.
+  useEffect(() => {
+    const raiz = conteudoRef.current;
+    if (!raiz) return;
+    const ligado = foco && tocando && comAudio;
+    raiz.classList.toggle("lente-foco", ligado);
+    return () => { raiz.classList.remove("lente-foco"); };
+  }, [conteudoRef, foco, tocando, comAudio]);
 
   useEffect(() => {
     try {
       const b = localStorage.getItem(CHAVE_PREFS);
       if (!b) return;
-      const p = JSON.parse(b) as { zoom?: number; velocidade?: number; volume?: number; emSequencia?: boolean };
+      const p = JSON.parse(b) as { zoom?: number; velocidade?: number; volume?: number; emSequencia?: boolean; foco?: boolean };
       if (typeof p.zoom === "number") setZoom(Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, p.zoom)));
       if (typeof p.velocidade === "number") setVelocidade(p.velocidade);
       if (typeof p.volume === "number") setVolume(Math.min(1, Math.max(0, p.volume)));
       if (typeof p.emSequencia === "boolean") setEmSequencia(p.emSequencia);
+      if (typeof p.foco === "boolean") setFoco(p.foco);
     } catch { /* preferência é conforto, não estado crítico */ }
   }, []);
 
@@ -787,7 +877,7 @@ export default function LenteSobreposta({
           style={{ left: selecao.x, top: selecao.y - 10 }}
           onMouseDown={(e) => e.preventDefault()}   /* não deixa a seleção morrer no clique */
         >
-          <div className="flex items-center gap-0.5 rounded-full bg-[var(--reader-popover)] ring-1 ring-[rgba(var(--reader-tint),0.12)] shadow-2xl shadow-black/50 p-1">
+          <div className="flex items-center gap-0.5 rounded-full bg-[var(--lente-barra)] ring-1 ring-[var(--lente-barra-anel)] shadow-[0_18px_50px_-12px_rgba(0,0,0,0.75)] p-1">
             <button type="button" onClick={() => perguntar("explicar", selecao.texto)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[rgba(var(--reader-tint),0.8)] hover:text-white hover:bg-violet-500/25 transition-colors">
               <Sparkles size={13} />{T("Explicar melhor")}
@@ -809,7 +899,7 @@ export default function LenteSobreposta({
       {tutor && (
         <div className="fixed inset-x-0 bottom-0 z-50 pointer-events-none">
           <div className="mx-auto max-w-3xl px-3 pb-24 pointer-events-auto">
-            <div className="rounded-2xl bg-[var(--reader-popover)] ring-1 ring-violet-400/20 shadow-2xl shadow-black/60 overflow-hidden">
+            <div className="rounded-2xl bg-[var(--lente-barra)] ring-1 ring-violet-400/30 shadow-[0_18px_50px_-12px_rgba(0,0,0,0.8)] overflow-hidden">
               <div className="flex items-start gap-3 px-4 py-3 border-b border-[rgba(var(--reader-tint),0.07)]">
                 <Sparkles size={15} className="mt-0.5 shrink-0 text-violet-300" />
                 <div className="min-w-0 flex-1">
@@ -850,25 +940,22 @@ export default function LenteSobreposta({
       {/* ── A barra flutuante: um lugar só, sem moldura em volta do texto ── */}
       <div className="fixed bottom-0 inset-x-0 z-40 pointer-events-none">
         <div className="mx-auto max-w-3xl px-3 pb-3 pointer-events-auto">
-          <div className="rounded-2xl bg-[var(--reader-float)]/95 backdrop-blur-xl ring-1 ring-[rgba(var(--reader-tint),0.1)] shadow-2xl shadow-black/50 overflow-hidden">
+          {/* ── A BARRA PRECISA SER UM OBJETO, NÃO UMA MANCHA ──────────────
+              Ela usava `--reader-float` (#0d0f18) sobre um fundo de página
+              #0b0c13: dois pontos de diferença, ou seja, invisível. Os
+              controles pareciam soltos em cima do texto, e foi assim que o
+              Ricardo viu "controles que aparecem por trás".
+              `--lente-barra` é uma superfície DELIBERADAMENTE mais clara que a
+              página em cada tema, com anel e sombra que a levantam. */}
+          <div className="rounded-2xl bg-[var(--lente-barra)] ring-1 ring-[var(--lente-barra-anel)] shadow-[0_18px_50px_-12px_rgba(0,0,0,0.75)] overflow-hidden">
 
-            {/* painel de tela e som */}
+            {/* painel de som e sequência */}
             <div className={cn(
               "grid transition-[grid-template-rows,opacity] duration-300 ease-out",
-              painelAberto ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+              painelAberto && comAudio ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
             )}>
               <div className="overflow-hidden">
-                <div className="grid gap-4 sm:grid-cols-3 px-5 pt-4 pb-2 border-b border-[rgba(var(--reader-tint),0.06)]">
-                  <label className="flex flex-col gap-1.5">
-                    <span className="flex items-center justify-between text-[11px] uppercase tracking-[0.12em] text-[rgba(var(--reader-tint),0.4)]">
-                      <span className="flex items-center gap-1.5"><ZoomIn size={12} />{T("Aumento")}</span>
-                      <span className="tabular-nums">{Math.round(zoom * 100)}%</span>
-                    </span>
-                    <input type="range" min={ZOOM_MIN} max={ZOOM_MAX} step={0.05} value={zoom}
-                      onChange={(e) => setZoom(Number(e.target.value))}
-                      className="w-full accent-violet-400 cursor-pointer" aria-label={T("Aumento do texto")} />
-                  </label>
-
+                <div className="grid gap-4 sm:grid-cols-2 px-5 pt-4 pb-2 border-b border-[rgba(var(--reader-tint),0.06)]">
                   {comAudio && (
                     <label className="flex flex-col gap-1.5">
                       <span className="flex items-center justify-between text-[11px] uppercase tracking-[0.12em] text-[rgba(var(--reader-tint),0.4)]">
@@ -903,7 +990,7 @@ export default function LenteSobreposta({
                   )}
 
                   {comAudio && irParaCapitulo && (
-                    <label className="sm:col-span-3 flex items-center justify-between gap-3 cursor-pointer pt-1">
+                    <label className="sm:col-span-2 flex items-center justify-between gap-3 cursor-pointer pt-1">
                       <span className="text-[12px] text-[rgba(var(--reader-tint),0.6)]">
                         {T("Seguir para o próximo capítulo sozinho")}
                       </span>
@@ -995,7 +1082,7 @@ export default function LenteSobreposta({
                     <span className="tabular-nums">{caderno.length}</span>
                   </button>
                   {guardadosAbertos && (
-                    <div className="absolute right-0 bottom-full mb-2 z-20 w-72 max-h-80 overflow-y-auto rounded-2xl bg-[var(--reader-popover)] ring-1 ring-[rgba(var(--reader-tint),0.1)] shadow-2xl shadow-black/50 py-1.5">
+                    <div className="absolute right-0 bottom-full mb-2 z-20 w-72 max-h-80 overflow-y-auto rounded-2xl bg-[var(--lente-barra)] ring-1 ring-[var(--lente-barra-anel)] shadow-[0_18px_50px_-12px_rgba(0,0,0,0.75)] py-1.5">
                       {caderno.map((t) => (
                         <div key={t.id} className="group flex items-start gap-2 px-3.5 py-2 hover:bg-[rgba(var(--reader-tint),0.05)]">
                           <div className="min-w-0 flex-1">
@@ -1029,7 +1116,7 @@ export default function LenteSobreposta({
                     <ChevronDown size={11} className={cn("transition-transform", indiceAberto && "rotate-180")} />
                   </button>
                   {indiceAberto && (
-                    <div className="absolute right-0 bottom-full mb-2 z-20 w-60 max-h-72 overflow-y-auto rounded-2xl bg-[var(--reader-popover)] ring-1 ring-[rgba(var(--reader-tint),0.1)] shadow-2xl shadow-black/50 py-1.5">
+                    <div className="absolute right-0 bottom-full mb-2 z-20 w-60 max-h-72 overflow-y-auto rounded-2xl bg-[var(--lente-barra)] ring-1 ring-[var(--lente-barra-anel)] shadow-[0_18px_50px_-12px_rgba(0,0,0,0.75)] py-1.5">
                       {linhaDoTempo.marcas.map((m) => (
                         <button key={`${m.segundos}-${m.titulo}`} type="button"
                           onClick={() => { irParaSecao(m); setIndiceAberto(false); }}
@@ -1045,19 +1132,53 @@ export default function LenteSobreposta({
                 </div>
               )}
 
+              {/* ── O AUMENTO SAI DE TRÁS DO ÍCONE ─────────────────────────
+                  Ele era um `range` dentro do painel de ajustes. Controle que
+                  precisa ser descoberto é controle que não existe — e "aumenta
+                  a área que estou" era metade do pedido original. */}
+              <div className="flex items-center rounded-full bg-[rgba(var(--reader-tint),0.06)]">
+                <button type="button" onClick={() => setZoom((z) => Math.max(ZOOM_MIN, +(z - PASSO_ZOOM).toFixed(2)))}
+                  disabled={zoom <= ZOOM_MIN} title={T("Diminuir o texto")}
+                  className="px-2 py-1.5 rounded-l-full text-[12px] font-semibold text-[rgba(var(--reader-tint),0.6)] enabled:hover:text-[rgba(var(--reader-tint),1)] enabled:hover:bg-[rgba(var(--reader-tint),0.09)] disabled:opacity-30 transition-colors">
+                  A<span className="text-[9px]">−</span>
+                </button>
+                <span className="px-1 text-[10px] tabular-nums text-[rgba(var(--reader-tint),0.42)] select-none">
+                  {Math.round(zoom * 100)}%
+                </span>
+                <button type="button" onClick={() => setZoom((z) => Math.min(ZOOM_MAX, +(z + PASSO_ZOOM).toFixed(2)))}
+                  disabled={zoom >= ZOOM_MAX} title={T("Aumentar o texto")}
+                  className="px-2 py-1.5 rounded-r-full text-[14px] font-semibold text-[rgba(var(--reader-tint),0.6)] enabled:hover:text-[rgba(var(--reader-tint),1)] enabled:hover:bg-[rgba(var(--reader-tint),0.09)] disabled:opacity-30 transition-colors">
+                  A<span className="text-[10px]">+</span>
+                </button>
+              </div>
+
+              {comAudio && (
+                <button type="button" onClick={() => setFoco((v) => !v)} aria-pressed={foco}
+                  title={foco ? T("O resto da página recua enquanto toca") : T("Página inteira em brilho cheio")}
+                  className={cn("flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors",
+                    foco ? "text-violet-200 bg-violet-500/20"
+                      : "text-[rgba(var(--reader-tint),0.55)] bg-[rgba(var(--reader-tint),0.05)] hover:bg-[rgba(var(--reader-tint),0.1)]")}>
+                  <Focus size={13} />
+                </button>
+              )}
+
               <button type="button" onClick={() => porTopo(quemRola(rolagemRef.current), 0, true)}
                 title={T("Voltar ao topo")}
                 className="p-2 rounded-full text-[rgba(var(--reader-tint),0.5)] hover:text-[rgba(var(--reader-tint),0.95)] hover:bg-[rgba(var(--reader-tint),0.07)] transition-colors">
                 <ArrowUpToLine size={15} />
               </button>
 
+              {/* Sem áudio o painel ficaria vazio: o aumento mudou-se para a
+                  barra, e velocidade/volume/sequência só existem com narração. */}
+              {comAudio && (
               <button type="button" onClick={() => setPainelAberto((v) => !v)} aria-expanded={painelAberto}
-                title={T("Tela e som")}
+                title={T("Som e sequência")}
                 className={cn("flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors",
                   painelAberto ? "text-violet-200 bg-violet-500/15"
                     : "text-[rgba(var(--reader-tint),0.55)] bg-[rgba(var(--reader-tint),0.05)] hover:bg-[rgba(var(--reader-tint),0.1)]")}>
                 <SlidersHorizontal size={13} />
               </button>
+              )}
 
               {comAudio && (
                 <button type="button" onClick={() => setSeguindo((v) => !v)} aria-pressed={seguindo}
