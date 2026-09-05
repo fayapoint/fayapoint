@@ -153,7 +153,18 @@ export function DashboardSidebar({
   const pathname = usePathname();
   const router = useRouter();
   const locale = pathname?.split("/").find((part) => part === "pt-BR" || part === "en");
-  const cubeHref = locale ? `/${locale}` : "/";
+  // ⚠️ SEM `/${locale}` AQUI (04/09/2026)
+  //
+  // Este `<Link>` vem de `@/i18n/navigation` e prefixa o idioma SOZINHO. Com o
+  // prefixo escrito à mão o botão de voltar ao site apontava para
+  // `/pt-BR/pt-BR` — 404 na cara de quem sai do painel. O defeito nasceu na
+  // migração de `next/link` para o Link com idioma: os hrefs do JSX foram
+  // limpos, este, que é montado numa variável, ficou para trás.
+  //
+  // O `locale` continua vivo porque o `router.push` lá embaixo é do
+  // `next/navigation` e ESSE não prefixa nada. São dois mecanismos no mesmo
+  // arquivo, de propósito — ver o cabeçalho de `src/i18n/navigation.ts`.
+  const cubeHref = "/";
   
   // Support both controlled and uncontrolled mode
   const isCollapsed = controlledCollapsed !== undefined ? controlledCollapsed : internalCollapsed;

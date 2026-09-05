@@ -4,4 +4,8 @@
 # Este hook só existe para quem rodou `npm run hooks` uma vez (ele aponta
 # core.hooksPath para cá). Por isso ele NÃO é a única defesa: o mesmo script
 # roda no CI, onde ninguém esquece de instalar.
-exec node scripts/_conferir/varrer-segredos.mjs --staged
+node scripts/_conferir/varrer-segredos.mjs --staged || exit 1
+
+# Recusa href que sai com o idioma duas vezes (`/pt-BR/pt-BR` → 404).
+# Estático e rápido: varre `src` sem subir servidor nenhum.
+node scripts/_conferir/conferir-idioma-duplo.mjs || exit 1

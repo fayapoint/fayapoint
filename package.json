@@ -15,7 +15,8 @@
     "radar:seed": "tsx scripts/radar-seed.ts",
     "radar:historico": "node --env-file=.env.local node_modules/tsx/dist/cli.mjs scripts/radar-historico-backfill.ts",
     "hooks": "git config core.hooksPath .githooks",
-    "varrer-segredos": "node scripts/_conferir/varrer-segredos.mjs"
+    "varrer-segredos": "node scripts/_conferir/varrer-segredos.mjs",
+    "conferir-idioma": "node scripts/_conferir/conferir-idioma-duplo.mjs"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
