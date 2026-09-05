@@ -47,7 +47,59 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$ComfyExe  = "$env:LOCALAPPDATA\Programs\ComfyUI\ComfyUI.exe"
+# ─────────────────────────────────────────────────────────────────────────────
+# A BATIDA — a primeira coisa que este arquivo faz, antes de qualquer logica.
+#
+# 05/09/2026: o log desta rotina nao recebe uma linha desde 31/07, e mesmo assim
+# o Agendador registra "ultima execucao: ontem 10:55, resultado 0". As duas
+# afirmacoes nao podem ser verdade juntas. Rodada a mao AGORA, a rotina escreve
+# normalmente — entao o problema esta entre o Agendador e a primeira linha
+# executada, e nao dentro da logica.
+#
+# Esta batida separa as duas hipoteses de uma vez: se o arquivo `batida` ganhar
+# a data de hoje as 10:55 e o log continuar mudo, o script comeca e morre no
+# meio; se nem a batida aparecer, a tarefa nunca chega a executar o script e o
+# "resultado 0" do Agendador e mentira.
+#
+# ⛔ Nao proteja esta linha com try. Ela existe justamente para falhar alto.
+# ─────────────────────────────────────────────────────────────────────────────
+$PastaBatida = "$env:LOCALAPPDATA\FayAI"
+if (-not (Test-Path $PastaBatida)) { New-Item -ItemType Directory -Path $PastaBatida -Force | Out-Null }
+Add-Content -Path "$PastaBatida\janela-capas.batida.log" -Encoding UTF8 -Value (
+    "[{0:yyyy-MM-dd HH:mm:ss}] entrei · acao={1} · usuario={2} · sessao={3} · cwd={4}" -f
+    (Get-Date), $Acao, $env:USERNAME, [System.Diagnostics.Process]::GetCurrentProcess().SessionId, (Get-Location).Path
+)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# QUAL ComfyUI — e por que isto e uma linha perigosa
+#
+# 05/09/2026. Ha DUAS arvores de ComfyUI neste disco dividindo UMA venv
+# (`C:\WORKS\ComfyUI\.venv`):
+#
+#   Comfy Desktop\Comfy Desktop.exe   ago/2026, core 0.34.5   <- a boa
+#   ComfyUI.exe                       mai/2026, core 0.22.2   <- a do instalador
+#
+# Cada uma exige pins Python diferentes, e **quem sobe por ultimo deixa a venv
+# do seu jeito e quebra a outra**. Esta rotina subia a ANTIGA todo dia as 10h55;
+# o Estudio Social sobe a NOVA as 06h30. Resultado medido: o turno da manha
+# falhou em 28, 29 e 31/08 e em 03, 04 e 05/09 com "ComfyUI nao respondeu na
+# porta 8000 em 240s" — oito dias de posts perdidos por causa desta variavel.
+#
+# Nao e lentidao: no dia 30/08, quando a venv estava do jeito da Desktop, ela
+# subiu em 42 segundos. Ou sobe rapido, ou nao sobe nunca.
+#
+# ⛔ As duas rotinas tem de apontar para o MESMO executavel. Ver a memoria
+#    `reference_comfyui_venv_desatualizada`.
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# 05/09/2026, decisao do Ricardo: **a antiga nunca mais**, nem como plano B.
+# O executavel dela foi renomeado no disco por
+# `painel-automacoes\so-a-comfy-nova.ps1`, e este arquivo nao tem mais como
+# chama-la nem por engano.
+$ComfyCandidatos = @(
+    "$env:LOCALAPPDATA\Programs\ComfyUI\Comfy Desktop\Comfy Desktop.exe"
+)
+$ComfyExe  = $ComfyCandidatos | Where-Object { Test-Path $_ } | Select-Object -First 1
 $Bridge    = 'FayAI-ComfyBridge'          # tarefa agendada que ja existia
 $VpsHost   = 'root@76.13.234.38'
 $PastaEst  = "$env:LOCALAPPDATA\FayAI"
@@ -119,7 +171,7 @@ if ($Acao -eq 'abrir') {
     $pids = @()
     $dono = DonoDaPorta 8000
     if ($dono) { $pids += $dono }
-    $pids += (Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -like 'ComfyUI*' }).Id
+    $pids += (Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -match '^(ComfyUI|Comfy Desktop)' }).Id
     $pids = $pids | Sort-Object -Unique
 
     if (-not (PortaAtiva 8088)) {
@@ -174,7 +226,7 @@ foreach ($p in @($m.comfyPids)) {
 }
 # Varredura final: o Electron pode ter aberto filhos depois do momento em que
 # anotamos os pids.
-foreach ($proc in (Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -like 'ComfyUI*' })) {
+foreach ($proc in (Get-Process -ErrorAction SilentlyContinue | Where-Object { $_.ProcessName -match '^(ComfyUI|Comfy Desktop)' })) {
     Stop-Process -Id $proc.Id -Force -ErrorAction SilentlyContinue
     $mortos += $proc.Id
 }
