@@ -28,9 +28,9 @@ import { cn } from "@/lib/utils";
 export type Formato = "texto" | "audio" | "video";
 
 const SELOS: Record<Formato, { icone: typeof BookOpen; rotuloPt: string; rotuloEn: string; cor: string }> = {
-  texto: { icone: BookOpen, rotuloPt: "Texto", rotuloEn: "Text", cor: "text-sky-300" },
-  audio: { icone: Headphones, rotuloPt: "Audiobook", rotuloEn: "Audiobook", cor: "text-violet-300" },
-  video: { icone: Video, rotuloPt: "Vídeo", rotuloEn: "Video", cor: "text-amber-300" },
+  texto: { icone: BookOpen, rotuloPt: "Texto", rotuloEn: "Text", cor: "text-sky-100 bg-sky-500/80 ring-sky-300/40" },
+  audio: { icone: Headphones, rotuloPt: "Audiobook", rotuloEn: "Audiobook", cor: "text-white bg-violet-600/95 ring-violet-300/50" },
+  video: { icone: Video, rotuloPt: "Vídeo", rotuloEn: "Video", cor: "text-white bg-amber-600/95 ring-amber-300/50" },
 };
 
 export function SeloDeFormato({
@@ -60,13 +60,18 @@ export function SeloDeFormato({
             title={rotulo}
             aria-label={rotulo}
             className={cn(
-              "inline-flex items-center gap-1 rounded-full bg-black/45 backdrop-blur-sm ring-1 ring-white/10",
+              // ⚠️ FUNDO SÓLIDO, NÃO `black/45`.
+              // Sobre uma capa escura, um selo preto translúcido com texto de
+              // 10px desaparece: ele estava lá desde 02/09 e o Ricardo, olhando
+              // a vitrine, disse que não via diferença nenhuma nos cursos com
+              // áudio. Selo que precisa ser procurado não sinaliza nada.
+              "inline-flex items-center gap-1 rounded-full ring-1 shadow-lg shadow-black/30",
               s.cor,
-              compacto ? "p-1.5" : "px-2 py-1",
+              compacto ? "p-1.5" : "px-2.5 py-1",
             )}
           >
             <Icone size={compacto ? 13 : 12} aria-hidden="true" />
-            {!compacto && <span className="text-[10px] font-medium tracking-wide">{rotulo}</span>}
+            {!compacto && <span className="text-[11px] font-bold tracking-wide">{rotulo}</span>}
           </span>
         );
       })}

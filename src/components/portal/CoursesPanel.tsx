@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { temAlgumaNarracao } from "@/data/narradores";
 import { allCourses, getNormalizedLevel, type CourseData } from "@/data/courses";
 import { matriculaEhGratuita, type EnrollmentSlots, type TierConfig } from "@/lib/course-tiers";
 import type { VagasSimultaneas } from "@/lib/vagas-simultaneas";
@@ -698,6 +699,7 @@ export function CoursesPanel({
                 nivel: courseLevelLabels[course.normalizedLevel],
                 aulas: course.totalLessons || undefined,
                 duracao: course.duration || undefined,
+                audiobook: temAlgumaNarracao(course.slug),
                 progresso: course.isEnrolled ? (course.progresso ?? 0) : undefined,
                 estado: { rotulo: course.rotulo, tom: course.estado },
                 // O Ateliê só aparece em curso que a pessoa PODE abrir. Num

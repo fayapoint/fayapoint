@@ -109,7 +109,7 @@ import { useT } from "@/i18n/dicionario";
 
 import Link from "next/link";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-import { ArrowLeft, ArrowRight, Award, ChevronDown, Clock, Layers, Loader2, PlayCircle, Sparkles, Wand2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Award, ChevronDown, Clock, Headphones, Layers, Loader2, PlayCircle, Sparkles, Wand2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 
@@ -124,6 +124,16 @@ export interface ItemTrilho {
   nivel?: string;
   aulas?: number;
   duracao?: string;
+  /**
+   * O curso tem narração pronta.
+   *
+   * Mora aqui, e não só no cartão do catálogo público, porque é NO PORTAL que
+   * o aluno escolhe o que estudar hoje — e quem quer ouvir dirigindo precisa
+   * ver isso antes de abrir. O selo do catálogo existia desde 02/09 e nunca
+   * chegou a esta lista: o Ricardo abriu o portal e não viu diferença nenhuma
+   * entre um curso narrado e um curso sem áudio.
+   */
+  audiobook?: boolean;
   preco?: number;
   precoDe?: number;
   /** 0–100. Quando presente, desenha a barra e troca o rótulo do botão. */
@@ -1070,6 +1080,20 @@ export function TrilhoParallax({
             )}
 
             {/* A capa, com folga lateral para o parallax não abrir borda */}
+            {/* ── O SELO FICA NA CAPA, NÃO NA GAVETA ─────────────────────
+                A linha de "30 aulas · 2h45 · Audiobook" mora dentro da gaveta
+                que só abre no hover — ou seja, invisível justamente na hora de
+                escolher o curso. Na capa ele é visto sem nenhum gesto. */}
+            {item.audiobook && (
+              <span
+                title={T("Tem audiobook")}
+                className="pointer-events-none absolute right-1.5 top-1.5 z-[2] inline-flex items-center gap-1 rounded-full bg-violet-600/95 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-lg shadow-black/40 ring-1 ring-violet-300/40 sm:right-4 sm:top-4 sm:px-2 sm:text-[10px]"
+              >
+                <Headphones size={10} />
+                <span className="hidden sm:inline">{T("Audiobook")}</span>
+              </span>
+            )}
+
             <img
               data-capa
               src={item.capa}
@@ -1279,6 +1303,11 @@ export function TrilhoParallax({
                 {item.duracao && (
                   <span className="inline-flex items-center gap-1">
                     <Clock size={11} /> {T(item.duracao)}
+                  </span>
+                )}
+                {item.audiobook && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-violet-500/15 px-2 py-0.5 text-violet-200 ring-1 ring-violet-400/25">
+                    <Headphones size={11} /> {T("Audiobook")}
                   </span>
                 )}
               </span>

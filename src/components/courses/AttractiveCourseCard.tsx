@@ -56,12 +56,18 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
   const style = courseStyles[product.slug] || courseStyles['default'];
 
   /**
-   * O que este curso oferece HOJE. Texto todo curso tem; áudio sai do manifesto
-   * gerado pela publicação do audiobook (`src/data/audiobook-manifesto.json`),
+   * O que este curso oferece ALÉM do texto.
+   *
+   * ⚠️ "Texto" saiu da vitrine de propósito. Todo curso é texto, então o selo
+   * aparecia em 90 cartões e não distinguia nada — ao lado dele, o "Audiobook"
+   * virava só mais um chip cinza numa fileira. Um sinal que aparece em tudo é
+   * ruído; o que precisa saltar é o que só alguns têm.
+   *
+   * O áudio sai do manifesto gerado pela publicação (`audiobook-manifesto.json`),
    * então o selo aparece no mesmo deploy em que o áudio fica disponível — não
    * antes, não depois.
    */
-  const formatos: Formato[] = ["texto"];
+  const formatos: Formato[] = [];
   if (temAlgumaNarracao(product.slug)) formatos.push("audio");
   const Icon = style.icon;
   const locale = useLocale();
@@ -146,9 +152,10 @@ export function AttractiveCourseCard({ product, index }: AttractiveCourseCardPro
                 )}
               </div>
 
-              {/* Formatos disponíveis — texto sempre; áudio quando narrado.
-                  O vídeo entra sozinho quando `temVideo` virar verdade. */}
-              <div className="absolute bottom-3 left-3">
+              {/* Só o que este curso tem de especial. Fica no ALTO À ESQUERDA:
+                  o rodapé da capa é onde o olho menos vai, e era lá que ele
+                  passava despercebido. */}
+              <div className="absolute top-3 left-3">
                 <SeloDeFormato formatos={formatos} ptBr={isPtBr} />
               </div>
 

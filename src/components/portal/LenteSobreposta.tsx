@@ -939,7 +939,52 @@ export default function LenteSobreposta({
 
       {/* ── A barra flutuante: um lugar só, sem moldura em volta do texto ── */}
       <div className="fixed bottom-0 inset-x-0 z-40 pointer-events-none">
-        <div className="mx-auto max-w-3xl px-3 pb-3 pointer-events-auto">
+        <div className="relative mx-auto max-w-3xl px-3 pb-3 pointer-events-auto">
+          {/* ── OS SUMÁRIOS MORAM FORA DA BARRA ────────────────────────────
+              A barra tem `overflow-hidden` (é o que arredonda os cantos e
+              recorta a animação do painel). Um popover que abre PARA CIMA de
+              dentro dela é cortado pela própria caixa: o Ricardo só conseguiu
+              ver a lista de seções depois de abrir o painel de áudio, que
+              aumentava a altura recortada. Aqui eles são irmãos da barra, não
+              filhos — nada os corta. */}
+          {indiceAberto && linhaDoTempo.marcas.length > 0 && (
+            <div className="absolute inset-x-3 bottom-full mb-2 z-50 flex justify-end">
+              <div className="w-60 max-h-72 overflow-y-auto rounded-2xl bg-[var(--lente-barra)] ring-1 ring-[var(--lente-barra-anel)] shadow-[0_18px_50px_-12px_rgba(0,0,0,0.75)] py-1.5">
+                {linhaDoTempo.marcas.map((m) => (
+                  <button key={`${m.segundos}-${m.titulo}`} type="button"
+                    onClick={() => { irParaSecao(m); setIndiceAberto(false); }}
+                    className="w-full flex items-center justify-between gap-3 px-4 py-2 text-left text-[13px] text-[rgba(var(--reader-tint),0.7)] hover:text-[rgba(var(--reader-tint),1)] hover:bg-[rgba(var(--reader-tint),0.06)] transition-colors">
+                    <span className="truncate">{m.titulo}</span>
+                    {comAudio && (
+                      <span className="tabular-nums text-[11px] text-[rgba(var(--reader-tint),0.35)]">{tempoHumano(m.segundos)}</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {guardadosAbertos && caderno.length > 0 && (
+            <div className="absolute inset-x-3 bottom-full mb-2 z-50 flex justify-end">
+              <div className="w-72 max-h-80 overflow-y-auto rounded-2xl bg-[var(--lente-barra)] ring-1 ring-[var(--lente-barra-anel)] shadow-[0_18px_50px_-12px_rgba(0,0,0,0.75)] py-1.5">
+                {caderno.map((t) => (
+                  <div key={t.id} className="group flex items-start gap-2 px-3.5 py-2 hover:bg-[rgba(var(--reader-tint),0.05)]">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[12.5px] leading-snug text-[rgba(var(--reader-tint),0.78)] line-clamp-3">{t.texto}</p>
+                      {t.capitulo && (
+                        <p className="mt-0.5 text-[10px] text-[rgba(var(--reader-tint),0.32)] truncate">{t.capitulo}</p>
+                      )}
+                    </div>
+                    <button type="button" onClick={() => esquecer(t.id)} title={T("Esquecer")}
+                      className="shrink-0 p-1 rounded-full text-[rgba(var(--reader-tint),0.25)] hover:text-amber-300 hover:bg-amber-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100 transition">
+                      <X size={12} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* ── A BARRA PRECISA SER UM OBJETO, NÃO UMA MANCHA ──────────────
               Ela usava `--reader-float` (#0d0f18) sobre um fundo de página
               #0b0c13: dois pontos de diferença, ou seja, invisível. Os
@@ -1072,34 +1117,14 @@ export default function LenteSobreposta({
 
               {/* O caderno: só aparece quando existe alguma coisa nele. */}
               {caderno.length > 0 && (
-                <div className="relative">
-                  <button type="button" onClick={() => setGuardadosAbertos((v) => !v)} aria-expanded={guardadosAbertos}
-                    title={T("Trechos guardados")}
-                    className={cn("flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors",
-                      guardadosAbertos ? "text-amber-200 bg-amber-500/15"
-                        : "text-[rgba(var(--reader-tint),0.55)] bg-[rgba(var(--reader-tint),0.05)] hover:bg-[rgba(var(--reader-tint),0.1)]")}>
-                    <Bookmark size={13} />
-                    <span className="tabular-nums">{caderno.length}</span>
-                  </button>
-                  {guardadosAbertos && (
-                    <div className="absolute right-0 bottom-full mb-2 z-20 w-72 max-h-80 overflow-y-auto rounded-2xl bg-[var(--lente-barra)] ring-1 ring-[var(--lente-barra-anel)] shadow-[0_18px_50px_-12px_rgba(0,0,0,0.75)] py-1.5">
-                      {caderno.map((t) => (
-                        <div key={t.id} className="group flex items-start gap-2 px-3.5 py-2 hover:bg-[rgba(var(--reader-tint),0.05)]">
-                          <div className="min-w-0 flex-1">
-                            <p className="text-[12.5px] leading-snug text-[rgba(var(--reader-tint),0.78)] line-clamp-3">{t.texto}</p>
-                            {t.capitulo && (
-                              <p className="mt-0.5 text-[10px] text-[rgba(var(--reader-tint),0.32)] truncate">{t.capitulo}</p>
-                            )}
-                          </div>
-                          <button type="button" onClick={() => esquecer(t.id)} title={T("Esquecer")}
-                            className="shrink-0 p-1 rounded-full text-[rgba(var(--reader-tint),0.25)] hover:text-amber-300 hover:bg-amber-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100 transition">
-                            <X size={12} />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <button type="button" onClick={() => setGuardadosAbertos((v) => !v)} aria-expanded={guardadosAbertos}
+                  title={T("Trechos guardados")}
+                  className={cn("flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors",
+                    guardadosAbertos ? "text-amber-200 bg-amber-500/20"
+                      : "text-[rgba(var(--reader-tint),0.55)] bg-[rgba(var(--reader-tint),0.05)] hover:bg-[rgba(var(--reader-tint),0.1)]")}>
+                  <Bookmark size={13} />
+                  <span className="tabular-nums">{caderno.length}</span>
+                </button>
               )}
 
               {secaoAtual && (
@@ -1109,27 +1134,14 @@ export default function LenteSobreposta({
               )}
 
               {linhaDoTempo.marcas.length > 0 && (
-                <div className="relative">
-                  <button type="button" onClick={() => setIndiceAberto((v) => !v)} aria-expanded={indiceAberto}
-                    className="flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs text-[rgba(var(--reader-tint),0.6)] hover:text-[rgba(var(--reader-tint),0.9)] bg-[rgba(var(--reader-tint),0.05)] hover:bg-[rgba(var(--reader-tint),0.1)] transition-colors">
-                    <ListTree size={13} />
-                    <ChevronDown size={11} className={cn("transition-transform", indiceAberto && "rotate-180")} />
-                  </button>
-                  {indiceAberto && (
-                    <div className="absolute right-0 bottom-full mb-2 z-20 w-60 max-h-72 overflow-y-auto rounded-2xl bg-[var(--lente-barra)] ring-1 ring-[var(--lente-barra-anel)] shadow-[0_18px_50px_-12px_rgba(0,0,0,0.75)] py-1.5">
-                      {linhaDoTempo.marcas.map((m) => (
-                        <button key={`${m.segundos}-${m.titulo}`} type="button"
-                          onClick={() => { irParaSecao(m); setIndiceAberto(false); }}
-                          className="w-full flex items-center justify-between gap-3 px-4 py-2 text-left text-[13px] text-[rgba(var(--reader-tint),0.7)] hover:text-[rgba(var(--reader-tint),1)] hover:bg-[rgba(var(--reader-tint),0.06)] transition-colors">
-                          <span className="truncate">{m.titulo}</span>
-                          {comAudio && (
-                            <span className="tabular-nums text-[11px] text-[rgba(var(--reader-tint),0.35)]">{tempoHumano(m.segundos)}</span>
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                <button type="button" onClick={() => setIndiceAberto((v) => !v)} aria-expanded={indiceAberto}
+                  title={T("Seções do capítulo")}
+                  className={cn("flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs transition-colors",
+                    indiceAberto ? "text-violet-200 bg-violet-500/20"
+                      : "text-[rgba(var(--reader-tint),0.6)] bg-[rgba(var(--reader-tint),0.05)] hover:bg-[rgba(var(--reader-tint),0.1)]")}>
+                  <ListTree size={13} />
+                  <ChevronDown size={11} className={cn("transition-transform", indiceAberto && "rotate-180")} />
+                </button>
               )}
 
               {/* ── O AUMENTO SAI DE TRÁS DO ÍCONE ─────────────────────────
