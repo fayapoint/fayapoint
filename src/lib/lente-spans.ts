@@ -60,9 +60,20 @@ function indexar(raiz: HTMLElement) {
     acceptNode(no) {
       const pai = no.parentElement;
       if (!pai) return NodeFilter.FILTER_REJECT;
-      // Código, fórmula e legenda de mídia não são narrados — marcá-los
-      // criaria realce em texto que a voz nunca vai ler.
-      if (pai.closest("pre, code, figcaption, .not-prose")) return NodeFilter.FILTER_REJECT;
+      // ── BLOCO DE CÓDIGO NÃO, CÓDIGO EM LINHA SIM (04/09/2026) ────────────
+      //
+      // A primeira versão recusava `code` inteiro. Parece certo — a voz não lê
+      // bloco de código — e está errado para o código EM LINHA: `M`,
+      // `efConstruction`, `nprobe` são narrados no meio da frase, e pular esse
+      // pedaço parte a frase ao meio. A fala inteira deixa de casar, não só a
+      // palavra.
+      //
+      // Medido nos 134 capítulos: `rag-knowledge` cap11 casava 39 de 53 (74%),
+      // e as catorze falhas eram todas frases com termo entre crases. Era o
+      // único capítulo abaixo do portão de 95% no acervo inteiro.
+      //
+      // `pre` continua fora: ali o texto é bloco e a voz de fato não lê.
+      if (pai.closest("pre, figcaption, .not-prose")) return NodeFilter.FILTER_REJECT;
       if (!no.textContent?.trim()) return NodeFilter.FILTER_REJECT;
       return NodeFilter.FILTER_ACCEPT;
     },

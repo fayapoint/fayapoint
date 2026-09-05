@@ -104,6 +104,8 @@ type CourseProgressDto = {
   totalSections: number | null;
   lastScrollY: number | null;
   lastScrollPercent: number | null;
+  /** Ate onde a lente chegou em cada capitulo: { "7": { fala, de } }. */
+  posicaoMaxima?: Record<string, { fala: number; de: number }>;
   isCompleted: boolean;
   startedAt: string;
   lastAccessedAt: string;
@@ -1182,6 +1184,9 @@ export default function CourseReaderPage() {
   const [showQuizModal, setShowQuizModal] = useState(false);
   const [chapterMediaMap, setChapterMediaMap] = useState<Record<string, ChapterMediaData>>({});
   /** O audiobook por ÍNDICE de capítulo: link assinado + onde cada frase começa. */
+  /** Fase 2 — ate onde este aluno chegou em cada capitulo, vindo do servidor. */
+  const [posicoesMaximas, setPosicoesMaximas] = useState<Record<string, { fala: number; de: number }>>({});
+
   const [audiobookPorNumero, setAudiobookPorNumero] = useState<
     Record<string, { url: string; linhaDoTempo: LinhaDoTempo }>
   >({});
@@ -1501,6 +1506,7 @@ export default function CourseReaderPage() {
       totalSections?: number;
       progressPercent?: number;
       isCompleted?: boolean;
+      posicaoMaxima?: { capitulo: number; fala: number; de: number };
     }) => {
       const token = getStoredBearerToken();
       writeLocalProgress(slug, {
@@ -1545,6 +1551,29 @@ export default function CourseReaderPage() {
     [chapters, courseAccess]
   );
 
+  /**
+   * ── QUEM ROLA É O `<main>`, NÃO A JANELA (04/09/2026) ─────────────────────
+   *
+   * O leitor põe o texto num `<main className="flex-1 overflow-y-auto">` dentro
+   * de uma coluna de altura fixa. A janela, portanto, NUNCA rola — e as seis
+   * chamadas a `window.scrollTo({ top: 0 })` desta página não faziam nada.
+   *
+   * Duas consequências que pareciam outra coisa:
+   *
+   *  • trocar de capítulo deixava você na altura em que estava no anterior, ou
+   *    seja, no meio da aula nova. Isso soava como "a lente não acompanha o
+   *    texto", porque a lente abria com a página fora do lugar;
+   *  • os quatro botões de "voltar ao topo" eram enfeite.
+   *
+   * `behavior` fica de fora quando é a lente que pede: a rolagem suave briga
+   * com a perseguição da narração, que já é amortecida.
+   */
+  const voltarAoTopo = useCallback((suave = true) => {
+    const rol = rolagemRef.current;
+    if (rol) rol.scrollTo({ top: 0, behavior: suave ? "smooth" : "auto" });
+    else window.scrollTo({ top: 0, behavior: suave ? "smooth" : "auto" });
+  }, []);
+
   /* ─── Navigation ─── */
   const goToChapter = useCallback(
     (index: number, markPreviousComplete = false) => {
@@ -1555,7 +1584,7 @@ export default function CourseReaderPage() {
         // Scroll to locked chapter to show paywall
         setCurrentChapterIndex(index);
         setSidebarOpen((prev) => (window.innerWidth >= 1024 ? prev : false));
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        voltarAoTopo();
         return;
       }
 
@@ -1566,7 +1595,7 @@ export default function CourseReaderPage() {
       setCompletedChapterIds(newCompleted);
       setCurrentChapterIndex(index);
       setSidebarOpen((prev) => (window.innerWidth >= 1024 ? prev : false));
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      voltarAoTopo();
 
       const targetChapter = chapters[index];
       if (targetChapter) {
@@ -1596,6 +1625,60 @@ export default function CourseReaderPage() {
       goToChapter(currentChapterIndex - 1, false);
     }
   }, [currentChapterIndex, goToChapter]);
+
+  /**
+   * ── ONDE O VERDE COMEÇA, NESTE CAPÍTULO (Fase 2) ──────────────────────────
+   *
+   * O que o servidor guarda é `{ fala, de }` — a frase alcançada E quantas
+   * frases o capítulo tinha na ocasião. O denominador não é redundância: um
+   * capítulo regravado muda a contagem, e aplicar o índice antigo numa régua
+   * nova pintaria de verde um pedaço que ninguém ouviu. Quando as réguas
+   * diferem, a posição é reescalada pela fração.
+   */
+  const maximoDaLente = useMemo(() => {
+    if (!numeroDoCapitulo) return -1;
+    const guardado = posicoesMaximas[String(numeroDoCapitulo)];
+    if (!guardado || !(guardado.de > 0)) return -1;
+    const agora = lenteDoCapitulo?.linhaDoTempo?.falas?.length ?? lenteDeLeitura?.falas?.length ?? 0;
+    if (!agora) return -1;
+    if (agora === guardado.de) return Math.min(guardado.fala, agora - 1);
+    return Math.min(agora - 1, Math.round((guardado.fala / guardado.de) * agora));
+  }, [numeroDoCapitulo, posicoesMaximas, lenteDoCapitulo, lenteDeLeitura]);
+
+  /**
+   * ⚠️ O CAPÍTULO VEM DE FORA, NÃO DE `numeroDoCapitulo`.
+   *
+   * A lente pode chamar isto no instante em que o capítulo troca — a gravação
+   * pendente é justamente descarregada nessa hora. Se o número saísse daqui,
+   * ele já seria o do capítulo NOVO, e a posição do que acabou de sair seria
+   * gravada em cima da do que entrou: o aluno abriria o capítulo 8 já com dez
+   * minutos "ouvidos" que ele nunca ouviu.
+   *
+   * Sem `numeroDoCapitulo` nas dependências, esta função também para de trocar
+   * de identidade a cada aula.
+   */
+  const registrarPosicao = useCallback((fala: number, de: number, capitulo: number) => {
+    if (!capitulo) return;
+    const chave = String(capitulo);
+    setPosicoesMaximas((ant) => {
+      const velho = ant[chave];
+      if (velho && velho.de > 0 && velho.fala / velho.de >= fala / de) return ant;
+      return { ...ant, [chave]: { fala, de } };
+    });
+    void syncProgress({ posicaoMaxima: { capitulo, fala, de } });
+  }, [syncProgress]);
+
+  /**
+   * O capítulo seguinte tem narração? A barra precisa saber ANTES de o áudio
+   * acabar, para avisar em vez de simplesmente emudecer.
+   */
+  const numeroDoProximo = numeroDoCapitulo == null ? 1 : numeroDoCapitulo + 1;
+  const proximoTemAudio = !!audiobookPorNumero[String(numeroDoProximo)];
+
+  const navegarCapitulo = useCallback((direcao: -1 | 1) => {
+    if (direcao === 1) goToNextChapter();
+    else goToPrevChapter();
+  }, [goToNextChapter, goToPrevChapter]);
 
   const markCurrentComplete = useCallback(() => {
     if (!currentChapter) return;
@@ -1849,6 +1932,10 @@ export default function CourseReaderPage() {
                 ? p.completedLessons
                 : [];
               const serverLastHeadingId = p.lastHeadingId || null;
+
+              if (p.posicaoMaxima && typeof p.posicaoMaxima === "object") {
+                setPosicoesMaximas(p.posicaoMaxima);
+              }
 
               rawCompletedRef.current = serverCompletedSections;
               rawCompletedLessonsRef.current = serverCompletedLessons;
@@ -3174,7 +3261,7 @@ export default function CourseReaderPage() {
                     <div className="p-3 space-y-2">
                       <div className="grid grid-cols-3 gap-2">
                         <button
-                          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                          onClick={() => voltarAoTopo()}
                           className="flex h-11 items-center justify-center rounded-2xl border border-[rgba(var(--reader-tint),0.07)] bg-[rgba(var(--reader-tint),0.03)] text-[var(--reader-fg)]/75 hover:bg-[rgba(var(--reader-tint),0.06)] hover:text-[var(--reader-fg)] transition-all"
                           aria-label={T("Ir para o topo")}
                         >
@@ -3294,7 +3381,7 @@ export default function CourseReaderPage() {
                     <div className="p-3">
                       <div className="grid grid-cols-2 gap-2">
                         <button
-                          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                          onClick={() => voltarAoTopo()}
                           className="flex items-center justify-center gap-2 rounded-2xl border border-[rgba(var(--reader-tint),0.07)] bg-[rgba(var(--reader-tint),0.03)] px-3 py-2.5 text-xs font-medium text-[var(--reader-fg)]/75 hover:bg-[rgba(var(--reader-tint),0.06)] hover:text-[var(--reader-fg)] transition-all"
                         >
                           <ArrowUp size={14} />
@@ -3369,7 +3456,7 @@ export default function CourseReaderPage() {
                 {/* Mobile: compact horizontal bar with all controls */}
                 <div className="flex lg:hidden items-center gap-1.5 p-1.5 rounded-2xl border border-[rgba(var(--reader-tint),0.08)] bg-[var(--reader-float)]/90 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.5)]">
                   <button
-                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                    onClick={() => voltarAoTopo()}
                     className="w-10 h-10 rounded-xl bg-[rgba(var(--reader-tint),0.05)] flex items-center justify-center text-[rgba(var(--reader-tint),0.6)] hover:text-[var(--reader-fg)] hover:bg-[rgba(var(--reader-tint),0.1)] transition-all"
                     aria-label={T("Voltar ao topo")}
                   >
@@ -3404,7 +3491,7 @@ export default function CourseReaderPage() {
                 {/* Desktop: individual floating buttons */}
                 <div className="hidden lg:flex items-center justify-end gap-2">
                   <button
-                    onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                    onClick={() => voltarAoTopo()}
                     className="w-12 h-12 rounded-2xl border border-[rgba(var(--reader-tint),0.08)] bg-[var(--reader-float)]/88 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.4)] flex items-center justify-center text-[rgba(var(--reader-tint),0.8)] hover:text-[var(--reader-fg)] hover:bg-[rgba(var(--reader-tint),0.08)] transition-all"
                     aria-label={T("Voltar ao topo")}
                   >
@@ -3592,6 +3679,15 @@ export default function CourseReaderPage() {
             chave={`${slug}:${currentChapterIndex}`}
             aoFechar={() => setLenteAberta(false)}
             T={T}
+            maximoInicial={maximoDaLente}
+            aoAvancar={registrarPosicao}
+            capitulo={numeroDoCapitulo}
+            temAnterior={currentChapterIndex > 0}
+            temProximo={currentChapterIndex < chapters.length - 1}
+            proximoTemAudio={proximoTemAudio}
+            irParaCapitulo={navegarCapitulo}
+            cursoSlug={slug}
+            tituloDoCapitulo={currentChapter?.title}
           />
         )}
       </div>

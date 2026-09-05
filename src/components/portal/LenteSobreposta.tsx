@@ -31,16 +31,23 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
+  Bookmark,
   ChevronDown,
   Gauge,
+  Highlighter,
   ListTree,
+  Loader2,
   Lock,
   LockOpen,
   Pause,
   Play,
   RotateCcw,
   RotateCw,
+  Scissors,
+  SkipBack,
+  SkipForward,
   SlidersHorizontal,
+  Sparkles,
   Volume2,
   VolumeX,
   X,
@@ -83,6 +90,15 @@ export default function LenteSobreposta({
   chave,
   aoFechar,
   T = (s: string) => s,
+  maximoInicial = -1,
+  aoAvancar,
+  capitulo,
+  temAnterior = false,
+  temProximo = false,
+  proximoTemAudio = false,
+  irParaCapitulo,
+  cursoSlug,
+  tituloDoCapitulo,
 }: {
   /** O container do Markdown renderizado — é nele que as falas são marcadas. */
   conteudoRef: React.RefObject<HTMLElement | null>;
@@ -93,6 +109,20 @@ export default function LenteSobreposta({
   chave?: string;
   aoFechar?: () => void;
   T?: (s: string) => string;
+  /** Fase 2 — até onde este aluno já chegou neste capítulo (índice de fala). */
+  maximoInicial?: number;
+  /** Fase 2 — avisa o leitor para gravar. Já vem estrangulado por aqui. */
+  aoAvancar?: (fala: number, de: number, capitulo: number) => void;
+  /** O NÚMERO do capítulo aberto — vai junto na gravação. Ver `gravarPosicao`. */
+  capitulo?: number | null;
+  /** Fase 3 — navegação de capítulo, para a barra ser uma só. */
+  temAnterior?: boolean;
+  temProximo?: boolean;
+  proximoTemAudio?: boolean;
+  irParaCapitulo?: (direcao: -1 | 1) => void;
+  /** Fase 4 — para o tutor saber de onde veio o trecho. */
+  cursoSlug?: string;
+  tituloDoCapitulo?: string;
 }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const marcacaoRef = useRef<ResultadoDaMarcacao | null>(null);
@@ -101,7 +131,7 @@ export default function LenteSobreposta({
   const [tocando, setTocando] = useState(false);
   const [agora, setAgora] = useState(0);
   const [atual, setAtual] = useState(-1);
-  const [maximo, setMaximo] = useState(-1);
+  const [maximo, setMaximo] = useState(maximoInicial);
   const [seguindo, setSeguindo] = useState(true);
   const [velocidade, setVelocidade] = useState(1);
   const [zoom, setZoom] = useState(1);
@@ -109,6 +139,29 @@ export default function LenteSobreposta({
   const [painelAberto, setPainelAberto] = useState(false);
   const [indiceAberto, setIndiceAberto] = useState(false);
   const [casadas, setCasadas] = useState<number | null>(null);
+
+  // ── Fase 3: continuar no capítulo seguinte ───────────────────────────────
+  const [emSequencia, setEmSequencia] = useState(true);
+  const ultimoGravado = useRef(-1);
+  /** O `maximoInicial` mais recente, sem virar dependência de efeito nenhum. */
+  const maximoInicialRef = useRef(maximoInicial);
+  maximoInicialRef.current = maximoInicial;
+  const continuarAoCarregar = useRef(false);
+  /** Quem entrou em sequência começa do zero — não de onde parou da outra vez. */
+  const pularRetomada = useRef(false);
+
+  // ── Fase 4: selecionar e conversar ───────────────────────────────────────
+  const [selecao, setSelecao] = useState<{ texto: string; x: number; y: number } | null>(null);
+  const [tutor, setTutor] = useState<{
+    trecho: string;
+    pedido: string;
+    resposta: string | null;
+    erro: string | null;
+  } | null>(null);
+  const [pensando, setPensando] = useState(false);
+  const [guardados, setGuardados] = useState<string[]>([]);
+  const [guardadosAbertos, setGuardadosAbertos] = useState(false);
+  const retomarDepois = useRef(false);
 
   const falas = linhaDoTempo.falas;
   const total = linhaDoTempo.segundos || 0;
@@ -133,6 +186,71 @@ export default function LenteSobreposta({
     setCasadas(r.casadas);
     return () => { r.desfazer(); marcacaoRef.current = null; };
   }, [conteudoRef, falas, chave]);
+
+  // ── TROCAR DE CAPÍTULO ZERA O RELÓGIO, NÃO A MEMÓRIA ─────────────────────
+  //
+  // `atual` e `agora` são do capítulo que saiu e não querem dizer nada no que
+  // entrou. `maximo` não zera: ele volta a ser o que o servidor sabe deste
+  // capítulo — é isso que faz o verde aparecer já pintado ao voltar.
+  //
+  // ⚠️ A LISTA DE DEPENDÊNCIAS É SÓ `chave`, DE PROPÓSITO. `maximoInicial` vem
+  // de um `useMemo` sobre o mapa de posições, e esse mapa é reescrito a cada
+  // gravação — pôr `maximoInicial` aqui faria a lente ZERAR A FRASE ATUAL no
+  // meio da narração, uma vez a cada gravação do próprio progresso.
+  useEffect(() => {
+    setAtual(-1);
+    setAgora(0);
+    setMaximo(maximoInicialRef.current);
+    ultimoGravado.current = -1;   // outro capítulo, outra régua de gravação
+    setSelecao(null);
+    setTutor(null);
+  }, [chave]);
+
+  // O progresso do servidor chega DEPOIS do capítulo (é uma requisição). Este
+  // efeito é o que faz o verde aparecer quando ele chega — e ele só sobe,
+  // nunca desce, para não desfazer o que o relógio já pintou.
+  useEffect(() => {
+    if (maximoInicial < 0) return;
+    setMaximo((m) => (maximoInicial > m ? maximoInicial : m));
+  }, [maximoInicial]);
+
+  // ── Fase 2: gravar até onde chegou, sem afogar a rede ────────────────────
+  //
+  // O relógio mexe em `maximo` a cada frase — umas doze por minuto. Uma
+  // requisição por frase seria absurdo, e nenhuma requisição perderia tudo de
+  // quem fecha a aba no meio. Então: espera 4 s de quietude, e grava também ao
+  // sair da página.
+  //
+  // ⚠️ O QUE GRAVAR SAI DE UMA REF, NÃO DAS DEPENDÊNCIAS. A primeira versão
+  // punha `maximo` na lista do efeito do `pagehide` e gravava na limpeza — só
+  // que a limpeza roda a CADA mudança de dependência, então gravava uma vez por
+  // frase e a estrangulação não valia nada.
+  const despachoRef = useRef({ maximo, total: falas.length, capitulo, aoAvancar });
+  despachoRef.current = { maximo, total: falas.length, capitulo, aoAvancar };
+
+  const gravarPosicao = useCallback(() => {
+    const d = despachoRef.current;
+    if (!d.aoAvancar || d.capitulo == null) return;
+    if (d.maximo < 0 || d.total === 0 || d.maximo <= ultimoGravado.current) return;
+    ultimoGravado.current = d.maximo;
+    // O capítulo vai JUNTO. Na troca de aula o React já renderizou a nova antes
+    // de os efeitos rodarem; sem carregar o número, a posição do capítulo que
+    // saiu seria gravada em cima da do que entrou.
+    d.aoAvancar(d.maximo, d.total, d.capitulo);
+  }, []);
+
+  useEffect(() => {
+    if (maximo < 0 || maximo <= ultimoGravado.current) return;
+    const id = setTimeout(gravarPosicao, 4000);
+    return () => clearTimeout(id);
+  }, [maximo, gravarPosicao]);
+
+  useEffect(() => {
+    window.addEventListener("pagehide", gravarPosicao);
+    // A limpeza roda ao sair da lente e ao trocar de capítulo — e só nessas
+    // duas horas, porque a única dependência que muda é a `chave`.
+    return () => { window.removeEventListener("pagehide", gravarPosicao); gravarPosicao(); };
+  }, [chave, gravarPosicao]);
 
   // ── O relógio ────────────────────────────────────────────────────────────
   useEffect(() => {
@@ -166,7 +284,10 @@ export default function LenteSobreposta({
 
   // ── A rolagem que persegue ───────────────────────────────────────────────
   useEffect(() => {
-    if (!comAudio || !seguindo || semAnimacao) return;
+    // Perseguir a narração enquanto o aluno arrasta o dedo sobre um parágrafo
+    // arranca a seleção da mão dele. Enquanto há seleção ou resposta na tela,
+    // a página fica parada.
+    if (!comAudio || !seguindo || semAnimacao || selecao || tutor) return;
     let vivo = true, quadro = 0;
     const passo = () => {
       const rol = rolagemRef.current;
@@ -201,7 +322,7 @@ export default function LenteSobreposta({
     };
     quadro = requestAnimationFrame(passo);
     return () => { vivo = false; cancelAnimationFrame(quadro); };
-  }, [comAudio, seguindo, semAnimacao, atual, falas, rolagemRef]);
+  }, [comAudio, seguindo, semAnimacao, atual, falas, rolagemRef, selecao, tutor]);
 
   // Rolar com o dedo solta o seguimento — a lente não briga pelo scroll.
   useEffect(() => {
@@ -261,10 +382,11 @@ export default function LenteSobreposta({
     try {
       const b = localStorage.getItem(CHAVE_PREFS);
       if (!b) return;
-      const p = JSON.parse(b) as { zoom?: number; velocidade?: number; volume?: number };
+      const p = JSON.parse(b) as { zoom?: number; velocidade?: number; volume?: number; emSequencia?: boolean };
       if (typeof p.zoom === "number") setZoom(Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, p.zoom)));
       if (typeof p.velocidade === "number") setVelocidade(p.velocidade);
       if (typeof p.volume === "number") setVolume(Math.min(1, Math.max(0, p.volume)));
+      if (typeof p.emSequencia === "boolean") setEmSequencia(p.emSequencia);
     } catch { /* preferência é conforto, não estado crítico */ }
   }, []);
 
@@ -283,6 +405,9 @@ export default function LenteSobreposta({
     const a = audioRef.current;
     if (!a) return;
     const retomar = () => {
+      // Entrou tocando, vindo do capítulo anterior: começa no começo. Retomar
+      // do meio aqui daria a impressão de que a lente pulou um pedaço.
+      if (pularRetomada.current) { pularRetomada.current = false; return; }
       try {
         const s = Number(localStorage.getItem(chaveMarca));
         if (s > 1 && a.duration && s < a.duration - 5) a.currentTime = s;
@@ -304,6 +429,192 @@ export default function LenteSobreposta({
     window.addEventListener("pagehide", guardar);
     return () => { clearInterval(id); window.removeEventListener("pagehide", guardar); guardar(); };
   }, [chaveMarca]);
+
+  /**
+   * ── O FIM DE UM CAPÍTULO NÃO É O FIM DA AULA (Fase 3) ────────────────────
+   *
+   * O pedido era "ele segue lendo, andando com o curso". O `<audio>` é o mesmo
+   * elemento de um capítulo para o outro — a lente não desmonta ao trocar de
+   * aula, só o `src` muda —, então continuar é avisar o leitor e marcar que a
+   * próxima carga já entra tocando.
+   *
+   * ⚠️ NÃO PULA CAPÍTULO SEM ÁUDIO. Treze capítulos ainda estão reprovados no
+   * portão; saltar por cima deles entregaria um curso com buracos que ninguém
+   * veria. A lente avança um capítulo, e se lá não houver narração ela para e
+   * diz isso — o aluno lê aquele e segue.
+   */
+  const aoTerminarCapitulo = useCallback(() => {
+    setTocando(false);
+    setMaximo(falas.length - 1);      // terminou de ouvir: o capítulo fica verde inteiro
+    if (!emSequencia || !temProximo || !irParaCapitulo) return;
+    continuarAoCarregar.current = proximoTemAudio;
+    pularRetomada.current = proximoTemAudio;
+    irParaCapitulo(1);
+  }, [emSequencia, temProximo, proximoTemAudio, irParaCapitulo, falas.length]);
+
+  // Chegou o áudio do capítulo seguinte e viemos tocando: continua sozinho.
+  useEffect(() => {
+    if (!continuarAoCarregar.current || !src) return;
+    const a = audioRef.current;
+    if (!a) return;
+    continuarAoCarregar.current = false;
+    const partir = () => { a.currentTime = 0; void a.play().catch(() => { /* o navegador pode recusar */ }); };
+    if (a.readyState >= 2) partir();
+    else a.addEventListener("canplay", partir, { once: true });
+    return () => a.removeEventListener("canplay", partir);
+  }, [src]);
+
+  // ── Fase 4: SELECIONAR E CONVERSAR ───────────────────────────────────────
+  //
+  // O menu nasce da seleção do navegador, não de um modo à parte: o aluno já
+  // sabe arrastar o dedo sobre um parágrafo. O que a lente acrescenta é o que
+  // fazer com o que ele acabou de separar.
+  useEffect(() => {
+    const raiz = conteudoRef.current;
+    if (!raiz) return;
+
+    const olhar = () => {
+      const sel = window.getSelection();
+      const texto = sel?.toString().trim() ?? "";
+      // Curto demais é clique, não seleção. Longo demais estoura o contexto do
+      // tutor e deixa de ser "esta parte".
+      if (!sel || sel.rangeCount === 0 || texto.length < 12) { setSelecao(null); return; }
+      const faixa = sel.getRangeAt(0);
+      if (!raiz.contains(faixa.commonAncestorContainer)) { setSelecao(null); return; }
+      const r = faixa.getBoundingClientRect();
+      if (!r.width && !r.height) { setSelecao(null); return; }
+      setSelecao({
+        texto: texto.slice(0, 2000),
+        x: Math.min(window.innerWidth - 130, Math.max(130, r.left + r.width / 2)),
+        y: Math.max(56, r.top),
+      });
+    };
+
+    const soltar = () => setTimeout(olhar, 10);
+    document.addEventListener("mouseup", soltar);
+    document.addEventListener("touchend", soltar);
+    return () => {
+      document.removeEventListener("mouseup", soltar);
+      document.removeEventListener("touchend", soltar);
+    };
+  }, [conteudoRef]);
+
+  /**
+   * ── OUVIR E LER AO MESMO TEMPO NÃO FUNCIONA ──────────────────────────────
+   *
+   * A narração pausa enquanto o tutor responde e volta sozinha depois — o
+   * Ricardo já apontou noutro contexto que fica impossível entender o áudio
+   * com outra coisa aparecendo na tela. Aqui a regra é a mesma.
+   */
+  const perguntar = useCallback(async (pedido: "explicar" | "resumir", trecho: string) => {
+    setSelecao(null);
+    const a = audioRef.current;
+    if (a && !a.paused) { retomarDepois.current = true; a.pause(); }
+
+    const rotulo = pedido === "explicar" ? T("Explicar melhor") : T("Resumir isto");
+    setTutor({ trecho, pedido: rotulo, resposta: null, erro: null });
+    setPensando(true);
+
+    const ordem = pedido === "explicar"
+      ? "Explique este trecho do capítulo para um aluno que travou nele. Vá direto ao ponto, use um exemplo concreto, e nao repita o trecho de volta."
+      : "Resuma este trecho em ate tres frases curtas, sem perder nenhum numero nem nenhum nome proprio que ele traga.";
+
+    try {
+      const res = await fetch("/api/ai/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          message: ordem,
+          trecho,
+          curso: cursoSlug,
+          capitulo: tituloDoCapitulo,
+        }),
+      });
+      const dados = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        setTutor((t) => t && { ...t, erro: dados?.error || T("Não consegui responder agora.") });
+      } else {
+        setTutor((t) => t && { ...t, resposta: String(dados?.response || "") });
+      }
+    } catch {
+      setTutor((t) => t && { ...t, erro: T("Sem conexão com o tutor.") });
+    } finally {
+      setPensando(false);
+    }
+  }, [T, cursoSlug, tituloDoCapitulo]);
+
+  // ── O caderno de trechos ─────────────────────────────────────────────────
+  const [caderno, setCaderno] = useState<{ id: string; texto: string; capitulo: string | null }[]>([]);
+
+  useEffect(() => {
+    if (!cursoSlug) return;
+    let vivo = true;
+    fetch(`/api/courses/${cursoSlug}/trechos`, { credentials: "include" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (vivo && d?.trechos) setCaderno(d.trechos); })
+      .catch(() => { /* sem caderno a lente continua inteira */ });
+    return () => { vivo = false; };
+  }, [cursoSlug]);
+
+  const guardar = useCallback(async (texto: string) => {
+    // ── O GRIFO APARECE NO TEXTO, NÃO SÓ NUMA LISTA ────────────────────────
+    //
+    // "poder destacar uma parte" era metade do pedido. Guardar sem marcar a
+    // página deixaria o aluno sem saber o que já grifou da segunda vez que
+    // abrisse o capítulo.
+    //
+    // Mesma mecânica de `marcarFalas`: `extractContents` + `insertNode`
+    // atravessa fronteira de elemento, onde `surroundContents` desiste. Se o
+    // DOM recusar, perde-se o grifo visual e não a gravação.
+    try {
+      const sel = window.getSelection();
+      if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
+        const faixa = sel.getRangeAt(0);
+        const marca = document.createElement("mark");
+        marca.className = "lente-guardado";
+        marca.appendChild(faixa.extractContents());
+        faixa.insertNode(marca);
+        sel.removeAllRanges();
+      }
+    } catch { /* sem grifo na tela; a gravação abaixo continua */ }
+
+    setSelecao(null);
+    if (!cursoSlug) return;
+    // Aparece na lista ANTES da rede responder: guardar tem de parecer
+    // instantâneo, senão o aluno clica duas vezes achando que falhou.
+    setGuardados((g) => (g.includes(texto) ? g : [...g, texto]));
+    try {
+      const res = await fetch(`/api/courses/${cursoSlug}/trechos`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ texto, capitulo: tituloDoCapitulo }),
+      });
+      const d = await res.json().catch(() => ({}));
+      if (res.ok && d?.id && !d?.repetido) {
+        setCaderno((c) => [{ id: d.id, texto, capitulo: tituloDoCapitulo ?? null }, ...c]);
+      }
+    } catch { /* fica o grifo desta sessão; a próxima tentativa regrava */ }
+  }, [cursoSlug, tituloDoCapitulo]);
+
+  const esquecer = useCallback(async (id: string) => {
+    setCaderno((c) => c.filter((t) => t.id !== id));
+    if (!cursoSlug) return;
+    try {
+      await fetch(`/api/courses/${cursoSlug}/trechos?id=${encodeURIComponent(id)}`, {
+        method: "DELETE", credentials: "include",
+      });
+    } catch { /* some da tela; volta na próxima carga se a rede falhou */ }
+  }, [cursoSlug]);
+
+  const fecharTutor = useCallback(() => {
+    setTutor(null);
+    if (retomarDepois.current) {
+      retomarDepois.current = false;
+      void audioRef.current?.play().catch(() => { /* o aluno reprende quando quiser */ });
+    }
+  }, []);
 
   const irPara = useCallback((s: number) => {
     const a = audioRef.current;
@@ -335,6 +646,73 @@ export default function LenteSobreposta({
 
   return (
     <>
+      {/* ── Fase 4: o menu que nasce da seleção ────────────────────────────── */}
+      {selecao && !tutor && (
+        <div
+          className="fixed z-50 -translate-x-1/2 -translate-y-full"
+          style={{ left: selecao.x, top: selecao.y - 10 }}
+          onMouseDown={(e) => e.preventDefault()}   /* não deixa a seleção morrer no clique */
+        >
+          <div className="flex items-center gap-0.5 rounded-full bg-[var(--reader-popover)] ring-1 ring-[rgba(var(--reader-tint),0.12)] shadow-2xl shadow-black/50 p-1">
+            <button type="button" onClick={() => perguntar("explicar", selecao.texto)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[rgba(var(--reader-tint),0.8)] hover:text-white hover:bg-violet-500/25 transition-colors">
+              <Sparkles size={13} />{T("Explicar melhor")}
+            </button>
+            <button type="button" onClick={() => perguntar("resumir", selecao.texto)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[rgba(var(--reader-tint),0.8)] hover:text-white hover:bg-violet-500/25 transition-colors">
+              <Scissors size={13} />{T("Resumir isto")}
+            </button>
+            <button type="button" onClick={() => guardar(selecao.texto)}
+              disabled={guardados.includes(selecao.texto)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium text-[rgba(var(--reader-tint),0.8)] enabled:hover:text-white enabled:hover:bg-amber-500/25 disabled:text-amber-300/70 transition-colors">
+              <Highlighter size={13} />{guardados.includes(selecao.texto) ? T("Guardado") : T("Guardar")}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Fase 4: a resposta do tutor, sobre AQUELE trecho ───────────────── */}
+      {tutor && (
+        <div className="fixed inset-x-0 bottom-0 z-50 pointer-events-none">
+          <div className="mx-auto max-w-3xl px-3 pb-24 pointer-events-auto">
+            <div className="rounded-2xl bg-[var(--reader-popover)] ring-1 ring-violet-400/20 shadow-2xl shadow-black/60 overflow-hidden">
+              <div className="flex items-start gap-3 px-4 py-3 border-b border-[rgba(var(--reader-tint),0.07)]">
+                <Sparkles size={15} className="mt-0.5 shrink-0 text-violet-300" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-[11px] uppercase tracking-[0.12em] text-violet-300/70">{tutor.pedido}</p>
+                  <p className="mt-1 text-[12px] leading-relaxed text-[rgba(var(--reader-tint),0.45)] line-clamp-2 italic">
+                    &ldquo;{tutor.trecho}&rdquo;
+                  </p>
+                </div>
+                <button type="button" onClick={fecharTutor} aria-label={T("Fechar")}
+                  className="p-1 rounded-full text-[rgba(var(--reader-tint),0.4)] hover:text-white hover:bg-[rgba(var(--reader-tint),0.08)] transition-colors">
+                  <X size={15} />
+                </button>
+              </div>
+              <div className="px-4 py-3 max-h-[38vh] overflow-y-auto">
+                {pensando && (
+                  <p className="flex items-center gap-2 text-sm text-[rgba(var(--reader-tint),0.5)]">
+                    <Loader2 size={14} className="animate-spin" />
+                    {T("O tutor está lendo o trecho…")}
+                  </p>
+                )}
+                {tutor.erro && <p className="text-sm text-amber-300/90">{tutor.erro}</p>}
+                {tutor.resposta && (
+                  <p className="text-[13.5px] leading-relaxed text-[rgba(var(--reader-tint),0.88)] whitespace-pre-wrap">
+                    {tutor.resposta}
+                  </p>
+                )}
+              </div>
+              {comAudio && retomarDepois.current && (
+                <p className="px-4 pb-3 text-[11px] text-[rgba(var(--reader-tint),0.35)]">
+                  {T("A narração volta quando você fechar.")}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── A barra flutuante: um lugar só, sem moldura em volta do texto ── */}
       <div className="fixed bottom-0 inset-x-0 z-40 pointer-events-none">
         <div className="mx-auto max-w-3xl px-3 pb-3 pointer-events-auto">
@@ -389,6 +767,21 @@ export default function LenteSobreposta({
                         className="w-full accent-violet-400 cursor-pointer" aria-label={T("Volume")} />
                     </label>
                   )}
+
+                  {comAudio && irParaCapitulo && (
+                    <label className="sm:col-span-3 flex items-center justify-between gap-3 cursor-pointer pt-1">
+                      <span className="text-[12px] text-[rgba(var(--reader-tint),0.6)]">
+                        {T("Seguir para o próximo capítulo sozinho")}
+                      </span>
+                      <button type="button" role="switch" aria-checked={emSequencia}
+                        onClick={() => setEmSequencia((v) => !v)}
+                        className={cn("relative w-10 h-5 rounded-full transition-colors shrink-0",
+                          emSequencia ? "bg-violet-500" : "bg-[rgba(var(--reader-tint),0.15)]")}>
+                        <span className={cn("absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all",
+                          emSequencia ? "left-[1.375rem]" : "left-0.5")} />
+                      </button>
+                    </label>
+                  )}
                 </div>
               </div>
             </div>
@@ -410,6 +803,18 @@ export default function LenteSobreposta({
 
             {/* controles */}
             <div className="flex items-center gap-1.5 px-3 sm:px-4 py-2.5">
+              {/* ── Fase 5: a navegação de capítulo mora AQUI ────────────────
+                  Duas barras disputando o rodapé era o que havia antes. Quem
+                  ouve não quer sair da barra para trocar de aula, e quem lê
+                  sem áudio precisa dos mesmos botões. */}
+              {irParaCapitulo && (
+                <button type="button" disabled={!temAnterior}
+                  onClick={() => irParaCapitulo(-1)} title={T("Capítulo anterior")}
+                  className="p-2 rounded-full text-[rgba(var(--reader-tint),0.5)] enabled:hover:text-[rgba(var(--reader-tint),0.95)] enabled:hover:bg-[rgba(var(--reader-tint),0.07)] disabled:opacity-25 transition-colors">
+                  <SkipBack size={15} />
+                </button>
+              )}
+
               {comAudio && (
                 <>
                   <button type="button" onClick={() => irPara(agora - PULO)} title={T("Voltar 15 segundos")}
@@ -434,7 +839,47 @@ export default function LenteSobreposta({
                 <span className="px-2 text-xs text-[rgba(var(--reader-tint),0.5)]">{T("Lente de leitura")}</span>
               )}
 
+              {irParaCapitulo && (
+                <button type="button" disabled={!temProximo}
+                  onClick={() => irParaCapitulo(1)} title={T("Próximo capítulo")}
+                  className="p-2 rounded-full text-[rgba(var(--reader-tint),0.5)] enabled:hover:text-[rgba(var(--reader-tint),0.95)] enabled:hover:bg-[rgba(var(--reader-tint),0.07)] disabled:opacity-25 transition-colors">
+                  <SkipForward size={15} />
+                </button>
+              )}
+
               <div className="flex-1" />
+
+              {/* O caderno: só aparece quando existe alguma coisa nele. */}
+              {caderno.length > 0 && (
+                <div className="relative">
+                  <button type="button" onClick={() => setGuardadosAbertos((v) => !v)} aria-expanded={guardadosAbertos}
+                    title={T("Trechos guardados")}
+                    className={cn("flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-medium transition-colors",
+                      guardadosAbertos ? "text-amber-200 bg-amber-500/15"
+                        : "text-[rgba(var(--reader-tint),0.55)] bg-[rgba(var(--reader-tint),0.05)] hover:bg-[rgba(var(--reader-tint),0.1)]")}>
+                    <Bookmark size={13} />
+                    <span className="tabular-nums">{caderno.length}</span>
+                  </button>
+                  {guardadosAbertos && (
+                    <div className="absolute right-0 bottom-full mb-2 z-20 w-72 max-h-80 overflow-y-auto rounded-2xl bg-[var(--reader-popover)] ring-1 ring-[rgba(var(--reader-tint),0.1)] shadow-2xl shadow-black/50 py-1.5">
+                      {caderno.map((t) => (
+                        <div key={t.id} className="group flex items-start gap-2 px-3.5 py-2 hover:bg-[rgba(var(--reader-tint),0.05)]">
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[12.5px] leading-snug text-[rgba(var(--reader-tint),0.78)] line-clamp-3">{t.texto}</p>
+                            {t.capitulo && (
+                              <p className="mt-0.5 text-[10px] text-[rgba(var(--reader-tint),0.32)] truncate">{t.capitulo}</p>
+                            )}
+                          </div>
+                          <button type="button" onClick={() => esquecer(t.id)} title={T("Esquecer")}
+                            className="shrink-0 p-1 rounded-full text-[rgba(var(--reader-tint),0.25)] hover:text-amber-300 hover:bg-amber-500/10 opacity-0 group-hover:opacity-100 focus:opacity-100 transition">
+                            <X size={12} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {secaoAtual && (
                 <span className="hidden md:inline text-[11px] text-[rgba(var(--reader-tint),0.45)] truncate max-w-[14rem]">
@@ -496,13 +941,21 @@ export default function LenteSobreposta({
               {T("Sincronia parcial neste capítulo")} ({casadas}/{falas.length})
             </p>
           )}
+
+          {/* Dizer que a narração vai parar antes de ela parar. O contrário —
+              o silêncio sem explicação — lê como defeito. */}
+          {comAudio && emSequencia && temProximo && !proximoTemAudio && (
+            <p className="mt-1.5 text-center text-[10px] text-[rgba(var(--reader-tint),0.35)]">
+              {T("O próximo capítulo ainda não tem narração — a lente segue em leitura.")}
+            </p>
+          )}
         </div>
       </div>
 
       {comAudio && (
         <audio ref={audioRef} src={src ?? undefined} preload="metadata"
           onPlay={() => setTocando(true)} onPause={() => setTocando(false)}
-          onEnded={() => setTocando(false)} className="hidden" />
+          onEnded={aoTerminarCapitulo} className="hidden" />
       )}
     </>
   );

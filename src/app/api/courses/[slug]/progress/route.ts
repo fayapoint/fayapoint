@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
-import CourseProgress from '@/models/CourseProgress';
+import CourseProgress, { type ICourseProgress } from '@/models/CourseProgress';
 import Order from '@/models/Order';
 import { getAuthUser } from '@/lib/auth';
 import { getMongoClient } from '@/lib/products';
@@ -10,6 +10,16 @@ import { isCourseFreeThisMonth } from '@/lib/monthly-course-offers';
 
 function uniqueStrings(values: string[]) {
   return Array.from(new Set(values.map((v) => v.trim()).filter(Boolean)));
+}
+
+/**
+ * O `posicaoMaxima` do Mongoose e um Map. `JSON.stringify` de um Map da `{}` —
+ * e um `{}` silencioso aqui apagaria o verde da lente sem erro nenhum.
+ */
+function mapaParaObjeto(m: ICourseProgress['posicaoMaxima']): Record<string, { fala: number; de: number }> {
+  if (!m) return {};
+  if (m instanceof Map) return Object.fromEntries(m) as Record<string, { fala: number; de: number }>;
+  return m as unknown as Record<string, { fala: number; de: number }>;
 }
 
 function computeSectionProgressPercent(completedSections: string[], totalSections: number | null | undefined) {
@@ -130,6 +140,7 @@ export async function GET(
         totalSections: progress.totalSections || null,
         lastScrollY: progress.lastScrollY ?? null,
         lastScrollPercent: progress.lastScrollPercent ?? null,
+        posicaoMaxima: mapaParaObjeto(progress.posicaoMaxima),
         isCompleted: progress.isCompleted || false,
         startedAt: progress.startedAt,
         lastAccessedAt: progress.lastAccessedAt,
@@ -142,6 +153,12 @@ export async function GET(
 }
 
 interface UpdateProgressBody {
+  /**
+   * Ate onde a lente chegou NESTE capitulo. Uma entrada por chamada — a lente
+   * so mexe no capitulo aberto, e mandar o mapa inteiro faria uma aba velha
+   * apagar o que outra acabou de gravar.
+   */
+  posicaoMaxima?: { capitulo: number; fala: number; de: number };
   completedSections?: string[];
   replaceAllSections?: boolean;
   lastHeadingId?: string | null;
@@ -191,10 +208,40 @@ export async function PUT(
             ? Math.min(100, Math.max(0, Math.round(body.lastScrollPercent)))
             : progress?.progressPercent || 0;
 
+    /**
+     * ── O MAXIMO E DECIDIDO NO SERVIDOR, NAO NO NAVEGADOR ──────────────────
+     *
+     * Duas abas do mesmo curso, ou o telefone e o computador, mandam posicoes
+     * diferentes. Quem grava por ultimo venceria — e a aba que ficou parada no
+     * comeco do capitulo apagaria o verde de quem ouviu o capitulo inteiro.
+     *
+     * Aqui a gravacao so acontece se a posicao nova for MAIOR que a guardada,
+     * em fracao do capitulo (a contagem de falas muda quando o capitulo e
+     * regravado, entao comparar indice cru compararia reguas diferentes).
+     */
+    const posicoes: Record<string, { fala: number; de: number }> = {};
+    const pm = body.posicaoMaxima;
+    if (pm && Number.isFinite(pm.capitulo) && Number.isFinite(pm.fala) && pm.de > 0) {
+      const chave = String(Math.trunc(pm.capitulo));
+      const guardadoMapa = progress?.posicaoMaxima;
+      const guardado = guardadoMapa instanceof Map
+        ? guardadoMapa.get(chave)
+        : (guardadoMapa as unknown as Record<string, { fala: number; de: number }> | undefined)?.[chave];
+      const fracaoNova = Math.max(0, Math.min(1, pm.fala / pm.de));
+      const fracaoVelha = guardado && guardado.de > 0 ? guardado.fala / guardado.de : -1;
+      if (fracaoNova > fracaoVelha) {
+        posicoes[`posicaoMaxima.${chave}`] = {
+          fala: Math.max(0, Math.trunc(pm.fala)),
+          de: Math.trunc(pm.de),
+        };
+      }
+    }
+
     const updated = await CourseProgress.findOneAndUpdate(
       { userId: authUser.id, courseId: slug },
       {
         $set: {
+          ...posicoes,
           completedSections,
           lastHeadingId: body.lastHeadingId ?? progress?.lastHeadingId,
           lastScrollY: typeof body.lastScrollY === 'number' ? body.lastScrollY : progress?.lastScrollY,
@@ -222,6 +269,7 @@ export async function PUT(
         lastHeadingId: updated.lastHeadingId || null,
         lastScrollY: updated.lastScrollY ?? null,
         lastScrollPercent: updated.lastScrollPercent ?? null,
+        posicaoMaxima: mapaParaObjeto(updated.posicaoMaxima),
         totalSections: updated.totalSections || null,
         progressPercent: updated.progressPercent || 0,
         isCompleted: updated.isCompleted || false,

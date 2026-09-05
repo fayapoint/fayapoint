@@ -1818,6 +1818,20 @@ html[data-virada-livro="tras"]::view-transition-new(pagina-direita) {
   margin: 0 -0.12em;
 }
 
+/* O trecho que o aluno guardou.
+   Âmbar, e não verde nem azul: os três estados da narração são um eixo só (o
+   tempo), e o grifo é outra coisa — foi ELE que escolheu, não o relógio. Fundo
+   em vez de sublinhado, pelo mesmo motivo: precisa ler diferente à primeira
+   vista, e é pouco texto, então mancha aqui não cansa. */
+.lente-guardado {
+  background-color: rgba(251, 191, 36, 0.16);
+  color: inherit;
+  border-bottom: 1px solid rgba(251, 191, 36, 0.45);
+  border-radius: 2px;
+  padding: 0.04em 0.1em;
+  margin: 0 -0.1em;
+}
+
 /* Quem pediu menos movimento recebe o realce, e nenhuma transição. */
 @media (prefers-reduced-motion: reduce) {
   .lente-ativa,
