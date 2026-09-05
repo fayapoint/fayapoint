@@ -9,9 +9,10 @@
  * texto, sem as imagens do capítulo, sem a formatação, sem a arte. Funcionava,
  * mas era um PAINEL que substituía a leitura — não uma lente.
  *
- * Esta enxerga o que já está na página. `marcarFalas` envolve cada frase
- * narrada num span dentro do Markdown renderizado, e daqui para a frente tudo é
- * CSS sobre esses spans mais uma rolagem que segue o áudio.
+ * Esta enxerga o que já está na página. `acharFaixas` descobre onde cada frase
+ * narrada mora no Markdown renderizado — SEM alterar o DOM — e daqui para a
+ * frente tudo é realce nativo sobre essas faixas mais uma rolagem que segue o
+ * áudio.
  *
  * Consequência prática: ligar a lente no meio do capítulo não muda nada de
  * lugar. As imagens continuam onde estavam, o que você estava lendo continua
@@ -19,8 +20,10 @@
  *
  * ## As três decisões que sustentam o resto
  *
- * 1. **O realce é do SPAN, não de um clone.** Nada é redesenhado; a página é a
- *    mesma, com classes a mais.
+ * 1. **O realce é PINTADO SOBRE a página, não construído nela.** Nada é
+ *    redesenhado e nada é envolvido: o DOM continua exatamente como o React o
+ *    deixou. Envolver era o desenho anterior, e derrubava a página inteira ao
+ *    trocar de capítulo — ver `lente-realce.ts`.
  * 2. **A rolagem persegue, não salta.** O destino é interpolado pelo progresso
  *    dentro da frase e alcançado por amortecimento — o texto desliza devagar em
  *    vez de pular de dez em dez segundos.
@@ -56,7 +59,14 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { marcarFalas, type ResultadoDaMarcacao } from "@/lib/lente-spans";
+import {
+  acharFaixas,
+  acharTrecho,
+  limparRealces,
+  publicarRealces,
+  temRealceNativo,
+  type Faixas,
+} from "@/lib/lente-realce";
 import { andar, moldura, ouvirRolagem, porTopo, quemRola, topoDe } from "@/lib/rolagem";
 import type { LinhaDoTempo } from "@/components/portal/LenteDeLeitura";
 
@@ -127,7 +137,9 @@ export default function LenteSobreposta({
   tituloDoCapitulo?: string;
 }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const marcacaoRef = useRef<ResultadoDaMarcacao | null>(null);
+  const faixasRef = useRef<Faixas | null>(null);
+  /** Os grifos deste capítulo, já achados no texto. */
+  const grifosRef = useRef<Range[]>([]);
   const ignorarAte = useRef(0);
 
   const [tocando, setTocando] = useState(false);
@@ -187,18 +199,19 @@ export default function LenteSobreposta({
     [],
   );
 
-  // ── Marcar as falas no DOM, e limpar ao sair ─────────────────────────────
+  // ── Achar onde cada fala mora, e apagar o realce ao sair ─────────────────
   //
-  // Depende do capítulo (`chave`): trocar de capítulo desfaz a marcação antiga
-  // antes de marcar a nova. Sem isso, os spans do capítulo anterior ficariam
-  // órfãos e o realce apontaria para lugar nenhum.
+  // ⚠️ NADA AQUI MUDA O DOM. A versão anterior envolvia cada frase num `<span>`
+  // e isso derrubava a página: o DOM é do React, e ao trocar de capítulo ele
+  // chamava `removeChild` num nó que tinha mudado de pai
+  // ("Application error", tela branca). Ver o cabeçalho de `lente-realce.ts`.
   useEffect(() => {
     const raiz = conteudoRef.current;
     if (!raiz) return;
-    const r = marcarFalas(raiz, falas.map((f) => ({ i: f.i, texto: f.texto })));
-    marcacaoRef.current = r;
+    const r = acharFaixas(raiz, falas.map((f) => ({ i: f.i, texto: f.texto })));
+    faixasRef.current = r;
     setCasadas(r.casadas);
-    return () => { r.desfazer(); marcacaoRef.current = null; };
+    return () => { limparRealces(); faixasRef.current = null; grifosRef.current = []; };
   }, [conteudoRef, falas, chave]);
 
   // ── TROCAR DE CAPÍTULO ZERA O RELÓGIO, NÃO A MEMÓRIA ─────────────────────
@@ -291,34 +304,68 @@ export default function LenteSobreposta({
   }, [chave, gravarPosicao]);
 
   // ── O relógio ────────────────────────────────────────────────────────────
+  //
+  // ⚠️ DOIS RELÓGIOS, E O SEGUNDO NÃO É LUXO.
+  //
+  // `requestAnimationFrame` PARA quando a aba fica escondida — e ouvir
+  // audiobook com a tela apagada é o uso principal, não a exceção. Só com o
+  // rAF, quem ouvisse um capítulo inteiro no bolso voltaria com a lente
+  // exatamente onde deixou: nada verde, nada gravado.
+  //
+  // `timeupdate` continua disparando com a aba escondida (~4 vezes por
+  // segundo). Ele é grosso demais para a rolagem parecer contínua, mas é
+  // exatamente o suficiente para a frase atual, o verde e a gravação.
+  //
+  // O rAF fica para o que só importa com a tela acesa: o número do tempo
+  // correndo e a interpolação da perseguição.
   useEffect(() => {
     if (!comAudio) return;
-    let vivo = true, quadro = 0;
-    const passo = () => {
+    const bater = () => {
       const a = audioRef.current;
-      if (a && vivo) {
-        setAgora(a.currentTime);
-        const i = acharFala(falas, a.currentTime);
-        setAtual((ant) => (ant === i ? ant : i));
-        setMaximo((m) => (i > m ? i : m));
-      }
-      if (vivo) quadro = requestAnimationFrame(passo);
+      if (!a) return;
+      setAgora(a.currentTime);
+      const i = acharFala(falas, a.currentTime);
+      setAtual((ant) => (ant === i ? ant : i));
+      setMaximo((m) => (i > m ? i : m));
     };
-    quadro = requestAnimationFrame(passo);
-    return () => { vivo = false; cancelAnimationFrame(quadro); };
-  }, [falas, comAudio]);
 
-  // ── O realce, aplicado como classe nos spans ─────────────────────────────
+    let vivo = true, quadro = 0;
+    const passo = () => { if (!vivo) return; bater(); quadro = requestAnimationFrame(passo); };
+    quadro = requestAnimationFrame(passo);
+
+    const a = audioRef.current;
+    a?.addEventListener("timeupdate", bater);
+    return () => {
+      vivo = false;
+      cancelAnimationFrame(quadro);
+      a?.removeEventListener("timeupdate", bater);
+    };
+  }, [falas, comAudio, src]);
+
+  // ── O realce, pintado pelo navegador ─────────────────────────────────────
+  //
+  // Três conjuntos de faixas por vez. Refazê-los é barato (é montar arrays), e
+  // acontece só quando a frase atual ou a fronteira do verde muda — não a cada
+  // quadro.
   useEffect(() => {
-    const m = marcacaoRef.current;
+    const m = faixasRef.current;
     if (!m) return;
-    for (const [i, span] of m.spans) {
-      const posicao = falas.findIndex((f) => f.i === i);
-      span.classList.toggle("lente-atual", posicao === atual);
-      span.classList.toggle("lente-lida", posicao < atual || (posicao <= maximo && posicao !== atual));
-      span.classList.toggle("lente-porvir", posicao > Math.max(atual, maximo));
-    }
-  }, [atual, maximo, falas]);
+    const lidas: Range[] = [], porvir: Range[] = [], atuais: Range[] = [];
+    const fronteira = Math.max(atual, maximo);
+    falas.forEach((f, posicao) => {
+      const faixa = m.faixas.get(f.i);
+      if (!faixa) return;
+      if (posicao === atual) atuais.push(faixa);
+      else if (posicao < atual || posicao <= maximo) lidas.push(faixa);
+      else if (posicao > fronteira) porvir.push(faixa);
+    });
+    publicarRealces({
+      "lente-lida": lidas,
+      "lente-porvir": porvir,
+      "lente-atual": atuais,
+      "lente-guardado": grifosRef.current,
+    });
+  }, [atual, maximo, falas, casadas]);
 
   // ── A rolagem que persegue ───────────────────────────────────────────────
   useEffect(() => {
@@ -336,23 +383,23 @@ export default function LenteSobreposta({
     const passo = () => {
       const rol = rolagemRef.current;
       const a = audioRef.current;
-      const m = marcacaoRef.current;
+      const m = faixasRef.current;
       if (!rol || !a || !m || atual < 0) { if (vivo) quadro = requestAnimationFrame(passo); return; }
 
-      const alvo = m.spans.get(falas[atual]?.i);
+      const alvo = m.faixas.get(falas[atual]?.i);
       if (!alvo) { if (vivo) quadro = requestAnimationFrame(passo); return; }
 
       const quem = quemRola(rol);
       const mold = moldura(quem);
-      const ondePousa = (el: HTMLElement) => {
-        const r = el.getBoundingClientRect();
+      const ondePousa = (faixa: Range) => {
+        const r = faixa.getBoundingClientRect();
         return topoDe(quem) + (r.top - mold.topo) + r.height / 2 - mold.altura * ANCORA;
       };
 
       const f = falas[atual];
       const dur = Math.max(0.001, (f.ate ?? 0) - (f.de ?? 0));
       const dentro = Math.min(1, Math.max(0, (a.currentTime - (f.de ?? 0)) / dur));
-      const seguinte = m.spans.get(falas[atual + 1]?.i);
+      const seguinte = m.faixas.get(falas[atual + 1]?.i);
 
       const destino = seguinte
         ? ondePousa(alvo) + (ondePousa(seguinte) - ondePousa(alvo)) * dentro
@@ -391,15 +438,15 @@ export default function LenteSobreposta({
     if (comAudio) return;
 
     const focar = () => {
-      const m = marcacaoRef.current;
+      const m = faixasRef.current;
       if (!m) return;
       const mold = moldura(quemRola(rol));
       const alvoY = mold.topo + mold.altura * ANCORA;
       let melhor = -1, menor = Infinity;
       for (let i = 0; i < falas.length; i++) {
-        const el = m.spans.get(falas[i].i);
-        if (!el) continue;
-        const r = el.getBoundingClientRect();
+        const faixa = m.faixas.get(falas[i].i);
+        if (!faixa) continue;
+        const r = faixa.getBoundingClientRect();
         const d = Math.abs(r.top + r.height / 2 - alvoY);
         if (d < menor) { menor = d; melhor = i; }
       }
@@ -608,20 +655,19 @@ export default function LenteSobreposta({
     // página deixaria o aluno sem saber o que já grifou da segunda vez que
     // abrisse o capítulo.
     //
-    // Mesma mecânica de `marcarFalas`: `extractContents` + `insertNode`
-    // atravessa fronteira de elemento, onde `surroundContents` desiste. Se o
-    // DOM recusar, perde-se o grifo visual e não a gravação.
-    try {
-      const sel = window.getSelection();
-      if (sel && sel.rangeCount > 0 && !sel.isCollapsed) {
-        const faixa = sel.getRangeAt(0);
-        const marca = document.createElement("mark");
-        marca.className = "lente-guardado";
-        marca.appendChild(faixa.extractContents());
-        faixa.insertNode(marca);
-        sel.removeAllRanges();
+    // ⚠️ NADA DE `<mark>`. A versão anterior envolvia a seleção num elemento, o
+    // que é o mesmo defeito que derrubava a página na marcação das falas: DOM
+    // do React alterado por fora. O grifo agora é uma faixa a mais no realce
+    // nativo — o navegador pinta, o DOM não muda.
+    const raiz = conteudoRef.current;
+    if (raiz) {
+      const achada = acharTrecho(raiz, texto);
+      if (achada) {
+        grifosRef.current = [...grifosRef.current, achada];
+        publicarRealces({ "lente-guardado": grifosRef.current });
       }
-    } catch { /* sem grifo na tela; a gravação abaixo continua */ }
+    }
+    window.getSelection()?.removeAllRanges();
 
     setSelecao(null);
     if (!cursoSlug) return;
@@ -640,10 +686,33 @@ export default function LenteSobreposta({
         setCaderno((c) => [{ id: d.id, texto, capitulo: tituloDoCapitulo ?? null }, ...c]);
       }
     } catch { /* fica o grifo desta sessão; a próxima tentativa regrava */ }
-  }, [cursoSlug, tituloDoCapitulo]);
+  }, [cursoSlug, tituloDoCapitulo, conteudoRef]);
+
+  // ── Reacender os grifos deste capítulo ───────────────────────────────────
+  //
+  // O caderno chega do servidor depois do capítulo, e o aluno volta a uma aula
+  // que grifou semanas atrás. Sem isto, o grifo só existiria na sessão em que
+  // foi feito — que é o mesmo que não existir.
+  useEffect(() => {
+    const raiz = conteudoRef.current;
+    if (!raiz || !tituloDoCapitulo) return;
+    const daqui = caderno.filter((t) => t.capitulo === tituloDoCapitulo);
+    if (daqui.length === 0) return;
+    const achadas: Range[] = [];
+    for (const t of daqui) {
+      const f = acharTrecho(raiz, t.texto);
+      if (f) achadas.push(f);
+    }
+    grifosRef.current = achadas;
+    publicarRealces({ "lente-guardado": achadas });
+  }, [caderno, tituloDoCapitulo, conteudoRef, casadas, chave]);
 
   const esquecer = useCallback(async (id: string) => {
+    // Some da lista E do texto: o efeito acima recalcula os grifos a partir do
+    // caderno, então basta tirar daqui.
     setCaderno((c) => c.filter((t) => t.id !== id));
+    grifosRef.current = [];
+    publicarRealces({ "lente-guardado": [] });
     if (!cursoSlug) return;
     try {
       await fetch(`/api/courses/${cursoSlug}/trechos?id=${encodeURIComponent(id)}`, {
@@ -677,14 +746,14 @@ export default function LenteSobreposta({
    */
   const irParaSecao = useCallback((m: { segundos: number; titulo: string }) => {
     if (comAudio) { irPara(m.segundos); return; }
-    const marc = marcacaoRef.current;
+    const marc = faixasRef.current;
     if (!marc) return;
     const f = falas.find((x) => x.secao === m.titulo);
-    const el = f ? marc.spans.get(f.i) : null;
-    if (!el) return;
+    const faixa = f ? marc.faixas.get(f.i) : null;
+    if (!faixa) return;
     const quem = quemRola(rolagemRef.current);
     const mold = moldura(quem);
-    const r = el.getBoundingClientRect();
+    const r = faixa.getBoundingClientRect();
     porTopo(quem, topoDe(quem) + (r.top - mold.topo) - mold.altura * ANCORA, true);
   }, [comAudio, irPara, falas, rolagemRef]);
 
@@ -1008,6 +1077,16 @@ export default function LenteSobreposta({
               )}
             </div>
           </div>
+
+          {/* Realce nativo é de 2022 (Chrome 105, Safari 17.2, Firefox 140). Num
+              navegador mais velho não há como pintar sem mexer no DOM — e mexer
+              no DOM é o que derrubava a página. Então dizemos, em vez de
+              deixar a lente parecer quebrada. */}
+          {!temRealceNativo() && (
+            <p className="mt-1.5 text-center text-[10px] text-amber-300/60">
+              {T("Seu navegador não pinta o realce; a narração e o índice continuam funcionando.")}
+            </p>
+          )}
 
           {casadas !== null && casadas < falas.length * 0.7 && (
             <p className="mt-1.5 text-center text-[10px] text-amber-300/60">

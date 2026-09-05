@@ -1750,9 +1750,10 @@ html[data-virada-livro="tras"]::view-transition-new(pagina-direita) {
    A LENTE — realce sobre o capítulo já renderizado
    ═══════════════════════════════════════════════════════════════════════════
 
-   Os spans são criados em tempo de execução por `lib/lente-spans.ts`, dentro do
-   Markdown que o leitor já desenhou. Daqui para a frente é só CSS: nada é
-   redesenhado, nada muda de lugar quando a lente liga.
+   `lib/lente-realce.ts` descobre onde cada frase narrada mora no Markdown que o
+   leitor já desenhou e entrega as faixas ao navegador. Nada é envolvido, nada é
+   redesenhado, nada muda de lugar quando a lente liga — e o DOM continua sendo
+   do React, que é o que impede a página de quebrar.
 
    ⚠️ SUBLINHADO, E NÃO FUNDO, para o lido e o por vir.
    Um capítulo inteiro com fundo colorido vira mancha e cansa em dois minutos.
@@ -1770,72 +1771,54 @@ html[data-virada-livro="tras"]::view-transition-new(pagina-direita) {
   transition: font-size 220ms ease-out;
 }
 
-.lente-fala {
-  /* A transição cobre o que muda ao trocar de frase. `text-decoration-color`
-     entra na lista para o verde nascer, e não aparecer de estalo. */
-  transition:
-    color 260ms ease-out,
-    opacity 260ms ease-out,
-    text-decoration-color 400ms ease-out,
-    background-color 200ms ease-out;
-  text-decoration-line: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.22em;
-  text-decoration-color: transparent;
-  border-radius: 2px;
-}
+/* ── O REALCE É PINTADO PELO NAVEGADOR, NÃO POR ELEMENTOS ──────────────────
+   As regras abaixo eram `.lente-fala.lente-lida` etc., aplicadas a `<span>`
+   inseridos no Markdown renderizado. Aquilo derrubava a página: o DOM é do
+   React, e envolver um nó de texto tira ele do pai que o React conhece.
+   Ver o cabeçalho de `src/lib/lente-realce.ts`.
+
+   `::highlight()` pinta as mesmas faixas sem que exista elemento nenhum. Sem
+   transição: o realce nativo não anima, e é melhor assim — a troca de frase
+   fica instantânea em vez de arrastada. */
 
 /* O que ainda não foi narrado: azul MUITO discreto.
    Visto na tela cheia, a primeira versão (0.28) pintava o capítulo inteiro de
    azul e a página virava um formulário. O que ainda não foi lido é a maior
    parte do texto quase sempre — então ele tem que ser o mais silencioso dos
    três estados, quase um fio. */
-.lente-fala.lente-porvir {
-  text-decoration-color: rgba(56, 189, 248, 0.16);
-  text-decoration-thickness: 1px;
-  opacity: 0.66;
+::highlight(lente-porvir) {
+  text-decoration: underline 1px rgba(56, 189, 248, 0.3);
+  text-underline-offset: 0.22em;
 }
 
-/* O que já passou: verde presente, texto em contraste cheio.
-   Este é o estado que RECOMPENSA — mostra o caminho andado — então ele pode
-   falar mais alto que o azul sem cansar: ele cresce devagar, ao longo da aula. */
-.lente-fala.lente-lida {
-  text-decoration-color: rgba(52, 211, 153, 0.5);
-  opacity: 0.92;
-}
-
-/* A frase que está tocando. */
-.lente-fala.lente-atual {
-  opacity: 1;
-  color: var(--reader-fg);
-  background-color: rgba(167, 139, 250, 0.18);
-  text-decoration-color: rgba(167, 139, 250, 0.9);
-  text-decoration-thickness: 2.5px;
-  /* A sombra é o que dá o "aceso" sem mexer em uma medida de layout sequer. */
-  text-shadow: 0 0 22px rgba(167, 139, 250, 0.22);
-  /* Caixa um pouco maior que o texto, para o fundo não estrangular a linha. */
-  padding: 0.06em 0.12em;
-  margin: 0 -0.12em;
+/* O que já passou: verde presente.
+   Este é o estado que RECOMPENSA — mostra o caminho andado — então pode falar
+   mais alto que o azul sem cansar: ele cresce devagar, ao longo da aula. */
+::highlight(lente-lida) {
+  text-decoration: underline 2px rgba(52, 211, 153, 0.62);
+  text-underline-offset: 0.22em;
 }
 
 /* O trecho que o aluno guardou.
    Âmbar, e não verde nem azul: os três estados da narração são um eixo só (o
-   tempo), e o grifo é outra coisa — foi ELE que escolheu, não o relógio. Fundo
-   em vez de sublinhado, pelo mesmo motivo: precisa ler diferente à primeira
-   vista, e é pouco texto, então mancha aqui não cansa. */
-.lente-guardado {
-  background-color: rgba(251, 191, 36, 0.16);
-  color: inherit;
-  border-bottom: 1px solid rgba(251, 191, 36, 0.45);
-  border-radius: 2px;
-  padding: 0.04em 0.1em;
-  margin: 0 -0.1em;
+   tempo), e o grifo é outra coisa — foi ELE que escolheu, não o relógio. */
+::highlight(lente-guardado) {
+  background-color: rgba(251, 191, 36, 0.18);
+  text-decoration: underline 1px rgba(251, 191, 36, 0.55);
+  text-underline-offset: 0.22em;
 }
 
-/* Quem pediu menos movimento recebe o realce, e nenhuma transição. */
+/* A frase que está tocando. */
+::highlight(lente-atual) {
+  background-color: rgba(167, 139, 250, 0.22);
+  color: var(--reader-fg);
+  text-decoration: underline 2.5px rgba(167, 139, 250, 0.95);
+  text-underline-offset: 0.22em;
+}
+
+/* Quem pediu menos movimento recebe o aumento sem a animação dele. */
 @media (prefers-reduced-motion: reduce) {
-  .lente-ativa,
-  .lente-fala {
+  .lente-ativa {
     transition: none;
   }
 }
