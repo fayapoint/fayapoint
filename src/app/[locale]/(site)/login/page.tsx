@@ -12,7 +12,6 @@ import {
   EyeOff, 
   ArrowRight,
   Sparkles,
-  Github,
   Chrome
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
@@ -166,10 +165,6 @@ function LoginPageContent() {
       toast.error(msg);
       setIsLoading(false);
     }
-  };
-
-  const handleGithubLogin = () => {
-    toast.success(t("messages.githubInDev"));
   };
 
   return (
@@ -327,23 +322,22 @@ function LoginPageContent() {
                 
                 {T("Google")}
               </Button>
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full border-border hover:bg-popover/40"
-                onClick={handleGithubLogin}
-              >
-                <Github className="mr-2" size={20} />
-                
-                {T("GitHub")}
-              </Button>
+              {/* O BOTÃO DE GITHUB SAIU EM 06/09/2026.
+
+                  Ele nunca autenticou ninguém: o clique chamava
+                  `toast.success("Login com GitHub em desenvolvimento")` e
+                  acabava ali. Numa tela de conta, um botão que parece uma opção
+                  e não é custa mais do que a ausência dele — a pessoa escolhe o
+                  caminho que não existe, recebe um aviso, e recomeça achando
+                  que errou. Volta quando houver OAuth do GitHub de verdade; o
+                  desenho de duas colunas continua aqui embaixo esperando. */}
             </div>
 
             {/* Sign Up Link */}
             <p className="text-center mt-6 text-muted-foreground">
               {t("noAccount")}{" "}
               <Link 
-                href="/onboarding" 
+                href="/registro" 
                 className="text-amber-400 hover:text-amber-300 font-medium"
               >
                 {t("createAccount")}

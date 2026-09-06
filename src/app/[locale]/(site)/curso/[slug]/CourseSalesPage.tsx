@@ -294,7 +294,9 @@ export default function CourseSalesPage({
     if (isLoggedIn) {
       router.push('/checkout/cart');
     } else {
-      router.push('/onboarding');
+      // Criar conta e VOLTAR para o carrinho. Antes mandava para `/onboarding`
+      // (porta sem Google) e terminava no portal, sem o carrinho na frente.
+      router.push('/registro?proximo=/checkout/cart');
     }
   };
 

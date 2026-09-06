@@ -106,7 +106,7 @@ export default function ChatGPTAllowlistingPage() {
     toast.success(T("Curso adicionado ao carrinho!"));
     if (buyNow) {
       if (isLoggedIn) router.push('/checkout/cart');
-      else router.push('/onboarding');
+      else router.push('/registro?proximo=/checkout/cart');
     }
   };
 

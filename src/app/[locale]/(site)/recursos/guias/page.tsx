@@ -83,7 +83,7 @@ export default async function GuidesPage({
             <h2 className="text-2xl font-bold mb-3">{t("cta.title")}</h2>
             <p className="text-muted-foreground mb-6">{t("cta.description")}</p>
             <Link
-              href="/onboarding"
+              href="/registro"
               className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors font-medium"
             >
               {t("cta.button")}

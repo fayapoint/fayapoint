@@ -1,9 +1,9 @@
 "use client";
 import { useT } from "@/i18n/dicionario";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { Link } from "@/i18n/navigation";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { 
   Mail, 
@@ -13,7 +13,6 @@ import {
   User,
   ArrowRight,
   CheckCircle,
-  Github,
   Chrome
 } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -24,14 +23,48 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "react-hot-toast";
 import { useUser } from "@/contexts/UserContext";
 import { usePostHog } from "posthog-js/react";
+import { PaginaCarregando } from "@/components/marca/LoaderFayai";
 
+/**
+ * `useSearchParams` obriga fronteira de Suspense — sem ela o build do Next
+ * reprova a página inteira. Mesmo desenho do `/login`, que já resolvia assim.
+ */
 export default function RegisterPage() {
+  return (
+    <Suspense fallback={<PaginaCarregando />}>
+      <FormularioDeRegistro />
+    </Suspense>
+  );
+}
+
+function FormularioDeRegistro() {
   const T = useT();
   const t = useTranslations("Register");
   const benefits = t.raw("benefits") as string[];
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { setUser } = useUser();
   const posthog = usePostHog();
+
+  /**
+   * PARA ONDE A PESSOA VOLTA DEPOIS DE CRIAR A CONTA (06/09/2026).
+   *
+   * Antes, todo cadastro terminava em `/portal` — inclusive o de quem clicou
+   * "comprar" numa página de curso e foi mandado para criar conta. A pessoa
+   * punha o curso no carrinho, criava a conta, e era largada no portal sem o
+   * carrinho na frente: o passo seguinte da compra simplesmente sumia.
+   *
+   * ⚠️ O destino é sanitizado dos dois lados. Aqui, só caminho interno começando
+   * com uma barra (e nunca `//`, que o navegador lê como outro domínio). No
+   * caminho do Google, quem sanitiza de novo é `sanitizeRedirectPath()` em
+   * `api/auth/google-callback` — que já existia e já tratava o `state`; a tela
+   * de registro é que nunca mandava um.
+   */
+  const proximo = (() => {
+    const bruto = searchParams?.get("proximo") || "";
+    if (!bruto.startsWith("/") || bruto.startsWith("//")) return "/portal";
+    return bruto;
+  })();
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -86,7 +119,7 @@ export default function RegisterPage() {
       posthog?.identify(data.user?.email, { name: data.user?.name });
 
       toast.success(t("messages.success"));
-      router.push("/portal");
+      router.push(proximo);
     } catch (error) {
       const msg = error instanceof Error ? error.message : t("messages.unexpectedError");
       toast.error(msg);
@@ -102,12 +135,18 @@ export default function RegisterPage() {
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "167078774916-ktdd044k8l528goetmjc7pdqkgrbranc.apps.googleusercontent.com";
     // Use flat path to avoid Next.js 16 Turbopack nested route resolution bug
     const redirectUri = `${window.location.origin}/api/auth/google-callback`;
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=openid%20email%20profile&prompt=select_account`;
-    window.location.href = authUrl;
-  };
-
-  const handleGithubSignup = () => {
-    toast.success(t("messages.githubInDev"));
+    const authUrl = new URL("https://accounts.google.com/o/oauth2/v2/auth");
+    authUrl.searchParams.set("client_id", clientId);
+    authUrl.searchParams.set("redirect_uri", redirectUri);
+    authUrl.searchParams.set("response_type", "code");
+    authUrl.searchParams.set("scope", "openid email profile");
+    authUrl.searchParams.set("prompt", "select_account");
+    authUrl.searchParams.set("include_granted_scopes", "true");
+    // O `state` é o destino pós-login. O callback já o lia e sanitizava desde
+    // sempre; era esta tela que nunca mandava um — então quem se cadastrava
+    // pelo Google caía no destino padrão, e não de volta no que estava fazendo.
+    authUrl.searchParams.set("state", proximo);
+    window.location.assign(authUrl.toString());
   };
 
   return (
@@ -175,17 +214,16 @@ export default function RegisterPage() {
             ))}
           </div>
 
+          {/* O que havia aqui era um DEPOIMENTO INVENTADO — "Maria Silva, CEO,
+              TechStartup", com bolinha de gradiente no lugar do rosto — ao lado
+              de "junte-se a mais de 5.000 profissionais". Prova social fabricada
+              na página que fecha a conta: o pior lugar possível para uma
+              afirmação que não se sustenta. Saiu em 06/09/2026 junto com o
+              número. No lugar entra o que de fato acontece a seguir — e isso é
+              conferível abrindo o portal. */}
           <div className="bg-popover/50 backdrop-blur-sm rounded-lg p-6 border border-border">
-            <p className="text-muted-foreground italic">
-              &ldquo;{t("testimonial.quote")}&rdquo;
-            </p>
-            <div className="flex items-center gap-4 mt-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-yellow-600" />
-              <div>
-                <p className="font-semibold">{t("testimonial.name")}</p>
-                <p className="text-sm text-muted-foreground">{t("testimonial.role")}</p>
-              </div>
-            </div>
+            <p className="font-semibold mb-2">{t("depois.titulo")}</p>
+            <p className="text-muted-foreground">{t("depois.texto")}</p>
           </div>
         </motion.div>
 
@@ -347,16 +385,15 @@ export default function RegisterPage() {
                 
                 {T("Google")}
               </Button>
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full border-border hover:bg-popover/40"
-                onClick={handleGithubSignup}
-              >
-                <Github className="mr-2" size={20} />
-                
-                {T("GitHub")}
-              </Button>
+              {/* O BOTÃO DE GITHUB SAIU EM 06/09/2026.
+
+                  Ele nunca autenticou ninguém: o clique chamava
+                  `toast.success("Login com GitHub em desenvolvimento")` e
+                  acabava ali. Numa tela de conta, um botão que parece uma opção
+                  e não é custa mais do que a ausência dele — a pessoa escolhe o
+                  caminho que não existe, recebe um aviso, e recomeça achando
+                  que errou. Volta quando houver OAuth do GitHub de verdade; o
+                  desenho de duas colunas continua aqui embaixo esperando. */}
             </div>
 
             {/* Login Link */}

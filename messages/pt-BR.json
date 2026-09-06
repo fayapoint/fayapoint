@@ -2021,19 +2021,18 @@
   "Register": {
     "title": "FayAi",
     "subtitle": "Crie sua conta gratuita",
-    "heroTitle": "Junte-se a mais de",
-    "heroHighlight": "5.000 profissionais",
-    "heroDescription": "Crie sua conta gratuita e comece sua jornada para dominar a Inteligência Artificial hoje mesmo.",
+    "heroTitle": "Sua conta grátis já vem com",
+    "heroHighlight": "50 créditos",
+    "heroDescription": "Dá para personalizar um curso inteiro com o seu contexto — a sua profissão, os seus exemplos, o seu dia a dia. Sem cartão de crédito.",
     "benefits": [
-      "Acesso a aulas gratuitas",
-      "Certificado de conclusão",
-      "Comunidade exclusiva",
-      "Atualizações semanais"
+      "50 créditos de boas-vindas (= R$50 em geração)",
+      "3 capítulos abertos em todo curso do catálogo",
+      "20 conversas com o assistente por mês",
+      "Certificado verificável em endereço público"
     ],
-    "testimonial": {
-      "quote": "A FayAi mudou completamente minha forma de trabalhar com IA. Em apenas 2 meses, já automatizei 80% das minhas tarefas repetitivas.",
-      "name": "Maria Silva",
-      "role": "CEO, TechStartup"
+    "depois": {
+      "titulo": "O que acontece depois de criar a conta",
+      "texto": "Você cai direto no portal, escolhe um curso e os três primeiros capítulos abrem na hora. Os créditos de boas-vindas já estão lá."
     },
     "fields": {
       "fullName": "Nome Completo",
@@ -3833,6 +3832,7 @@
     "studentFallback": "aluno",
     "myPortal": "Meu Portal",
     "signIn": "Entrar",
+    "createAccount": "Criar conta",
     "continueTrail": "Continuar minha trilha",
     "trailProgress": "({done} de {total})",
     "heroTitle": "O QUE A <destaque>IA</destaque> FAZ POR VOCÊ<br></br>EM <gradiente>30 SEGUNDOS</gradiente>?",

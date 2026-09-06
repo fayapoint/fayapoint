@@ -60,7 +60,7 @@ export function FreeOfferBanner() {
   const freeCourse = monthlyOffers?.freeCourse || null;
   // ⚠️ COM idioma: sem `comIdioma`, o botão do curso grátis do mês levava
   // 308 para o português — inclusive para quem estava em /en.
-  const ctaHref = comIdioma(freeCourse ? `/curso/${freeCourse.slug}` : "/onboarding", locale);
+  const ctaHref = comIdioma(freeCourse ? `/curso/${freeCourse.slug}` : "/registro", locale);
   const benefits = freeCourse
     ? [
         {

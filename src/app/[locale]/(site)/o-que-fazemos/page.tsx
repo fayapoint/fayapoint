@@ -668,7 +668,7 @@ function CTASection() {
           <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">{t("subtitle")}</p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/onboarding">
+            <Link href="/registro">
               <Button size="lg" className="bg-gradient-to-r from-amber-600 to-yellow-700 hover:from-amber-500 hover:to-yellow-500 text-lg px-10 py-7">
                 {t("cta.primary")}
                 <ArrowRight className="w-5 h-5 ml-2" />

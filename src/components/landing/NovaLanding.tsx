@@ -517,9 +517,32 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               <ArrowRight size={15} />
             </Link>
           ) : (
-            <Link href={rota("/login")} className="inline-flex min-h-11 items-center text-sm font-semibold text-white/60 hover:text-white transition-colors sm:min-h-0">
-              {t("signIn")}
-            </Link>
+            /* A HOME NÃO TINHA PORTA DE CADASTRO (medido 05/09/2026).
+
+               Deslogado, o cabeçalho oferecia só "Entrar". O único CTA para
+               `/registro` da página inteira estava dentro de uma condicional lá
+               embaixo: aparecia **depois** que a pessoa jogava o minigame até o
+               fim e ganhava XP. Varrendo o DOM da home em produção: 237 links,
+               e o único de autenticação era `/pt-BR/login`.
+
+               Ou seja — a página que mais recebe gente pedia login de quem
+               ainda não tem conta, e escondia o cadastro atrás de um jogo.
+               Agora "Criar conta" está no cabeçalho, sempre, e "Entrar" fica ao
+               lado em peso menor: são intenções diferentes e não podem ter o
+               mesmo destaque. */
+            <>
+              <Link href={rota("/login")} className="inline-flex min-h-11 items-center text-sm font-semibold text-white/60 hover:text-white transition-colors sm:min-h-0">
+                {t("signIn")}
+              </Link>
+              <Link
+                href={rota("/registro")}
+                className="fx-shine inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity sm:min-h-0"
+                style={{ background: `linear-gradient(135deg, ${GOLD}, #ffdf8e)`, boxShadow: "0 4px 18px rgba(245,192,78,.35)" }}
+              >
+                {t("createAccount")}
+                <ArrowRight size={15} />
+              </Link>
+            </>
           )}
         </div>
       </header>

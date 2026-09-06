@@ -2021,19 +2021,18 @@
   "Register": {
     "title": "FayAi",
     "subtitle": "Create your free account",
-    "heroTitle": "Join over",
-    "heroHighlight": "5,000 professionals",
-    "heroDescription": "Create your free account and start your journey to master Artificial Intelligence today.",
+    "heroTitle": "Your free account comes with",
+    "heroHighlight": "50 credits",
+    "heroDescription": "Enough to personalise a whole course around your context — your job, your examples, your day. No credit card.",
     "benefits": [
-      "Access to free classes",
-      "Completion certificate",
-      "Exclusive community",
-      "Weekly updates"
+      "50 welcome credits (= R$50 of generation)",
+      "3 open chapters in every course in the catalogue",
+      "20 assistant conversations per month",
+      "Certificate verifiable at a public address"
     ],
-    "testimonial": {
-      "quote": "FayAi completely changed how I work with AI. In just 2 months, I automated 80% of my repetitive tasks.",
-      "name": "Maria Silva",
-      "role": "CEO, TechStartup"
+    "depois": {
+      "titulo": "What happens after you sign up",
+      "texto": "You land straight in the portal, pick a course, and the first three chapters open right away. The welcome credits are already there."
     },
     "fields": {
       "fullName": "Full Name",
@@ -3743,6 +3742,7 @@
     "studentFallback": "there",
     "myPortal": "My Portal",
     "signIn": "Sign in",
+    "createAccount": "Create account",
     "continueTrail": "Continue my trail",
     "trailProgress": "({done} of {total})",
     "heroTitle": "WHAT CAN <destaque>AI</destaque> DO FOR YOU<br></br>IN <gradiente>30 SECONDS</gradiente>?",

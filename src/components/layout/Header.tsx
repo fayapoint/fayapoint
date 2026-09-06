@@ -435,7 +435,7 @@ export function Header() {
                     {t("buttons.signIn")}
                   </Button>
                 </Link>
-                <Link href={rota("/onboarding")}>
+                <Link href={rota("/registro")}>
                   <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
                     {t("buttons.startFree")}
                   </Button>
@@ -596,7 +596,7 @@ export function Header() {
                       {t("buttons.signIn")}
                     </Button>
                   </Link>
-                  <Link href={rota("/onboarding")} onClick={() => setMobileMenuOpen(false)} className="block">
+                  <Link href={rota("/registro")} onClick={() => setMobileMenuOpen(false)} className="block">
                     <Button className="w-full h-12 text-base bg-primary text-primary-foreground">
                       {t("buttons.startFree")}
                     </Button>
