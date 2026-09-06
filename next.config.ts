@@ -368,6 +368,27 @@ const config: NextConfig = {
         permanent: true,
       },
       /**
+       * O programa Fundadores é só do Brasil, e por motivo de produto, não de
+       * tradução: a adesão exige **CPF**, o saque é por **Pix**, e o
+       * regulamento se apoia no Código de Defesa do Consumidor. Quem chega em
+       * inglês não tem como participar.
+       *
+       * Sem esta regra o build pré-renderizava `/en/fundadores` com o texto em
+       * português — uma página indexável, em inglês no endereço e em português
+       * no conteúdo, oferecendo algo que o leitor dela não pode comprar.
+       * Redirecionar é mais honesto do que traduzir uma oferta indisponível.
+       */
+      {
+        source: '/en/fundadores',
+        destination: '/pt-BR/fundadores',
+        permanent: false,
+      },
+      {
+        source: '/en/f/:codigo',
+        destination: '/pt-BR/f/:codigo',
+        permanent: false,
+      },
+      /**
        * ⚠️ A MESMA DOENÇA DO `/blog`, MULTIPLICADA POR 44 (26/08/2026)
        *
        * `src/app/[locale]/(site)/cursos/[slug]/page.tsx` chama

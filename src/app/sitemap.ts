@@ -33,6 +33,17 @@ const SITE_URL =
 const LOCALES = ["pt-BR", "en"] as const;
 
 /**
+ * Rotas que existem SÓ em português — e por motivo de produto, não de tradução.
+ *
+ * `/fundadores` exige CPF na adesão, paga por Pix e se apoia no Código de
+ * Defesa do Consumidor: quem lê em inglês não tem como participar. `/en/...`
+ * redireciona para a versão em português, então a URL inglesa não entra no
+ * sitemap (redirecionamento anunciado gasta rastreio sem entregar página) e o
+ * `hreflang` dessas rotas declara só `pt-BR`, via `alternates(p, true)`.
+ */
+const SO_EM_PORTUGUES = new Set(["/fundadores"]);
+
+/**
  * O par de idiomas de um caminho, no formato que o sitemap do Next espera.
  *
  * `somentePt` existe para o conteúdo que **não** tem versão inglesa de
@@ -197,9 +208,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     for (const p of secondaryPaths) {
+      // ⚠️ Rota que só existe em português não entra no sitemap em inglês.
+      // `/fundadores` exige CPF e paga por Pix: `/en/fundadores` redireciona
+      // (307) para a versão em português, e URL que redireciona dentro do
+      // sitemap gasta orçamento de rastreio para não entregar página nova —
+      // é o mesmo motivo pelo qual `/afiliados` saiu daqui em 06/09/2026.
+      if (locale !== "pt-BR" && SO_EM_PORTUGUES.has(p)) continue;
+
       entries.push({
         url: url(`/${locale}${p}`),
-        alternates: alternates(p),
+        alternates: alternates(p, SO_EM_PORTUGUES.has(p)),
         lastModified: now,
         changeFrequency: "monthly",
         priority: p.startsWith("/termos") || p.startsWith("/privacidade") || p.startsWith("/exclusao") ? 0.3 : 0.5,
