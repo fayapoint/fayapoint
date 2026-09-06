@@ -54,6 +54,12 @@ export default function PainelDoFundador() {
   const [novoCodigo, setNovoCodigo] = useState("");
   const [copiado, setCopiado] = useState(false);
 
+  // Verificação de celular: número → código → verificado.
+  const [etapaTelefone, setEtapaTelefone] = useState<"numero" | "codigo">("numero");
+  const [telefone, setTelefone] = useState("");
+  const [codigoOtp, setCodigoOtp] = useState("");
+  const [enviandoOtp, setEnviandoOtp] = useState(false);
+
   const carregar = useCallback(async () => {
     try {
       const r = await fetch("/api/fundadores/painel");
@@ -90,6 +96,54 @@ export default function PainelDoFundador() {
       toast.error(e instanceof Error ? e.message : "Não deu para salvar.");
     } finally {
       setSalvando(false);
+    }
+  };
+
+  /**
+   * O erro do envio aparece INTEIRO para a pessoa.
+   *
+   * A rota devolve mensagens que dizem o que fazer ("espere 43 segundos",
+   * "peça outro código", "a verificação ainda não está ligada"). Trocar isso
+   * por um "erro ao enviar" genérico transformaria cada teto de segurança num
+   * mistério — e o suporte que recebe essa dúvida sou eu.
+   */
+  const enviarCodigo = async () => {
+    setEnviandoOtp(true);
+    try {
+      const r = await fetch("/api/fundadores/telefone", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ telefone }),
+      });
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.erro || "Não deu para enviar o código.");
+      toast.success(`Código enviado para ${j.para}. Vale ${j.validoPor} minutos.`);
+      setEtapaTelefone("codigo");
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Não deu para enviar o código.");
+    } finally {
+      setEnviandoOtp(false);
+    }
+  };
+
+  const confirmarCodigo = async () => {
+    setEnviandoOtp(true);
+    try {
+      const r = await fetch("/api/fundadores/telefone", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ codigo: codigoOtp }),
+      });
+      const j = await r.json();
+      if (!r.ok) throw new Error(j.erro || "Código não confere.");
+      toast.success("Celular confirmado.");
+      setCodigoOtp("");
+      setEtapaTelefone("numero");
+      await carregar();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Código não confere.");
+    } finally {
+      setEnviandoOtp(false);
     }
   };
 
@@ -180,13 +234,69 @@ export default function PainelDoFundador() {
       )}
 
       {pendente && (
-        <p className="mt-4 rounded-lg border border-border bg-secondary/40 px-5 py-4 text-sm text-muted-foreground">
-          Para o código valer, faltam:{" "}
-          {!dados.identidade?.cpfVerificado && <b className="text-foreground">CPF</b>}
-          {!dados.identidade?.cpfVerificado && !dados.identidade?.telefoneVerificado && " e "}
-          {!dados.identidade?.telefoneVerificado && <b className="text-foreground">celular verificado</b>}
-          . A sua vaga já está garantida — a verificação é só para o código sair.
-        </p>
+        <div className="mt-4 rounded-lg border border-border bg-secondary/40 px-5 py-5">
+          <p className="text-sm text-muted-foreground">
+            Para o código valer, faltam:{" "}
+            {!dados.identidade?.cpfVerificado && <b className="text-foreground">CPF</b>}
+            {!dados.identidade?.cpfVerificado && !dados.identidade?.telefoneVerificado && " e "}
+            {!dados.identidade?.telefoneVerificado && (
+              <b className="text-foreground">celular verificado</b>
+            )}
+            . A sua vaga já está garantida — a verificação é só para o código sair.
+          </p>
+
+          {!dados.identidade?.telefoneVerificado && (
+            <div className="mt-4">
+              {etapaTelefone === "numero" ? (
+                <div className="flex flex-wrap items-center gap-2">
+                  <input
+                    value={telefone}
+                    onChange={(e) => setTelefone(e.target.value)}
+                    placeholder="(21) 99999-8888"
+                    inputMode="tel"
+                    className="min-w-[170px] rounded-md border border-border bg-background px-3 py-2 text-sm"
+                  />
+                  <button
+                    type="button"
+                    disabled={enviandoOtp || telefone.replace(/\D/g, "").length < 10}
+                    onClick={enviarCodigo}
+                    className="rounded-md bg-primary px-4 py-2 text-sm font-bold text-primary-foreground disabled:opacity-40"
+                  >
+                    {enviandoOtp ? "enviando…" : "receber código"}
+                  </button>
+                </div>
+              ) : (
+                <div className="flex flex-wrap items-center gap-2">
+                  <input
+                    value={codigoOtp}
+                    onChange={(e) => setCodigoOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                    placeholder="000000"
+                    inputMode="numeric"
+                    className="w-[120px] rounded-md border border-border bg-background px-3 py-2 text-center font-mono text-lg tracking-[0.3em]"
+                  />
+                  <button
+                    type="button"
+                    disabled={enviandoOtp || codigoOtp.length !== 6}
+                    onClick={confirmarCodigo}
+                    className="rounded-md bg-primary px-4 py-2 text-sm font-bold text-primary-foreground disabled:opacity-40"
+                  >
+                    confirmar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEtapaTelefone("numero");
+                      setCodigoOtp("");
+                    }}
+                    className="text-sm text-muted-foreground underline-offset-4 hover:underline"
+                  >
+                    trocar o número
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       )}
 
       {/* ── Saldo ────────────────────────────────────────────────── */}

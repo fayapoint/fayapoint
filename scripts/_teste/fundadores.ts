@@ -39,6 +39,12 @@ import {
   DIAS_DE_RETENCAO,
   COMISSAO,
 } from '../../src/lib/fundadores';
+import {
+  normalizarTelefone,
+  gerarCodigo,
+  hashDoCodigo,
+  confereHash,
+} from '../../src/lib/telefone';
 
 const MARCA = '@teste-fundadores.invalid';
 let falhas = 0;
@@ -241,6 +247,26 @@ async function main() {
   conferir('indicado paga 20% a menos', soIndicado.preco === 77.6, `${soIndicado.preco}`);
   const avulso = precoComDesconto(100, { ehFundador: true, indicadoAtivo: false, avulso: true });
   conferir('avulso é 20%, não 50%', avulso.preco === 80, `${avulso.preco}`);
+
+  // ── 10. Telefone (funções puras, mas decidem quem é quem) ─────────
+  console.log('\n8. telefone');
+  conferir('máscara vira E.164', normalizarTelefone('(21) 99999-8888') === '5521999998888');
+  conferir('sem DDI também', normalizarTelefone('21999998888') === '5521999998888');
+  conferir('com DDI não duplica', normalizarTelefone('5521999998888') === '5521999998888');
+  conferir('fixo de 10 dígitos passa', normalizarTelefone('2122223333') === '552122223333');
+  conferir('número curto é recusado', normalizarTelefone('99998888') === null);
+  conferir('vazio é recusado', normalizarTelefone('') === null);
+
+  const cod = gerarCodigo();
+  conferir('código tem 6 dígitos', /^\d{6}$/.test(cod), cod);
+  const h = hashDoCodigo(cod, '5521999998888');
+  conferir('hash confere consigo', confereHash(h, hashDoCodigo(cod, '5521999998888')));
+  conferir('hash não confere com outro código', !confereHash(h, hashDoCodigo('000000', '5521999998888')));
+  // O telefone entra no hash: o mesmo código para outro número não vale.
+  conferir(
+    'hash é preso ao número',
+    !confereHash(h, hashDoCodigo(cod, '5511988887777')),
+  );
 
   await limpar();
   const vagasDepois = await contarVagas();

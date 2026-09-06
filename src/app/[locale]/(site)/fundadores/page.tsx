@@ -411,6 +411,17 @@ export default async function PaginaFundadores() {
             >
               Quero meu número <ArrowRight size={18} />
             </Link>
+
+            <p className="mt-10 text-sm text-muted-foreground">
+              Tudo o que está escrito aqui vale como oferta.{" "}
+              <Link
+                href="/fundadores/regulamento"
+                className="underline underline-offset-4 hover:text-foreground"
+              >
+                O regulamento completo
+              </Link>{" "}
+              diz as mesmas coisas com as condições por extenso.
+            </p>
           </div>
         </section>
       </main>
