@@ -8,6 +8,9 @@ import Subscription, {
   mapAsaasStatusToSubscriptionStatus,
 } from '@/models/Subscription';
 import User from '@/models/User';
+import Fundador from '@/models/Fundador';
+import Indicacao from '@/models/Indicacao';
+import { precoComDesconto, MESES_DESCONTO_INDICADO } from '@/lib/fundadores';
 import asaas, {
   getOrCreateCustomer,
   createSubscription as createAsaasSubscription,
@@ -154,7 +157,41 @@ export async function POST(request: NextRequest) {
     }
 
     // Determine price based on cycle
-    const value = cycle === 'yearly' ? plan.yearlyPrice : plan.monthlyPrice;
+    const precoDeTabela = cycle === 'yearly' ? plan.yearlyPrice : plan.monthlyPrice;
+
+    /**
+     * ── O DESCONTO DO PROGRAMA FUNDADORES ────────────────────────────────
+     * 06/09/2026 · ver `autoresearch/PLANO_FUNDADORES_2026-09-05.md`
+     *
+     * Resolvido AQUI, no servidor, a partir do banco. O cliente manda plano e
+     * ciclo; quanto isso custa é decisão nossa. Preço que chega do navegador é
+     * preço que o navegador escolhe.
+     *
+     * ⚠️ Descontos não se somam: quem é fundador E entrou por um código leva o
+     * maior dos dois, nunca 50% + 20%. A regra vive em `precoComDesconto()`
+     * porque o checkout de curso e o de crédito vão precisar da mesma conta —
+     * e duas implementações da mesma regra é como uma delas envelhece sozinha.
+     */
+    const [ehFundador, indicacaoAtiva] = await Promise.all([
+      Fundador.findOne({ userId: user._id, status: 'ativo' }).lean(),
+      Indicacao.findOne({ indicadoUserId: user._id, estado: { $ne: 'anulada' } }).lean(),
+    ]);
+    const dentroDaJanela =
+      !!indicacaoAtiva?.primeiraConversaoEm &&
+      Date.now() - new Date(indicacaoAtiva.primeiraConversaoEm).getTime() <
+        MESES_DESCONTO_INDICADO * 30 * 24 * 60 * 60 * 1000;
+
+    const cobranca = precoComDesconto(precoDeTabela, {
+      ehFundador: !!ehFundador,
+      indicadoAtivo: dentroDaJanela,
+    });
+    const value = cobranca.preco;
+    if (cobranca.desconto > 0) {
+      console.log(
+        `[Fundadores] ${user.email}: ${precoDeTabela} -> ${value} (${cobranca.rotulo}, ${Math.round(cobranca.desconto * 100)}%)`,
+      );
+    }
+
     const asaasCycle = cycle === 'yearly' ? 'YEARLY' : 'MONTHLY';
 
     // Create or get Asaas customer

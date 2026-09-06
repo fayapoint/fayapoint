@@ -343,6 +343,31 @@ const config: NextConfig = {
         permanent: true,
       },
       /**
+       * ⚠️ A MESMA LIÇÃO, DE NOVO — `/onboarding` e `/afiliados` (06/09/2026)
+       *
+       * As duas rotas foram aposentadas com `permanentRedirect()` na página, e
+       * as duas responderam **200 pré-renderizado** na primeira medição
+       * (`x-nextjs-prerender: 1`), exatamente como o `/blog` acima. Página sem
+       * dado dinâmico não carrega código de status: o Next assa a intenção
+       * dentro do HTML. As páginas continuam existindo — para quem chega por
+       * navegação interna do próprio site, o redirecionamento delas funciona —
+       * mas quem decide o status HTTP é esta lista.
+       *
+       * `/onboarding` era a SEGUNDA tela de criar conta (sem Google), para onde
+       * o cabeçalho e o `/login` mandavam. `/afiliados` anunciava "30% de
+       * comissão" sem motor nenhum atrás — oferta que, pelo CDC, vincula.
+       */
+      {
+        source: '/:locale(pt-BR|en)/onboarding',
+        destination: '/:locale/registro',
+        permanent: true,
+      },
+      {
+        source: '/:locale(pt-BR|en)/afiliados',
+        destination: '/:locale/fundadores',
+        permanent: true,
+      },
+      /**
        * ⚠️ A MESMA DOENÇA DO `/blog`, MULTIPLICADA POR 44 (26/08/2026)
        *
        * `src/app/[locale]/(site)/cursos/[slug]/page.tsx` chama

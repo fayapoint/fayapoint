@@ -14,6 +14,7 @@ import { processFulfillment } from '@/lib/fulfillment';
 import { CREDIT_PACKS, TIER_CONFIGS, resolvePlan } from '@/lib/course-tiers';
 import { montarMatricula } from '@/lib/matricula';
 import { generateReceiptFromPayment, generateReceiptFromSubscription } from '@/lib/receipt-generator';
+import { criarFundador, registrarComissao, estornarComissao } from '@/lib/fundadores';
 
 // Disable body parsing for webhook verification
 export const runtime = 'nodejs';
@@ -160,7 +161,72 @@ export async function POST(request: NextRequest) {
         if (previousStatus !== 'paid') {
           await grantUserAccess(payment);
         }
-        
+
+        /**
+         * ── PROGRAMA FUNDADORES: a vaga e a comissão nascem AQUI ────────────
+         * 06/09/2026 · ver `autoresearch/PLANO_FUNDADORES_2026-09-05.md`
+         *
+         * Este é o único lugar do sistema onde se sabe que dinheiro entrou de
+         * verdade. Por isso as duas coisas acontecem no pagamento confirmado, e
+         * não no cadastro:
+         *
+         * 1. **A vaga de fundador.** Se bastasse criar conta, as cem vagas
+         *    sumiriam numa noite de robô.
+         * 2. **A comissão de quem indicou**, sobre o `netValue` — o que de fato
+         *    entrou, já sem a taxa da maquininha.
+         *
+         * ⚠️ Envolvido em try/catch de propósito. Uma falha aqui não pode
+         * derrubar o processamento do pagamento: o cliente já pagou, e o acesso
+         * dele não depende do programa de indicação. Erro vira log e evento no
+         * histórico, nunca 500 para o Asaas (que reentregaria tudo de novo).
+         */
+        try {
+          const ehAssinatura = payment.items?.some(
+            (i: { type?: string }) => i.type === 'subscription',
+          );
+          const liquido = Number(asaasPayment.netValue ?? asaasPayment.value ?? 0);
+
+          if (ehAssinatura && previousStatus !== 'paid') {
+            const novoFundador = await criarFundador(String(payment.userId));
+            if (novoFundador) {
+              console.log(
+                `[Fundadores] Fundador #${novoFundador.numero} — ${novoFundador.codigo}`,
+              );
+              payment.webhookEvents.push({
+                event: 'FUNDADOR_CRIADO',
+                receivedAt: new Date(),
+                data: { numero: novoFundador.numero, codigo: novoFundador.codigo },
+              });
+            }
+          }
+
+          const comissao = await registrarComissao({
+            indicadoUserId: String(payment.userId),
+            asaasPaymentId: asaasPayment.id,
+            valorLiquido: liquido,
+            tipo: payment.items?.[0]?.type,
+          });
+          if (comissao) {
+            console.log(
+              `[Fundadores] Comissão de ${comissao.valor} em ${comissao.forma} (retida 30 dias)`,
+            );
+            payment.webhookEvents.push({
+              event: 'COMISSAO_REGISTRADA',
+              receivedAt: new Date(),
+              data: { valor: comissao.valor, forma: comissao.forma },
+            });
+          }
+        } catch (erroFundadores) {
+          console.error('[Fundadores] erro ao processar (pagamento segue válido):', erroFundadores);
+          payment.webhookEvents.push({
+            event: 'FUNDADORES_ERRO',
+            receivedAt: new Date(),
+            data: {
+              error: erroFundadores instanceof Error ? erroFundadores.message : 'desconhecido',
+            },
+          });
+        }
+
         // Trigger automatic fulfillment
         try {
           const fulfillmentResult = await processFulfillment(payment._id.toString());
@@ -223,6 +289,22 @@ export async function POST(request: NextRequest) {
         // Revoke access if fully refunded
         if (body.event === 'PAYMENT_REFUNDED') {
           await revokeUserAccess(payment);
+          // A comissão que este pagamento gerou é desfeita junto. É para isto
+          // que ela nasce retida por 30 dias: na maior parte dos casos o
+          // estorno chega antes de o dinheiro sair.
+          try {
+            const desfeita = await estornarComissao(asaasPayment.id);
+            if (desfeita) {
+              console.log(`[Fundadores] Comissão estornada: ${asaasPayment.id}`);
+              payment.webhookEvents.push({
+                event: 'COMISSAO_ESTORNADA',
+                receivedAt: new Date(),
+                data: { asaasPaymentId: asaasPayment.id },
+              });
+            }
+          } catch (erro) {
+            console.error('[Fundadores] erro ao estornar comissão:', erro);
+          }
         }
         break;
 

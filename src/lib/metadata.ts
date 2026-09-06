@@ -319,11 +319,18 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
     en: { title: "Create account | FayAI", description: "Create your free FayAI account." },
     noindex: true,
   },
+  /**
+   * ⚠️ `/afiliados` redireciona para `/fundadores` desde 06/09/2026. O título
+   * anterior anunciava "30% de comissão" — número que nunca teve motor atrás e
+   * que, indexado, era oferta pública sem sistema que a cumprisse. A entrada
+   * fica porque a URL antiga ainda é resolvida (308), e o texto agora descreve
+   * para onde ela leva.
+   */
   "/afiliados": {
     "pt-BR": {
-      title: "Programa de Afiliados — 30% de comissão | FayAI",
+      title: "Indicar a FayAI — Programa Fundadores | FayAI",
       description:
-        "Monetize sua audiência indicando cursos de IA em português. 30% de comissão por venda, material pronto e acompanhamento de resultados.",
+        "O programa de indicação da FayAI agora é o Fundadores: cem lugares, metade do preço para sempre e comissão vitalícia por conta indicada.",
     },
     en: {
       title: "Affiliate Program — 30% commission | FayAI",
@@ -512,6 +519,18 @@ export const ROUTE_SEO: Record<string, RouteSeoEntry> = {
       title: "Instructors — who teaches the AI courses | FayAI",
       description:
         "Meet FayAI's instructors: working professionals with real experience delivering Artificial Intelligence projects.",
+    },
+  },
+  "/fundadores": {
+    "pt-BR": {
+      title: "Fundadores — cem lugares, metade do preço para sempre | FayAI",
+      description:
+        "As cem primeiras assinaturas da FayAI: metade do preço enquanto durar, um número que não se repete e 7% de tudo que você indicar, sem prazo.",
+    },
+    en: {
+      title: "Founders — one hundred seats, half price forever | FayAI",
+      description:
+        "The first hundred FayAI subscriptions: half price for as long as it lasts, a number that is yours alone, and 7% of everything you refer, with no end date.",
     },
   },
   "/parcerias": {

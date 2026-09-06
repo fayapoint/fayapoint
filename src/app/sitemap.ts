@@ -145,7 +145,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/api-docs",
     "/comunidade",
     "/instrutores",
-    "/afiliados",
+    // `/afiliados` saiu em 06/09/2026: virou 308 para `/fundadores`, e URL
+    // que redireciona no sitemap desperdiça rastreio e confunde a canônica.
+    "/fundadores",
     "/parcerias",
     "/carreiras",
     "/ajuda",

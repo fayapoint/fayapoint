@@ -21,6 +21,7 @@ import "../globals.css";
 import { Toaster } from "react-hot-toast";
 import Script from "next/script";
 import { AttributionTracker } from "@/components/AttributionTracker";
+import { VinculoDeIndicacao } from "@/components/VinculoDeIndicacao";
 import { UserProvider } from "@/contexts/UserContext";
 import { ServiceCartProvider } from "@/contexts/ServiceCartContext";
 import { PostHogProvider } from "@/components/PostHogProvider";
@@ -349,6 +350,7 @@ export default async function RootLayout({
           />
           <Suspense fallback={null}>
             <AttributionTracker />
+            <VinculoDeIndicacao />
           </Suspense>
           <Script
             id="ld-organization"

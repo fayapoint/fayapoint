@@ -1,122 +1,31 @@
-import { obterT } from "@/i18n/dicionario-servidor";
+import { permanentRedirect } from "next/navigation";
 
-import { getTranslations } from "next-intl/server";
-import { DollarSign, TrendingUp, Gift, Users, CheckCircle, ArrowRight, Percent, Clock, BarChart } from "lucide-react";
-import { Link } from "@/i18n/navigation";
-
-type Step = {
-  title: string;
-  description: string;
-};
-
-type Benefit = {
-  icon: string;
-  title: string;
-  description: string;
-};
-
-const benefitIcons: Record<string, React.ComponentType<{ className?: string }>> = {
-  Percent,
-  Clock,
-  BarChart,
-  Gift,
-  Users,
-  DollarSign,
-};
-
-export default async function AffiliatesPage({
+/**
+ * ── A PROMESSA DE 30% QUE NÃO TINHA MOTOR ────────────────────────────────────
+ * 06/09/2026 · ver `autoresearch/PLANO_FUNDADORES_2026-09-05.md`, §2 e §6.3
+ *
+ * Esta página anunciava, em letra grande, **"30% de comissão por venda"** — com
+ * três passos ("Cadastre-se · Compartilhe · Ganhe"), seis vantagens e um botão.
+ * Atrás disso não havia nada: nem cadastro de afiliado, nem link exclusivo, nem
+ * cálculo, nem pagamento. O botão levava para `/contato`.
+ *
+ * Pelo Código de Defesa do Consumidor (art. 30) a oferta publicada **vincula e
+ * integra o contrato**. Uma página no ar prometendo 30% a quem indicasse era,
+ * portanto, obrigação assumida sem sistema que a cumprisse — e o risco não é
+ * teórico: bastava alguém indicar uma venda e cobrar.
+ *
+ * O programa de verdade nasceu em `/fundadores`, com percentual que sai do
+ * código (`lib/fundadores.ts`), extrato por lançamento (`models/Comissao.ts`) e
+ * retenção de 30 dias. Quem procurava afiliação chega lá.
+ *
+ * A página antiga ficou ao lado como `_promessa-sem-motor.page.tsx.txt` — fora
+ * do roteamento, dentro da história.
+ */
+export default async function AfiliadosRedirecionado({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const T = await obterT(locale);
-  const t = await getTranslations({ locale, namespace: "Affiliates" });
-  const benefits = t.raw("benefits") as Benefit[];
-  const steps = t.raw("steps") as Step[];
-
-  return (
-    <div className="min-h-screen bg-background text-foreground">
-      
-      <main className="pt-32 pb-20">
-        {/* Hero */}
-        <section className="container mx-auto px-4 text-center mb-20">
-          <div
-            className="entra max-w-3xl mx-auto"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20 mb-6">
-              <DollarSign size={16} className="text-green-400" />
-              <span className="text-sm text-green-300">{t("badge")}</span>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6">{t("title")}</h1>
-            <p className="text-xl text-muted-foreground mb-8">{t("description")}</p>
-            
-            {/* Commission Highlight */}
-            <div className="inline-flex items-center gap-3 px-6 py-4 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-2xl">
-              <TrendingUp className="text-green-400" size={28} />
-              <span className="text-2xl font-bold text-green-400">{t("commissionRate")}</span>
-              <span className="text-muted-foreground">{t("commissionLabel")}</span>
-            </div>
-          </div>
-        </section>
-
-        {/* How it Works */}
-        <section className="container mx-auto px-4 mb-20">
-          <h2 className="text-3xl font-bold text-center mb-12">{t("howItWorksTitle")}</h2>
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {steps.map((step, idx) => (
-              <div
-                key={step.title}
-                className="entra-2 text-center"
-              >
-                <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-2xl font-bold">
-                  {idx + 1}
-                </div>
-                <h3 className="text-xl font-semibold mb-2">{T(step.title)}</h3>
-                <p className="text-muted-foreground">{T(step.description)}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Benefits */}
-        <section className="container mx-auto px-4 mb-20">
-          <h2 className="text-3xl font-bold text-center mb-12">{t("benefitsTitle")}</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-            {benefits.map((benefit, idx) => {
-              const Icon = benefitIcons[benefit.icon] || Gift;
-              return (
-                <div
-                  key={benefit.title}
-                  className="entra-3 bg-secondary border border-border rounded-xl p-6"
-                >
-                  <Icon className="w-10 h-10 text-green-400 mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">{T(benefit.title)}</h3>
-                  <p className="text-muted-foreground text-sm">{T(benefit.description)}</p>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* CTA */}
-        <section className="container mx-auto px-4">
-          <div
-            className="entra-4 max-w-3xl mx-auto text-center bg-gradient-to-r from-green-900/20 to-emerald-900/20 border border-green-500/30 rounded-2xl p-10"
-          >
-            <h2 className="text-3xl font-bold mb-4">{t("cta.title")}</h2>
-            <p className="text-muted-foreground mb-8">{t("cta.description")}</p>
-            <Link
-              href="/contato"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-green-600 hover:bg-green-700 rounded-lg transition-colors font-semibold"
-            >
-              {t("cta.button")}
-              <ArrowRight size={18} />
-            </Link>
-          </div>
-        </section>
-      </main>
-      
-    </div>
-  );
+  permanentRedirect(`/${locale}/fundadores`);
 }

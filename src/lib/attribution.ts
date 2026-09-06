@@ -7,6 +7,22 @@ export type AttributionState = {
   lastLandingUrl?: string;
   referrer?: string;
   updatedAt?: string;
+  /**
+   * O código de fundador que trouxe esta pessoa — programa Fundadores,
+   * 06/09/2026. Ver `autoresearch/PLANO_FUNDADORES_2026-09-05.md`.
+   *
+   * Mora aqui, e não num cookie próprio, porque a janela de atribuição que o
+   * programa precisa (90 dias) é EXATAMENTE a que este arquivo já mantinha,
+   * com o mesmo triplo de armazenamento (localStorage, sessionStorage e
+   * cookie). Cookie novo seria uma segunda janela para envelhecer sozinha.
+   *
+   * ⚠️ **Só o PRIMEIRO código fica.** Quem chegou pelo link de alguém e depois
+   * clicou no link de outro não troca de indicador no meio do caminho — a
+   * comissão é de quem trouxe. É a mesma regra do índice único em
+   * `Indicacao.indicadoUserId`, aqui na ponta do navegador.
+   */
+  ref?: string;
+  refEm?: string;
 };
 
 const STORAGE_KEY = "fayai_attribution_v1";
@@ -169,8 +185,46 @@ export function updateAttributionFromLocation(params?: {
     next.lastTouch = utm;
   }
 
+  // O código de indicação: `?ref=` na URL, ou a própria rota `/f/<codigo>`.
+  // Grava só se ainda não houver um — ver o comentário em `AttributionState`.
+  if (!next.ref) {
+    const codigo = lerCodigoDeIndicacao(href);
+    if (codigo) {
+      next.ref = codigo;
+      next.refEm = now;
+    }
+  }
+
   next.updatedAt = now;
   writeAttribution(next);
+}
+
+/**
+ * Acha o código de indicação numa URL: `?ref=ricardo` ou `/f/ricardo`.
+ *
+ * A normalização é a MESMA de `lib/fundadores.ts` (minúsculo, sem acento, só
+ * letra/número/hífen) — o código que o navegador guarda tem de ser byte a byte
+ * o que está no banco, senão o vínculo não casa e ninguém entende por quê.
+ */
+export function lerCodigoDeIndicacao(urlString: string): string | undefined {
+  try {
+    const u = new URL(urlString);
+    const bruto = u.searchParams.get("ref") || u.pathname.match(/\/f\/([^/?#]+)/)?.[1] || "";
+    const limpo = decodeURIComponent(bruto)
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9-]/g, "")
+      .slice(0, 24);
+    return limpo.length >= 3 ? limpo : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/** O código guardado, para o cadastro mandar junto. */
+export function lerRefGuardado(): string | undefined {
+  return readAttribution()?.ref;
 }
 
 export function getAttributionUtmPayload(): UtmData {
