@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 import mongoose from "mongoose";
 import dbConnect from "@/lib/mongodb";
 import GameVaga, { type IGameVaga } from "@/models/GameVaga";
+import Fundador from "@/models/Fundador";
 import { POSICOES } from "@/lib/game/posicoes";
 
 /**
@@ -74,6 +75,26 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 
   await dbConnect();
   const v = (await GameVaga.findById(id).lean()) as unknown as (IGameVaga & { _id: unknown }) | null;
+
+  /**
+   * ── O CARTAZ SE ASSINA (06/09/2026) ──────────────────────────────────
+   *
+   * Se quem publicou a vaga for fundador, o rodapé deixa de dizer
+   * `fayai.com.br/game` e passa a dizer o endereço DELE. É o mecanismo de
+   * capilaridade do programa: o fundador não divulga um link — ele monta o
+   * time, publica o cartaz no grupo, e o cartaz leva o convite junto.
+   *
+   * ⚠️ Falha em silêncio de propósito. O cartaz é uma imagem que já é
+   * compartilhada; se a busca do fundador der erro, ele sai com o rodapé
+   * genérico, que é o comportamento de antes. Imagem que não gera é pior do
+   * que imagem sem assinatura.
+   */
+  const fundador = v?.ownerUserId
+    ? await Fundador.findOne({ userId: v.ownerUserId, status: "ativo" })
+        .select("numero codigo")
+        .lean()
+        .catch(() => null)
+    : null;
   if (!v) return new Response("vaga não encontrada", { status: 404 });
 
   const url = new URL(req.url);
@@ -224,10 +245,14 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
           </div>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: `2px solid ${paleta.acento}44`, paddingTop: "26px" }}>
             <div style={{ display: "flex", fontSize: "30px", fontWeight: 900, color: paleta.acento, letterSpacing: "1px" }}>
-              fayai.com.br/game
+              {fundador ? `fayai.com.br/f/${fundador.codigo}` : "fayai.com.br/game"}
             </div>
             <div style={{ display: "flex", fontSize: "18px", fontWeight: 700, color: paleta.suave }}>
-              {en ? "Post & apply on the site" : "Anuncie e candidate-se no site"}
+              {fundador
+                ? `${en ? "Founder" : "Fundador"} #${String(fundador.numero).padStart(3, "0")}`
+                : en
+                  ? "Post & apply on the site"
+                  : "Anuncie e candidate-se no site"}
             </div>
           </div>
         </div>

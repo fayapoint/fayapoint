@@ -17,6 +17,7 @@ export function AvatarJogador({
   status = "offline",
   anel = true,
   titulo,
+  fundador,
 }: {
   seed: string;
   size?: number;
@@ -24,6 +25,17 @@ export function AvatarJogador({
   /** Desenha o anel de status ao redor. */
   anel?: boolean;
   titulo?: string;
+  /**
+   * O número de fundador, quando a pessoa for um. Desenha um aro dourado por
+   * FORA do anel de status — os dois convivem porque dizem coisas diferentes:
+   * o de dentro é onde a pessoa está agora, o de fora é quem ela é.
+   *
+   * ⚠️ O selo entra no SVG do boneco em vez de ser um `<div>` por cima porque
+   * o boneco aparece em nuvem com dezenas de instâncias, em card e em busca —
+   * um adorno posicionado por CSS teria de ser reposicionado em cada um deles,
+   * e sairia errado no primeiro lugar que ninguém revisou.
+   */
+  fundador?: number;
 }) {
   const a = atributosAvatar(seed);
   const cor = corStatus(status);
@@ -47,6 +59,11 @@ export function AvatarJogador({
           <stop offset="1" stopColor="#0c0e1d" />
         </linearGradient>
       </defs>
+
+      {/* aro de fundador — por fora do anel de status, e sempre visível */}
+      {fundador ? (
+        <circle cx="32" cy="32" r="33.5" fill="none" stroke="#f5c04e" strokeWidth="2" opacity="0.95" />
+      ) : null}
 
       {/* anel de status */}
       {anel && status !== "offline" && (

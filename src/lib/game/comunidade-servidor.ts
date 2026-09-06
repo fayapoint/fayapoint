@@ -1,4 +1,5 @@
 import dbConnect from "@/lib/mongodb";
+import Fundador from "@/models/Fundador";
 import GamePresenca from "@/models/GamePresenca";
 import GameCompeticao from "@/models/GameCompeticao";
 import GameVaga from "@/models/GameVaga";
@@ -24,6 +25,8 @@ export interface JogadorOnline {
   overall: number | null;
   status: "online" | "procurando" | "jogando";
   reputacao?: ResumoReputacao;
+  /** Número de fundador, quando houver — desenha o aro dourado no boneco. */
+  fundador?: number;
 }
 
 export interface RetratoOnline {
@@ -49,20 +52,49 @@ export async function snapshotOnline(limite = 80): Promise<RetratoOnline> {
       .lean(),
   ]);
 
-  const lista: JogadorOnline[] = (docs as unknown as Array<{
+  const brutos = docs as unknown as Array<{
     avatarSeed?: string;
     userId?: unknown;
     gamertag?: string;
     posicao?: string;
     overall?: number;
     status: JogadorOnline["status"];
-  }>).map((d) => ({
+  }>;
+
+  const lista: JogadorOnline[] = brutos.map((d) => ({
     seed: d.avatarSeed || String(d.userId) || d.gamertag || "x",
     gamertag: d.gamertag ?? null,
     posicao: d.posicao ?? null,
     overall: d.overall ?? null,
     status: d.status,
   }));
+
+  /**
+   * O selo de fundador na nuvem da comunidade — 06/09/2026.
+   *
+   * Uma consulta em lote para todos os online, não uma por boneco: a nuvem
+   * chega a 80 jogadores e o pulso roda a cada 20 segundos. Oitenta consultas
+   * a cada pulso, por visitante, derrubariam o Mongo antes de a comunidade
+   * ficar interessante.
+   *
+   * Falha em silêncio: sem o selo a nuvem continua funcionando, e presença é
+   * dado de tela, não de dinheiro.
+   */
+  const ids = brutos.map((d) => d.userId).filter(Boolean);
+  if (ids.length) {
+    try {
+      const fundadores = await Fundador.find({ userId: { $in: ids }, status: "ativo" })
+        .select("userId numero")
+        .lean();
+      const porUsuario = new Map(fundadores.map((f) => [String(f.userId), f.numero]));
+      brutos.forEach((d, i) => {
+        const n = porUsuario.get(String(d.userId));
+        if (n) lista[i].fundador = n;
+      });
+    } catch {
+      // sem selo, e segue
+    }
+  }
 
   // Reputação em lote para quem tem gamertag.
   const gts = lista.map((j) => j.gamertag).filter(Boolean) as string[];

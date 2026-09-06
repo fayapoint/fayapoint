@@ -383,6 +383,15 @@ const config: NextConfig = {
         destination: '/pt-BR/fundadores',
         permanent: false,
       },
+      // ⚠️ `:resto*` cobre `/muro` e `/regulamento`. Sem esta segunda regra, a
+      // primeira pegava só a raiz e as subpáginas continuavam servindo
+      // português num endereço em inglês — o defeito que a regra acima existe
+      // para consertar, escondido um nível abaixo.
+      {
+        source: '/en/fundadores/:resto*',
+        destination: '/pt-BR/fundadores/:resto*',
+        permanent: false,
+      },
       {
         source: '/en/f/:codigo',
         destination: '/pt-BR/f/:codigo',

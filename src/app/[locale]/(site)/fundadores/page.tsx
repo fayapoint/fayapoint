@@ -170,6 +170,7 @@ export default async function PaginaFundadores() {
                 rotulo: "Identidade",
                 titulo: "Um número só seu",
                 texto: `De #001 a #${LIMITE_DE_VAGAS}. No perfil, no seu boneco do /game e no muro dos fundadores. O número é seu mesmo se um dia você sair.`,
+                link: { href: "/fundadores/muro", texto: "ver o muro" },
               },
               {
                 rotulo: "Produção",
@@ -198,6 +199,14 @@ export default async function PaginaFundadores() {
                 </p>
                 <h3 className="mt-2.5 text-lg font-semibold">{b.titulo}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{b.texto}</p>
+                {"link" in b && b.link ? (
+                  <Link
+                    href={b.link.href}
+                    className="mt-3 inline-block text-sm text-primary underline-offset-4 hover:underline"
+                  >
+                    {b.link.texto} →
+                  </Link>
+                ) : null}
               </div>
             ))}
           </div>

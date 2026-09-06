@@ -37,6 +37,8 @@ interface JogadorOnline {
   overall: number | null;
   status: StatusPresenca;
   reputacao?: ResumoReputacao;
+  /** Número de fundador — vem do `snapshotOnline`, em lote. */
+  fundador?: number;
 }
 interface MembroComunidade {
   seed: string;
@@ -134,11 +136,11 @@ export function ComunidadeAoVivo({ copy }: { copy: CopyMercado }) {
   // A nuvem: online (com rosto vivo) + amostra da comunidade, sem repetir.
   const nuvem = useMemo(() => {
     const vistos = new Set<string>();
-    const arr: Array<{ seed: string; nome: string | null; posicao: string | null; status: StatusPresenca | null; overall: number | null; reputacao?: ResumoReputacao; vivo: boolean }> = [];
+    const arr: Array<{ seed: string; nome: string | null; posicao: string | null; status: StatusPresenca | null; overall: number | null; reputacao?: ResumoReputacao; vivo: boolean; fundador?: number }> = [];
     for (const j of onlineNum?.lista ?? []) {
       if (vistos.has(j.seed)) continue;
       vistos.add(j.seed);
-      arr.push({ seed: j.seed, nome: j.gamertag, posicao: j.posicao, status: j.status, overall: j.overall, reputacao: j.reputacao, vivo: true });
+      arr.push({ seed: j.seed, nome: j.gamertag, posicao: j.posicao, status: j.status, overall: j.overall, reputacao: j.reputacao, vivo: true, fundador: j.fundador });
     }
     for (const m of dados?.comunidade ?? []) {
       if (vistos.has(m.seed)) continue;
@@ -277,7 +279,7 @@ function BonecoNaNuvem({
   membro,
   copy,
 }: {
-  membro: { seed: string; nome: string | null; posicao: string | null; status: StatusPresenca | null; overall: number | null; reputacao?: ResumoReputacao; vivo: boolean };
+  membro: { seed: string; nome: string | null; posicao: string | null; status: StatusPresenca | null; overall: number | null; reputacao?: ResumoReputacao; vivo: boolean; fundador?: number };
   copy: CopyMercado;
 }) {
   const status = membro.status ?? "offline";
@@ -285,13 +287,24 @@ function BonecoNaNuvem({
   const conteudo = (
     <>
       <span style={{ opacity: membro.vivo ? 1 : 0.62, display: "block" }}>
-        <AvatarJogador seed={membro.seed} size={46} status={status} titulo={membro.nome ?? undefined} />
+        <AvatarJogador
+          seed={membro.seed}
+          size={46}
+          status={status}
+          titulo={membro.nome ?? undefined}
+          fundador={membro.fundador}
+        />
       </span>
 
       {/* tooltip */}
       <div className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 hidden w-max max-w-[220px] -translate-x-1/2 rounded-xl border border-white/12 bg-[#12142a] p-3 text-left shadow-xl group-hover:block">
         <div className="flex items-center gap-2">
           <span className="truncate text-[13px] font-black text-white">{membro.nome ?? "—"}</span>
+          {membro.fundador ? (
+            <span className="rounded px-1.5 py-px text-[10px] font-extrabold" style={{ background: "#f5c04e22", color: "#f5c04e" }}>
+              FUNDADOR #{String(membro.fundador).padStart(3, "0")}
+            </span>
+          ) : null}
           {posNome && (
             <span className="rounded px-1.5 py-px text-[10px] font-extrabold" style={{ background: `${corSetor(posicaoPorCode(membro.posicao!)?.setor ?? "—")}22`, color: corSetor(posicaoPorCode(membro.posicao!)?.setor ?? "—") }}>
               {posNome}
