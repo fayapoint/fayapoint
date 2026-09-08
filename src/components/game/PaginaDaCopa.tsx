@@ -32,6 +32,7 @@ import {
   corNota,
 } from "@/lib/game/tema";
 import { FaixaDeCena, FundoDeCena, CENAS } from "./CenaW22";
+import { AcervoDoCampeonato } from "./AcervoDoCampeonato";
 
 /**
  * A PÁGINA DA SUPER COPA DOS STREAMERS — 08/09/2026.
@@ -132,6 +133,7 @@ interface Noticia {
 
 interface Dados {
   copa: {
+    slug: string;
     nome: string;
     edicao?: string;
     jogo: string;
@@ -340,6 +342,8 @@ export function PaginaDaCopa({ slug, locale }: { slug: string; locale: string })
             <TabelaJogadores lista={goleiros} coluna="defesas" />
           </div>
         </section>
+
+        <AcervoDoCampeonato escopo="copa" refId={copa.slug} />
 
         <FontesENoticias declaracoes={declaracoes} noticias={noticias} />
 
