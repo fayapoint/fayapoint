@@ -119,6 +119,10 @@ export function HubWinners22({ locale }: { locale: string }) {
             cena="trofeu"
             alt="Troféu do Winners 22 com a marca FayAi gravada na base"
             altura="h-full min-h-[13rem]"
+            titulo="A taça"
+            linha="Quem está ganhando a Super Copa."
+            href="/game/copa/super-copa-dos-streamers"
+            locale={locale}
           />
         </div>
       </div>
@@ -131,6 +135,8 @@ export function HubWinners22({ locale }: { locale: string }) {
           altura="h-40 sm:h-48"
           titulo="Onde tudo acontece"
           linha="Dado real de Pro Clubs, lido da fonte que a própria EA publica."
+          href="/game/campeonatos"
+          locale={locale}
         />
         <FaixaDeCena
           cena="controle"
@@ -138,6 +144,8 @@ export function HubWinners22({ locale }: { locale: string }) {
           altura="h-40 sm:h-48"
           titulo="Você não precisa jogar"
           linha="Dá para entrar, apostar e acompanhar sem nunca ter tocado num Pro Clubs."
+          href="/game/apostas"
+          locale={locale}
         />
       </div>
     </section>

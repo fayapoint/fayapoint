@@ -1,4 +1,8 @@
-import { FUNDO, bebas } from "@/lib/game/tema";
+"use client";
+
+import { Link } from "@/i18n/navigation";
+import { ArrowUpRight } from "lucide-react";
+import { FUNDO, LIMA, bebas } from "@/lib/game/tema";
 
 /**
  * AS CENAS DO WINNERS 22 — a arte da seção, num lugar só. 08/09/2026.
@@ -57,6 +61,17 @@ export type NomeDaCena = keyof typeof CENAS;
  *
  * `prioridade` marca a imagem que abre a página — só ela, porque marcar todas
  * é o mesmo que não marcar nenhuma e ainda atrasa a que importa.
+ *
+ * ## `href` não é opcional por preguiça — é uma regra de tela
+ *
+ * Uma faixa COM TÍTULO no meio de uma grade de cartões clicáveis **parece um
+ * cartão**. Se ela não levar a lugar nenhum, a pessoa clica e nada acontece —
+ * e a conclusão dela não é "essa parte é decorativa", é "o site está
+ * quebrado". Foi exatamente o que aconteceu: três faixas tituladas entraram no
+ * hub ao lado dos cinco cartões, e o Ricardo relatou clique morto.
+ *
+ * A regra que fica: **faixa com título tem `href`; faixa sem `href` não tem
+ * título.** Textura pode ser muda; manchete, não.
  */
 export function FaixaDeCena({
   cena,
@@ -65,6 +80,8 @@ export function FaixaDeCena({
   linha,
   altura = "h-56 sm:h-72",
   prioridade = false,
+  href,
+  locale,
   children,
 }: {
   cena: NomeDaCena;
@@ -73,10 +90,13 @@ export function FaixaDeCena({
   linha?: string;
   altura?: string;
   prioridade?: boolean;
+  /** Para onde a faixa leva. Obrigatório na prática quando há `titulo`. */
+  href?: string;
+  locale?: string;
   children?: React.ReactNode;
 }) {
-  return (
-    <div className={`relative overflow-hidden rounded-2xl ${altura}`}>
+  const conteudo = (
+    <div className={`relative h-full overflow-hidden rounded-2xl ${href ? "" : altura}`}>
       {/* eslint-disable-next-line @next/next/no-img-element -- arte local estática; o otimizador não acrescenta nada a um webp já dimensionado */}
       <img
         src={CENAS[cena]}
@@ -101,10 +121,34 @@ export function FaixaDeCena({
             </p>
           )}
           {linha && <p className="mt-1 max-w-xl text-sm text-white/65">{linha}</p>}
+          {/* A seta só aparece quando a faixa REALMENTE leva a algum lugar.
+              É o sinal que faltava: sem ela, clicável e decorativo eram
+              indistinguíveis. */}
+          {href && (
+            <span
+              className="mt-2 inline-flex items-center gap-1 text-xs font-medium"
+              style={{ color: LIMA }}
+            >
+              abrir
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </span>
+          )}
           {children}
         </div>
       )}
     </div>
+  );
+
+  if (!href) return conteudo;
+
+  return (
+    <Link
+      href={href}
+      locale={locale}
+      className={`group block ${altura} transition duration-200 hover:-translate-y-0.5`}
+    >
+      {conteudo}
+    </Link>
   );
 }
 
