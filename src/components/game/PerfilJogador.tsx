@@ -402,7 +402,17 @@ function FaixaVinculo({ ficha, copy }: { ficha: FichaJogadorDados; copy: CopyFic
           </h2>
           <p className="mt-1 text-[13px] text-white/60">{copy.dono.sub}</p>
         </div>
-        <Link href="/game/apostas" className="inline-flex shrink-0 flex-col items-start rounded-xl px-5 py-2.5 sm:items-center" style={{ background: LIMA, color: FUNDO }}>
+        {/*
+          O botão leva a gamertag: sem ela, "apostar em mim" caía no saguão
+          genérico e a pessoa tinha de abrir partida por partida para descobrir
+          se estava escalada em alguma. Com o filtro, o saguão já responde — e
+          quando não há nenhuma, ele diz isso em vez de mostrar lista vazia.
+        */}
+        <Link
+          href={`/game/apostas?jogador=${encodeURIComponent(ficha.perfil.gamertag)}`}
+          className="inline-flex shrink-0 flex-col items-start rounded-xl px-5 py-2.5 sm:items-center"
+          style={{ background: LIMA, color: FUNDO }}
+        >
           <span className="inline-flex items-center gap-2 text-sm font-bold">
             <Coins size={14} />
             {copy.dono.apostar}

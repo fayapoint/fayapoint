@@ -65,9 +65,32 @@ export async function GET(req: Request) {
     );
   }
 
+  /**
+   * APOSTAR EM SI MESMO — o filtro por gamertag.
+   *
+   * O Ricardo pediu, em português claro, que o jogador pudesse "apostar em si
+   * mesmo". O botão da ficha existia e levava para o saguão GENÉRICO: a pessoa
+   * caía numa lista de oito partidas sem nenhuma relação visível com ela, e
+   * tinha de abrir uma por uma para descobrir se estava escalada em alguma.
+   *
+   * Aqui o filtro é feito no banco, contra os dois elencos do evento. Ele NÃO
+   * inventa mercado nenhum: se a pessoa não está escalada em partida aberta, a
+   * lista volta vazia e a tela diz por quê. Prometer um mercado que não existe
+   * seria pior do que o botão genérico.
+   *
+   * Insensível a maiúsculas porque a EA guarda a gamertag como o jogador
+   * digitou, e quem chega pela ficha traz o que estava na URL.
+   */
+  const jogador = (url.searchParams.get("jogador") ?? "").trim().slice(0, 40);
+  const filtroBase: Record<string, unknown> = { status: "aberto", comecaEm: { $gt: new Date() } };
+  if (jogador) {
+    const rx = new RegExp(`^${jogador.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i");
+    filtroBase.$or = [{ "mandante.elenco.gamertag": rx }, { "visitante.elenco.gamertag": rx }];
+  }
+
   // O saguão: o que está aberto, do próximo a começar em diante, mais os
   // últimos liquidados — o resultado recente é o que dá confiança no cardápio.
-  const abertos = await GameEvento.find({ status: "aberto", comecaEm: { $gt: new Date() } })
+  const abertos = await GameEvento.find(filtroBase)
     .sort({ comecaEm: 1 })
     .limit(24)
     .select("slug mandante visitante comecaEm equilibrio compromisso totalApostado totalCupons competicaoId rodada")
@@ -150,6 +173,25 @@ export async function GET(req: Request) {
         placar: e.resultado ? `${e.resultado.golsMandante} × ${e.resultado.golsVisitante}` : null,
         liquidadoEm: e.liquidadoEm,
       })),
+      /**
+       * A tela precisa saber que a lista está FILTRADA, e por quem.
+       *
+       * Sem isto, uma lista vazia por filtro é indistinguível de um saguão sem
+       * partida nenhuma — e o jogador concluiria que a casa está fechada,
+       * quando o que aconteceu é que ele não foi escalado hoje.
+       *
+       * `abertosNoTotal` vem de uma contagem à parte de propósito: é o número
+       * que permite à tela dizer "há 8 partidas abertas, nenhuma com você".
+       */
+      filtro: jogador
+        ? {
+            jogador,
+            abertosNoTotal: await GameEvento.countDocuments({
+              status: "aberto",
+              comecaEm: { $gt: new Date() },
+            }),
+          }
+        : null,
     },
     { headers: { "Cache-Control": "no-store" } }
   );

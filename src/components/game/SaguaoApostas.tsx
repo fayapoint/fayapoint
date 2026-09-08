@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { getClientAuthHeaders } from "@/lib/client-auth";
 import {
@@ -14,6 +15,8 @@ import {
   Lock,
   ArrowRight,
   Sparkles,
+  User,
+  X,
 } from "lucide-react";
 import { LIMA, OURO, CIANO, VIOLETA, CINZA, FUNDO, bebas, superficie } from "@/lib/game/tema";
 import { FaixaDeCena, FundoDeCena } from "./CenaW22";
@@ -101,21 +104,41 @@ interface ApostaMinha {
   pernas: PernaMinha[];
 }
 
+interface FiltroJogador {
+  jogador: string;
+  abertosNoTotal: number;
+}
+
 export function SaguaoApostas({ locale }: { locale: string }) {
-  const [dados, setDados] = useState<{ eventos: EventoResumo[]; encerrados: Encerrado[] } | null | "erro">(null);
+  /**
+   * APOSTAR EM SI MESMO — de onde vem o `?jogador=`.
+   *
+   * O botão da ficha ("apostar em mim") mandava para o saguão genérico: uma
+   * lista de oito partidas sem relação visível com a pessoa, que teria de abrir
+   * uma por uma para descobrir se está escalada. Agora ele traz a gamertag, e o
+   * saguão mostra só as partidas em que ela joga.
+   *
+   * Quando não há nenhuma, a tela DIZ isso e diz quantas existem sem o filtro.
+   * Lista vazia sem explicação seria lida como "a casa está fechada".
+   */
+  const params = useSearchParams();
+  const jogadorNaUrl = (params.get("jogador") ?? "").trim();
+
+  const [dados, setDados] = useState<{ eventos: EventoResumo[]; encerrados: Encerrado[]; filtro: FiltroJogador | null } | null | "erro">(null);
   const [carteira, setCarteira] = useState<Carteira | null>(null);
   const [aba, setAba] = useState<"cardapio" | "minhas">("cardapio");
   const [minhas, setMinhas] = useState<ApostaMinha[] | null>(null);
 
   const carregar = useCallback(async () => {
     try {
-      const r = await fetch("/api/game/apostas");
+      const q = jogadorNaUrl ? `?jogador=${encodeURIComponent(jogadorNaUrl)}` : "";
+      const r = await fetch(`/api/game/apostas${q}`);
       if (!r.ok) throw new Error();
       setDados(await r.json());
     } catch {
       setDados("erro");
     }
-  }, []);
+  }, [jogadorNaUrl]);
 
   useEffect(() => {
     carregar();
@@ -212,13 +235,57 @@ export function SaguaoApostas({ locale }: { locale: string }) {
             </p>
           )}
 
+          {dados !== null && dados !== "erro" && dados.filtro && (
+            <div
+              style={superficie(LIMA)}
+              className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-2xl border p-4 text-sm"
+            >
+              <User className="h-4 w-4 shrink-0" style={{ color: LIMA }} />
+              <span className="text-white/75">
+                Só as partidas com <strong className="text-white">{dados.filtro.jogador}</strong>{" "}
+                escalado.
+              </span>
+              <Link
+                href="/game/apostas"
+                className="ml-auto inline-flex items-center gap-1 text-xs text-white/45 transition hover:text-white"
+              >
+                <X className="h-3 w-3" />
+                ver todas as {dados.filtro.abertosNoTotal}
+              </Link>
+            </div>
+          )}
+
           {dados !== null && dados !== "erro" && dados.eventos.length === 0 && (
             <div
               style={superficie(CINZA)}
-              className="mt-8 rounded-2xl border p-6 text-sm text-white/60"
+              className="mt-8 rounded-2xl border p-6 text-sm leading-relaxed text-white/60"
             >
-              Nenhuma partida aberta neste momento. A mesa monta uma rodada nova a cada
-              poucas horas — volte já já.
+              {dados.filtro ? (
+                <>
+                  {dados.filtro.abertosNoTotal > 0 ? (
+                    <>
+                      Há <strong className="text-white/85">{dados.filtro.abertosNoTotal}</strong>{" "}
+                      partida(s) aberta(s) agora, e <strong className="text-white/85">
+                        {dados.filtro.jogador}
+                      </strong>{" "}
+                      não está escalado em nenhuma.
+                    </>
+                  ) : (
+                    <>Nenhuma partida aberta neste momento.</>
+                  )}{" "}
+                  A rodada é montada com os clubes do espelho, e cada clube leva um recorte do
+                  próprio elenco — quando o clube dele entrar numa rodada, ele aparece aqui
+                  sozinho, com os mercados de jogador junto.
+                  <Link href="/game/apostas" className="mt-3 block text-xs" style={{ color: LIMA }}>
+                    ver todas as partidas abertas →
+                  </Link>
+                </>
+              ) : (
+                <>
+                  Nenhuma partida aberta neste momento. A mesa monta uma rodada nova a cada
+                  poucas horas — volte já já.
+                </>
+              )}
             </div>
           )}
 

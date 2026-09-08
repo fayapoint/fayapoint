@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { SaguaoApostas } from "@/components/game/SaguaoApostas";
 
 interface Props {
@@ -26,5 +27,12 @@ export const dynamic = "force-dynamic";
 
 export default async function ApostasPage({ params }: Props) {
   const { locale } = await params;
-  return <SaguaoApostas locale={locale} />;
+  // `SaguaoApostas` lê `?jogador=` com `useSearchParams` — o filtro de
+  // "apostar em mim". Sem a fronteira de Suspense, o Next recusa a página no
+  // build assim que alguém tirar o `force-dynamic` daqui.
+  return (
+    <Suspense>
+      <SaguaoApostas locale={locale} />
+    </Suspense>
+  );
 }
