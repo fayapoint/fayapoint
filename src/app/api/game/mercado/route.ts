@@ -149,7 +149,29 @@ export async function POST(req: Request) {
     if (eaClubId) {
       // A vaga ligada a um clube da EA nasce com a divisão e a campanha REAIS
       // do espelho — e sobe de "declarado" (E) para "fonte pública" (B).
-      const doc = (await GameEaClube.findOne({ clubId: eaClubId })
+      //
+      // ⚠️ A PLATAFORMA ENTRA NA CONSULTA. `clubId` é único DENTRO de uma
+      // piscina, não entre elas: `common-gen5` (PS5/Series/PC) e `common-gen4`
+      // (PS4/Xbox One) são mundos separados da EA, com numeração própria. Sem
+      // isto, uma vaga anunciada por um clube da gen4 nasceria carimbada com a
+      // divisão e a campanha de um clube gen5 de mesmo número — e com selo de
+      // "fonte pública" por cima, que é o que torna o erro grave.
+      //
+      // Achado pelo codex-bets em 08/09, e é o mesmo defeito que ele já tinha
+      // apontado em `copa.ts`. Duas ocorrências da mesma falha em arquivos
+      // diferentes: quem escrever a terceira consulta a `GameEaClube` que
+      // filtre por `clubId` sozinho vai repetir de novo.
+      //
+      // `"mista"` é plataforma de VAGA (o clube aceita gente das duas
+      // gerações), não de CLUBE — o espelho só conhece gen5 e gen4. Filtrar
+      // por ela não acharia nada e a vaga perderia o enriquecimento em
+      // silêncio, que é como se conserta um defeito criando outro. Nesse caso
+      // a busca cai nas duas piscinas e fica com a que existir.
+      const filtroClube =
+        plataforma === "mista"
+          ? { clubId: eaClubId, platform: { $in: ["common-gen5", "common-gen4"] } }
+          : { clubId: eaClubId, platform: plataforma };
+      const doc = (await GameEaClube.findOne(filtroClube)
         .select("clubId name currentDivision skillRating wins ties losses gamesPlayed crestAssetId")
         .lean()) as unknown as {
         clubId: string;

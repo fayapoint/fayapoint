@@ -356,7 +356,14 @@ export function classificacaoPelaEA(
   );
 }
 
-export type Veredito = "confere" | "diverge" | "so-oficial" | "so-ea";
+/**
+ * O veredito de uma linha da conferência.
+ *
+ * `sem-comparacao` existe porque "não deu para comparar" NÃO é "conferiu".
+ * Ver o comentário dentro de `conferir()` para o defeito que obrigou a
+ * distinção — a versão anterior devolvia `confere` sem medida nenhuma.
+ */
+export type Veredito = "confere" | "diverge" | "sem-comparacao" | "so-oficial" | "so-ea";
 
 export interface Conferencia {
   time: string;
@@ -406,17 +413,36 @@ export function conferir(
       });
       continue;
     }
-    // Só compara o que dá para comparar. A EA conta JOGO; a copa, série.
-    const cabe = typeof o.jogos === "number" && o.jogos > 0;
-    const diferenca = cabe ? Math.abs(o.jogos! - ea.series) : 0;
+    /**
+     * ⚠️ CONFERIR EXIGE DUAS MEDIDAS. Sem as duas, o veredito é
+     * `sem-comparacao` — nunca `confere`.
+     *
+     * Apontado pelo codex-bets em 08/09. A versão anterior fazia
+     * `veredito: !cabe ? "confere" : ...`, ou seja: quando a organização não
+     * publicava o número de confrontos, a linha saía **"confere"**. Dizia que
+     * bateu sem nada ter sido comparado.
+     *
+     * É o mesmo defeito que eu tinha acabado de consertar no acervo (o "11
+     * times parados" com um dia de fotografia) e escrevi de novo aqui, no
+     * arquivo ao lado. Zero de medida virando afirmação de acordo.
+     *
+     * O segundo erro era a tolerância: `diferenca <= 1` chamava de `confere`
+     * uma diferença real de 3 séries declaradas contra 2 observadas. Conferir
+     * é bater — igualdade exata. Diferença é `diverge`, com a nota explicando
+     * a causa mais provável, que é NOSSA (a janela de 10 amistosos da EA
+     * cortando histórico), não da organização.
+     */
+    const temMedidaOficial = typeof o.jogos === "number" && o.jogos > 0;
+    const bate = temMedidaOficial && o.jogos === ea.series;
     saida.push({
       time: o.time,
-      veredito: !cabe ? "confere" : diferenca <= 1 ? "confere" : "diverge",
+      veredito: !temMedidaOficial ? "sem-comparacao" : bate ? "confere" : "diverge",
       oficial: { pontos: o.pontos, jogos: o.jogos },
       ea: { jogos: ea.jogos, series: ea.series },
-      nota:
-        cabe && diferenca > 1
-          ? `a organização publica ${o.jogos} confronto(s) e nós achamos ${ea.series} na EA — a janela de 10 amistosos da EA costuma explicar a diferença`
+      nota: !temMedidaOficial
+        ? "a organização não publica o número de confrontos deste time, então não há o que conferir — o que está ao lado é só o que observamos na EA"
+        : !bate
+          ? `a organização publica ${o.jogos} confronto(s) e nós observamos ${ea.series} na EA. A causa mais provável é nossa: a EA guarda só 10 amistosos por clube, e o que passa disso já saiu da fonte.`
           : undefined,
     });
   }
