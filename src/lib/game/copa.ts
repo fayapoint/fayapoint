@@ -447,13 +447,29 @@ export function conferir(
     });
   }
 
+  /**
+   * ⚠️ TABELA VAZIA NÃO É TIME AUSENTE DA TABELA.
+   *
+   * Medido em 08/09 no painel em produção: as 11 linhas diziam "achamos
+   * partidas deste time na EA, mas ele não está na tabela publicada" — todas.
+   * Lido de fora, isso acusa a organização de ter deixado onze times de fora
+   * da própria tabela. A verdade era outra: `classificacaoOficial` estava
+   * VAZIA, porque ninguém capturou tabela nenhuma ainda.
+   *
+   * A frase só é honesta quando existe uma tabela para o time faltar dentro.
+   * Sem nenhuma linha oficial, o que falta é do nosso lado, e é isso que a nota
+   * passa a dizer.
+   */
+  const semTabela = oficial.length === 0;
   for (const l of calculada) {
     if (vistos.has(normalizarNome(l.time))) continue;
     saida.push({
       time: l.time,
       veredito: "so-ea",
       ea: { jogos: l.jogos, series: l.series },
-      nota: "achamos partidas deste time na EA, mas ele não está na tabela publicada",
+      nota: semTabela
+        ? "ainda não capturamos a tabela publicada pela organização — o que está ao lado é só o que nós observamos na EA"
+        : "achamos partidas deste time na EA, mas ele não está na tabela publicada",
     });
   }
 

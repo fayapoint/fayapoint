@@ -139,7 +139,19 @@ async function main() {
   }
   copa.declaracoes = DECLARACOES as never;
   copa.noticias = NOTICIAS as never;
-  copa.oficialCapturadaEm = HOJE;
+  /**
+   * ⛔ NÃO carimbe `oficialCapturadaEm` aqui.
+   *
+   * Este script grava o que as fontes DECLARAM e as notícias. Ele não lê a
+   * tabela de classificação da organização — e `oficialCapturadaEm` quer dizer
+   * exatamente "quando a tabela oficial foi lida do site".
+   *
+   * Carimbar mesmo assim fez o painel da Federação anunciar, em 08/09,
+   * "Tabela declarada: capturada em 08/09/2026, 16:00:00" com
+   * `classificacaoOficial` em ZERO linhas. Data de captura de uma captura que
+   * nunca houve — a mesma família de defeito do painel que declarava receita
+   * que não existia. Quem carimbar tem de ser quem escrever as linhas.
+   */
   await copa.save();
   console.log(
     `✓ ${DECLARACOES.length} declaração(ões) de fonte e ${NOTICIAS.length} notícia(s) gravadas`
