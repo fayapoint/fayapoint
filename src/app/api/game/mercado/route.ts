@@ -84,9 +84,25 @@ export async function GET(req: Request) {
   const vagas: VagaSerializada[] = docs.map((d) => serializarVaga(d, { userId: user?.id }));
   await Promise.all([enriquecerComEspelho(vagas), enriquecerReputacao(vagas)]);
 
+  /**
+   * ⛔ ESTA RESPOSTA É PESSOAL. Nunca `public`.
+   *
+   * `serializarVaga` devolve `contato` — o Discord ou o WhatsApp de quem
+   * publicou — SÓ para o dono do anúncio. Duas pessoas pedindo a mesma lista
+   * recebem conteúdos diferentes.
+   *
+   * Ela estava marcada `public, s-maxage=30`. Nunca vazou porque
+   * `force-dynamic` reescreve o cabeçalho para `no-store` antes de sair (medido
+   * em 08/09) — ou seja, o que protegia o contato dos anunciantes era um efeito
+   * colateral, não uma decisão. Bastava alguém tirar o `force-dynamic`, ou a
+   * plataforma mudar de comportamento, para a borda guardar a resposta do dono
+   * e entregá-la ao próximo visitante.
+   *
+   * Agora está escrito o que é.
+   */
   return NextResponse.json(
     { vagas },
-    { headers: { "Cache-Control": "public, s-maxage=30, stale-while-revalidate=120" } }
+    { headers: { "Cache-Control": "private, no-store" } }
   );
 }
 

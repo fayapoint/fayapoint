@@ -50,7 +50,16 @@ export async function GET(req: Request) {
       })),
       presets: PRESETS,
     },
-    { headers: { "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300" } }
+    {
+      headers: {
+        // `Cache-Control` sozinho não chega à borda: `force-dynamic` faz o Next
+        // reescrevê-lo como `no-store`. Ver o comentário longo em
+        // api/game/copa/[slug]/route.ts. Esta rota é pública e igual para todo
+        // mundo — não lê usuário nenhum.
+        "Netlify-CDN-Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+        "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+      },
+    }
   );
 }
 
