@@ -58,6 +58,7 @@ interface EventoResumo {
   totalCupons: number;
   mandante: { nome: string; sigla: string | null; cor: string | null; nota: number; elencoConhecido: number };
   visitante: { nome: string; sigla: string | null; cor: string | null; nota: number; elencoConhecido: number };
+  competicao: { slug: string | null; nome: string | null; rodada: number | null } | null;
   principal: { mercadoId: string; selecoes: SelecaoResumo[] } | null;
 }
 
@@ -424,6 +425,15 @@ function CartaoEvento({ evento }: { evento: EventoResumo }) {
           <Timer className="h-3.5 w-3.5" />
           <ContagemRegressiva ate={evento.comecaEm} />
         </span>
+        {evento.competicao?.nome && (
+          <span
+            style={{ borderColor: OURO + "44", color: OURO }}
+            className="rounded border px-1.5 py-0.5 text-[9px] uppercase tracking-widest"
+            title={"Prévia simulada de um confronto de " + evento.competicao.nome}
+          >
+            prévia
+          </span>
+        )}
         <span className="inline-flex items-center gap-1.5 text-white/35">
           <Scale className="h-3.5 w-3.5" />
           equilíbrio {Math.round(evento.equilibrio * 100)}%

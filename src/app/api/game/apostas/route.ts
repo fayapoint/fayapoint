@@ -5,6 +5,7 @@ import { getAuthUser } from "@/lib/auth";
 import { cobrar } from "@/lib/game/limite";
 import GameEvento from "@/models/GameEvento";
 import GameMercadoAposta from "@/models/GameMercadoAposta";
+import GameCompeticao from "@/models/GameCompeticao";
 import GameAposta from "@/models/GameAposta";
 import { registrarAposta } from "@/lib/game/apostas-servidor";
 import { garantirCarteira, ErroCarteira } from "@/lib/game/carteira";
@@ -69,7 +70,7 @@ export async function GET(req: Request) {
   const abertos = await GameEvento.find({ status: "aberto", comecaEm: { $gt: new Date() } })
     .sort({ comecaEm: 1 })
     .limit(24)
-    .select("slug mandante visitante comecaEm equilibrio compromisso totalApostado totalCupons")
+    .select("slug mandante visitante comecaEm equilibrio compromisso totalApostado totalCupons competicaoId rodada")
     .lean();
 
   const encerrados = await GameEvento.find({ status: "liquidado" })
@@ -78,9 +79,29 @@ export async function GET(req: Request) {
     .select("slug mandante.nome mandante.sigla visitante.nome visitante.sigla resultado.golsMandante resultado.golsVisitante liquidadoEm")
     .lean();
 
+  /**
+   * De que COMPETIÇÃO cada evento é prévia.
+   *
+   * Sem isto, a prévia de um confronto de campeonato aparece no saguão
+   * idêntica a uma partida avulsa — e quem olha não tem como saber que aquele
+   * jogo tem relação com um campeonato de verdade. O cabeçalho de
+   * `previa-competicao.ts` prometia que "a tela pode dizer de que confronto ele
+   * é prévia"; sem este trecho, a promessa vivia só no comentário.
+   *
+   * Uma consulta para todas, nunca uma por evento.
+   */
+  const idsCompeticao = [
+    ...new Set(abertos.map((e) => e.competicaoId).filter(Boolean).map(String)),
+  ];
+  const competicoes = idsCompeticao.length
+    ? await GameCompeticao.find({ _id: { $in: idsCompeticao } }).select("slug nome").lean()
+    : [];
+  const compPorId = new Map(competicoes.map((c) => [String(c._id), c]));
+
+  const ids = abertos.map((e) => e._id);
+
   // O 1X2 de cada evento aberto, para o cartão do saguão mostrar preço sem
   // exigir um clique. Uma consulta agregada, nunca uma por evento.
-  const ids = abertos.map((e) => e._id);
   const principais = await GameMercadoAposta.find({
     eventoId: { $in: ids },
     chave: "1x2",
@@ -100,6 +121,13 @@ export async function GET(req: Request) {
           compromisso: e.compromisso,
           totalApostado: e.totalApostado,
           totalCupons: e.totalCupons,
+          competicao: e.competicaoId
+            ? {
+                slug: compPorId.get(String(e.competicaoId))?.slug ?? null,
+                nome: compPorId.get(String(e.competicaoId))?.nome ?? null,
+                rodada: e.rodada ?? null,
+              }
+            : null,
           mandante: resumoLado(e.mandante),
           visitante: resumoLado(e.visitante),
           principal: m

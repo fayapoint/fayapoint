@@ -115,6 +115,7 @@ interface Ficha {
     status: string;
     comecaEm: string;
     equilibrio: number;
+    competicao: { slug: string | null; nome: string | null; rodada: number | null } | null;
     totalApostado: number;
     totalCupons: number;
     mandante: Lado;
@@ -298,6 +299,15 @@ export function MesaDeAposta({ slug, locale }: { slug: string; locale: string })
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_320px]">
           <div className="min-w-0">
+            {evento.competicao?.nome && (
+              <AvisoDePrevia
+                nome={evento.competicao.nome}
+                slug={evento.competicao.slug}
+                rodada={evento.competicao.rodada}
+                locale={locale}
+              />
+            )}
+
             <SeloHonestidade honestidade={honestidade} liquidado={liquidado} />
 
             {liquidado && evento.resultado && (
@@ -377,6 +387,11 @@ function Placar({ evento, liquidado }: { evento: Ficha["evento"]; liquidado: boo
 
       <div className="mt-5 flex flex-wrap justify-center gap-x-6 gap-y-2 border-t border-white/10 pt-4 text-xs text-white/45">
         <span>equilíbrio aplicado: {Math.round(evento.equilibrio * 100)}%</span>
+        {/* Ver `AvisoDePrevia` abaixo: o rótulo tem de estar em letra normal,
+            não escondido aqui embaixo. Este é só o resumo. */}
+        {evento.competicao?.nome && (
+          <span style={{ color: OURO }}>prévia de {evento.competicao.nome}</span>
+        )}
         <span>{evento.totalCupons} cupons</span>
         <span>{evento.totalApostado} fichas na mesa</span>
       </div>
@@ -804,6 +819,68 @@ function Sumula({ resultado, evento }: { resultado: Resultado; evento: Ficha["ev
             </table>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * O AVISO DE PRÉVIA — o rótulo que separa a nossa simulação do jogo deles.
+ *
+ * ## Por que ele existe, e por que em letra normal
+ *
+ * Quando um confronto de campeonato é marcado, a mesa abre uma PRÉVIA: os dois
+ * times reais, com a força real da campanha deles, jogando uma partida que o
+ * NOSSO motor simula. A aposta é sobre a nossa simulação, nunca sobre o jogo
+ * que as pessoas vão disputar.
+ *
+ * Sem este bloco, a prévia é indistinguível de uma partida avulsa — e alguém
+ * pode sair achando que apostou no confronto de verdade. Isso seria o oposto
+ * exato dos Arts. 11 e 18 do regulamento, que existem para que nunca haja
+ * dinheiro (nem ficha) apostado no resultado que jogadores de carne e osso
+ * controlam.
+ *
+ * Por isso o aviso vem ANTES do cardápio, em corpo de texto e não em rodapé.
+ * Um aviso que a pessoa precisa procurar é um aviso que não foi dado.
+ */
+function AvisoDePrevia({
+  nome,
+  slug,
+  rodada,
+  locale,
+}: {
+  nome: string;
+  slug: string | null;
+  rodada: number | null;
+  locale: string;
+}) {
+  return (
+    <div style={superficie(OURO)} className="mb-4 rounded-2xl border p-4">
+      <div className="flex items-start gap-3">
+        <Trophy className="mt-0.5 h-4 w-4 shrink-0" style={{ color: OURO }} />
+        <div className="min-w-0">
+          <p className="text-sm font-medium" style={{ color: OURO }}>
+            Prévia de {nome}
+            {rodada ? ` · rodada ${rodada}` : ""}
+          </p>
+          <p className="mt-1 text-sm leading-relaxed text-white/65">
+            Estes dois times vão se enfrentar de verdade neste campeonato. O que está
+            cotado aqui <strong className="text-white/85">não é aquele jogo</strong> — é
+            uma simulação nossa do confronto, com a força real de cada lado. O resultado
+            que sair daqui não vale para a tabela, e o resultado de lá não paga cupom
+            nenhum.
+          </p>
+          {slug && (
+            <Link
+              href={`/game/campeonato/${slug}`}
+              locale={locale}
+              className="mt-2 inline-block text-xs underline decoration-white/20 underline-offset-2 transition hover:text-white"
+              style={{ color: OURO }}
+            >
+              ver o campeonato
+            </Link>
+          )}
+        </div>
       </div>
     </div>
   );

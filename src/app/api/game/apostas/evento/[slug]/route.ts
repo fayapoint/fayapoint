@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import { cobrar } from "@/lib/game/limite";
 import GameEvento from "@/models/GameEvento";
+import GameCompeticao from "@/models/GameCompeticao";
 import GameMercadoAposta from "@/models/GameMercadoAposta";
 import { derivarSemente } from "@/lib/game/apostas-servidor";
 
@@ -29,6 +30,19 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
   const evento = await GameEvento.findOne({ slug }).lean();
   if (!evento) return NextResponse.json({ error: "evento não encontrado" }, { status: 404 });
 
+  /**
+   * De que confronto de campeonato este evento é PRÉVIA, quando é.
+   *
+   * A tela precisa dizer isso em letra grande, e não como curiosidade: uma
+   * prévia é a NOSSA simulação de um confronto real que ainda vai ser jogado
+   * por pessoas. Sem o rótulo, ela é indistinguível de uma partida avulsa — e
+   * alguém pode achar que apostou no jogo de verdade, que é exatamente o que
+   * os Arts. 11 e 18 proíbem.
+   */
+  const competicao = evento.competicaoId
+    ? await GameCompeticao.findById(evento.competicaoId).select("slug nome").lean()
+    : null;
+
   const mercados = await GameMercadoAposta.find({ eventoId: evento._id })
     .sort({ ordem: 1 })
     .lean();
@@ -42,6 +56,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
         status: evento.status,
         comecaEm: evento.comecaEm,
         equilibrio: evento.equilibrio,
+        competicao: competicao
+          ? { slug: competicao.slug, nome: competicao.nome, rodada: evento.rodada ?? null }
+          : null,
         totalApostado: evento.totalApostado,
         totalCupons: evento.totalCupons,
         mandante: lado(evento.mandante),
