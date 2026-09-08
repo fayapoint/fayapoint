@@ -27,6 +27,7 @@ import GameCompeticao from "../../src/models/GameCompeticao";
 import { rodarEventosVencidos } from "../../src/lib/game/apostas-servidor";
 import { montarRodada } from "../../src/lib/game/rodada";
 import { fotografarCompeticao } from "../../src/lib/game/acervo";
+import { abrirPreviasEmAndamento } from "../../src/lib/game/previa-competicao";
 
 /** Abaixo disto, repõe. Oito partidas por rodada, espaçadas de 30 em 30 min. */
 const MINIMO_NO_SAGUAO = 6;
@@ -54,6 +55,17 @@ async function main() {
   if (abertos < MINIMO_NO_SAGUAO) {
     novos = await montarRodada({ quantidade: ALVO_NO_SAGUAO - abertos });
     for (const n of novos) console.log(`   + ${n.confronto}`);
+  }
+
+  /* ---- as prévias dos confrontos de campeonato ----------------------
+     ⚠️ PRÉVIA, e não o confronto. Art. 11 e 18 do regulamento: aposta só
+     em partida simulada, e nunca em jogo real de gente sem identidade
+     verificada. O que abre aqui é a NOSSA simulação do confronto, com a
+     força real dos dois times — não o resultado que os capitães vão
+     lançar. Ver o cabeçalho de previa-competicao.ts. */
+  const previas = await abrirPreviasEmAndamento(3);
+  for (const p of previas) {
+    console.log(`   + ${p.criados} prévia(s) de "${p.competicao}"`);
   }
 
   /* ---- a fotografia das competições dos usuários --------------------
