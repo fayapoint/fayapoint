@@ -413,3 +413,53 @@ export async function guardarAglomerados(
 
   return resumo;
 }
+
+/* ------------------------------------------------------------------ */
+/* A REGRA DA DECISÃO — fora da rota, para poder ser testada            */
+/* ------------------------------------------------------------------ */
+
+export const ESTADOS_DE_DECISAO = ["novo", "investigando", "descartado", "promovido"] as const;
+export type EstadoDeDecisao = (typeof ESTADOS_DE_DECISAO)[number];
+
+export type Decisao =
+  | { ok: true; chave: string; plataforma: string; estado: EstadoDeDecisao; motivo: string; copaSlug: string }
+  | { ok: false; erro: string };
+
+/**
+ * O QUE UMA DECISÃO PRECISA TER PARA VALER — e por que isto não mora na rota.
+ *
+ * Estas regras são o produto da fila: descartar sem motivo escrito é a forma
+ * mais rápida de ninguém entender, seis meses depois, por que aquele torneio
+ * nunca foi coberto; e promover sem dizer para qual copa deixa o candidato fora
+ * da fila sem que nada tenha sido coberto.
+ *
+ * Elas moravam dentro do handler, atrás da porta de autorização — então testá-las
+ * exigia uma sessão de administrador de verdade, que um teste em processo não
+ * tem. O resultado prático era que a única forma de exercitá-las era pelo
+ * segredo de serviço, que é justamente o que a rota NÃO deve mais aceitar para
+ * decidir. Fora daqui, a regra se testa sozinha e a rota fica com o que é dela:
+ * quem pode entrar.
+ *
+ * A existência da copa NÃO é conferida aqui: isso é ida ao banco, e esta função
+ * é pura de propósito. A rota confere logo depois.
+ */
+export function validarDecisao(corpo: unknown): Decisao {
+  const b = (corpo ?? {}) as Record<string, unknown>;
+  const chave = String(b.chave ?? "").trim();
+  const plataforma = String(b.plataforma ?? "").trim();
+  const estado = String(b.estado ?? "").trim();
+  const motivo = String(b.motivo ?? "").trim();
+  const copaSlug = String(b.copaSlug ?? "").trim();
+
+  if (!chave) return { ok: false, erro: "informe a chave do candidato" };
+  if (!(ESTADOS_DE_DECISAO as readonly string[]).includes(estado)) {
+    return { ok: false, erro: "informe um estado válido" };
+  }
+  if (estado === "descartado" && motivo.length < 3) {
+    return { ok: false, erro: "descartar exige motivo escrito" };
+  }
+  if (estado === "promovido" && !copaSlug) {
+    return { ok: false, erro: "promover exige o slug da copa que passou a cobri-lo" };
+  }
+  return { ok: true, chave, plataforma, estado: estado as EstadoDeDecisao, motivo, copaSlug };
+}

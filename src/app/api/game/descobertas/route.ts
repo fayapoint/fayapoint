@@ -5,6 +5,8 @@ import { getAuthUser } from "@/lib/auth";
 import { porSegredoDeServico } from "@/lib/guarda-de-servico";
 import { cobrar } from "@/lib/game/limite";
 import GameDescoberta, { type EstadoDescoberta } from "@/models/GameDescoberta";
+import { validarDecisao } from "@/lib/game/descoberta";
+import GameCopa from "@/models/GameCopa";
 
 /**
  * GET   /api/game/descobertas — a fila de candidatos a campeonato
@@ -29,8 +31,22 @@ export const dynamic = "force-dynamic";
 
 const ESTADOS: EstadoDescoberta[] = ["novo", "investigando", "descartado", "promovido"];
 
-async function autorizado(req: Request): Promise<{ ok: boolean; userId?: string }> {
-  if (porSegredoDeServico(req, ["x-social-secret", "x-cron-secret", "x-admin-secret"])) {
+/**
+ * LER pode ser de serviço; DECIDIR, não.
+ *
+ * O segredo de serviço existe para o coletor conferir a fila sem sessão. Mas o
+ * cabeçalho desta rota promete que a decisão é humana e fica registrada com
+ * quem decidiu — e a primeira versão aceitava o mesmo segredo no PATCH, o que
+ * gravava uma decisão com `decididoPor` vazio. O código contradizia a regra que
+ * ele mesmo escreve três parágrafos acima. (Achado pelo Codex, 08/09.)
+ *
+ * Então a porta é uma só, com uma chave a mais: `exigeHumano`.
+ */
+async function autorizado(
+  req: Request,
+  exigeHumano: boolean
+): Promise<{ ok: boolean; userId?: string }> {
+  if (!exigeHumano && porSegredoDeServico(req, ["x-social-secret", "x-cron-secret", "x-admin-secret"])) {
     return { ok: true };
   }
   const user = await getAuthUser();
@@ -39,7 +55,7 @@ async function autorizado(req: Request): Promise<{ ok: boolean; userId?: string 
 }
 
 export async function GET(req: Request) {
-  const auth = await autorizado(req);
+  const auth = await autorizado(req, false);
   if (!auth.ok) return NextResponse.json({ error: "não autorizado" }, { status: 401 });
 
   const teto = await cobrar(req, "aposta-leitura", "descobertas");
@@ -85,50 +101,70 @@ export async function GET(req: Request) {
 }
 
 export async function PATCH(req: Request) {
-  const auth = await autorizado(req);
-  if (!auth.ok) return NextResponse.json({ error: "não autorizado" }, { status: 401 });
+  const auth = await autorizado(req, true);
+  if (!auth.ok) {
+    return NextResponse.json(
+      { error: "decidir sobre um candidato exige uma sessão de administrador" },
+      { status: 401 }
+    );
+  }
 
   const teto = await cobrar(req, "aposta-escrita", "descobertas");
   if (!teto.ok) return teto.resposta!;
 
-  let body: { chave?: string; estado?: string; motivo?: string; copaSlug?: string };
+  let body: unknown;
   try {
     body = await req.json();
   } catch {
     return NextResponse.json({ error: "JSON inválido" }, { status: 400 });
   }
 
-  const chave = String(body.chave ?? "").trim();
-  const estado = String(body.estado ?? "").trim() as EstadoDescoberta;
-  if (!chave || !ESTADOS.includes(estado)) {
-    return NextResponse.json({ error: "informe chave e um estado válido" }, { status: 400 });
-  }
-
-  // Descartar sem motivo deixa a decisão sem rastro — e a fila existe
-  // justamente para que ninguém tenha de adivinhar depois por que um torneio
-  // ficou de fora.
-  const motivo = String(body.motivo ?? "").trim();
-  if (estado === "descartado" && motivo.length < 3) {
-    return NextResponse.json(
-      { error: "descartar exige motivo escrito" },
-      { status: 400 }
-    );
-  }
-  if (estado === "promovido" && !String(body.copaSlug ?? "").trim()) {
-    return NextResponse.json(
-      { error: "promover exige o slug da copa que passou a cobri-lo" },
-      { status: 400 }
-    );
-  }
+  // As regras da decisão (motivo obrigatório no descarte, copa obrigatória na
+  // promoção) moram em `validarDecisao`, fora daqui — ver o comentário lá.
+  const d = validarDecisao(body);
+  if (!d.ok) return NextResponse.json({ error: d.erro }, { status: 400 });
+  const { chave, plataforma, estado, motivo, copaSlug } = d;
 
   await dbConnect();
+
+  // Promover diz "este grupo virou AQUELA cobertura". Se a copa não existe, a
+  // fila passa a afirmar uma cobertura que ninguém pode abrir, e o candidato
+  // sai da fila sem que nada tenha sido coberto — o pior dos dois mundos.
+  // (Achado pelo Codex, 08/09.)
+  if (estado === "promovido") {
+    const copa = await GameCopa.exists({ slug: copaSlug });
+    if (!copa) {
+      return NextResponse.json(
+        { error: `não existe copa com o slug "${copaSlug}" — cadastre-a antes de promover` },
+        { status: 400 }
+      );
+    }
+  }
+
+  // ⛔ `chave` sozinha NÃO identifica um candidato: o índice único é
+  // `chave + plataforma`, porque o mesmo torneio pode existir nas duas gerações
+  // de console. Filtrar só pela chave decidiria sobre o primeiro que o Mongo
+  // devolvesse — e ninguém veria o erro, porque o outro simplesmente continuaria
+  // na fila. (Achado pelo Codex, 08/09.)
+  const filtro: Record<string, unknown> = { chave };
+  if (plataforma) filtro.plataforma = plataforma;
+  else {
+    const quantos = await GameDescoberta.countDocuments({ chave });
+    if (quantos > 1) {
+      return NextResponse.json(
+        { error: "este candidato existe em mais de uma plataforma; informe qual" },
+        { status: 400 }
+      );
+    }
+  }
+
   const doc = await GameDescoberta.findOneAndUpdate(
-    { chave },
+    filtro,
     {
       $set: {
         estado,
         motivo: motivo || undefined,
-        copaSlug: body.copaSlug?.trim() || undefined,
+        copaSlug: copaSlug || undefined,
         decididoEm: new Date(),
         decididoPor: auth.userId ? new mongoose.Types.ObjectId(auth.userId) : undefined,
       },
@@ -137,5 +173,5 @@ export async function PATCH(req: Request) {
   );
 
   if (!doc) return NextResponse.json({ error: "candidato não encontrado" }, { status: 404 });
-  return NextResponse.json({ ok: true, chave: doc.chave, estado: doc.estado });
+  return NextResponse.json({ ok: true, chave: doc.chave, plataforma: doc.plataforma, estado: doc.estado });
 }

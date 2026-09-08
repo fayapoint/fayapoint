@@ -9,13 +9,17 @@
  *
  * O que ele protege, e por que cada um importa:
  *
- *  - descartar EXIGE motivo. Descarte sem motivo e a forma mais rapida de
- *    ninguem entender, seis meses depois, por que aquele torneio nunca foi
- *    coberto.
- *  - promover EXIGE o slug da copa. Sem ele, o candidato sai da fila sem
- *    ninguem saber para onde foi.
- *  - sem autorizacao, 401. Um candidato e SUSPEITA nossa sobre clubes de
- *    pessoas reais; a fila nao e publica.
+ *  - LER pode ser de servico; DECIDIR, nao. O segredo existe para o coletor
+ *    conferir a fila. Aceita-lo tambem no PATCH gravava decisao com
+ *    `decididoPor` vazio, contradizendo a regra que a propria rota escreve:
+ *    a decisao e humana e fica com quem decidiu. (Achado pelo Codex, 08/09.)
+ *  - sem autorizacao nenhuma, 401. Um candidato e SUSPEITA nossa sobre clubes
+ *    de pessoas reais; a fila nao e publica.
+ *  - descartar EXIGE motivo, promover EXIGE copa. Essas duas regras agora vivem
+ *    em `validarDecisao`, fora da rota, e sao testadas direto — porque atras da
+ *    porta de administrador um teste em processo nao consegue chegar nelas, e a
+ *    unica forma antiga de exercita-las era justamente pelo segredo de servico
+ *    que a rota deixou de aceitar.
  *
  * Limpa o que cria.
  */
@@ -23,7 +27,7 @@
 import mongoose from "mongoose";
 import dbConnect from "../../../src/lib/mongodb";
 import GameDescoberta from "../../../src/models/GameDescoberta";
-
+import { validarDecisao } from "../../../src/lib/game/descoberta";
 
 /**
  * Em vez de substituir a guarda, DEFINE o segredo e manda o cabecalho.
@@ -39,40 +43,45 @@ const ok = (n: string, c: boolean, d = "") => { console.log(`${c ? "  OK " : "FA
 async function main() {
   await dbConnect();
   const { GET, PATCH } = await import("../../../src/app/api/game/descobertas/route");
-  const req = (corpo?: unknown) =>
+  const comSegredo = (corpo?: unknown) =>
     new Request("http://x/api/game/descobertas", corpo
       ? { method: "PATCH", headers: { "content-type": "application/json", "x-social-secret": SEGREDO }, body: JSON.stringify(corpo) }
       : { headers: { "x-social-secret": SEGREDO } });
 
-  // semeia um candidato
   const chave = "teste-rota-" + Date.now();
-  await GameDescoberta.create({ chave, apelido: "torneio de teste", clubes: [{clubId:"a",nome:"A",jogos:1}], forca: 70, estado: "novo" });
+  await GameDescoberta.create({ chave, apelido: "torneio de teste", clubes: [{ clubId: "a", nome: "A", jogos: 1 }], forca: 70, estado: "novo" });
 
-  const g = await GET(req());
+  console.log("\n1. A PORTA\n");
+
+  const g = await GET(comSegredo());
   const corpo = await g.json();
-  ok("GET devolve a fila", g.status === 200 && Array.isArray(corpo.candidatos), `${corpo.candidatos?.length} candidato(s)`);
+  ok("servico LE a fila", g.status === 200 && Array.isArray(corpo.candidatos), `${corpo.candidatos?.length} candidato(s)`);
   ok("GET avisa que o apelido e palpite", typeof corpo.aviso === "string" && corpo.aviso.includes("palpite"));
 
-  const semMotivo = await PATCH(req({ chave, estado: "descartado" }));
-  ok("descartar SEM motivo e recusado", semMotivo.status === 400, String(semMotivo.status));
-
-  const semSlug = await PATCH(req({ chave, estado: "promovido" }));
-  ok("promover SEM slug e recusado", semSlug.status === 400, String(semSlug.status));
-
-  const estadoInvalido = await PATCH(req({ chave, estado: "inventado" }));
-  ok("estado invalido e recusado", estadoInvalido.status === 400, String(estadoInvalido.status));
-
-  const comMotivo = await PATCH(req({ chave, estado: "descartado", motivo: "grupo de amigos, nao torneio" }));
-  ok("descartar COM motivo passa", comMotivo.status === 200, String(comMotivo.status));
-
-  const doc = await GameDescoberta.findOne({ chave });
-  ok("o motivo e a data ficaram gravados", doc?.estado === "descartado" && !!doc?.motivo && !!doc?.decididoEm, doc?.motivo ?? "");
-
-  const inexistente = await PATCH(req({ chave: "nao-existe", estado: "investigando" }));
-  ok("candidato inexistente devolve 404", inexistente.status === 404, String(inexistente.status));
-
   const semAuth = await GET(new Request("http://x/api/game/descobertas"));
-  ok("sem autorizacao devolve 401", semAuth.status === 401, String(semAuth.status));
+  ok("sem autorizacao nenhuma, GET devolve 401", semAuth.status === 401, String(semAuth.status));
+
+  // O ponto do dia: o mesmo segredo que le NAO decide.
+  const decisaoDeServico = await PATCH(comSegredo({ chave, estado: "descartado", motivo: "um cron nao decide isto" }));
+  ok("servico NAO decide — PATCH com segredo devolve 401", decisaoDeServico.status === 401, String(decisaoDeServico.status));
+
+  const aindaNovo = await GameDescoberta.findOne({ chave });
+  ok("e nada foi gravado por ele", aindaNovo?.estado === "novo", aindaNovo?.estado ?? "sumiu");
+
+  console.log("\n2. A REGRA DA DECISAO\n");
+
+  ok("descartar SEM motivo e recusado", validarDecisao({ chave, estado: "descartado" }).ok === false);
+  ok("descartar com motivo de 2 letras e recusado", validarDecisao({ chave, estado: "descartado", motivo: "ok" }).ok === false);
+  ok("promover SEM copa e recusado", validarDecisao({ chave, estado: "promovido" }).ok === false);
+  ok("estado inventado e recusado", validarDecisao({ chave, estado: "inventado" }).ok === false);
+  ok("sem chave e recusado", validarDecisao({ estado: "investigando" }).ok === false);
+
+  const boa = validarDecisao({ chave, plataforma: "common-gen4", estado: "descartado", motivo: "grupo de amigos, nao torneio" });
+  ok("descartar COM motivo passa", boa.ok === true);
+  ok("a plataforma atravessa a validacao", boa.ok === true && boa.plataforma === "common-gen4", boa.ok ? boa.plataforma : "");
+
+  const promo = validarDecisao({ chave, estado: "promovido", copaSlug: "  super-copa-dos-streamers  " });
+  ok("o slug chega aparado", promo.ok === true && promo.copaSlug === "super-copa-dos-streamers", promo.ok ? promo.copaSlug : "");
 
   await GameDescoberta.deleteOne({ chave });
   console.log(falhas === 0 ? "\n✅ a fila de descobertas se defende\n" : `\n⛔ ${falhas} FALHA(S)\n`);
