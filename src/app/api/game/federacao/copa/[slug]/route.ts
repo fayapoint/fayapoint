@@ -19,7 +19,16 @@ export async function GET(req: Request, ctx: { params: Promise<{ slug: string }>
       oficialCapturadaEm: copa.oficialCapturadaEm?.toISOString() ?? null,
       consultadoEm: new Date().toISOString(),
       fontesOficiais: (copa.organizacao?.sites ?? []).filter(site => /^https?:\/\//i.test(site)),
-      times: copa.times.map(t => ({ nome: t.nome, vinculo: t.vinculo, evidencia: t.evidencia })),
+      /* A PROCEDÊNCIA COMPLETA VIVE AQUI, e só aqui.
+         A rota pública passou a mostrar apenas o grau do vínculo e a data
+         (Estatuto, art. 20). Quem decide precisa do resto — evidência do
+         vínculo e o que a auditoria descartou —, porque auditoria sem trilha é
+         palavra vazia (art. 22). Esta rota é fechada à federação. */
+      times: copa.times.map(t => ({
+        nome: t.nome, vinculo: t.vinculo, evidencia: t.evidencia,
+        buscadoEm: t.buscadoEm?.toISOString() ?? null, buscaNota: t.buscaNota ?? null,
+      })),
+      declaracoes: (copa.declaracoes ?? []).map(d => ({ fonte: d.fonte, url: d.url ?? null, afirma: d.afirma, lidoEm: d.lidoEm })),
       cobertura: { partidas: partidas.length, series: series.length, janelaHoras: JANELA_DA_SERIE_MS / 3600_000 },
       aviso: "A EA não distingue treino de jogo oficial entre estes clubes. Séries são agrupamentos por horário, não confirmação do chaveamento. Uma divergência pede revisão do vínculo, da cobertura e do agrupamento.",
     }, { headers: { "Cache-Control": "private, no-store" } });

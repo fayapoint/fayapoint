@@ -81,11 +81,10 @@ interface TimeCopa {
   eaClubName: string | null;
   eaClubId: string | null;
   vinculo: "confirmado" | "provavel" | "nao-encontrado";
-  evidencia: string[];
-  /** Quando a busca automática rodou por este time. Null = nunca rodou. */
+  /** Quando a Federação auditou este vínculo. Null = ainda não auditado. */
+  auditadoEm: string | null;
+  /** Quando a auditoria procurou o clube deste time. Null = nunca procurou. */
   buscadoEm: string | null;
-  /** O que a busca achou de errado nos candidatos. Null quando achou. */
-  buscaNota: string | null;
 }
 
 interface LinhaEA {
@@ -120,12 +119,6 @@ interface Jogador {
   defesas: number;
 }
 
-interface Declaracao {
-  fonte: string;
-  url: string | null;
-  afirma: Record<string, string | number>;
-  lidoEm: string;
-}
 
 interface Noticia {
   titulo: string;
@@ -147,7 +140,6 @@ interface Dados {
     comecouEm?: string;
     times: TimeCopa[];
   };
-  declaracoes: Declaracao[];
   noticias: Noticia[];
   pelaEA: LinhaEA[];
   series: Serie[];
@@ -186,7 +178,7 @@ export function PaginaDaCopa({ slug, locale }: { slug: string; locale: string })
     );
   }
 
-  const { copa, pelaEA, series, artilharia, goleiros, cobertura, declaracoes, noticias } = d;
+  const { copa, pelaEA, series, artilharia, goleiros, cobertura, noticias } = d;
   const grupos = [...new Set(copa.times.map((t) => t.grupo).filter(Boolean))].sort() as string[];
 
   return (
@@ -348,7 +340,7 @@ export function PaginaDaCopa({ slug, locale }: { slug: string; locale: string })
 
         <AcervoDoCampeonato escopo="copa" refId={copa.slug} />
 
-        <FontesENoticias declaracoes={declaracoes} noticias={noticias} />
+        <FontesENoticias noticias={noticias} />
 
         <PalcoDaCopa locale={locale} nome={copa.nome} />
       </div>
@@ -423,29 +415,41 @@ function Cobertura({ c, times }: { c: Dados["cobertura"]; times: TimeCopa[] }) {
 
           {aberto && (
             <div className="mt-3 space-y-2 border-t border-white/10 pt-3">
+              {/*
+                ⛔ AQUI NÃO SE EXPLICA O MÉTODO.
+                A versão anterior contava como a vinculação é feita, com exemplo
+                de nome e o critério de confirmação. Isso é a receita de montar
+                esta cobertura, e é ativo da Federação (Estatuto, art. 20).
+                Fica o que a medida É — o grau do vínculo e a data —, não como
+                se chega nela. A procedência completa continua na Federação.
+              */}
               <p className="text-xs leading-relaxed text-white/50">
-                Os nomes que a organização publica <strong className="text-white/75">não são</strong>{" "}
-                os nomes de dentro do jogo — &quot;Osempic do Marcelo&quot; é{" "}
-                <code className="text-white/70">OsempicDMarcelo</code>, &quot;Ice Nuggets&quot; é{" "}
-                <code className="text-white/70">ICE NUGETS OFC</code>. Ligamos os dois por
-                semelhança de nome e confirmamos vendo o clube jogar contra outro já confirmado.
+                O nome que a organização publica quase nunca é o nome de dentro do jogo. A
+                correspondência abaixo é{" "}
+                <strong className="text-white/75">auditada pelos sistemas proprietários da
+                FayAI</strong>, e cada linha carrega o grau de certeza que a auditoria atribuiu.
               </p>
               <ul className="space-y-1.5 text-xs">
                 {times
-                  .filter((t) => t.evidencia.length > 0)
+                  .filter((t) => t.eaClubName)
                   .map((t) => (
                     <li key={t.nome} className="flex flex-wrap items-baseline gap-x-2">
                       <SeloVinculo v={t.vinculo} />
                       <span className="text-white/75">{t.nome}</span>
                       <span className="text-white/35">→ {t.eaClubName}</span>
-                      <span className="text-white/30">· {t.evidencia[0]}</span>
+                      {t.auditadoEm && (
+                        <span className="text-white/25">
+                          · {new Date(t.auditadoEm).toLocaleDateString("pt-BR")}
+                        </span>
+                      )}
                     </li>
                   ))}
               </ul>
               {provaveis.length > 0 && (
                 <p className="text-xs text-white/40">
-                  <strong style={{ color: OURO }}>{provaveis.length} provável(is)</strong>: nome e
-                  assinatura batem, mas ainda não vimos jogar contra um time já confirmado.
+                  <strong style={{ color: OURO }}>{provaveis.length} provável(is)</strong>: a
+                  auditoria achou correspondência, mas ainda não no grau que a Federação exige
+                  para dar o vínculo por confirmado.
                 </p>
               )}
               {semVinculo.length > 0 && <SemVinculo times={semVinculo} />}
@@ -458,19 +462,19 @@ function Cobertura({ c, times }: { c: Dados["cobertura"]; times: TimeCopa[] }) {
 }
 
 /**
- * OS TIMES SEM CLUBE — um vazio que se explica, em vez de um vazio que acusa.
+ * OS TIMES SEM CLUBE — um vazio que se explica, sem entregar o método.
  *
- * "Sem vínculo (7)" sozinho lê como defeito nosso: parece que a página não
+ * "Sem clube (7)" sozinho lê como defeito nosso: parece que a página não
  * carregou, ou que ninguém terminou o trabalho. E não é nem uma coisa nem
- * outra — a busca rodou, olhou os candidatos e nenhum era o time.
+ * outra — a auditoria rodou, olhou os candidatos e nenhum era o time.
  *
- * O que a busca faz: procura o nome na EA e, para cada clube parecido, olha se
- * ele já jogou contra um time que a gente JÁ confirmou nesta copa. Homônimo não
- * joga contra a copa; o time da copa joga. Medido em 08/09: "Aura FC" devolve
- * 40 clubes com nome parecido, e nenhum dos 40 encostou em time da copa.
+ * ⛔ O QUE ESTA PEÇA NÃO DIZ MAIS: como a auditoria decide. A versão anterior
+ * explicava o critério inteiro e ainda listava, time a time, quantos candidatos
+ * foram descartados e por quê. Era a receita (Estatuto, art. 20), e ela saiu.
  *
- * Por isso a frase final não é promessa vaga: eles entram sozinhos no dia em
- * que jogarem contra um time mapeado — é literalmente o teste que roda.
+ * ⛔ O QUE ELA NÃO PODE DEIXAR DE DIZER: que a auditoria rodou, quando, e que
+ * não achou. Sem isso o vazio volta a acusar a própria página, e sigilo de
+ * método não autoriza calar um fato (art. 21).
  */
 function SemVinculo({ times }: { times: TimeCopa[] }) {
   const buscados = times.filter((t) => t.buscadoEm);
@@ -488,27 +492,16 @@ function SemVinculo({ times }: { times: TimeCopa[] }) {
       <p className="mt-1">
         {buscados.length === times.length ? (
           <>
-            A busca automática já rodou por todos
+            A auditoria da Federação já passou por todos
             {maisNova && <> (última em {new Date(maisNova).toLocaleDateString("pt-BR")})</>} e não
-            achou: existem clubes com nome parecido, mas nenhum deles jogou contra um time que já
-            confirmamos nesta copa — que é o teste que decide, porque homônimo não enfrenta a copa.
+            encontrou correspondência com grau suficiente para publicar. Existem clubes de nome
+            parecido; nenhum deles passou no critério.
           </>
         ) : (
-          <>A busca automática ainda não rodou por todos eles.</>
+          <>A auditoria ainda não passou por todos eles.</>
         )}{" "}
-        Eles entram sozinhos no dia em que aparecerem numa partida contra um time já mapeado.
+        Eles entram sozinhos assim que a correspondência atingir o grau exigido.
       </p>
-      {buscados.some((t) => t.buscaNota) && (
-        <ul className="mt-2 space-y-0.5 text-white/30">
-          {buscados
-            .filter((t) => t.buscaNota)
-            .map((t) => (
-              <li key={t.nome}>
-                <span className="text-white/50">{t.nome}</span> — {t.buscaNota}
-              </li>
-            ))}
-        </ul>
-      )}
     </div>
   );
 }
@@ -775,80 +768,43 @@ function PalcoDaCopa({ locale, nome }: { locale: string; nome: string }) {
  * fonte, com o que mede e — declarado no mesmo tamanho de letra — o que **não**
  * mede.
  */
-function FontesENoticias({
-  declaracoes,
-  noticias,
-}: {
-  declaracoes: Declaracao[];
-  noticias: Noticia[];
-}) {
-  if (declaracoes.length === 0 && noticias.length === 0) return null;
+function FontesENoticias({ noticias }: { noticias: Noticia[] }) {
 
   return (
     <section className="mt-14">
       <Titulo icone={Scale} cor={CIANO}>
-        Fontes e notícias
+        Notícias e apuração
       </Titulo>
       <p className="mt-1 max-w-2xl text-sm text-white/50">
-        Quem está dizendo o quê sobre esta copa — inclusive nós. Cada linha traz a data em
-        que foi lida e o link para conferir.
+        O que saiu sobre esta copa, com crédito e data. Os números desta página são apuração
+        própria.
       </p>
 
-      {/* ---- O que cada fonte afirma ---- */}
-      <div className="mt-6 grid gap-3 lg:grid-cols-2">
-        {declaracoes.map((d) => {
-          const nossa = d.fonte.startsWith("Winners 22");
-          const cor = nossa ? LIMA : CIANO;
-          return (
-            <div
-              key={d.fonte}
-              style={superficie(cor)}
-              className="rounded-2xl border p-4"
-            >
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <p className="font-medium" style={{ color: nossa ? LIMA : undefined }}>
-                  {d.url ? (
-                    <a
-                      href={d.url}
-                      target="_blank"
-                      rel="noopener noreferrer nofollow"
-                      className="underline decoration-white/20 underline-offset-2 transition hover:text-white"
-                    >
-                      {d.fonte}
-                    </a>
-                  ) : (
-                    d.fonte
-                  )}
-                </p>
-                <span
-                  style={{ borderColor: `${cor}44`, color: cor }}
-                  className="rounded border px-1.5 py-0.5 text-[9px] uppercase tracking-widest"
-                >
-                  {nossa ? "observado" : "declarado"}
-                </span>
-              </div>
+      {/*
+        ⛔ O QUADRO "O QUE CADA FONTE AFIRMA" SAIU DAQUI.
+        Ele listava, com link, todo site que publica tabela desta copa. Isso é
+        mapa de origem — quem tem a lista monta a mesma cobertura (Estatuto,
+        art. 20). Continua inteiro no painel da Federação, onde quem decide
+        precisa dele.
 
-              <dl className="mt-2.5 space-y-1 text-xs">
-                {Object.entries(d.afirma).map(([chave, valor]) => (
-                  <div key={chave} className="flex flex-wrap gap-x-2">
-                    <dt className="text-white/35">{chave}</dt>
-                    <dd className="text-white/75">{String(valor)}</dd>
-                  </div>
-                ))}
-              </dl>
-
-              <p className="mt-3 flex items-center gap-1 border-t border-white/10 pt-2 text-[10px] text-white/30">
-                <Clock className="h-3 w-3" />
-                lido em{" "}
-                {new Date(d.lidoEm).toLocaleDateString("pt-BR", {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                })}
-              </p>
-            </div>
-          );
-        })}
+        ⛔ O QUE FICOU, e não pode sair: o aviso de contradição logo abaixo.
+        As fontes DISCORDAM entre si sobre número de times e de grupos. Quem lê
+        um número nosso sem esse aviso conclui que ele é o consenso, e não é.
+        Dizer que há divergência não entrega fonte nenhuma (art. 21).
+      */}
+      <div
+        style={superficie(LIMA)}
+        className="mt-6 flex items-start gap-2.5 rounded-2xl border p-4 text-xs leading-relaxed text-white/60"
+      >
+        <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0" style={{ color: LIMA }} />
+        <span>
+          Os números desta página — confrontos, séries, artilharia e desempenho — são{" "}
+          <strong className="text-white/85">
+            apurados e auditados pelos sistemas proprietários da FayAI
+          </strong>
+          , com data de leitura em cada bloco. Não reproduzimos tabela de terceiro como se fosse
+          nossa, e não apresentamos como oficial o que é observação nossa.
+        </span>
       </div>
 
       {/* ---- O aviso sobre a contradição ----
@@ -861,11 +817,11 @@ function FontesENoticias({
       >
         <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" style={{ color: OURO }} />
         <p className="text-sm leading-relaxed text-white/65">
-          <strong className="text-white/85">As fontes não concordam entre si.</strong> O
-          anúncio original fala em 16 times; os sites que publicam tabela falam em 20. As
-          duas afirmações estão no ar, no mesmo mês, sobre a mesma copa. Não escolhemos uma
-          — nós não organizamos esta competição e não falamos por ela. Mostramos as duas e
-          dizemos onde cada uma foi lida.
+          <strong className="text-white/85">O que se publica por aí não bate entre si.</strong>{" "}
+          Sobre esta mesma copa, e no mesmo mês, circulam duas versões do formato — uma com 16
+          times e outra com 20. A Federação não escolhe entre elas: não organizamos esta
+          competição e não falamos por ela. O que esta página apresenta é apuração própria do
+          que foi efetivamente jogado, e não a tabela oficial de ninguém.
         </p>
       </div>
 

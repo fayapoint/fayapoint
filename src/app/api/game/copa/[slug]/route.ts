@@ -87,22 +87,50 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
           eaClubName: t.eaClubName ?? null,
           eaClubId: t.eaClubId ?? null,
           vinculo: t.vinculo,
-          evidencia: t.evidencia,
+          /**
+           * ⛔ `evidencia` NÃO SAI MAIS AQUI.
+           *
+           * Ela guarda a prova em texto humano — "9 amistosos 11v11 desde
+           * 10/08", "nome 95% parecido", "jogou contra 3 times da copa". Junta,
+           * a lista descreve o algoritmo de vinculação inteiro. É o ativo da
+           * Federação, e a rota pública deixa de entregá-lo (Estatuto, art. 20).
+           *
+           * Ela continua inteira no banco e continua saindo na rota da
+           * Federação, que é fechada: quem decide precisa da procedência, e
+           * auditoria sem trilha é palavra vazia (art. 22).
+           *
+           * O que fica no público é o GRAU do vínculo e QUANDO foi auditado —
+           * o que a medida é e quando, sem como.
+           */
+          auditadoEm: t.vinculadoEm ? t.vinculadoEm.toISOString() : null,
           // O resultado NEGATIVO da busca também é informação: sem ele a tela
           // não distingue "ninguém procurou" de "procuramos e não é nenhum".
+          /**
+           * A DATA da auditoria sai; a NOTA dela, não.
+           *
+           * `buscaNota` diz "40 clubes com nome parecido; nenhum jogou contra
+           * time da copa nem tem amistoso 11v11 no período" — que é o critério
+           * de decisão escrito por extenso. Fica na rota da Federação.
+           *
+           * A data sozinha ainda sustenta a frase que importa e que não é
+           * método: a auditoria rodou, foi neste dia, e não achou. Sem ela, o
+           * vazio voltaria a ler como página quebrada.
+           */
           buscadoEm: t.buscadoEm ? t.buscadoEm.toISOString() : null,
-          buscaNota: t.buscaNota ?? null,
         })),
       },
-      // O que cada fonte AFIRMA, e as notícias. A divergência entre elas é
-      // informação, não ruído: o anúncio original fala em 16 times e os sites
-      // de tabela publicam 20. Mostrar as duas é o produto.
-      declaracoes: (copa.declaracoes ?? []).map((d) => ({
-        fonte: d.fonte,
-        url: d.url ?? null,
-        afirma: d.afirma,
-        lidoEm: d.lidoEm,
-      })),
+      /**
+       * ⛔ `declaracoes` NÃO SAI NA ROTA PÚBLICA.
+       *
+       * Ela guarda, com URL, todo site que publica tabela desta copa. É mapa de
+       * origem: quem tem a lista monta a mesma cobertura. Ativo da Federação
+       * (Estatuto, art. 20), e continua inteira na rota da Federação.
+       *
+       * O que sobrevive no público é o FATO de que as versões publicadas por aí
+       * divergem entre si — dito sem nomear ninguém. Esconder a divergência
+       * seria deixar o leitor achar que o número desta página é o consenso, e
+       * ele não é (art. 21).
+       */
       noticias: (copa.noticias ?? [])
         .slice()
         .sort((a, b) => (b.em?.getTime() ?? 0) - (a.em?.getTime() ?? 0))
@@ -126,9 +154,22 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
         timesTotal: copa.times.length,
         confrontos: series.length,
         partidas: partidas.length,
-        // A frase que a tela precisa dizer, montada aqui para não divergir.
+        /**
+         * O AVISO PÚBLICO — o que a medida É, sem dizer COMO ela é feita.
+         *
+         * A versão anterior explicava a mecânica da origem ("a EA guarda apenas
+         * 10 partidas amistosas por clube…"). Isso é método, e método é ativo da
+         * Federação: publicá-lo é entregar a receita de montar uma cobertura
+         * igual a esta (Estatuto, art. 20).
+         *
+         * ⛔ O que NÃO pode sumir junto: o limite do que a medida sustenta.
+         * Continuamos dizendo que estes são confrontos REGISTRADOS entre times
+         * da copa e que não distinguimos jogo oficial de treino — porque afirmar
+         * "estes são os jogos da copa" seria afirmação que não temos como
+         * provar. Sigilo de método nunca autoriza afirmação falsa (art. 21).
+         */
         aviso:
-          "A EA guarda apenas 10 partidas amistosas por clube. O que está aqui é o que conseguimos capturar antes de a fonte descartar — e não distingue jogo oficial de treino entre times da copa.",
+          "Confrontos entre times da copa registrados e auditados pelos sistemas proprietários da FayAI. A leitura não distingue jogo oficial de treino entre dois times da copa, e por isso não é apresentada como a tabela oficial da competição.",
       },
     },
     {
