@@ -310,6 +310,49 @@ export interface MatchPlayer {
   goalsConceded: number | null;
   /** Arquétipo do FC 26 (o "molde" do Pro). Cru — a EA não publica o nome. */
   archetypeId: string | null;
+  /**
+   * ⛔ `match_event_aggregate_0..3` — MEDIDO VAZIO no FC 26, em 08/09/2026.
+   *
+   * O inventário de 25/08 chamou este campo de "o maior tesouro não decifrado":
+   * strings como `"111:10,174:3,…"`, cada par um código de evento e sua
+   * contagem. Decifrá-lo daria uma súmula que nenhum site de Pro Clubs tem.
+   *
+   * Fui decifrar e o tesouro está vazio. Medido no JSON CRU da EA, 110 linhas
+   * de jogador em 5 partidas: os quatro campos **existem** na resposta e valem
+   * `["", "", "", ""]` em todas. Não é o nosso normalizador comendo — é a EA
+   * que parou de preencher.
+   *
+   * Fica capturado assim mesmo, e o filtro de string vazia faz isso custar
+   * zero: se a EA voltar a preencher num título ou num patch, o dado começa a
+   * entrar sozinho e ninguém precisa lembrar de religar nada.
+   *
+   * `string[]` e não objeto: enquanto o significado dos códigos não estiver
+   * confirmado, transformá-los em campos nomeados seria inventar sentido.
+   */
+  eventosCrus: string[];
+  /**
+   * As DEFESAS POR TIPO do goleiro — e estas vêm preenchidas.
+   *
+   * Era a oportunidade nº 1 do inventário ("nenhum tracker separa defesa por
+   * tipo; a EA publica os seis") e estava sendo jogada fora desde o começo: o
+   * normalizador mapeia campo a campo, e o que não está no mapa some sem aviso.
+   * Descobri ao inspecionar o JSON cru atrás do agregado de eventos — o campo
+   * que eu procurava estava vazio, e ao lado dele havia seis que não estavam.
+   *
+   * Medido em 08/09, valores reais: `saves=6` com `cross=1, reflex=1, dir=1`;
+   * `saves=5` com `cross=1, dir=3`. Ou seja, a soma dos tipos **não fecha** com
+   * o total — há defesa que a EA conta em `saves` e não classifica. Por isso os
+   * seis vão como estão, sem serem somados nem completados: um "outras" que
+   * fosse a diferença seria número inventado.
+   */
+  defesasPorTipo: {
+    mergulho: number | null;
+    cruzamento: number | null;
+    rebote: number | null;
+    soco: number | null;
+    reflexo: number | null;
+    direcao: number | null;
+  };
 }
 
 export interface ClubMatch {
@@ -764,6 +807,19 @@ export async function clubMatches(
         secondsIdle: numOrNull(p.realtimeidle),
         goalsConceded: numOrNull(p.goalsconceded),
         archetypeId: p.archetypeid ? String(p.archetypeid) : null,
+        // Os quatro agregados, na ordem, só os que vieram preenchidos — que
+        // hoje é nenhum. Ver o comentário de `eventosCrus` em `MatchPlayer`.
+        eventosCrus: [0, 1, 2, 3]
+          .map((i) => p[`match_event_aggregate_${i}`])
+          .filter((v): v is string => typeof v === "string" && v.length > 0),
+        defesasPorTipo: {
+          mergulho: numOrNull(p.ballDiveSaves),
+          cruzamento: numOrNull(p.crossSaves),
+          rebote: numOrNull(p.parrySaves),
+          soco: numOrNull(p.punchSaves),
+          reflexo: numOrNull(p.reflexSaves),
+          direcao: numOrNull(p.goodDirectionSaves),
+        },
       }));
       return {
         clubId: cid,
