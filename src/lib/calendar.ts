@@ -8,13 +8,24 @@ const WORK_START_HOUR = 9;
 const WORK_END_HOUR = 18;
 const MAX_LOOKAHEAD_DAYS = 30;
 
-const DEFAULT_CALENDAR_ID =
-  "c0bf22f3a88f970e8f729ddbebcd80a8b00a4ab00bd9bfffa50d3a2e458dc022@group.calendar.google.com";
-const DEFAULT_ICS_URL =
-  "https://calendar.google.com/calendar/ical/c0bf22f3a88f970e8f729ddbebcd80a8b00a4ab00bd9bfffa50d3a2e458dc022%40group.calendar.google.com/private-a9cc79fb2cc6a500336abd4e0f682227/basic.ics";
-
-const CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID ?? DEFAULT_CALENDAR_ID;
-const CALENDAR_ICS_URL = process.env.GOOGLE_CALENDAR_ICS_URL ?? DEFAULT_ICS_URL;
+/**
+ * ⛔ AQUI MORAVA UM SEGREDO PUBLICADO.
+ *
+ * Este arquivo trazia, como valor padrão, a URL "secreta" (`.../private-<token>/basic.ics`)
+ * da agenda de Trabalho do Ricardo. O repositório `fayapoint/fayapoint` é PÚBLICO:
+ * o endereço estava legível por qualquer pessoa, e foi medido respondendo 200 com
+ * os eventos dentro. Um `process.env.X ?? "valor"` em repositório aberto não é um
+ * padrão de conveniência — é a publicação do valor.
+ *
+ * A URL do iCal privado NÃO É configuração: é credencial. Ela mora só no ambiente.
+ * Sem ela, a busca de horário livre falha alto (linha abaixo) em vez de vazar.
+ *
+ * Tirar daqui não desfaz o vazamento: o endereço continua no histórico do git e
+ * segue válido até ser RESETADO na Google Agenda (Configurações da agenda →
+ * Endereço secreto no formato iCal → Redefinir). Esse passo é do Ricardo.
+ */
+const CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID ?? "";
+const CALENDAR_ICS_URL = process.env.GOOGLE_CALENDAR_ICS_URL ?? "";
 
 interface BusySlot {
   startUtc: Date;
@@ -89,8 +100,18 @@ function ensureWithinWorkWindow(date: Date) {
 }
 
 async function fetchBusySlots(): Promise<BusySlot[]> {
+  // Sem a credencial no ambiente, NÃO se derruba o formulário: um pedido de
+  // consultoria que chega é a coisa mais escassa que este negócio tem, e perdê-lo
+  // por falta de variável de ambiente seria trocar um defeito por outro pior.
+  // Segue-se sem conferir conflito — e diz-se isso em voz alta no log, porque
+  // "não conferido" não pode passar por "está livre".
   if (!CALENDAR_ICS_URL) {
-    throw new Error("GOOGLE_CALENDAR_ICS_URL is not configured");
+    console.warn(
+      "[calendar] GOOGLE_CALENDAR_ICS_URL não está configurada: " +
+        "o horário proposto NÃO foi conferido contra a agenda. " +
+        "Defina a variável no ambiente (ela é credencial, não vai para o repositório).",
+    );
+    return [];
   }
 
   const response = await fetch(CALENDAR_ICS_URL, { cache: "no-store" });

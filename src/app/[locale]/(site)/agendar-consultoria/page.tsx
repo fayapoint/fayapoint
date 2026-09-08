@@ -29,19 +29,53 @@ export default function ConsultPage() {
                 {T("Agenda exclusiva")}
               </Badge>
               <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("title")}</h1>
-              <p className="text-lg md:text-xl text-gray-100 mb-6">{t("description")}</p>
-              <p className="text-sm text-muted-foreground">{T("Reservamos blocos de 30 minutos entre 9h e 18h (BRT). Após enviar, você será redirecionado para a agenda do Google com o próximo horário disponível.")}</p>
+              {/* O texto do dicionário ("preencha e retornaremos") descreve o
+                  formulário, que agora é a segunda porta. No alto da página ele
+                  prometeria espera onde existe agendamento imediato — então o
+                  herói ganha a sua própria frase, e o dicionário segue servindo
+                  o formulário, onde continua verdadeiro. */}
+              <p className="text-lg md:text-xl text-gray-100 mb-6">
+                {T("Escolha um horário e receba a confirmação na hora. Sem formulário, sem espera.")}
+              </p>
+              <p className="text-sm text-gray-200">{T("Blocos de 30 minutos, de segunda a sexta, das 9h às 17h (horário de Brasília). Você escolhe o horário e recebe o convite na hora — sem esperar retorno.")}</p>
             </div>
           </div>
         </section>
 
-        <section className="container mx-auto px-4 -mt-16 pb-20 relative z-10">
+        {/* O AGENDAMENTO DE VERDADE, ANTES DO FORMULÁRIO.
+            A página nasceu com o formulário na frente: a pessoa preenchia e
+            esperava alguém responder — e ninguém era avisado, porque a rota só
+            registrava no banco. Quem já decidiu falar não quer preencher um
+            pedido: quer escolher a hora e sair com o convite na mão. O
+            formulário continua logo abaixo, para quem prefere escrever antes. */}
+        <section className="container mx-auto px-4 -mt-16 pb-4 relative z-10">
+          <div className="bg-card border border-border rounded-3xl p-4 md:p-6 shadow-2xl shadow-amber-900/15">
+            <h2 className="text-2xl font-semibold mb-1 px-2 pt-2">{T("Escolha o horário")}</h2>
+            <p className="text-sm text-muted-foreground mb-4 px-2">
+              {T("A confirmação e o link do Google Meet chegam no seu e-mail assim que você escolher.")}
+            </p>
+            <iframe
+              src="https://calendly.com/ricardofaya/30min?hide_gdpr_banner=1&background_color=0e1013&text_color=e6e9ee&primary_color=d29922"
+              title={T("Agenda do Ricardo Faya")}
+              className="w-full rounded-2xl border-0"
+              style={{ height: "720px", minHeight: "720px" }}
+              loading="lazy"
+            />
+          </div>
+        </section>
+
+        <section className="container mx-auto px-4 pt-10 pb-20 relative z-10">
           <div className="grid lg:grid-cols-[1.1fr_0.9fr] gap-10">
             <div className="bg-card border border-border rounded-3xl p-8 shadow-2xl shadow-amber-900/15">
+              <p className="text-sm text-muted-foreground mb-6">
+                {T("Prefere escrever antes de marcar? Conte o que você precisa e eu volto com uma proposta de horário.")}
+              </p>
               <ScheduleMeetingForm
                 copy={{
-                  badge: t("badge", { default: "" }) as string,
-                  title: t("title"),
+                  // Sem crachá e sem título repetidos: o herói já disse o nome
+                  // da página, e vê-lo duas vezes lê como defeito de montagem.
+                  badge: "",
+                  title: "",
                   description: t("description"),
                   submit: t("submit"),
                   fields: {
@@ -60,13 +94,13 @@ export default function ConsultPage() {
                 <h2 className="text-2xl font-semibold mb-4">{T("Como funciona")}</h2>
                 <ul className="space-y-4 text-muted-foreground">
                   <li>
-                    <span className="font-semibold text-foreground">1.</span>  {T("Validamos se você já está em nossa base para personalizar o atendimento.")}
+                    <span className="font-semibold text-foreground">1.</span>  {T("Você escolhe um horário livre no calendário acima — o que aparece lá já está livre de verdade.")}
                   </li>
                   <li>
-                    <span className="font-semibold text-foreground">2.</span>  {T("Calculamos automaticamente o próximo horário disponível na agenda compartilhada.")}
+                    <span className="font-semibold text-foreground">2.</span>  {T("A confirmação e o link do Google Meet chegam no seu e-mail na hora, sem depender de ninguém responder.")}
                   </li>
                   <li>
-                    <span className="font-semibold text-foreground">3.</span>  {T("Abrimos a Google Agenda para você concluir o agendamento e ajustar o melhor horário.")}
+                    <span className="font-semibold text-foreground">3.</span>  {T("Na conversa, quem atende é Ricardo Faya — editor de broadcast desde 1998, com passagem por Fox e Copa do Mundo.")}
                   </li>
                 </ul>
               </div>
