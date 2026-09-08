@@ -310,3 +310,106 @@ export function apelidoDoAglomerado(a: Aglomerado): string {
   if (comum) return `torneio "${comum[0]}" (${a.clubes.length} clubes)`;
   return `${a.clubes[0]?.nome} + ${a.clubes[1]?.nome} e mais ${a.clubes.length - 2}`;
 }
+
+/* ------------------------------------------------------------------ */
+/* Guardar o achado                                                    */
+/* ------------------------------------------------------------------ */
+
+/**
+ * A identidade de um aglomerado, estável entre rodadas.
+ *
+ * ## O problema que ela resolve
+ *
+ * Um torneio ganha e perde participante o tempo todo: um clube some da janela
+ * de 10 amistosos da EA, outro entra numa rodada nova. Se a chave fosse a
+ * lista inteira de clubes, **todo dia nasceria um candidato diferente** para o
+ * mesmo torneio — e a fila de "novos" viraria um despejo em que ninguém
+ * decide nada.
+ *
+ * Então a chave usa só o **NÚCLEO**: os clubes mais ativos do aglomerado,
+ * ordenados por id. Quem joga muito continua ali de uma semana para a outra;
+ * quem aparece uma vez não muda a identidade do grupo.
+ *
+ * O tamanho do núcleo é 6 porque é o mínimo de clubes que um aglomerado
+ * precisa ter para ser considerado (`MINIMO_CLUBES`). Usar menos deixaria dois
+ * torneios distintos colidirem; usar mais quebraria a chave assim que um
+ * habitual faltasse.
+ */
+export function chaveDoAglomerado(a: Pick<Aglomerado, "clubes">): string {
+  const nucleo = [...a.clubes]
+    .sort((x, y) => y.jogos - x.jogos)
+    .slice(0, MINIMO_CLUBES)
+    .map((c) => c.clubId)
+    .sort();
+  return nucleo.join("-");
+}
+
+export interface ResumoDaGravacao {
+  novos: number;
+  atualizados: number;
+  /** Os candidatos novos, para o log e para quem for avisar alguém. */
+  candidatos: Array<{ chave: string; apelido: string; forca: number; clubes: number }>;
+}
+
+/**
+ * Grava os aglomerados achados, sem duplicar e sem ressuscitar descartado.
+ *
+ * ## As duas regras que valem registro
+ *
+ * 1. **Aglomerado já coberto não entra.** Se algum clube dele já pertence a uma
+ *    copa que a gente cobre, ele não é candidato — é a copa que já temos, vista
+ *    de novo.
+ *
+ * 2. **`descartado` NUNCA volta para `novo`.** Se um humano olhou e disse "não
+ *    é torneio", a rodada seguinte não pode desfazer isso — senão o descobridor
+ *    reapresenta o mesmo grupo de amigos para sempre, e a fila perde o sentido.
+ *    A evidência continua sendo atualizada (força, séries, clubes), porque ela
+ *    pode mudar de figura e justificar alguém reabrir à mão; o que não muda
+ *    sozinho é a DECISÃO.
+ */
+export async function guardarAglomerados(
+  aglomerados: Aglomerado[],
+  plataforma = "common-gen5"
+): Promise<ResumoDaGravacao> {
+  await dbConnect();
+  const { default: GameDescoberta } = await import("@/models/GameDescoberta");
+
+  const resumo: ResumoDaGravacao = { novos: 0, atualizados: 0, candidatos: [] };
+
+  for (const a of aglomerados) {
+    // Já cobrimos: não é candidato, é o que já temos.
+    if (a.jaConhecido) continue;
+
+    const chave = chaveDoAglomerado(a);
+    const apelido = apelidoDoAglomerado(a);
+
+    const existente = await GameDescoberta.findOne({ chave, plataforma });
+
+    // A evidência é sempre atualizada; a decisão humana, nunca.
+    const evidencia = {
+      apelido,
+      clubes: a.clubes,
+      confrontos: a.confrontos,
+      series: a.series,
+      densidade: a.densidade,
+      partidas: a.partidas,
+      forca: a.forca,
+      primeiraEm: a.primeiraEm,
+      ultimaEm: a.ultimaEm,
+    };
+
+    if (existente) {
+      Object.assign(existente, evidencia);
+      existente.vezesVisto += 1;
+      await existente.save();
+      resumo.atualizados++;
+      continue;
+    }
+
+    await GameDescoberta.create({ chave, plataforma, estado: "novo", vezesVisto: 1, ...evidencia });
+    resumo.novos++;
+    resumo.candidatos.push({ chave, apelido, forca: a.forca, clubes: a.clubes.length });
+  }
+
+  return resumo;
+}

@@ -32,7 +32,7 @@ import * as EA from "../../src/lib/game/ea-api";
 import { gravarPartidas, gravarClubeCompleto } from "../../src/lib/game/espelho";
 import { proximidadeDeNome, pareceJogoDeCopa } from "../../src/lib/game/copa";
 import { fotografarCopa } from "../../src/lib/game/acervo";
-import { descobrirAglomerados, apelidoDoAglomerado } from "../../src/lib/game/descoberta";
+import { descobrirAglomerados, apelidoDoAglomerado, guardarAglomerados } from "../../src/lib/game/descoberta";
 
 const SLUG = "super-copa-dos-streamers";
 const descobrir = process.argv.includes("--descobrir");
@@ -250,16 +250,35 @@ async function main() {
      amistoso 11v11 em SERIE entre si. Ver src/lib/game/descoberta.ts. */
   const aglomerados = await descobrirAglomerados();
   const novos = aglomerados.filter((a) => !a.jaConhecido);
+
+  /**
+   * GRAVAR o achado, e não só imprimi-lo.
+   *
+   * Antes disto a descoberta terminava aqui, num `console.log`. Se ela achasse
+   * a próxima Super Copa às três da manhã, a notícia morreria no `coletar.log`
+   * — e no turno seguinte a mesma linha seria reimpressa, para sempre, sem
+   * ninguém nunca decidir nada.
+   *
+   * É a família de defeito que já custou 17 dias de auditoria parada nesta
+   * casa: processo automático que só fala com um log.
+   */
+  const guardado = await guardarAglomerados(novos);
+
   if (novos.length === 0) {
     console.log(`Descoberta — ${aglomerados.length} aglomerado(s) conhecido(s), nenhum novo`);
   } else {
-    console.log(`Descoberta — ${novos.length} CANDIDATO(S) NOVO(S) a campeonato:`);
+    console.log(
+      `Descoberta — ${novos.length} candidato(s): ${guardado.novos} novo(s), ${guardado.atualizados} já na fila`
+    );
     for (const a of novos.slice(0, 5)) {
       console.log(
         `   força ${a.forca} · densidade ${a.densidade} · ${a.clubes.length} clubes · ${a.series} séries — ${apelidoDoAglomerado(a)}`
       );
       console.log(`      ${a.clubes.slice(0, 8).map((c) => c.nome).join(", ")}`);
     }
+  }
+  if (guardado.novos > 0) {
+    console.log(`   ⚠️ ${guardado.novos} candidato(s) NOVO(S) na fila — alguém precisa olhar`);
   }
 
   await mongoose.disconnect();
