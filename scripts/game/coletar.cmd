@@ -42,10 +42,33 @@ if exist "scripts\game\coletar.log" move /y "scripts\game\coletar.log" "scripts\
 
 echo ===== %DATE% %TIME% ===== >> "scripts\game\coletar.log"
 
-REM  Ranking das duas gerações + captura funda dos 3 primeiros de cada + todos
-REM  os clubes que alguém reivindicou no site. ~25 idas à EA por rodada, o que
+REM  Ranking das duas gerações + captura funda dos 10 primeiros de cada + todos
+REM  os clubes que alguém reivindicou no site. ~45 idas à EA por rodada, o que
 REM  é irrisório para uma fonte pública e generoso com ela.
-node --env-file=.env.local node_modules\tsx\dist\cli.mjs scripts\game\espelhar-ea.ts --fundo 3 >> "scripts\game\coletar.log" 2>&1
+node --env-file=.env.local node_modules\tsx\dist\cli.mjs scripts\game\espelhar-ea.ts --fundo 10 >> "scripts\game\coletar.log" 2>&1
+
+REM  COLETOR DA COPA - o mais urgente deste arquivo.
+REM
+REM  A EA guarda 10 partidas AMISTOSAS por clube, e um confronto MD5 queima
+REM  cinco slots numa noite. Duas rodadas e o historico anterior some da fonte
+REM  PARA SEMPRE: nao ha paginacao, consulta por matchId nem arquivo. Nem a
+REM  organizacao da copa recupera - ela depende da mesma API.
+REM
+REM  Medido em 08/09: a varredura pelo grafo achou 9 dos 20 times e PAROU,
+REM  porque os outros 11 ja tinham saido da janela. O que este comando grava
+REM  hoje e o unico registro que vai existir amanha.
+node --env-file=.env.local node_modules\tsx\dist\cli.mjs scripts\game\copa-coletar.ts --descobrir >> "scripts\game\coletar.log" 2>&1
+
+REM  O BATIMENTO DA MESA DE APOSTAS - pega carona neste turno, de proposito.
+REM
+REM  Regra da casa: nao criar horario agendado novo; entrar num que ja existe.
+REM  Consequencia declarada: um evento liquida em ate 1 hora depois do apito,
+REM  que e o intervalo deste coletor. Por isso a rodada espaca as partidas em
+REM  30 minutos - cada execucao acha 1 ou 2 vencidas, nunca uma pilha.
+REM
+REM  Roda DEPOIS do espelho, nao antes: a rodada nova e montada a partir dos
+REM  clubes que o espelho acabou de atualizar.
+node --env-file=.env.local node_modules\tsx\dist\cli.mjs scripts\game\mesa.ts >> "scripts\game\coletar.log" 2>&1
 
 echo Saida: %ERRORLEVEL% >> "scripts\game\coletar.log"
 endlocal

@@ -1,0 +1,185 @@
+import mongoose, { Schema, Document, Model } from 'mongoose';
+
+/**
+ * COPA DE TERCEIRO — um campeonato que NÃO é nosso, coberto por nós.
+ * 08/09/2026, nascido para a Super Copa dos Streamers (EA FC 26 Pro Clubs).
+ *
+ * ## Por que não é `GameCompeticao`
+ *
+ * `GameCompeticao` é campeonato que a gente ORGANIZA: nós definimos regra,
+ * geramos tabela, homologamos resultado. Aqui é o contrário — a competição é de
+ * outra gente, nós só observamos. Guardar as duas no mesmo documento faria a
+ * cobertura herdar poderes que ela não tem (gerar confronto, mudar regra) e
+ * perderia o único campo que importa nesta: **a procedência do vínculo**.
+ *
+ * ## O campo que é o produto: `vinculo` + `evidencia`
+ *
+ * Dizer "o time Narizes FC é o clube 240581 da EA" é uma AFIRMAÇÃO NOSSA, e
+ * pode estar errada — os nomes que a organização publica não são os nomes de
+ * dentro do jogo ("Osempic do Marcelo" no site é `OsempicDMarcelo` na EA;
+ * "Ice Nuggets" é `ICE NUGETS OFC`, com um G a menos). Uma associação errada
+ * faria a gente publicar o placar de um clube aleatório como se fosse da copa.
+ *
+ * Por isso o vínculo tem grau e tem prova escrita. `evidencia` guarda POR QUE
+ * a gente acredita: "elenco tem AD0LFZ_", "jogou 3 vezes contra BOTAFOFO 77 em
+ * 40 minutos", "gamertags com prefixo Kick-". A tela mostra isso. Quem discorda
+ * consegue conferir.
+ *
+ * ## A classificação vem em DUAS versões, de propósito
+ *
+ * `classificacaoOficial` é o que a organização publica. O que a EA mostra é
+ * calculado das partidas espelhadas, na hora. Guardar as duas separadas é o que
+ * permite o selo de divergência — o único produto aqui que ninguém mais tem,
+ * porque ninguém mais junta os dois lados.
+ *
+ * ⚠️ Divergência **não é acusação**. A causa mais provável é o nosso de-para
+ * estar errado, ou a EA ter registrado um amistoso que não era da copa.
+ */
+
+export type GrauVinculo = 'confirmado' | 'provavel' | 'nao-encontrado';
+
+export interface TimeDaCopa {
+  /** Nome como a ORGANIZAÇÃO publica. É por ele que a pessoa procura. */
+  nome: string;
+  /** Streamer que preside o time. */
+  presidente?: string;
+  grupo?: string;
+  /** Canal da live, quando conhecido. */
+  canal?: { plataforma: 'kick' | 'twitch' | 'youtube'; url: string };
+
+  /** O de-para. Afirmação nossa — ver o cabeçalho. */
+  eaClubId?: string;
+  eaClubName?: string;
+  eaPlatform?: 'common-gen5' | 'common-gen4';
+  vinculo: GrauVinculo;
+  /** Por que acreditamos. Vai a tela, em texto humano. */
+  evidencia: string[];
+  /** Quando o vínculo foi feito ou revisto. */
+  vinculadoEm?: Date;
+}
+
+/** Uma linha da tabela que a organização publica. */
+export interface LinhaOficial {
+  time: string;
+  grupo?: string;
+  pontos?: number;
+  jogos?: number;
+  vitorias?: number;
+  empates?: number;
+  derrotas?: number;
+  golsPro?: number;
+  golsContra?: number;
+  posicao?: number;
+}
+
+export interface IGameCopa extends Document {
+  slug: string;
+  nome: string;
+  edicao?: string;
+  jogo: string;
+  descricao?: string;
+  /** Quem manda na copa. Não somos nós — e a tela diz isso. */
+  organizacao?: { nome?: string; presidentes: string[]; sites: string[] };
+  formato: {
+    times: number;
+    grupos: number;
+    timesPorGrupo: number;
+    /** Jogos por confronto na fase de grupos (MD5 = 5). */
+    jogosPorConfrontoGrupo: number;
+    jogosPorConfrontoMataMata: number;
+  };
+  status: 'anunciada' | 'em-andamento' | 'encerrada';
+  comecouEm?: Date;
+  times: TimeDaCopa[];
+  classificacaoOficial: LinhaOficial[];
+  /** Quando a tabela oficial foi lida do site. Tabela sem data não vale. */
+  oficialCapturadaEm?: Date;
+  /** A janela de horário observada das séries, para prever a próxima. */
+  janelaObservada?: { horaInicio: number; horaFim: number; amostras: number };
+  destaque: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const GameCopaSchema = new Schema<IGameCopa>(
+  {
+    slug: { type: String, required: true, unique: true, index: true },
+    nome: { type: String, required: true },
+    edicao: { type: String },
+    jogo: { type: String, default: 'EA SPORTS FC 26' },
+    descricao: { type: String },
+    organizacao: {
+      nome: { type: String },
+      presidentes: { type: [String], default: [] },
+      sites: { type: [String], default: [] },
+    },
+    formato: {
+      times: { type: Number, default: 20 },
+      grupos: { type: Number, default: 4 },
+      timesPorGrupo: { type: Number, default: 5 },
+      jogosPorConfrontoGrupo: { type: Number, default: 5 },
+      jogosPorConfrontoMataMata: { type: Number, default: 3 },
+    },
+    status: {
+      type: String,
+      enum: ['anunciada', 'em-andamento', 'encerrada'],
+      default: 'em-andamento',
+    },
+    comecouEm: { type: Date },
+    times: [
+      {
+        _id: false,
+        nome: { type: String, required: true },
+        presidente: { type: String },
+        grupo: { type: String },
+        canal: {
+          plataforma: { type: String, enum: ['kick', 'twitch', 'youtube'] },
+          url: { type: String },
+        },
+        eaClubId: { type: String },
+        eaClubName: { type: String },
+        eaPlatform: { type: String, enum: ['common-gen5', 'common-gen4'] },
+        vinculo: {
+          type: String,
+          enum: ['confirmado', 'provavel', 'nao-encontrado'],
+          default: 'nao-encontrado',
+        },
+        evidencia: { type: [String], default: [] },
+        vinculadoEm: { type: Date },
+      },
+    ],
+    classificacaoOficial: [
+      {
+        _id: false,
+        time: { type: String, required: true },
+        grupo: String,
+        pontos: Number,
+        jogos: Number,
+        vitorias: Number,
+        empates: Number,
+        derrotas: Number,
+        golsPro: Number,
+        golsContra: Number,
+        posicao: Number,
+      },
+    ],
+    oficialCapturadaEm: { type: Date },
+    janelaObservada: {
+      horaInicio: Number,
+      horaFim: Number,
+      amostras: Number,
+    },
+    destaque: { type: Boolean, default: false },
+  },
+  { timestamps: true, collection: 'game_copas' }
+);
+
+/** A vitrine mostra as copas em destaque primeiro. */
+GameCopaSchema.index({ destaque: -1, status: 1 });
+/** Achar a copa pelo clube da EA — usado quando uma partida chega ao espelho. */
+GameCopaSchema.index({ 'times.eaClubId': 1 });
+
+const GameCopa: Model<IGameCopa> =
+  mongoose.models.GameCopa || mongoose.model<IGameCopa>('GameCopa', GameCopaSchema);
+
+export default GameCopa;

@@ -45,7 +45,9 @@
     ".next-forja/types/**/*.ts",
     ".next-forja/dev/types/**/*.ts",
     ".next-lente/types/**/*.ts",
-    ".next-lente/dev/types/**/*.ts"
+    ".next-lente/dev/types/**/*.ts",
+    ".next-apostas/types/**/*.ts",
+    ".next-apostas/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",

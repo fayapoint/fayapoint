@@ -36,7 +36,10 @@ export type OrcamentoGame =
   | "mercado-escrita"
   | "presenca"
   | "comunidade"
-  | "avaliar";
+  | "avaliar"
+  | "carteira"
+  | "aposta-leitura"
+  | "aposta-escrita";
 
 /** Teto por IP, por minuto. O custo real de cada rota está no comentário. */
 const ORCAMENTOS: Record<OrcamentoGame, number> = {
@@ -63,6 +66,15 @@ const ORCAMENTOS: Record<OrcamentoGame, number> = {
   comunidade: 30,
   // Voto em jogador. Escrita autenticada, um por par.
   avaliar: 30,
+  // Saldo e extrato: 1 consulta ao Mongo. A tela relê a cada aposta.
+  carteira: 60,
+  // Saguão e ficha de evento: leitura de mercados já cotados, sem ir à EA.
+  "aposta-leitura": 90,
+  // Registrar cupom. Teto BAIXO de propósito: é o caminho que mexe em saldo,
+  // e 15/min já é mais depressa do que qualquer pessoa aposta de verdade.
+  // Aqui o teto não é economia de recurso — é a primeira barreira contra
+  // script que tenta explorar corrida no débito.
+  "aposta-escrita": 15,
 };
 
 export interface Veredito {
