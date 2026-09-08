@@ -131,6 +131,33 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
           "A EA guarda apenas 10 partidas amistosas por clube. O que está aqui é o que conseguimos capturar antes de a fonte descartar — e não distingue jogo oficial de treino entre times da copa.",
       },
     },
-    { headers: { "Cache-Control": "public, s-maxage=120, stale-while-revalidate=600" } }
+    {
+      headers: {
+        /**
+         * ⚠️ `Cache-Control` NÃO CHEGA À BORDA — medido em 08/09.
+         *
+         * `export const dynamic = "force-dynamic"` faz o Next reescrever a
+         * resposta com `no-store,no-cache,must-revalidate`, apagando o
+         * `s-maxage` que esta linha escrevia. Conferido em produção nas quatro
+         * rotas do /game que tentavam cachear: todas saíam com `no-store` e
+         * `Cache-Status: "Netlify Durable"; fwd=bypass`. O cabeçalho estava ali
+         * havia dias sem cachear nada — a intenção existia, o efeito não.
+         *
+         * `Netlify-CDN-Cache-Control` é um cabeçalho SEPARADO, que o Next não
+         * mexe e a borda da Netlify lê. O navegador continua com `no-store`;
+         * quem passa a guardar é a borda.
+         *
+         * Custava: 16 s no primeiro acesso (função fria), 1,8 a 7,5 s depois —
+         * numa página que é uma leitura pública, igual para todo mundo, e cujo
+         * conteúdo só muda quando o coletor roda, de hora em hora.
+         *
+         * ⛔ Isto só vale porque esta rota é PÚBLICA e não varia por usuário.
+         * Não copie para `carteira`, `federacao` ou `descobertas`: guardar na
+         * borda uma resposta pessoal é entregá-la ao próximo visitante.
+         */
+        "Netlify-CDN-Cache-Control": "public, s-maxage=120, stale-while-revalidate=600",
+        "Cache-Control": "public, s-maxage=120, stale-while-revalidate=600",
+      },
+    }
   );
 }

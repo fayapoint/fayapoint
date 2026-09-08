@@ -514,11 +514,25 @@ export async function partidasDaCopa(slug: string): Promise<{
     ...new Set(copa.times.map((t) => t.eaPlatform ?? "common-gen5")),
   ];
 
-  // Traz tudo que tem UM lado da copa; o filtro dos DOIS lados é feito abaixo,
-  // em memória. Um `$all` com os dois ids exigiria saber o par de antemão.
+  /**
+   * OS DOIS LADOS SÃO EXIGIDOS NO BANCO, não só na memória.
+   *
+   * O filtro em memória logo abaixo continua — ele também confere `length === 2`
+   * e a assinatura de jogo de copa. Mas trazer só o que já passa no teste dos
+   * dois lados muda a conta de forma que dá para medir (08/09, base real):
+   *
+   *     um lado  → 208 partidas · 1,7 MB · 261 ms
+   *     dois lados → 60 partidas · 0,5 MB ·  65 ms
+   *
+   * São 148 partidas do dia a dia dos clubes atravessando a rede para serem
+   * descartadas na linha seguinte. `$in` continua na frente para o índice
+   * `clubIds` ser usado; `$setIsSubset` sozinho viraria varredura de coleção, e
+   * o espelho só cresce.
+   */
   const docs = await GameEaPartida.find({
     clubIds: { $in: ids },
     platform: { $in: plataformas },
+    $expr: { $setIsSubset: ["$clubIds", ids] },
   })
     .sort({ timestamp: -1 })
     .limit(1000)
