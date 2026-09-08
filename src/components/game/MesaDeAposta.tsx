@@ -31,6 +31,7 @@ import {
   setorDaPosicao,
   corSetor,
 } from "@/lib/game/tema";
+import { FaixaDeCena, FundoDeCena } from "./CenaW22";
 
 /**
  * A MESA DE UMA PARTIDA — cardápio, cupom e súmula. 08/09/2026.
@@ -284,6 +285,15 @@ export function MesaDeAposta({ slug, locale }: { slug: string; locale: string })
           <ArrowLeft className="h-4 w-4" /> saguão
         </Link>
 
+        <div className="mt-5">
+          <FaixaDeCena
+            cena={liquidado ? "posJogo" : "duelo"}
+            alt={liquidado ? "Campo vazio depois do jogo, refletor aceso" : "Duas equipes frente a frente no círculo central"}
+            altura="h-40 sm:h-52"
+            prioridade
+          />
+        </div>
+
         <Placar evento={evento} liquidado={liquidado} />
 
         <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_320px]">
@@ -431,7 +441,9 @@ function SeloHonestidade({
     honestidade.sementeFinal === honestidade.conferencia.recalculada;
 
   return (
-    <div style={superficie(VIOLETA)} className="rounded-2xl border p-5">
+    <div style={superficie(VIOLETA)} className="relative overflow-hidden rounded-2xl border p-5">
+      <FundoDeCena cena="selo" opacidade={0.2} />
+      <div className="relative">
       <div className="flex items-center gap-2">
         <ShieldCheck className="h-4.5 w-4.5" style={{ color: VIOLETA }} />
         <p style={bebas} className="text-lg uppercase tracking-wide">
@@ -473,6 +485,7 @@ function SeloHonestidade({
         escolhe o resultado sozinho.
       </p>
       {copiado && <p className="mt-1 text-[11px]" style={{ color: LIMA }}>copiado</p>}
+      </div>
     </div>
   );
 }

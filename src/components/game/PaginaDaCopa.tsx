@@ -14,6 +14,9 @@ import {
   ExternalLink,
   Coins,
   ChevronDown,
+  Newspaper,
+  Scale,
+  Clock,
 } from "lucide-react";
 import {
   LIMA,
@@ -28,6 +31,7 @@ import {
   superficie,
   corNota,
 } from "@/lib/game/tema";
+import { FaixaDeCena, FundoDeCena, CENAS } from "./CenaW22";
 
 /**
  * A PÁGINA DA SUPER COPA DOS STREAMERS — 08/09/2026.
@@ -111,6 +115,21 @@ interface Jogador {
   defesas: number;
 }
 
+interface Declaracao {
+  fonte: string;
+  url: string | null;
+  afirma: Record<string, string | number>;
+  lidoEm: string;
+}
+
+interface Noticia {
+  titulo: string;
+  fonte: string;
+  url: string;
+  em: string | null;
+  resumo: string | null;
+}
+
 interface Dados {
   copa: {
     nome: string;
@@ -122,6 +141,8 @@ interface Dados {
     comecouEm?: string;
     times: TimeCopa[];
   };
+  declaracoes: Declaracao[];
+  noticias: Noticia[];
   pelaEA: LinhaEA[];
   series: Serie[];
   artilharia: Jogador[];
@@ -159,13 +180,26 @@ export function PaginaDaCopa({ slug, locale }: { slug: string; locale: string })
     );
   }
 
-  const { copa, pelaEA, series, artilharia, goleiros, cobertura } = d;
+  const { copa, pelaEA, series, artilharia, goleiros, cobertura, declaracoes, noticias } = d;
   const grupos = [...new Set(copa.times.map((t) => t.grupo).filter(Boolean))].sort() as string[];
 
   return (
     <div style={{ background: FUNDO }} className="min-h-screen text-white">
       {/* ---- Capa ---- */}
       <header className="relative overflow-hidden border-b border-white/10">
+        {/* eslint-disable-next-line @next/next/no-img-element -- arte local estática */}
+        <img
+          src={CENAS.estudio}
+          alt=""
+          aria-hidden
+          fetchPriority="high"
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[.30]"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{ background: `linear-gradient(to top, ${FUNDO} 6%, ${FUNDO}dd 45%, ${FUNDO}55 100%)` }}
+        />
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 opacity-[.16]"
@@ -257,8 +291,18 @@ export function PaginaDaCopa({ slug, locale }: { slug: string; locale: string })
           </div>
         </section>
 
+        <div className="mt-12">
+          <FaixaDeCena
+            cena="tunel"
+            alt="Jogadores entrando em campo pelo túnel do estádio"
+            altura="h-40 sm:h-56"
+            titulo="Cada confronto é uma série"
+            linha="Medimos três jogos em quarenta minutos entre os mesmos dois clubes — é o MD5 anunciado, jogado de uma vez."
+          />
+        </div>
+
         {/* ---- Séries ---- */}
-        <section className="mt-14">
+        <section className="mt-8">
           <Titulo icone={Trophy} cor={OURO}>
             Os confrontos
           </Titulo>
@@ -296,6 +340,8 @@ export function PaginaDaCopa({ slug, locale }: { slug: string; locale: string })
             <TabelaJogadores lista={goleiros} coluna="defesas" />
           </div>
         </section>
+
+        <FontesENoticias declaracoes={declaracoes} noticias={noticias} />
 
         <PalcoDaCopa locale={locale} nome={copa.nome} />
       </div>
@@ -336,8 +382,9 @@ function Cobertura({ c, times }: { c: Dados["cobertura"]; times: TimeCopa[] }) {
   const provaveis = times.filter((t) => t.vinculo === "provavel");
 
   return (
-    <div style={superficie(VIOLETA)} className="rounded-2xl border p-5">
-      <div className="flex items-start gap-3">
+    <div style={superficie(VIOLETA)} className="relative overflow-hidden rounded-2xl border p-5">
+      <FundoDeCena cena="constelacao" opacidade={0.18} />
+      <div className="relative flex items-start gap-3">
         <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0" style={{ color: VIOLETA }} />
         <div className="min-w-0 flex-1">
           <p style={bebas} className="text-lg uppercase tracking-wide">
@@ -638,6 +685,177 @@ function PalcoDaCopa({ locale, nome }: { locale: string; nome: string }) {
           <ExternalLink className="h-4 w-4" />
         </Link>
       </div>
+    </section>
+  );
+}
+
+/**
+ * FONTES E NOTÍCIAS — o que cada um diz, lado a lado.
+ *
+ * ## Por que esta seção é o produto, e não um apêndice
+ *
+ * Cinco sites publicam esta copa. Nenhum observa a partida: todos republicam o
+ * que a organização informa. Nós observamos — lemos a API pública da EA, com
+ * placar e súmula por jogador.
+ *
+ * Então a pergunta que a seção responde não é "qual é a tabela", é **"quem
+ * está dizendo o quê, e com base em quê"**. É a única pergunta que a gente
+ * consegue responder melhor que todo mundo.
+ *
+ * ## A divergência fica em pé, não é resolvida
+ *
+ * As fontes se contradizem: o anúncio original fala em **16 times**, os sites
+ * de tabela publicam **20**. Medido em 08/09, e as duas afirmações estão vivas
+ * no mesmo mês, sobre a mesma copa.
+ *
+ * A tentação é escolher a mais provável e publicar como fato. Isso seria
+ * inventar uma autoridade que não temos — nós não organizamos esta competição
+ * e não falamos por ela. O que a tela faz é mostrar as duas, com data e link,
+ * e deixar quem lê decidir. Um leitor informado vale mais que um número
+ * confiante e errado.
+ *
+ * A nossa linha entra na mesma lista, e não num pedestal: ela também é uma
+ * fonte, com o que mede e — declarado no mesmo tamanho de letra — o que **não**
+ * mede.
+ */
+function FontesENoticias({
+  declaracoes,
+  noticias,
+}: {
+  declaracoes: Declaracao[];
+  noticias: Noticia[];
+}) {
+  if (declaracoes.length === 0 && noticias.length === 0) return null;
+
+  return (
+    <section className="mt-14">
+      <Titulo icone={Scale} cor={CIANO}>
+        Fontes e notícias
+      </Titulo>
+      <p className="mt-1 max-w-2xl text-sm text-white/50">
+        Quem está dizendo o quê sobre esta copa — inclusive nós. Cada linha traz a data em
+        que foi lida e o link para conferir.
+      </p>
+
+      {/* ---- O que cada fonte afirma ---- */}
+      <div className="mt-6 grid gap-3 lg:grid-cols-2">
+        {declaracoes.map((d) => {
+          const nossa = d.fonte.startsWith("Winners 22");
+          const cor = nossa ? LIMA : CIANO;
+          return (
+            <div
+              key={d.fonte}
+              style={superficie(cor)}
+              className="rounded-2xl border p-4"
+            >
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <p className="font-medium" style={{ color: nossa ? LIMA : undefined }}>
+                  {d.url ? (
+                    <a
+                      href={d.url}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                      className="underline decoration-white/20 underline-offset-2 transition hover:text-white"
+                    >
+                      {d.fonte}
+                    </a>
+                  ) : (
+                    d.fonte
+                  )}
+                </p>
+                <span
+                  style={{ borderColor: `${cor}44`, color: cor }}
+                  className="rounded border px-1.5 py-0.5 text-[9px] uppercase tracking-widest"
+                >
+                  {nossa ? "observado" : "declarado"}
+                </span>
+              </div>
+
+              <dl className="mt-2.5 space-y-1 text-xs">
+                {Object.entries(d.afirma).map(([chave, valor]) => (
+                  <div key={chave} className="flex flex-wrap gap-x-2">
+                    <dt className="text-white/35">{chave}</dt>
+                    <dd className="text-white/75">{String(valor)}</dd>
+                  </div>
+                ))}
+              </dl>
+
+              <p className="mt-3 flex items-center gap-1 border-t border-white/10 pt-2 text-[10px] text-white/30">
+                <Clock className="h-3 w-3" />
+                lido em{" "}
+                {new Date(d.lidoEm).toLocaleDateString("pt-BR", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                })}
+              </p>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* ---- O aviso sobre a contradição ----
+           Ele é explícito e não um rodapé: quem lê duas fontes com números
+           diferentes e não recebe o aviso conclui que UMA das nossas telas
+           está com defeito. */}
+      <div
+        style={superficie(OURO)}
+        className="mt-4 flex items-start gap-3 rounded-2xl border p-4"
+      >
+        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" style={{ color: OURO }} />
+        <p className="text-sm leading-relaxed text-white/65">
+          <strong className="text-white/85">As fontes não concordam entre si.</strong> O
+          anúncio original fala em 16 times; os sites que publicam tabela falam em 20. As
+          duas afirmações estão no ar, no mesmo mês, sobre a mesma copa. Não escolhemos uma
+          — nós não organizamos esta competição e não falamos por ela. Mostramos as duas e
+          dizemos onde cada uma foi lida.
+        </p>
+      </div>
+
+      {/* ---- Notícias ---- */}
+      {noticias.length > 0 && (
+        <>
+          <h3
+            style={{ ...bebas, color: ROSA }}
+            className="mt-10 flex items-center gap-2 text-xl uppercase tracking-wide"
+          >
+            <Newspaper className="h-5 w-5" />
+            O que saiu por aí
+          </h3>
+          <div className="mt-3 space-y-2">
+            {noticias.map((n) => (
+              <a
+                key={n.url}
+                href={n.url}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                style={superficie(CINZA)}
+                className="group flex flex-wrap items-baseline gap-x-3 gap-y-1 rounded-xl border p-3.5 transition hover:-translate-y-0.5"
+              >
+                {n.em && (
+                  <span className="shrink-0 font-mono text-[11px] text-white/30">
+                    {new Date(n.em).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })}
+                  </span>
+                )}
+                <span className="min-w-0 flex-1">
+                  <span className="text-sm text-white/85 transition group-hover:text-white">
+                    {n.titulo}
+                  </span>
+                  {n.resumo && (
+                    <span className="mt-0.5 block text-xs leading-relaxed text-white/45">
+                      {n.resumo}
+                    </span>
+                  )}
+                </span>
+                <span className="shrink-0 text-[10px] uppercase tracking-wider text-white/30">
+                  {n.fonte}
+                </span>
+                <ExternalLink className="h-3 w-3 shrink-0 text-white/25" />
+              </a>
+            ))}
+          </div>
+        </>
+      )}
     </section>
   );
 }

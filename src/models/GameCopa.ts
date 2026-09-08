@@ -92,6 +92,32 @@ export interface IGameCopa extends Document {
   comecouEm?: Date;
   times: TimeDaCopa[];
   classificacaoOficial: LinhaOficial[];
+  /**
+   * O QUE CADA FONTE AFIRMA — e onde elas se contradizem.
+   *
+   * Não é redundância com `organizacao.sites`: ali fica a URL, aqui fica o
+   * CONTEÚDO que cada uma declara. A diferença existe porque as fontes
+   * DISCORDAM entre si, e a divergência é informação.
+   *
+   * Medido em 08/09: umas publicam 20 times em 4 grupos de 5; outras, 16 times
+   * em 4 grupos de 4. As duas falam da mesma copa. Escolher uma e apresentar
+   * como fato seria inventar uma autoridade que não temos — mostrar as duas,
+   * lado a lado e com a data da leitura, é o produto.
+   */
+  declaracoes: Array<{
+    fonte: string;
+    url?: string;
+    afirma: Record<string, string | number>;
+    lidoEm: Date;
+  }>;
+  /** Notícias sobre a copa, com fonte e data. Nunca sem as duas. */
+  noticias: Array<{
+    titulo: string;
+    fonte: string;
+    url: string;
+    em?: Date;
+    resumo?: string;
+  }>;
   /** Quando a tabela oficial foi lida do site. Tabela sem data não vale. */
   oficialCapturadaEm?: Date;
   /** A janela de horário observada das séries, para prever a próxima. */
@@ -161,6 +187,25 @@ const GameCopaSchema = new Schema<IGameCopa>(
         golsPro: Number,
         golsContra: Number,
         posicao: Number,
+      },
+    ],
+    declaracoes: [
+      {
+        _id: false,
+        fonte: { type: String, required: true },
+        url: { type: String },
+        afirma: { type: Schema.Types.Mixed, default: {} },
+        lidoEm: { type: Date, default: Date.now },
+      },
+    ],
+    noticias: [
+      {
+        _id: false,
+        titulo: { type: String, required: true },
+        fonte: { type: String, required: true },
+        url: { type: String, required: true },
+        em: { type: Date },
+        resumo: { type: String },
       },
     ],
     oficialCapturadaEm: { type: Date },

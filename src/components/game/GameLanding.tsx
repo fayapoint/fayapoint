@@ -12,6 +12,7 @@ import { CalendarioTemporada } from "./CalendarioTemporada";
 import { TabelaClassificacao } from "./TabelaClassificacao";
 import { TabelaRanking } from "./TabelaRanking";
 import { VideoAmbiente } from "./VideoAmbiente";
+import { HubWinners22 } from "./HubWinners22";
 import { ComunidadeAoVivo } from "./ComunidadeAoVivo";
 import { LIMA, OURO, CIANO, VIOLETA, ROSA, LARANJA, FUNDO, bebas, superficie, TEXTO } from "@/lib/game/tema";
 
@@ -192,6 +193,12 @@ export function GameLanding({
           </dl>
         </header>
       </section>
+
+      {/* ============================== HUB ==============================
+          As portas da secao. Vem logo depois do heroi de proposito: a landing
+          ganhou seis destinos num dia e continuava apontando para dois — tudo
+          o mais ficava no ar e inalcancavel. Ver o cabecalho de HubWinners22. */}
+      <HubWinners22 locale={locale} />
 
       {/* ============================== COMUNIDADE AO VIVO ==============================
           A área principal pedida pelo Ricardo: quem está online AGORA, a nuvem

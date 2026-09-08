@@ -79,6 +79,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
         formato: copa.formato,
         status: copa.status,
         comecouEm: copa.comecouEm,
+        oficialCapturadaEm: copa.oficialCapturadaEm ?? null,
         times: copa.times.map((t) => ({
           nome: t.nome,
           presidente: t.presidente ?? null,
@@ -89,6 +90,19 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
           evidencia: t.evidencia,
         })),
       },
+      // O que cada fonte AFIRMA, e as notícias. A divergência entre elas é
+      // informação, não ruído: o anúncio original fala em 16 times e os sites
+      // de tabela publicam 20. Mostrar as duas é o produto.
+      declaracoes: (copa.declaracoes ?? []).map((d) => ({
+        fonte: d.fonte,
+        url: d.url ?? null,
+        afirma: d.afirma,
+        lidoEm: d.lidoEm,
+      })),
+      noticias: (copa.noticias ?? [])
+        .slice()
+        .sort((a, b) => (b.em?.getTime() ?? 0) - (a.em?.getTime() ?? 0))
+        .map((n) => ({ titulo: n.titulo, fonte: n.fonte, url: n.url, em: n.em ?? null, resumo: n.resumo ?? null })),
       // O que a EA mostra. NUNCA rotulado como "a tabela da copa" — ver o
       // comentário de `classificacaoPelaEA`.
       pelaEA: calculada,

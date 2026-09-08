@@ -16,6 +16,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { LIMA, OURO, CIANO, VIOLETA, CINZA, FUNDO, bebas, superficie } from "@/lib/game/tema";
+import { FaixaDeCena, FundoDeCena } from "./CenaW22";
 
 /**
  * O SAGUÃO DE APOSTAS — a porta da mesa. 08/09/2026.
@@ -147,6 +148,15 @@ export function SaguaoApostas({ locale }: { locale: string }) {
     <div style={{ background: FUNDO }} className="min-h-screen text-white">
       <div className="mx-auto max-w-6xl px-4 py-10 sm:py-14">
         <Cabecalho carteira={carteira} />
+
+        <div className="mt-8">
+          <FaixaDeCena
+            cena="fichas"
+            alt="Fichas do Winners 22 caindo no escuro, uma delas com a marca FayAi"
+            altura="h-48 sm:h-64"
+            prioridade
+          />
+        </div>
 
         {carteira && <FaixaCarteira carteira={carteira} />}
         {!carteira && <ConvitePraEntrar />}
@@ -587,8 +597,10 @@ function JogoResponsavel() {
   return (
     <section
       style={superficie(CINZA)}
-      className="mt-14 rounded-2xl border p-6 text-sm leading-relaxed text-white/55"
+      className="relative mt-14 overflow-hidden rounded-2xl border p-6 text-sm leading-relaxed text-white/55"
     >
+      <FundoDeCena cena="corredor" opacidade={0.16} />
+      <div className="relative">
       <p style={bebas} className="text-lg uppercase tracking-wide text-white/80">
         As regras do dinheiro aqui
       </p>
@@ -623,6 +635,7 @@ function JogoResponsavel() {
         valor no Brasil dependem de autorização da SPA/Ministério da Fazenda
         (Lei 14.790/2023), que não temos e não pedimos.
       </p>
+      </div>
     </section>
   );
 }
