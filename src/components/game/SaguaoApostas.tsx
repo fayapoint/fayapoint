@@ -384,7 +384,17 @@ function ComoFunciona() {
     },
   ];
   return (
-    <div className="mt-10 grid gap-4 sm:grid-cols-3">
+    <>
+    <div className="mt-10">
+      <FaixaDeCena
+        cena="luzGrafico"
+        alt="Rastros de luz subindo e caindo, com a marca FayAi projetada na névoa"
+        altura="h-40 sm:h-48"
+        titulo="O preço não é palpite nosso"
+        linha="Cada odd sai de um modelo calibrado em partidas reais de Pro Clubs — e a chance que ele calculou fica ao lado dela, na tela."
+      />
+    </div>
+    <div className="mt-4 grid gap-4 sm:grid-cols-3">
       {passos.map((p) => (
         <div key={p.titulo} style={superficie(p.cor)} className="rounded-2xl border p-5">
           <p.icone className="h-5 w-5" style={{ color: p.cor }} />
@@ -395,6 +405,7 @@ function ComoFunciona() {
         </div>
       ))}
     </div>
+    </>
   );
 }
 

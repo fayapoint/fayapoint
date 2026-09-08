@@ -32,6 +32,8 @@ export const CENAS = {
   trofeu: "/game/w22/trofeu.webp",
   /** Fichas em queda, uma delas marcada. A mesa. */
   fichas: "/game/w22/fichas.webp",
+  /** Rastros de luz subindo e caindo, com a marca projetada na névoa. A odd. */
+  luzGrafico: "/game/w22/luz-grafico.webp",
   /** Corredor que se divide em dois. A escolha. */
   corredor: "/game/w22/corredor.webp",
   /** Duas equipes frente a frente no círculo central. O confronto. */
