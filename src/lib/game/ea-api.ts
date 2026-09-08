@@ -344,6 +344,17 @@ export interface MatchPlayer {
    * o total — há defesa que a EA conta em `saves` e não classifica. Por isso os
    * seis vão como estão, sem serem somados nem completados: um "outras" que
    * fosse a diferença seria número inventado.
+   *
+   * A LACUNA, MEDIDA NO ESPELHO INTEIRO (08/09, 3.572 linhas com o campo):
+   * 1.153 defesas, 735 classificadas — **36,3% ficam sem tipo**. Não é ruído de
+   * arredondamento; é mais de um terço. Quem mostrar isso tem de mostrar a
+   * sobra junto, senão afirma que os seis explicam a defesa inteira.
+   *
+   * E `parrySaves` (rebote) veio **0 nas 3.572 linhas** — existe na resposta e
+   * nunca é preenchido, igual ao agregado de evento. Categoria zerada não vai
+   * para a tela: listar "Rebote 0" faria parecer que o goleiro nunca segura
+   * rebote, quando na verdade a EA não conta. Se um patch reativar o campo, ele
+   * aparece sozinho.
    */
   defesasPorTipo: {
     mergulho: number | null;

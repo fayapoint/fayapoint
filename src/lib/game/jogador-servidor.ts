@@ -89,6 +89,15 @@ export interface LinhaPartidaJogador {
   passes: { feitos: number; tentados: number } | null;
   desarmes: { feitos: number; tentados: number } | null;
   defesas: number | null;
+  /**
+   * As seis defesas classificadas pela EA nesta partida, quando ela classificou.
+   *
+   * `null` em duas situacoes que NAO se distinguem aqui: partida capturada antes
+   * de 08/09/2026 (o normalizador descartava os campos) e partida em que a EA
+   * simplesmente nao mandou. Por isso a ficha conta em quantos jogos veio, em vez
+   * de tratar ausencia como zero.
+   */
+  defesasPorTipo: { mergulho: number; cruzamento: number; rebote: number; soco: number; reflexo: number; direcao: number } | null;
   golsSofridos: number | null;
   semSofrer: boolean;
   craque: boolean;
@@ -153,6 +162,29 @@ export interface FichaGoleiroDados {
   aproveitamento: number | null;
   /** `cleanSheetsGk` do elenco da temporada — é a EA contando, não nós. */
   semSofrerTemporada: number | null;
+  /** As defesas que a EA classificou. `null` se nenhuma partida trouxe. */
+  porTipo: DefesasClassificadas | null;
+}
+
+/**
+ * O detalhe da defesa — soma das seis categorias da EA nas partidas no gol.
+ *
+ * `classificadas` é a soma dos seis e **é menor que `defesas`**, sempre. A
+ * diferença é defesa que a EA contou e não classificou, e ela fica visível de
+ * propósito: inventar uma categoria "outras" para fechar a conta seria publicar
+ * número que a fonte não deu.
+ */
+export interface DefesasClassificadas {
+  mergulho: number;
+  cruzamento: number;
+  rebote: number;
+  soco: number;
+  reflexo: number;
+  direcao: number;
+  /** A soma dos seis. Nunca comparável com `defesas` como se fosse o mesmo. */
+  classificadas: number;
+  /** Em quantos jogos no gol a classificação veio — o resto não é zero, é vazio. */
+  jogosComClassificacao: number;
 }
 
 /** O que o elenco da temporada traz além do que o perfil já mostrava. */
@@ -249,6 +281,38 @@ async function partidasDaGamertag(
   };
 }
 
+/**
+ * As seis defesas classificadas — o dado que nenhum tracker de Pro Clubs tem.
+ *
+ * A EA publica, por partida e por jogador, quantas defesas foram de mergulho,
+ * em cruzamento, de rebote, de soco, de reflexo e de boa direcao. Nos
+ * descartavamos os seis desde sempre, porque o normalizador so copia campo que
+ * esta no mapa e o que fica de fora some sem avisar (achado e corrigido em
+ * 08/09/2026, commit 4b126ae).
+ *
+ * ⛔ OS SEIS NAO SOMAM `saves`. Medido: `saves=6` com `cruzamento 1, reflexo 1,
+ * direcao 1`. Ha defesa que a EA conta no total e nao classifica. Quem for
+ * mostrar isso NUNCA pode preencher a diferenca com uma categoria "outras" —
+ * seria numero inventado.
+ *
+ * Devolve `null` quando os seis campos vem ausentes: partida do espelho antiga,
+ * capturada quando o normalizador ainda os jogava fora. Ausencia nao e zero.
+ */
+function classificarDefesas(jogador: MatchPlayer): LinhaPartidaJogador["defesasPorTipo"] {
+  const d = jogador.defesasPorTipo;
+  if (!d) return null;
+  const seis = [d.mergulho, d.cruzamento, d.rebote, d.soco, d.reflexo, d.direcao];
+  if (seis.every((v) => v == null)) return null;
+  return {
+    mergulho: num(d.mergulho) ?? 0,
+    cruzamento: num(d.cruzamento) ?? 0,
+    rebote: num(d.rebote) ?? 0,
+    soco: num(d.soco) ?? 0,
+    reflexo: num(d.reflexo) ?? 0,
+    direcao: num(d.direcao) ?? 0,
+  };
+}
+
 function linhaDaPartida(partida: ClubMatch, chave: string): LinhaPartidaJogador | null {
   let clube: ClubMatch["clubs"][number] | null = null;
   let jogador: MatchPlayer | null = null;
@@ -287,6 +351,7 @@ function linhaDaPartida(partida: ClubMatch, chave: string): LinhaPartidaJogador 
     passes,
     desarmes,
     defesas: num(jogador.saves),
+    defesasPorTipo: classificarDefesas(jogador),
     golsSofridos: num(jogador.goalsConceded),
     semSofrer: jogador.cleanSheet === true,
     craque: jogador.mom === true,
@@ -386,6 +451,28 @@ function fichaGoleiro(linhas: LinhaPartidaJogador[], cleanSheetsGk: number | nul
     if (l.nota != null) { somaNota += l.nota; comNota++; }
   }
   const n = noGol.length;
+
+  // As seis categorias só entram nas partidas que as trouxeram. Somar zero pelas
+  // que vieram sem classificação faria um goleiro antigo parecer um que não
+  // defende de nada — o espelho tem partidas capturadas antes de 08/09/2026, e
+  // nelas o campo nem chegou a ser guardado.
+  const comTipo = noGol.filter((l) => l.defesasPorTipo != null);
+  let porTipo: DefesasClassificadas | null = null;
+  if (comTipo.length > 0) {
+    const t = { mergulho: 0, cruzamento: 0, rebote: 0, soco: 0, reflexo: 0, direcao: 0 };
+    for (const l of comTipo) {
+      const d = l.defesasPorTipo!;
+      t.mergulho += d.mergulho;
+      t.cruzamento += d.cruzamento;
+      t.rebote += d.rebote;
+      t.soco += d.soco;
+      t.reflexo += d.reflexo;
+      t.direcao += d.direcao;
+    }
+    const classificadas = t.mergulho + t.cruzamento + t.rebote + t.soco + t.reflexo + t.direcao;
+    if (classificadas > 0) porTipo = { ...t, classificadas, jogosComClassificacao: comTipo.length };
+  }
+
   return {
     jogos: n,
     defesas,
@@ -397,6 +484,7 @@ function fichaGoleiro(linhas: LinhaPartidaJogador[], cleanSheetsGk: number | nul
     vitorias,
     aproveitamento: arred((vitorias / n) * 100),
     semSofrerTemporada: cleanSheetsGk,
+    porTipo,
   };
 }
 
@@ -615,6 +703,8 @@ export interface CopyFicha {
     sub: string;
     jogos: string; defesas: string; defesasPorJogo: string; golsSofridos: string; golsSofridosPorJogo: string;
     semSofrer: string; semSofrerTemporada: string; nota: string; aproveitamento: string;
+    porTipoTitulo: string; porTipoNota: string;
+    mergulho: string; cruzamento: string; rebote: string; soco: string; reflexo: string; direcao: string;
   };
   elenco: {
     titulo: string;
@@ -678,6 +768,9 @@ const ptFicha: CopyFicha = {
     sub: "Só as partidas inteiras em que a gamertag jogou no gol. Defesas e gols sofridos são por partida, da EA.",
     jogos: "Jogos no gol", defesas: "Defesas", defesasPorJogo: "Defesas / jogo", golsSofridos: "Gols sofridos", golsSofridosPorJogo: "Sofridos / jogo",
     semSofrer: "Sem sofrer gol", semSofrerTemporada: "Sem sofrer gol (temporada, EA)", nota: "Nota média", aproveitamento: "Aproveit.",
+    porTipoTitulo: "Como foram as defesas",
+    porTipoNota: "A EA classifica parte das defesas, não todas — por isso a soma abaixo é menor que o total. O que falta é defesa que ela contou e não disse de que tipo; não inventamos uma categoria para fechar a conta.",
+    mergulho: "Mergulho", cruzamento: "Em cruzamento", rebote: "Rebote", soco: "Soco", reflexo: "Reflexo", direcao: "Boa direção",
   },
   elenco: {
     titulo: "Temporada, pela EA",
@@ -759,6 +852,9 @@ const enFicha: CopyFicha = {
     sub: "Only full matches where the gamertag played in goal. Saves and goals conceded are per match, from EA.",
     jogos: "Games in goal", defesas: "Saves", defesasPorJogo: "Saves / game", golsSofridos: "Goals conceded", golsSofridosPorJogo: "Conceded / game",
     semSofrer: "Clean sheets", semSofrerTemporada: "Clean sheets (season, EA)", nota: "Avg rating", aproveitamento: "Win rate",
+    porTipoTitulo: "How the saves were made",
+    porTipoNota: "EA classifies some saves, not all — which is why the numbers below add up to less than the total. The rest are saves it counted without saying what kind; we do not invent a category to close the gap.",
+    mergulho: "Diving", cruzamento: "From crosses", rebote: "Parry", soco: "Punch", reflexo: "Reflex", direcao: "Good direction",
   },
   elenco: {
     titulo: "Season, by EA",
