@@ -88,6 +88,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
           eaClubId: t.eaClubId ?? null,
           vinculo: t.vinculo,
           evidencia: t.evidencia,
+          // O resultado NEGATIVO da busca também é informação: sem ele a tela
+          // não distingue "ninguém procurou" de "procuramos e não é nenhum".
+          buscadoEm: t.buscadoEm ? t.buscadoEm.toISOString() : null,
+          buscaNota: t.buscaNota ?? null,
         })),
       },
       // O que cada fonte AFIRMA, e as notícias. A divergência entre elas é

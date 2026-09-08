@@ -159,46 +159,122 @@ async function capturar(clubId: string, plataforma: EA.EaPlatform = "common-gen5
  * outro clube já confirmado. Essa promoção é feita na próxima passada, quando
  * a partida aparecer no espelho.
  */
+/** Quanto tempo uma busca sem resultado vale antes de valer a pena refazer. */
+const VALIDADE_DA_BUSCA_MS = 3 * 24 * 60 * 60 * 1000;
+
+/**
+ * ACHAR O CLUBE DE QUEM AINDA NAO TEM — e lembrar do que ja foi descartado.
+ *
+ * ## O teste que decide e a ADJACENCIA, nao o tipo da partida
+ *
+ * A primeira versao exigia que o candidato tivesse partidas "com cara de copa"
+ * (amistoso 11v11 recente). Medido em 08/09, isso derrubou os 7 que faltam na
+ * Super Copa: existem 34 clubes com nomes parecidos, e nenhum tinha a
+ * assinatura — inclusive homonimos que jogam 2v2 de rua e apareciam como
+ * candidatos so pelo nome.
+ *
+ * O sinal forte e outro: **o candidato jogou contra um clube que ja sabemos ser
+ * da copa**. Isso vale mesmo que a EA tenha classificado a partida como
+ * `leagueMatch`, e mesmo que a organizacao jogue em formato diferente do que
+ * supomos. Homonimo nao joga contra a copa; o time da copa joga.
+ *
+ * A assinatura de amistoso 11v11 continua valendo, mas como sinal FRACO — so
+ * decide quando ninguem tem adjacencia, e ai o vinculo sai `provavel`.
+ *
+ * ## Por que guardar a busca que nao achou
+ *
+ * Cada candidato custa uma chamada de partidas a EA. Refazer os 34 de hora em
+ * hora e gastar a fonte para reencontrar o mesmo nada — e o resultado negativo
+ * nunca chegava a lugar nenhum, entao a tela dizia "sem vinculo" sem conseguir
+ * distinguir "ninguem procurou" de "procuramos, e nao e nenhum destes". Agora a
+ * busca vazia fica escrita no time, com data, e so se repete depois de 3 dias
+ * (ou na hora, com `--forcar-busca`).
+ */
 async function descobrirFaltantes(copa: InstanceType<typeof GameCopa>) {
+  const forcar = process.argv.includes("--forcar-busca");
   const pendentes = copa.times.filter((t) => !t.eaClubId);
   if (pendentes.length === 0) return 0;
-  console.log(`\nDescobrindo ${pendentes.length} time(s) sem vínculo…`);
-  let achados = 0;
 
-  for (const time of pendentes) {
-    let melhor: { c: EA.ClubSearchResult; sinal: number; prox: number } | null = null;
+  // Quem ja sabemos que e da copa — a regua da adjacencia.
+  const daCopa = new Map<string, string>();
+  for (const t of copa.times) if (t.eaClubId) daCopa.set(t.eaClubId, t.nome);
+
+  const agora = Date.now();
+  const aBuscar = pendentes.filter(
+    (t) => forcar || !t.buscadoEm || agora - new Date(t.buscadoEm).getTime() > VALIDADE_DA_BUSCA_MS
+  );
+  const dormindo = pendentes.length - aBuscar.length;
+  if (aBuscar.length === 0) {
+    console.log(`
+Descoberta: ${dormindo} time(s) sem vinculo, todos buscados nos ultimos 3 dias. (--forcar-busca refaz)`);
+    return 0;
+  }
+  console.log(`
+Descobrindo ${aBuscar.length} time(s) sem vinculo…${dormindo ? ` (${dormindo} em descanso de busca)` : ""}`);
+  let achados = 0;
+  let mexeu = false;
+
+  for (const time of aBuscar) {
+    let melhor: { c: EA.ClubSearchResult; sinal: number; prox: number; contra: string[] } | null = null;
+    let candidatos = 0;
     try {
       const r = await EA.buscarClubes(time.nome);
+      candidatos = r.clubes.length;
       for (const c of r.clubes.slice(0, 6)) {
         if (c.gamesPlayed < 5) continue;
         const prox = proximidadeDeNome(c.name, time.nome);
         if (prox < 0.6) continue;
         const ps = await EA.clubMatchesTodas(c.clubId, c.platform).catch(() => []);
+
+        // Sinal forte: jogou contra alguem que ja sabemos ser da copa.
+        const contra = new Set<string>();
+        for (const p of ps)
+          for (const cl of p.clubs)
+            if (cl.clubId !== c.clubId && daCopa.has(cl.clubId)) contra.add(daCopa.get(cl.clubId)!);
+
+        // Sinal fraco: amistoso 11v11 no periodo da copa.
         const sinal = ps.filter(
           (p) => pareceJogoDeCopa(p as never) && p.timestamp * 1000 > Date.parse("2026-08-10")
         ).length;
-        if (sinal === 0) continue;
-        if (!melhor || sinal > melhor.sinal) melhor = { c, sinal, prox };
-      }
-    } catch { /* clube pode não existir; segue */ }
 
+        if (contra.size === 0 && sinal === 0) continue;
+        const peso = contra.size * 1000 + sinal;
+        const pesoAtual = melhor ? melhor.contra.length * 1000 + melhor.sinal : -1;
+        if (peso > pesoAtual) melhor = { c, sinal, prox, contra: [...contra] };
+      }
+    } catch { /* clube pode nao existir; segue */ }
+
+    time.buscadoEm = new Date();
+    mexeu = true;
     if (!melhor) {
-      console.log(`   — ${time.nome}: nenhum candidato com assinatura de copa`);
+      time.buscaNota =
+        candidatos === 0
+          ? "a EA nao devolveu nenhum clube com esse nome"
+          : `${candidatos} clube(s) com nome parecido; nenhum jogou contra time da copa nem tem amistoso 11v11 no periodo`;
+      console.log(`   — ${time.nome}: ${time.buscaNota}`);
       continue;
     }
+    time.buscaNota = undefined;
     time.eaClubId = melhor.c.clubId;
     time.eaClubName = melhor.c.name;
     time.eaPlatform = melhor.c.platform;
-    time.vinculo = "provavel";
+    // Adjacencia e prova de identidade; assinatura de amistoso e so indicio.
+    time.vinculo = melhor.contra.length > 0 ? "confirmado" : "provavel";
     time.evidencia = [
-      `${melhor.sinal} amistoso(s) 11v11 desde 10/08`,
+      ...(melhor.contra.length > 0
+        ? [`jogou contra ${melhor.contra.length} time(s) da copa: ${melhor.contra.slice(0, 4).join(", ")}`]
+        : []),
+      ...(melhor.sinal > 0 ? [`${melhor.sinal} amistoso(s) 11v11 desde 10/08`] : []),
       `nome ${(melhor.prox * 100).toFixed(0)}% parecido com "${time.nome}"`,
     ];
     time.vinculadoEm = new Date();
     achados++;
-    console.log(`   ✓ ${time.nome} → ${melhor.c.name} [${melhor.c.clubId}] (${melhor.sinal} sinais)`);
+    console.log(
+      `   ✓ ${time.nome} → ${melhor.c.name} [${melhor.c.clubId}] (${melhor.contra.length} adversario(s) da copa, ${melhor.sinal} amistoso(s))`
+    );
   }
-  if (achados > 0) await copa.save();
+  // Grava tambem quando so houve busca vazia: o negativo e o que evita repetir.
+  if (mexeu) await copa.save();
   return achados;
 }
 

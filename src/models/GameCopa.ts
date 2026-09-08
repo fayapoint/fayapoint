@@ -56,6 +56,22 @@ export interface TimeDaCopa {
   evidencia: string[];
   /** Quando o vínculo foi feito ou revisto. */
   vinculadoEm?: Date;
+
+  /**
+   * A BUSCA QUE NÃO ACHOU — o resultado negativo, guardado.
+   *
+   * Sem isto, o coletor refazia a mesma varredura de hora em hora: para os 7
+   * times sem vínculo da Super Copa são ~34 clubes candidatos, cada um com uma
+   * chamada de partidas — dezenas de chamadas por rodada para reencontrar o
+   * mesmo nada. E a tela só sabia dizer "sem vínculo", que não distingue "nunca
+   * procuramos" de "procuramos e não é nenhum destes".
+   *
+   * `buscaNota` é escrita para uma pessoa ler: quantos clubes têm o nome e por
+   * que nenhum serve. É a diferença entre um vazio que parece defeito e um
+   * vazio que se explica.
+   */
+  buscadoEm?: Date;
+  buscaNota?: string;
 }
 
 /** Uma linha da tabela que a organização publica. */
@@ -171,6 +187,8 @@ const GameCopaSchema = new Schema<IGameCopa>(
           default: 'nao-encontrado',
         },
         evidencia: { type: [String], default: [] },
+        buscadoEm: { type: Date },
+        buscaNota: { type: String },
         vinculadoEm: { type: Date },
       },
     ],

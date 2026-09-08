@@ -82,6 +82,10 @@ interface TimeCopa {
   eaClubId: string | null;
   vinculo: "confirmado" | "provavel" | "nao-encontrado";
   evidencia: string[];
+  /** Quando a busca automática rodou por este time. Null = nunca rodou. */
+  buscadoEm: string | null;
+  /** O que a busca achou de errado nos candidatos. Null quando achou. */
+  buscaNota: string | null;
 }
 
 interface LinhaEA {
@@ -189,7 +193,6 @@ export function PaginaDaCopa({ slug, locale }: { slug: string; locale: string })
     <div style={{ background: FUNDO }} className="min-h-screen text-white">
       {/* ---- Capa ---- */}
       <header className="relative overflow-hidden border-b border-white/10">
-        {/* eslint-disable-next-line @next/next/no-img-element -- arte local estática */}
         <img
           src={CENAS.estudio}
           alt=""
@@ -445,17 +448,67 @@ function Cobertura({ c, times }: { c: Dados["cobertura"]; times: TimeCopa[] }) {
                   assinatura batem, mas ainda não vimos jogar contra um time já confirmado.
                 </p>
               )}
-              {semVinculo.length > 0 && (
-                <p className="text-xs text-white/40">
-                  <strong style={{ color: RUBRO }}>Sem vínculo ({semVinculo.length})</strong>:{" "}
-                  {semVinculo.map((t) => t.nome).join(", ")} — nenhum clube com a assinatura da copa
-                  foi achado. Eles aparecem quando enfrentarem um time já mapeado.
-                </p>
-              )}
+              {semVinculo.length > 0 && <SemVinculo times={semVinculo} />}
             </div>
           )}
         </div>
       </div>
+    </div>
+  );
+}
+
+/**
+ * OS TIMES SEM CLUBE — um vazio que se explica, em vez de um vazio que acusa.
+ *
+ * "Sem vínculo (7)" sozinho lê como defeito nosso: parece que a página não
+ * carregou, ou que ninguém terminou o trabalho. E não é nem uma coisa nem
+ * outra — a busca rodou, olhou os candidatos e nenhum era o time.
+ *
+ * O que a busca faz: procura o nome na EA e, para cada clube parecido, olha se
+ * ele já jogou contra um time que a gente JÁ confirmou nesta copa. Homônimo não
+ * joga contra a copa; o time da copa joga. Medido em 08/09: "Aura FC" devolve
+ * 40 clubes com nome parecido, e nenhum dos 40 encostou em time da copa.
+ *
+ * Por isso a frase final não é promessa vaga: eles entram sozinhos no dia em
+ * que jogarem contra um time mapeado — é literalmente o teste que roda.
+ */
+function SemVinculo({ times }: { times: TimeCopa[] }) {
+  const buscados = times.filter((t) => t.buscadoEm);
+  const maisNova = buscados
+    .map((t) => t.buscadoEm!)
+    .sort()
+    .at(-1);
+
+  return (
+    <div className="text-xs leading-relaxed text-white/40">
+      <p>
+        <strong style={{ color: RUBRO }}>Sem clube na EA ({times.length})</strong>:{" "}
+        {times.map((t) => t.nome).join(", ")}.
+      </p>
+      <p className="mt-1">
+        {buscados.length === times.length ? (
+          <>
+            A busca automática já rodou por todos
+            {maisNova && <> (última em {new Date(maisNova).toLocaleDateString("pt-BR")})</>} e não
+            achou: existem clubes com nome parecido, mas nenhum deles jogou contra um time que já
+            confirmamos nesta copa — que é o teste que decide, porque homônimo não enfrenta a copa.
+          </>
+        ) : (
+          <>A busca automática ainda não rodou por todos eles.</>
+        )}{" "}
+        Eles entram sozinhos no dia em que aparecerem numa partida contra um time já mapeado.
+      </p>
+      {buscados.some((t) => t.buscaNota) && (
+        <ul className="mt-2 space-y-0.5 text-white/30">
+          {buscados
+            .filter((t) => t.buscaNota)
+            .map((t) => (
+              <li key={t.nome}>
+                <span className="text-white/50">{t.nome}</span> — {t.buscaNota}
+              </li>
+            ))}
+        </ul>
+      )}
     </div>
   );
 }
