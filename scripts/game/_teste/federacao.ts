@@ -1,0 +1,17 @@
+import assert from "node:assert/strict";
+import { decidirApuracao, registrarDefesa, type ApuracaoClube } from "../../../src/lib/game/federacao";
+const agora = new Date();
+const caso: ApuracaoClube = { id: "teste", estado: "aguardando-defesa", motivo: "Sinal precisa de análise", evidencia: "Partida fictícia para teste", cautelar: true, abertaEm: agora, abertaPor: "admin" };
+assert.throws(() => decidirApuracao(caso, "suspender", "Justificativa suficiente", "admin", agora));
+assert.throws(() => decidirApuracao(caso, "advertir", "Justificativa suficiente", "admin", agora));
+assert.equal(decidirApuracao(caso, "arquivar", "Não há evidência suficiente", "admin", agora).estado, "decidida");
+const comDefesa = registrarDefesa(caso, "Houve queda de conexão, segue contexto.", "dono", agora);
+assert.equal(caso.estado, "aguardando-defesa", "função não modifica o caso original");
+assert.equal(comDefesa.estado, "em-revisao");
+assert.throws(() => registrarDefesa(comDefesa, "Outra explicação do dono", "dono", agora));
+assert.throws(() => decidirApuracao(comDefesa, "suspender", "Justificativa suficiente", "dono", agora));
+const decidido = decidirApuracao(comDefesa, "advertir", "Defesa analisada; advertência fundamentada.", "admin", agora);
+assert.equal(decidido.decisao?.resultado, "advertir");
+assert.throws(() => decidirApuracao(decidido, "suspender", "Outra decisão qualquer", "admin", agora));
+assert.throws(() => registrarDefesa(caso, "curto", "dono", agora));
+console.log("Apuração: defesa obrigatória, impedimento de julgamento próprio, imutabilidade e decisão única aprovados.");

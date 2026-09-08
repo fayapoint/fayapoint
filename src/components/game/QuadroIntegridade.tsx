@@ -1,0 +1,21 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import type { quadroIntegridade } from "@/lib/game/integridade-servidor";
+
+type Dados = Awaited<ReturnType<typeof quadroIntegridade>>;
+export function QuadroIntegridade() {
+  const [dados, setDados] = useState<Dados | null>(null); const [erro, setErro] = useState("");
+  const [plataforma, setPlataforma] = useState("common-gen5"); const [pagina, setPagina] = useState(0); const [tentativa, setTentativa] = useState(0);
+  useEffect(() => {
+    const controller = new AbortController(); setDados(null); setErro("");
+    void fetch(`/api/game/federacao/integridade?plataforma=${plataforma}&pagina=${pagina}`, { cache: "no-store", signal: controller.signal })
+      .then(async r => { const d = await r.json(); if (!r.ok) throw new Error(d.error || "Não foi possível carregar a integridade."); return d; })
+      .then(setDados).catch(e => { if (!controller.signal.aborted) setErro(e.message || "Falha de conexão."); });
+    return () => controller.abort();
+  }, [plataforma, pagina, tentativa]);
+  return <section className="space-y-5 rounded-2xl border border-white/10 bg-white/[0.035] p-6"><header><p className="mb-2 text-xs uppercase tracking-widest text-lime-300">Evidências para revisão</p><h2 className="text-2xl font-semibold">Integridade das partidas</h2><p className="mt-3 text-sm text-white/60">A fonte é o espelho da API pública da EA. Sinais não decidem sanções. A marca DNF aparece no clube que venceu por abandono do adversário.</p></header><div className="flex flex-wrap items-end gap-4"><label className="space-y-2"><span className="block text-sm text-white/60">Plataforma</span><select className="rounded-xl border border-white/20 bg-black/30 px-4 py-3" value={plataforma} onChange={e => { setPlataforma(e.target.value); setPagina(0); }}><option value="common-gen5">Geração 5</option><option value="common-gen4">Geração 4</option></select></label><button type="button" className="px-3 py-3 text-sm text-lime-300 underline" onClick={() => setTentativa(tentativa + 1)}>Atualizar</button></div>
+    {erro ? <p role="alert" className="text-rose-200">{erro}</p> : !dados ? <p role="status" className="text-white/60">Consultando partidas…</p> : dados.partidas.length === 0 ? <p className="text-white/60">Nenhuma partida capturada para esta página e plataforma.</p> : <div className="space-y-3">{dados.partidas.map(p => <details key={p.matchId} className="rounded-xl border border-white/10 p-4"><summary className="cursor-pointer"><span className="font-medium">{p.clubes.map(c => `${c.nome ?? c.clubId ?? "Clube"} (${c.gols ?? "?"})`).join(" × ") || "Clubes não informados"}</span><span className={`ml-3 inline-block rounded-full px-2 py-1 text-xs ${p.situacao === "revisar" ? "bg-amber-300/10 text-amber-200" : "bg-white/5 text-white/60"}`}>{p.situacao === "revisar" ? "Revisar sinais" : p.situacao === "sem-duracao" ? "Duração desconhecida" : "Sem sinal de W.O. pelo filtro"}</span></summary><div className="mt-4 space-y-3 text-sm text-white/70"><p>Partida EA {p.matchId} · {p.capturadoEm ? `capturada em ${new Date(p.capturadoEm).toLocaleString("pt-BR")}` : "captura sem data"}</p><p>Maior tempo em campo informado pela EA: {p.duracao === null ? "não medido" : `${p.duracao} segundos de jogo`}.</p>{p.vencedoresPorDnf.length > 0 && <p className="text-amber-200">Venceu por DNF do adversário: {p.vencedoresPorDnf.join(", ")}.</p>}{p.jogadoresParados.length > 0 ? <ul className="space-y-1">{p.jogadoresParados.map((j, i) => <li key={i}>{j.jogador ?? "Jogador sem nome"} · {j.clube ?? "Clube sem nome"}: {j.segundosParado} s parado{j.segundosEmCampo === null ? "; tempo em campo não medido" : ` em ${j.segundosEmCampo} s de jogo`}.</li>)}</ul> : <p>Nenhum tempo parado positivo informado nesta captura.</p>}<p className="text-xs text-white/40">Ausência de sinal não certifica a legitimidade da partida.</p></div></details>)}</div>}
+    {!erro && <nav aria-label="Páginas de integridade" className="flex justify-between text-sm"><button disabled={!dados || pagina === 0} className="disabled:opacity-30" onClick={() => setPagina(pagina - 1)}>← Anteriores</button><span className="text-white/40">Página {pagina + 1}</span><button disabled={!dados?.mais} className="disabled:opacity-30" onClick={() => setPagina(pagina + 1)}>Próximas →</button></nav>}
+  </section>;
+}
