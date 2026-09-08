@@ -23,8 +23,10 @@
 import mongoose from "mongoose";
 import dbConnect from "../../src/lib/mongodb";
 import GameEvento from "../../src/models/GameEvento";
+import GameCompeticao from "../../src/models/GameCompeticao";
 import { rodarEventosVencidos } from "../../src/lib/game/apostas-servidor";
 import { montarRodada } from "../../src/lib/game/rodada";
+import { fotografarCompeticao } from "../../src/lib/game/acervo";
 
 /** Abaixo disto, repõe. Oito partidas por rodada, espaçadas de 30 em 30 min. */
 const MINIMO_NO_SAGUAO = 6;
@@ -52,6 +54,33 @@ async function main() {
   if (abertos < MINIMO_NO_SAGUAO) {
     novos = await montarRodada({ quantidade: ALVO_NO_SAGUAO - abertos });
     for (const n of novos) console.log(`   + ${n.confronto}`);
+  }
+
+  /* ---- a fotografia das competições dos usuários --------------------
+     O acervo já fotografa a copa de terceiro no coletor da copa. Aqui
+     entram as competições que os PRÓPRIOS usuários criaram, no mesmo
+     formato — é o que dá a elas a série histórica que só a copa tinha.
+
+     Só as em andamento: campeonato encerrado não muda mais, e refotografar
+     todo dia só encheria a coleção com a mesma linha. */
+  const emAndamento = await GameCompeticao.find({ status: "em-andamento" })
+    .select("_id nome")
+    .limit(50)
+    .lean();
+
+  let comAcervo = 0;
+  for (const c of emAndamento) {
+    try {
+      const f = await fotografarCompeticao(String(c._id));
+      if (f.times > 0) comAcervo++;
+    } catch (e) {
+      console.log(`   ⚠️ acervo de "${c.nome}": ${(e as Error).message.slice(0, 60)}`);
+    }
+  }
+  if (emAndamento.length > 0) {
+    console.log(
+      `Acervo — ${comAcervo}/${emAndamento.length} competição(ões) de usuário fotografada(s)`
+    );
   }
 
   console.log(

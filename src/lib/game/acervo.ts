@@ -310,25 +310,45 @@ export async function movimento(
   refId: string,
   campo = "pontos",
   dias = 7
-): Promise<Array<{ chave: string; de: number; para: number; delta: number }>> {
+): Promise<{
+  linhas: Array<{ chave: string; de: number; para: number; delta: number }>;
+  /**
+   * Quantos dias DISTINTOS de fotografia existem no período.
+   *
+   * ⚠️ Devolvido porque sem ele a resposta mente por omissão. Com um único
+   * dia de acervo, `primeiro` e `ultimo` são a MESMA fotografia, todo delta
+   * dá zero, e a tela conclui "onze times parados" — que soa como observação
+   * ("ninguém pontuou esta semana") quando na verdade é ausência de medida
+   * ("ainda não temos com o que comparar").
+   *
+   * É o mesmo defeito do painel que declarava faturamento inexistente: um
+   * zero calculado apresentado como fato medido. Quem consome esta função tem
+   * de poder distinguir os dois, e agora consegue.
+   */
+  diasComFotografia: number;
+}> {
   await dbConnect();
   const limite = diaDe(new Date(Date.now() - dias * 86_400_000));
-  const docs = await GameAcervo.find({ escopo, refId, tipo: "time" })
+  const docs = await GameAcervo.find({ escopo, refId, tipo: "time", dia: { $gte: limite } })
     .sort({ dia: 1 })
     .select("chave dia dados")
     .lean();
+
+  const diasDistintos = new Set(docs.map((d) => d.dia));
 
   const porChave = new Map<string, { primeiro?: number; ultimo?: number }>();
   for (const d of docs) {
     const v = Number((d.dados as Record<string, number>)[campo] ?? 0);
     if (!porChave.has(d.chave)) porChave.set(d.chave, {});
     const r = porChave.get(d.chave)!;
-    if (d.dia >= limite && r.primeiro === undefined) r.primeiro = v;
+    if (r.primeiro === undefined) r.primeiro = v;
     r.ultimo = v;
   }
 
-  return [...porChave.entries()]
+  const linhas = [...porChave.entries()]
     .filter(([, r]) => r.primeiro !== undefined && r.ultimo !== undefined)
     .map(([chave, r]) => ({ chave, de: r.primeiro!, para: r.ultimo!, delta: r.ultimo! - r.primeiro! }))
     .sort((a, b) => b.delta - a.delta);
+
+  return { linhas, diasComFotografia: diasDistintos.size };
 }
