@@ -8,10 +8,22 @@ type Estado = keyof typeof estados;
 interface Candidato {
   chave: string; plataforma: string; apelido: string; estado: Estado;
   confrontos: number; series: number; partidas: number; vezesVisto: number;
+  forca: number; densidade: number;
   primeiraEm: string | null; ultimaEm: string | null; motivo: string | null; copaSlug: string | null;
   clubes: Array<{ clubId: string; nome: string; jogos: number }>;
 }
 const data = (valor: string | null) => valor ? new Date(valor).toLocaleString("pt-BR") : "Não informada";
+
+/**
+ * FORÇA e DENSIDADE são o que separa torneio de clube-polo — e por isso estão
+ * na tela, não só no banco.
+ *
+ * O descobridor achou uma vez 56 clubes ligados por 8 séries, força 79: parecia
+ * o achado do mês. Era um clube só jogando amistoso com muita gente diferente.
+ * A densidade (séries por clube) denunciou: 0,14 ali, contra 0,63 na Super Copa.
+ * Quem revisa precisa ver esse número, senão promove o clube-polo achando que
+ * está promovendo um campeonato.
+ */
 
 export function FilaDescobertas() {
   const [estado, setEstado] = useState<Estado>("novo");
@@ -52,6 +64,7 @@ function RevisaoDescoberta({ candidato: c, onSalvo }: { candidato: Candidato; on
     <summary className="cursor-pointer break-words"><span className="font-semibold">{c.apelido}</span><span className="mt-1 block text-xs text-white/50">Apelido automático · {c.plataforma} · {c.partidas} partidas observadas</span></summary>
     <div className="mt-4 space-y-4">
       <p className="text-sm text-white/70">{c.series} séries agrupadas · {c.confrontos} confrontos · reencontrado em {c.vezesVisto} rodadas da busca.</p>
+      <p className="text-sm"><span className="text-white/50">Força </span><strong className="text-lime-300">{c.forca}</strong><span className="text-white/50"> · densidade </span><strong className={c.densidade < 0.3 ? "text-amber-300" : "text-white/85"}>{c.densidade}</strong>{c.densidade < 0.3 && <span className="text-amber-200/80"> — abaixo de 0,3 quase nunca é torneio: costuma ser um clube-polo jogando muito amistoso com gente diferente.</span>}</p>
       <p className="text-xs text-white/50">Primeira observação: {data(c.primeiraEm)}. Última observação: {data(c.ultimaEm)}.</p>
       <ul className="space-y-1 text-sm">{c.clubes.map(clube => <li key={clube.clubId} className="break-words">{clube.nome} · clube {clube.clubId} · {clube.jogos} jogos observados</li>)}</ul>
       {c.motivo && <p className="whitespace-pre-wrap text-sm text-white/70">Último motivo registrado: {c.motivo}</p>}
