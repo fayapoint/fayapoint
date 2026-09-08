@@ -767,7 +767,15 @@ function elencoDeEmergencia(timeId: string): JogadorSimulado[] {
  * como futebol na calibração, na força dos times e na ficha do jogador.
  */
 export function ehWalkover(partida: {
-  clubs?: Array<{ goals?: number; winnerByDnf?: boolean; players?: Array<{ secondsPlayed?: number }> }>;
+  // `null` está aqui de propósito, e não é frouxidão: o `MatchPlayer` do
+  // `ea-api.ts` tipa `secondsPlayed` como `number | null`, porque a EA às
+  // vezes omite o campo. Aceitar só `undefined` fazia esta função recusar o
+  // tipo real da fonte — foi o que quebrou a integração da ficha do jogador.
+  clubs?: Array<{
+    goals?: number | null;
+    winnerByDnf?: boolean | null;
+    players?: Array<{ secondsPlayed?: number | null }>;
+  }>;
 }): boolean {
   const clubes = partida.clubs ?? [];
   const segundos = clubes.flatMap((c) => (c.players ?? []).map((p) => p.secondsPlayed ?? 0));

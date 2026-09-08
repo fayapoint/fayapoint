@@ -31,6 +31,8 @@ import GameCopa from "../../src/models/GameCopa";
 import * as EA from "../../src/lib/game/ea-api";
 import { gravarPartidas, gravarClubeCompleto } from "../../src/lib/game/espelho";
 import { proximidadeDeNome, pareceJogoDeCopa } from "../../src/lib/game/copa";
+import { fotografarCopa } from "../../src/lib/game/acervo";
+import { descobrirAglomerados, apelidoDoAglomerado } from "../../src/lib/game/descoberta";
 
 const SLUG = "super-copa-dos-streamers";
 const descobrir = process.argv.includes("--descobrir");
@@ -232,6 +234,32 @@ async function main() {
   if (semVinculo.length > 0) {
     console.log(`Sem vínculo ainda (${semVinculo.length}): ${semVinculo.join(", ")}`);
     console.log("   → rode com --descobrir para tentar achá-los pela busca");
+  }
+
+  /* ---- a fotografia do dia ----------------------------------------
+     Sem ela, o acumulado ENCOLHE: a EA guarda 10 amistosos por clube e
+     uma serie MD5 queima cinco numa noite. O que nao for fotografado
+     hoje some da fonte e nao volta. */
+  const foto = await fotografarCopa(SLUG);
+  console.log(
+    `\nAcervo — fotografia de ${foto.dia}: ${foto.times} time(s), ${foto.jogadores} jogador(es)`
+  );
+
+  /* ---- a ronda por campeonatos novos -------------------------------
+     Nao depende de site nenhum: procura aglomerado de clubes jogando
+     amistoso 11v11 em SERIE entre si. Ver src/lib/game/descoberta.ts. */
+  const aglomerados = await descobrirAglomerados();
+  const novos = aglomerados.filter((a) => !a.jaConhecido);
+  if (novos.length === 0) {
+    console.log(`Descoberta — ${aglomerados.length} aglomerado(s) conhecido(s), nenhum novo`);
+  } else {
+    console.log(`Descoberta — ${novos.length} CANDIDATO(S) NOVO(S) a campeonato:`);
+    for (const a of novos.slice(0, 5)) {
+      console.log(
+        `   força ${a.forca} · densidade ${a.densidade} · ${a.clubes.length} clubes · ${a.series} séries — ${apelidoDoAglomerado(a)}`
+      );
+      console.log(`      ${a.clubes.slice(0, 8).map((c) => c.nome).join(", ")}`);
+    }
   }
 
   await mongoose.disconnect();
