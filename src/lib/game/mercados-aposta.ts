@@ -61,7 +61,8 @@ export type TipoMercado =
   | "margem-vitoria"
   | "jogador-marca"
   | "jogador-marca-2"
-  | "jogador-craque";
+  | "jogador-craque"
+  | "goleiro-defesas";
 
 export interface MercadoMontado {
   /** Chave estável do mercado: `tipo` + parâmetro. É o que o cupom guarda. */
@@ -97,6 +98,8 @@ export interface ResultadoConfronto {
     timeId: string;
     gols: number;
     craque: boolean;
+    /** Defesas do goleiro. Só o mercado de goleiro usa. */
+    defesas?: number;
   }>;
 }
 
@@ -513,6 +516,86 @@ function mercadosDeJogador(
     }
   }
 
+  /* ---- Goleiro: defesas na partida --------------------------------- */
+  /**
+   * O mercado que nenhum tracker de Pro Clubs tem.
+   *
+   * A EA publica `saves` por jogador em cada partida — e ainda separa por TIPO
+   * de defesa (mergulho, cruzamento, rebote, reflexo, soco). Ninguém mostra.
+   * É o item nº 1 da lista de oportunidades do inventário da API, e o primeiro
+   * a virar mercado.
+   *
+   * ## Por que Monte Carlo e não forma fechada
+   *
+   * As defesas do goleiro no simulador são
+   * `max(0, round(golsSofridos · 1,4 + U(0,4)))` — dependem do que o time
+   * SOFRE, que vem da matriz, somado a um ruído uniforme e depois arredondado.
+   * O arredondamento sobre a soma de uma discreta com uma contínua não tem
+   * fechada bonita, e forçar uma daria uma aproximação que discordaria do
+   * simulador exatamente onde a linha corta.
+   *
+   * Rodar o próprio simulador resolve isso pela raiz: o preço é medido no
+   * mesmo mundo em que o resultado vai acontecer. É a mesma escolha do craque.
+   *
+   * ## A linha sai da mediana, não de um número redondo
+   *
+   * Uma linha fixa em 4,5 seria imposto num confronto de ataques fracos e
+   * presente num de goleada. A mediana da amostra deixa o mercado perto de
+   * 50/50, que é onde uma aposta é aposta.
+   */
+  {
+    const amostrasGk = Math.min(ctx.amostrasMonteCarlo ?? 3000, 3000);
+    for (const [elenco, time] of [
+      [ctx.elencoMandante, ctx.mandante],
+      [ctx.elencoVisitante, ctx.visitante],
+    ] as const) {
+      const gk = elenco.find((j) => j.posicao === "goalkeeper");
+      if (!gk) continue;
+
+      const defesas: number[] = [];
+      for (let s = 0; s < amostrasGk; s++) {
+        const p = simularPartida({
+          semente: (ctx.semente + 7919 + s * 40503) >>> 0,
+          mandante: ctx.mandante,
+          visitante: ctx.visitante,
+          elencoMandante: ctx.elencoMandante,
+          elencoVisitante: ctx.elencoVisitante,
+          matriz,
+        });
+        const linha = p.jogadores.find(
+          (x) => x.gamertag === gk.gamertag && x.timeId === time.id
+        );
+        if (linha) defesas.push(linha.defesas);
+      }
+      if (defesas.length < 100) continue;
+
+      defesas.sort((a, b) => a - b);
+      const mediana = defesas[Math.floor(defesas.length / 2)];
+      const linhaGk = mediana + 0.5;
+      const acima = defesas.filter((d) => d > linhaGk).length / defesas.length;
+
+      // Mercado sem risco não vai a cartaz: se a mediana empurrou a linha para
+      // uma ponta, o "menos" viraria 1,01 e o "mais" seria loteria.
+      if (acima < 0.2 || acima > 0.8) continue;
+
+      const rotuloLinha = linhaGk.toFixed(1).replace(".", ",");
+      out.push({
+        chave: `goleiro-defesas:${time.id}:${gk.gamertag}:${linhaGk}`,
+        tipo: "goleiro-defesas",
+        familia: "jogador",
+        titulo: `${gk.gamertag} — defesas`,
+        parametro: `${time.id}:${gk.gamertag}:${linhaGk}`,
+        selecoes: cotarMercado(
+          [
+            { chave: "mais", rotulo: `Mais de ${rotuloLinha}`, probabilidade: acima },
+            { chave: "menos", rotulo: `Menos de ${rotuloLinha}`, probabilidade: 1 - acima },
+          ],
+          "jogador"
+        ),
+      });
+    }
+  }
+
   /* ---- Craque da partida: Monte Carlo ------------------------------ */
   const amostras = ctx.amostrasMonteCarlo ?? 3000;
   const contagem = new Map<string, { n: number; timeId: string; gamertag: string }>();
@@ -666,6 +749,22 @@ export function liquidarMercado(
       break;
     }
 
+    case "goleiro-defesas": {
+      const [timeId, gamertag, linhaTexto] = String(mercado.parametro).split(":");
+      const linha = Number(linhaTexto);
+      const j = r.jogadores.find((x) => x.gamertag === gamertag && x.timeId === timeId);
+      // Goleiro que não entrou ANULA, pela mesma razão do artilheiro: quem
+      // apostou nas defesas dele não apostou em ele ser escalado.
+      if (!j || typeof j.defesas !== "number") {
+        out.set("mais", "anulada");
+        out.set("menos", "anulada");
+        break;
+      }
+      marcar("mais", j.defesas > linha);
+      marcar("menos", j.defesas < linha);
+      break;
+    }
+
     case "jogador-craque": {
       const craque = r.jogadores.find((x) => x.craque);
       const chaveCraque = craque ? `${craque.timeId}:${craque.gamertag}` : null;
@@ -737,6 +836,7 @@ export function resultadoDaSimulacao(p: PartidaSimulada): ResultadoConfronto {
       timeId: j.timeId,
       gols: j.gols,
       craque: j.craque,
+      defesas: j.defesas,
     })),
   };
 }

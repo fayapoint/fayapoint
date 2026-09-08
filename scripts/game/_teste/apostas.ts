@@ -343,6 +343,69 @@ console.log("\n§6 — Cardápio montado e liquidado de ponta a ponta");
   ok("toda seleção recebeu veredito", semVeredito === 0, `${semVeredito} sem`);
   ok("mercado excludente tem exatamente 1 vencedor", mercadosSemVencedor === 0, `${mercadosSemVencedor} errados`);
 
+  /* ---- O mercado de goleiro ---------------------------------------
+     O diferencial da casa: a EA publica `saves` por partida e nenhum
+     tracker mostra. Como o preco sai de Monte Carlo e o resultado do
+     mesmo simulador, os dois TEM de bater — e e isso que se prova aqui. */
+  {
+    const gk = mercados.find((m) => m.tipo === "goleiro-defesas");
+    ok("montou mercado de goleiro", Boolean(gk), gk?.titulo ?? "nenhum");
+    if (gk) {
+      const linha = Number(String(gk.parametro).split(":")[2]);
+      const gamertag = String(gk.parametro).split(":")[1];
+      const timeId = String(gk.parametro).split(":")[0];
+      const pMais = gk.selecoes.find((s) => s.chave === "mais")!.probabilidade;
+      ok(
+        "a linha do goleiro fica em faixa apostavel (20% a 80%)",
+        pMais >= 0.19 && pMais <= 0.81,
+        
+      );
+
+      // A prova de coerencia: o preco medido bate com o simulador?
+      const N = 8000;
+      let acima = 0;
+      let com = 0;
+      for (let s = 0; s < N; s++) {
+        const p = simularPartida({
+          semente: 500000 + s,
+          mandante: forte,
+          visitante: fraco,
+          elencoMandante: elencoA,
+          elencoVisitante: elencoB,
+        });
+        const l = p.jogadores.find((x) => x.gamertag === gamertag && x.timeId === timeId);
+        if (!l) continue;
+        com++;
+        if (l.defesas > linha) acima++;
+      }
+      ok(
+        "defesas do goleiro: simulado = cotado",
+        com > 0 && Math.abs(acima / com - pMais) <= 0.03,
+        
+      );
+
+      // E a liquidacao tem de seguir o mesmo numero.
+      const partidaGk = simularPartida({
+        semente: 4242,
+        mandante: forte,
+        visitante: fraco,
+        elencoMandante: elencoA,
+        elencoVisitante: elencoB,
+      });
+      const rGk = resultadoDaSimulacao(partidaGk);
+      const defesasReais = rGk.jogadores.find(
+        (x) => x.gamertag === gamertag && x.timeId === timeId
+      )?.defesas;
+      const veredito = liquidarMercado(gk, rGk);
+      ok(
+        "a liquidacao do goleiro segue as defesas da sumula",
+        typeof defesasReais === "number" &&
+          veredito.get("mais") === (defesasReais > linha ? "ganha" : "perdida"),
+        
+      );
+    }
+  }
+
   // A guarda que faltava na primeira rodada de verdade: sem elenco conhecido,
   // o cardápio publicou "Craque da partida" cotando os nomes do elenco de
   // emergência — jogadores que não existem, com id interno no rótulo.
