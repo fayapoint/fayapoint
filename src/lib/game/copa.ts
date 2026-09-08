@@ -455,9 +455,29 @@ export async function partidasDaCopa(slug: string): Promise<{
   const ids = copa.times.map((t) => t.eaClubId).filter((x): x is string => Boolean(x));
   if (ids.length === 0) return { copa, partidas: [] };
 
+  /**
+   * ⚠️ A PLATAFORMA ENTRA NA CONSULTA — apontado pelo codex-bets em 08/09.
+   *
+   * `clubId` é único DENTRO de uma piscina, não entre elas: `common-gen5`
+   * (PS5/Series/PC) e `common-gen4` (PS4/Xbox One) são mundos separados da EA,
+   * com numeração própria. Sem este filtro, o clube 78083 da gen4 entraria
+   * como se fosse o `FC APELUDOS` da gen5, e uma partida de gente que nunca
+   * ouviu falar da copa apareceria na tabela dela.
+   *
+   * Não deu erro em nenhum teste porque a copa inteira é gen5 e o espelho
+   * ainda tem pouca gen4 — o defeito estava esperando o dia em que as duas
+   * bases crescessem. É o tipo de coisa que só aparece em produção, e tarde.
+   */
+  const plataformas = [
+    ...new Set(copa.times.map((t) => t.eaPlatform ?? "common-gen5")),
+  ];
+
   // Traz tudo que tem UM lado da copa; o filtro dos DOIS lados é feito abaixo,
   // em memória. Um `$all` com os dois ids exigiria saber o par de antemão.
-  const docs = await GameEaPartida.find({ clubIds: { $in: ids } })
+  const docs = await GameEaPartida.find({
+    clubIds: { $in: ids },
+    platform: { $in: plataformas },
+  })
     .sort({ timestamp: -1 })
     .limit(1000)
     .lean();
