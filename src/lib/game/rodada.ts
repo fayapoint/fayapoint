@@ -106,16 +106,85 @@ export function clubeParaLado(
       };
     })
     // Gamertag vazia quebraria a chave do mercado de jogador em silêncio.
-    .filter((j) => j.gamertag.length > 0)
-    // Elenco de Clubs chega a 40 nomes; a partida tem 11. Os mais rodados.
-    .slice(0, 14);
+    .filter((j) => j.gamertag.length > 0);
 
-  return { forca, elenco, cor: corDoUniforme(clube.kitColors) };
+  return { forca, elenco: recortarElenco(elenco), cor: corDoUniforme(clube.kitColors) };
 }
 
+/** Quantos nomes do elenco entram na partida. O Clubs chega a 40. */
+const TAMANHO_DO_ELENCO = 14;
+
+/**
+ * Recorta o elenco para o tamanho da partida **garantindo um goleiro**.
+ *
+ * ## O defeito que obrigou isto a existir
+ *
+ * A versão anterior era um `.slice(0, 14)` seco, na ordem em que a EA devolve.
+ * Quando o goleiro do clube estava na posição 15 ou além, ele simplesmente não
+ * entrava — e a partida era simulada com onze jogadores de linha.
+ *
+ * Medido na primeira rodada com mercado de goleiro: **só 2 das 8 partidas**
+ * tinham goleiro no elenco recortado.
+ *
+ * As consequências passavam despercebidas porque nenhuma dá erro:
+ *
+ *  - **sem mercado de goleiro**, que é justamente o diferencial da casa;
+ *  - **defesas de ninguém**, porque o simulador só as atribui a quem é
+ *    `goalkeeper` — a partida saía sem uma linha de súmula inteira;
+ *  - **gols mal repartidos**: o peso 0,02 do goleiro some da soma, e todo o
+ *    resto do elenco fica marginalmente mais artilheiro do que deveria.
+ *
+ * Recortar por ordem de chegada é o tipo de simplificação que parece inofensiva
+ * porque a lista "geralmente" vem completa. Aqui ela não vinha.
+ */
+function recortarElenco(elenco: JogadorSimulado[]): JogadorSimulado[] {
+  if (elenco.length <= TAMANHO_DO_ELENCO) return elenco;
+
+  const recorte = elenco.slice(0, TAMANHO_DO_ELENCO);
+  if (recorte.some((j) => j.posicao === "goalkeeper")) return recorte;
+
+  const goleiro = elenco.find((j) => j.posicao === "goalkeeper");
+  if (!goleiro) return recorte; // o clube não tem goleiro cadastrado; nada a fazer
+
+  // Entra no lugar do último — e o último é o menos rodado, porque a lista
+  // chega ordenada por participação.
+  return [...recorte.slice(0, TAMANHO_DO_ELENCO - 1), goleiro];
+}
+
+/**
+ * Traduz a posição que a EA publica para a que o simulador entende.
+ *
+ * ## O que foi medido, e o que ele NÃO conserta
+ *
+ * Levantamento de 08/09 sobre 176 membros de 12 clubes do espelho:
+ *
+ *     proPosition   0 → goalkeeper  (14 de 14, sem exceção)
+ *     proPosition   5 → defender
+ *     proPosition  14 → midfielder
+ *     proPosition  25 → forward
+ *     sem proPosition → sem favoritePosition também
+ *
+ * Duas conclusões que mudam expectativa:
+ *
+ * 1. **`proPosition` não recupera goleiro nenhum.** Ele concorda 100% com
+ *    `favoritePosition`, e quando um falta o outro falta junto. Não há goleiro
+ *    escondido num campo numérico à espera de um de-para.
+ *
+ * 2. **Goleiro é raro de verdade no Clubs: ~4% dos membros.** Por isso a
+ *    maioria dos confrontos não tem mercado de goleiro — e isso é o dado, não
+ *    um defeito nosso. Inventar um goleiro para preencher seria criar um
+ *    jogador que não existe dentro de um mercado onde se aposta ficha, que é
+ *    exatamente o que a guarda de `mercados-aposta.ts` proíbe.
+ *
+ * ⚠️ **36% dos membros não têm posição nenhuma declarada**, e eles caem em
+ * `midfielder`. É uma SUPOSIÇÃO, não uma leitura — o simulador precisa de uma
+ * posição para repartir gol, e meio-campo é o palpite menos distorcivo (peso
+ * 0,45, entre o 1,0 do atacante e o 0,12 do zagueiro). Fica dito aqui porque
+ * um palpite silencioso vira fato na cabeça de quem ler o código depois.
+ */
 function normalizarPosicao(bruta: string): JogadorSimulado["posicao"] {
   const p = bruta.toLowerCase();
-  if (p.includes("goal") || p === "gk") return "goalkeeper";
+  if (p.includes("goal") || p === "gk" || p === "0") return "goalkeeper";
   if (p.includes("def") || p === "cb" || p === "lb" || p === "rb") return "defender";
   if (p.includes("forward") || p.includes("att") || p === "st" || p === "cf") return "forward";
   return "midfielder";
