@@ -126,6 +126,8 @@ interface Noticia {
   url: string;
   em: string | null;
   resumo: string | null;
+  /** Capa. Derivada do endereço quando é vídeo; null quando não há. */
+  imagem: string | null;
 }
 
 interface Dados {
@@ -825,7 +827,16 @@ function FontesENoticias({ noticias }: { noticias: Noticia[] }) {
         </p>
       </div>
 
-      {/* ---- Notícias ---- */}
+      {/* ---- Notícias ----
+           COM CAPA, e a capa não é enfeite: uma lista de links azuis não diz
+           nada a quem chegou querendo saber da copa, e era exatamente isso que
+           esta seção era. A capa de vídeo vem derivada do endereço na rota —
+           é a mesma que aparece quando qualquer pessoa compartilha o link.
+
+           Notícia SEM capa continua entrando, com a área da imagem ocupada por
+           uma faixa da própria seção. Cartão que encolhe quando falta imagem
+           faz a grade parecer quebrada, e sumir com a notícia por falta de foto
+           seria deixar de publicar o que interessa por causa do enfeite. */}
       {noticias.length > 0 && (
         <>
           <h3
@@ -835,7 +846,7 @@ function FontesENoticias({ noticias }: { noticias: Noticia[] }) {
             <Newspaper className="h-5 w-5" />
             O que saiu por aí
           </h3>
-          <div className="mt-3 space-y-2">
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {noticias.map((n) => (
               <a
                 key={n.url}
@@ -843,27 +854,55 @@ function FontesENoticias({ noticias }: { noticias: Noticia[] }) {
                 target="_blank"
                 rel="noopener noreferrer nofollow"
                 style={superficie(CINZA)}
-                className="group flex flex-wrap items-baseline gap-x-3 gap-y-1 rounded-xl border p-3.5 transition hover:-translate-y-0.5"
+                className="group flex flex-col overflow-hidden rounded-2xl border transition hover:-translate-y-1"
               >
-                {n.em && (
-                  <span className="shrink-0 font-mono text-[11px] text-white/30">
-                    {new Date(n.em).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit" })}
-                  </span>
-                )}
-                <span className="min-w-0 flex-1">
-                  <span className="text-sm text-white/85 transition group-hover:text-white">
-                    {n.titulo}
-                  </span>
-                  {n.resumo && (
-                    <span className="mt-0.5 block text-xs leading-relaxed text-white/45">
-                      {n.resumo}
+                <span className="relative block aspect-video overflow-hidden bg-black/40">
+                  {n.imagem ? (
+                    <img
+                      src={n.imagem}
+                      alt=""
+                      aria-hidden
+                      loading="lazy"
+                      className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                    />
+                  ) : (
+                    <span
+                      aria-hidden
+                      className="flex h-full w-full items-center justify-center"
+                      style={{ background: `linear-gradient(135deg, ${ROSA}22, transparent 70%)` }}
+                    >
+                      <Newspaper className="h-8 w-8" style={{ color: `${ROSA}66` }} />
                     </span>
                   )}
+                  <span
+                    aria-hidden
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-16"
+                    style={{ background: "linear-gradient(to top, rgba(9,14,17,.9), transparent)" }}
+                  />
                 </span>
-                <span className="shrink-0 text-[10px] uppercase tracking-wider text-white/30">
-                  {n.fonte}
+
+                <span className="flex flex-1 flex-col p-4">
+                  <span className="flex flex-wrap items-center gap-x-2 text-[10px] uppercase tracking-wider text-white/35">
+                    <span>{n.fonte}</span>
+                    {n.em && (
+                      <>
+                        <span className="text-white/15">·</span>
+                        <span className="font-mono normal-case tracking-normal">
+                          {new Date(n.em).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "2-digit" })}
+                        </span>
+                      </>
+                    )}
+                    <ExternalLink className="ml-auto h-3 w-3 text-white/20" />
+                  </span>
+
+                  <span className="mt-2 text-sm font-medium leading-snug text-white/85 transition group-hover:text-white">
+                    {n.titulo}
+                  </span>
+
+                  {n.resumo && (
+                    <span className="mt-1.5 text-xs leading-relaxed text-white/45">{n.resumo}</span>
+                  )}
                 </span>
-                <ExternalLink className="h-3 w-3 shrink-0 text-white/25" />
               </a>
             ))}
           </div>

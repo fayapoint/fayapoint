@@ -133,6 +133,19 @@ export interface IGameCopa extends Document {
     url: string;
     em?: Date;
     resumo?: string;
+    /**
+     * A imagem da notícia. Opcional, e quase sempre desnecessária.
+     *
+     * Quando a URL é de vídeo do YouTube, a capa é derivada do próprio
+     * endereço na leitura — é a representação que o YouTube publica para o
+     * vídeo e a que qualquer pessoa vê ao compartilhar o link. Guardar uma
+     * cópia nossa seria duplicar sem motivo, e envelheceria quando o canal
+     * trocasse a capa.
+     *
+     * Este campo existe para o outro caso: arte NOSSA, ou foto que a gente
+     * tenha direito de usar. Nunca para hospedar imagem de terceiro.
+     */
+    imagem?: string;
   }>;
   /** Quando a tabela oficial foi lida do site. Tabela sem data não vale. */
   oficialCapturadaEm?: Date;
@@ -224,6 +237,7 @@ const GameCopaSchema = new Schema<IGameCopa>(
         url: { type: String, required: true },
         em: { type: Date },
         resumo: { type: String },
+        imagem: { type: String },
       },
     ],
     oficialCapturadaEm: { type: Date },

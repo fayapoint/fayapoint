@@ -22,6 +22,37 @@ import {
  */
 export const dynamic = "force-dynamic";
 
+/**
+ * A CAPA DE UMA NOTÍCIA EM VÍDEO — derivada do endereço, não guardada.
+ *
+ * Notícia de Pro Clubs é quase sempre vídeo, e uma lista de links azuis não diz
+ * nada a quem chegou procurando saber da copa. A capa que o YouTube publica
+ * para o vídeo é a mesma que aparece quando qualquer pessoa compartilha aquele
+ * link — é a representação canônica dele, servida pelo próprio YouTube.
+ *
+ * Derivada em vez de guardada por dois motivos: uma cópia nossa seria
+ * duplicação sem ganho, e envelheceria calada no dia em que o canal trocasse a
+ * capa. O campo `imagem` do documento continua existindo para o outro caso —
+ * arte NOSSA. Nunca para hospedar imagem de terceiro.
+ *
+ * Devolve `null` para qualquer endereço que não seja vídeo do YouTube: sem id,
+ * sem capa, e a tela mostra a notícia sem imagem em vez de um quadrado quebrado.
+ */
+function capaDeVideo(url: string): string | null {
+  try {
+    const u = new URL(url);
+    const id =
+      u.hostname.endsWith("youtu.be")
+        ? u.pathname.slice(1)
+        : /(?:^|\.)youtube\.com$/.test(u.hostname)
+          ? u.searchParams.get("v")
+          : null;
+    return id && /^[\w-]{6,20}$/.test(id) ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function GET(req: Request, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
@@ -134,7 +165,14 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
       noticias: (copa.noticias ?? [])
         .slice()
         .sort((a, b) => (b.em?.getTime() ?? 0) - (a.em?.getTime() ?? 0))
-        .map((n) => ({ titulo: n.titulo, fonte: n.fonte, url: n.url, em: n.em ?? null, resumo: n.resumo ?? null })),
+        .map((n) => ({
+          titulo: n.titulo,
+          fonte: n.fonte,
+          url: n.url,
+          em: n.em ?? null,
+          resumo: n.resumo ?? null,
+          imagem: n.imagem || capaDeVideo(n.url),
+        })),
       // O que a EA mostra. NUNCA rotulado como "a tabela da copa" — ver o
       // comentário de `classificacaoPelaEA`.
       pelaEA: calculada,
