@@ -111,6 +111,8 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
         status: copa.status,
         comecouEm: copa.comecouEm,
         oficialCapturadaEm: copa.oficialCapturadaEm ?? null,
+        faseAtual: copa.faseAtual ?? null,
+        faseDeclaradaEm: copa.faseDeclaradaEm ?? null,
         times: copa.times.map((t) => ({
           nome: t.nome,
           presidente: t.presidente ?? null,
@@ -134,6 +136,11 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
            * o que a medida é e quando, sem como.
            */
           auditadoEm: t.vinculadoEm ? t.vinculadoEm.toISOString() : null,
+          // Declaração da organização, não medida nossa — por isso vai com a
+          // data em que foi lida. `indefinido` quer dizer "ninguém declarou
+          // nada sobre este time", nunca "ele segue vivo".
+          situacao: t.situacao ?? null,
+          situacaoEm: t.situacaoEm ? t.situacaoEm.toISOString() : null,
           // O resultado NEGATIVO da busca também é informação: sem ele a tela
           // não distingue "ninguém procurou" de "procuramos e não é nenhum".
           /**

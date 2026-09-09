@@ -58,6 +58,20 @@ export interface TimeDaCopa {
   vinculadoEm?: Date;
 
   /**
+   * A SITUAÇÃO DO TIME NA COMPETIÇÃO — declarada pela organização.
+   *
+   * ⚠️ Isto NÃO é medida nossa. É o que a organização publicou, e por isso vem
+   * com data: uma eliminação anunciada em 31/08 continua sendo a eliminação de
+   * 31/08 quando alguém ler a página em novembro.
+   *
+   * `indefinido` não é "ainda está no torneio": é "a organização não declarou
+   * nada sobre este time no que a gente leu". A diferença importa — dizer que
+   * um time segue vivo quando ninguém disse isso é inventar.
+   */
+  situacao?: 'classificado' | 'eliminado' | 'indefinido';
+  situacaoEm?: Date;
+
+  /**
    * A BUSCA QUE NÃO ACHOU — o resultado negativo, guardado.
    *
    * Sem isto, o coletor refazia a mesma varredura de hora em hora: para os 7
@@ -149,6 +163,21 @@ export interface IGameCopa extends Document {
   }>;
   /** Quando a tabela oficial foi lida do site. Tabela sem data não vale. */
   oficialCapturadaEm?: Date;
+
+  /**
+   * EM QUE FASE A COMPETIÇÃO ESTÁ, segundo a organização.
+   *
+   * Sem este campo, a página mostrava as tabelas de grupo como se fosse o
+   * estado atual — e a Super Copa saiu da fase de grupos em 03/09. Tabela de
+   * grupo continua sendo informação boa; apresentá-la como "onde a copa está"
+   * depois que ela virou mata-mata é dizer algo falso sem escrever uma frase
+   * falsa.
+   *
+   * Vem com a data da leitura pela mesma razão de sempre: fase sem data é
+   * afirmação sobre o presente que envelhece calada.
+   */
+  faseAtual?: string;
+  faseDeclaradaEm?: Date;
   /** A janela de horário observada das séries, para prever a próxima. */
   janelaObservada?: { horaInicio: number; horaFim: number; amostras: number };
   destaque: boolean;
@@ -202,6 +231,8 @@ const GameCopaSchema = new Schema<IGameCopa>(
         evidencia: { type: [String], default: [] },
         buscadoEm: { type: Date },
         buscaNota: { type: String },
+        situacao: { type: String, enum: ['classificado', 'eliminado', 'indefinido'] },
+        situacaoEm: { type: Date },
         vinculadoEm: { type: Date },
       },
     ],
@@ -241,6 +272,8 @@ const GameCopaSchema = new Schema<IGameCopa>(
       },
     ],
     oficialCapturadaEm: { type: Date },
+    faseAtual: { type: String },
+    faseDeclaradaEm: { type: Date },
     janelaObservada: {
       horaInicio: Number,
       horaFim: Number,

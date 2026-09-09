@@ -85,6 +85,9 @@ interface TimeCopa {
   auditadoEm: string | null;
   /** Quando a auditoria procurou o clube deste time. Null = nunca procurou. */
   buscadoEm: string | null;
+  /** Declarado pela organização. `indefinido` = ninguém declarou nada. */
+  situacao: "classificado" | "eliminado" | "indefinido" | null;
+  situacaoEm: string | null;
 }
 
 interface LinhaEA {
@@ -141,6 +144,9 @@ interface Dados {
     formato: { times: number; grupos: number; jogosPorConfrontoGrupo: number };
     comecouEm?: string;
     times: TimeCopa[];
+    /** A fase que a organização anunciou, e quando anunciou. */
+    faseAtual?: string | null;
+    faseDeclaradaEm?: string | null;
   };
   noticias: Noticia[];
   pelaEA: LinhaEA[];
@@ -264,7 +270,11 @@ export function PaginaDaCopa({ slug, locale }: { slug: string; locale: string })
       </header>
 
       <div className="mx-auto max-w-6xl px-4 py-10">
-        <Cobertura c={cobertura} times={copa.times} />
+        <FaseDaCopa copa={copa} />
+
+        <div className="mt-6">
+          <Cobertura c={cobertura} times={copa.times} />
+        </div>
 
         {/* ---- Grupos ---- */}
         <section className="mt-12">
@@ -272,8 +282,9 @@ export function PaginaDaCopa({ slug, locale }: { slug: string; locale: string })
             Os grupos
           </Titulo>
           <p className="mt-1 max-w-2xl text-sm text-white/50">
-            O que a <strong className="text-white/75">API da EA</strong> registrou dos confrontos
-            entre times da copa. Contado por jogo — a copa pontua por confronto MD
+            O que a <strong className="text-white/75">apuração da FayAI</strong> registrou dos
+            confrontos entre times da copa{copa.faseAtual ? " na fase de classificação" : ""}.
+            Contado por jogo — a copa pontua por confronto MD
             {copa.formato.jogosPorConfrontoGrupo}, então isto não é a tabela oficial: é o lado
             observável dela.
           </p>
@@ -369,6 +380,97 @@ function Titulo({ icone: Icone, cor, children }: { icone: typeof Users; cor: str
       <Icone className="h-6 w-6" style={{ color: cor }} />
       {children}
     </h2>
+  );
+}
+
+/**
+ * ONDE A COPA ESTÁ — a fase declarada pela organização.
+ *
+ * ## Por que esta faixa vem antes de tudo
+ *
+ * Sem ela, a página abria nas tabelas de grupo, e quem chegasse concluiria que
+ * a copa está na fase de grupos. Ela saiu de lá em 03/09. Nenhuma frase da
+ * página era falsa; o conjunto dizia uma coisa falsa — que é o jeito mais fácil
+ * de mentir sem escrever mentira nenhuma.
+ *
+ * ## Três estados, e o terceiro é o que exige cuidado
+ *
+ * `classificado` e `eliminado` são anúncios da organização, com data.
+ * `indefinido` NÃO quer dizer "ainda está no torneio": quer dizer que ninguém
+ * declarou nada sobre aquele time no que a gente leu. Fechar a conta por
+ * dedução — vinte times, seis classificados, seis eliminados, logo os outros
+ * oito seguem vivos — seria publicar aritmética nossa como fato de terceiro.
+ *
+ * A distinção aparece na tela em vez de sumir: oito times sem declaração é
+ * informação sobre a cobertura, não buraco a esconder.
+ */
+function FaseDaCopa({ copa }: { copa: Dados["copa"] }) {
+  if (!copa.faseAtual) return null;
+
+  const classificados = copa.times.filter((t) => t.situacao === "classificado");
+  const eliminados = copa.times.filter((t) => t.situacao === "eliminado");
+  const indefinidos = copa.times.filter((t) => !t.situacao || t.situacao === "indefinido");
+
+  return (
+    <section style={superficie(OURO, "forte")} className="rounded-2xl border p-5">
+      <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+        <h2 style={bebas} className="flex items-center gap-2 text-2xl uppercase tracking-wide">
+          <Trophy className="h-5 w-5" style={{ color: OURO }} />
+          {copa.faseAtual}
+        </h2>
+        {copa.faseDeclaradaEm && (
+          <span className="text-[11px] text-white/35">
+            anunciado pela organização em{" "}
+            {new Date(copa.faseDeclaradaEm).toLocaleDateString("pt-BR")}
+          </span>
+        )}
+      </div>
+
+      <p className="mt-2 max-w-3xl text-sm leading-relaxed text-white/60">
+        A fase de classificação terminou. As tabelas abaixo continuam valendo como o retrato do
+        que foi jogado até aqui — não como a posição atual da competição.
+      </p>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <ListaDeSituacao rotulo="Classificados" cor={LIMA} times={classificados} />
+        <ListaDeSituacao rotulo="Eliminados" cor={RUBRO} times={eliminados} />
+        <ListaDeSituacao
+          rotulo="Sem declaração"
+          cor={CINZA}
+          times={indefinidos}
+          nota="a organização não anunciou nada sobre estes — não quer dizer que sigam na disputa"
+        />
+      </div>
+    </section>
+  );
+}
+
+function ListaDeSituacao({
+  rotulo,
+  cor,
+  times,
+  nota,
+}: {
+  rotulo: string;
+  cor: string;
+  times: TimeCopa[];
+  nota?: string;
+}) {
+  return (
+    <div style={superficie(cor)} className="rounded-xl border p-3.5">
+      <p className="flex items-baseline gap-2 text-[10px] uppercase tracking-widest" style={{ color: cor }}>
+        {rotulo}
+        <strong className="text-sm tracking-normal">{times.length}</strong>
+      </p>
+      {times.length > 0 ? (
+        <p className="mt-1.5 text-xs leading-relaxed text-white/60">
+          {times.map((t) => t.nome).join(" · ")}
+        </p>
+      ) : (
+        <p className="mt-1.5 text-xs text-white/25">nenhum</p>
+      )}
+      {nota && <p className="mt-2 text-[10.5px] leading-relaxed text-white/30">{nota}</p>}
+    </div>
   );
 }
 
@@ -573,6 +675,28 @@ function TabelaGrupo({
                       style={{ background: l ? cor : "rgba(255,255,255,.12)" }}
                     />
                     <span className={l ? "" : "text-white/35"}>{t.nome}</span>
+                    {/* O selo é obrigatório aqui, não enfeite: uma tabela de
+                        grupo que lista um time eliminado sem dizer que ele foi
+                        eliminado é a mesma mentira por conjunto que a faixa de
+                        fase corrige lá em cima. */}
+                    {t.situacao === "classificado" && (
+                      <span
+                        title="classificado — anunciado pela organização"
+                        style={{ borderColor: `${LIMA}55`, color: LIMA }}
+                        className="shrink-0 rounded border px-1 py-px text-[8.5px] uppercase tracking-widest"
+                      >
+                        quartas
+                      </span>
+                    )}
+                    {t.situacao === "eliminado" && (
+                      <span
+                        title="eliminado — anunciado pela organização"
+                        style={{ borderColor: `${RUBRO}44`, color: `${RUBRO}cc` }}
+                        className="shrink-0 rounded border px-1 py-px text-[8.5px] uppercase tracking-widest"
+                      >
+                        fora
+                      </span>
+                    )}
                   </div>
                   {t.presidente && (
                     <span className="ml-3 text-[10px] uppercase tracking-wider text-white/30">
