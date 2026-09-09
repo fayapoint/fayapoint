@@ -113,6 +113,17 @@ export async function GET(req: Request, { params }: { params: Promise<{ slug: st
         oficialCapturadaEm: copa.oficialCapturadaEm ?? null,
         faseAtual: copa.faseAtual ?? null,
         faseDeclaradaEm: copa.faseDeclaradaEm ?? null,
+        // `placar` ausente é confronto SEM resultado publicado. Nunca 0 × 0:
+        // a organização usa 0 × 0 como estado inicial do chaveamento, e copiar
+        // isso publicaria um empate que não aconteceu.
+        chaveamento: (copa.chaveamento ?? []).map((c) => ({
+          fase: c.fase,
+          casa: c.casa,
+          fora: c.fora,
+          placar: c.placar ? { casa: c.placar.casa, fora: c.placar.fora } : null,
+          quando: c.quando ?? null,
+          quandoTexto: c.quandoTexto ?? null,
+        })),
         times: copa.times.map((t) => ({
           nome: t.nome,
           presidente: t.presidente ?? null,

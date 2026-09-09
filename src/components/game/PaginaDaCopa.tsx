@@ -147,6 +147,15 @@ interface Dados {
     /** A fase que a organização anunciou, e quando anunciou. */
     faseAtual?: string | null;
     faseDeclaradaEm?: string | null;
+    chaveamento?: Array<{
+      fase: string;
+      casa: string;
+      fora: string;
+      /** Null = sem resultado publicado. Nunca confundir com 0 × 0. */
+      placar: { casa: number; fora: number } | null;
+      quando: string | null;
+      quandoTexto: string | null;
+    }>;
   };
   noticias: Noticia[];
   pelaEA: LinhaEA[];
@@ -410,6 +419,7 @@ function FaseDaCopa({ copa }: { copa: Dados["copa"] }) {
   const classificados = copa.times.filter((t) => t.situacao === "classificado");
   const eliminados = copa.times.filter((t) => t.situacao === "eliminado");
   const indefinidos = copa.times.filter((t) => !t.situacao || t.situacao === "indefinido");
+  const chave = copa.chaveamento ?? [];
 
   return (
     <section style={superficie(OURO, "forte")} className="rounded-2xl border p-5">
@@ -427,20 +437,64 @@ function FaseDaCopa({ copa }: { copa: Dados["copa"] }) {
       </div>
 
       <p className="mt-2 max-w-3xl text-sm leading-relaxed text-white/60">
-        A fase de classificação terminou. As tabelas abaixo continuam valendo como o retrato do
-        que foi jogado até aqui — não como a posição atual da competição.
+        A fase de classificação terminou e oito times seguem. As tabelas mais abaixo continuam
+        valendo como o retrato do que foi jogado até aqui — não como a posição atual da
+        competição.
       </p>
 
-      <div className="mt-4 grid gap-3 sm:grid-cols-3">
-        <ListaDeSituacao rotulo="Classificados" cor={LIMA} times={classificados} />
-        <ListaDeSituacao rotulo="Eliminados" cor={RUBRO} times={eliminados} />
+      {chave.length > 0 && (
+        <div className="mt-4 grid gap-2.5 sm:grid-cols-2">
+          {chave.map((c) => (
+            <div
+              key={`${c.casa}-${c.fora}`}
+              style={superficie(c.placar ? OURO : CINZA)}
+              className="rounded-xl border p-3.5"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <span className="min-w-0 flex-1 truncate text-[13px] text-white/80">{c.casa}</span>
+                {c.placar ? (
+                  <span style={bebas} className="shrink-0 text-lg tabular-nums" title="resultado publicado pela organização">
+                    {c.placar.casa} <span className="text-white/25">×</span> {c.placar.fora}
+                  </span>
+                ) : (
+                  /* ⛔ NUNCA "0 × 0" aqui. A organização usa 0 × 0 como estado
+                     inicial do chaveamento; repetir isso publicaria um empate
+                     que não aconteceu. Sem placar, o espaço diz que não há. */
+                  <span className="shrink-0 text-[10px] uppercase tracking-widest text-white/25">
+                    ×
+                  </span>
+                )}
+                <span className="min-w-0 flex-1 truncate text-right text-[13px] text-white/80">
+                  {c.fora}
+                </span>
+              </div>
+              <p className="mt-1.5 text-center text-[10px] uppercase tracking-wider text-white/30">
+                {c.quando
+                  ? new Date(c.quando).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })
+                  : (c.quandoTexto ?? "sem data")}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <ListaDeSituacao rotulo="Nas quartas" cor={LIMA} times={classificados} />
+        <ListaDeSituacao
+          rotulo="Fora da disputa"
+          cor={RUBRO}
+          times={eliminados}
+          nota="não estão na lista de oito classificados que a organização publicou"
+        />
+      </div>
+      {indefinidos.length > 0 && (
         <ListaDeSituacao
           rotulo="Sem declaração"
           cor={CINZA}
           times={indefinidos}
           nota="a organização não anunciou nada sobre estes — não quer dizer que sigam na disputa"
         />
-      </div>
+      )}
     </section>
   );
 }

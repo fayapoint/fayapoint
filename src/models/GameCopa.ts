@@ -178,6 +178,28 @@ export interface IGameCopa extends Document {
    */
   faseAtual?: string;
   faseDeclaradaEm?: Date;
+
+  /**
+   * O CHAVEAMENTO, como a organização o publica.
+   *
+   * Declaração, não medida — mesma regra da `situacao`. O `placar` só existe
+   * quando a organização publicou um: confronto sem placar fica `null`, e a
+   * tela diz "a agendar" ou "sem resultado", nunca 0 × 0.
+   *
+   * ⚠️ `0 × 0` PUBLICADO É DIFERENTE DE SEM PLACAR. A Super Copa publica
+   * "Bala de Munich 0 × 0 Raposo FC" para um confronto que ainda não começou —
+   * é o estado inicial do chaveamento deles, não um empate. Por isso o campo é
+   * `placar?: {...}` e quem grava decide: só preenche o que for resultado.
+   */
+  chaveamento?: Array<{
+    fase: string;
+    casa: string;
+    fora: string;
+    placar?: { casa: number; fora: number };
+    quando?: Date;
+    /** Texto que a organização publicou no lugar da data ("a agendar"). */
+    quandoTexto?: string;
+  }>;
   /** A janela de horário observada das séries, para prever a próxima. */
   janelaObservada?: { horaInicio: number; horaFim: number; amostras: number };
   destaque: boolean;
@@ -274,6 +296,17 @@ const GameCopaSchema = new Schema<IGameCopa>(
     oficialCapturadaEm: { type: Date },
     faseAtual: { type: String },
     faseDeclaradaEm: { type: Date },
+    chaveamento: [
+      {
+        _id: false,
+        fase: { type: String, required: true },
+        casa: { type: String, required: true },
+        fora: { type: String, required: true },
+        placar: { casa: Number, fora: Number },
+        quando: { type: Date },
+        quandoTexto: { type: String },
+      },
+    ],
     janelaObservada: {
       horaInicio: Number,
       horaFim: Number,
