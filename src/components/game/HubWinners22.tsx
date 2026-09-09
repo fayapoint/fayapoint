@@ -12,6 +12,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { LIMA, OURO, CIANO, VIOLETA, ROSA, bebas } from "@/lib/game/tema";
+import { SalaDoChat } from "./SalaDoChat";
 import { FaixaDeCena } from "./CenaW22";
 
 /**
@@ -147,6 +148,14 @@ export function HubWinners22({ locale }: { locale: string }) {
           href="/game/apostas"
           locale={locale}
         />
+      </div>
+
+      {/* A SALA fecha o hub de propósito.
+          Ela é a única coisa aqui que não é leitura: as outras portas mostram
+          dado, a sala deixa a pessoa falar. Pôr no fim é a ordem certa — quem
+          chegou agora lê primeiro, e encontra gente quando já sabe onde está. */}
+      <div className="mt-10">
+        <SalaDoChat locale={locale} />
       </div>
     </section>
   );
