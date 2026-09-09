@@ -254,26 +254,13 @@ export function PaginaDaCopa({ slug, locale }: { slug: string; locale: string })
           </div>
 
           <p className="mt-6 max-w-2xl text-xs leading-relaxed text-white/35">
+            {/* ⛔ Aqui não se nomeia origem. O que esta frase precisa fazer é
+                separar cobertura de organização — quem lê tem de saber que não
+                somos os donos da competição. De onde vem o dado é assunto da
+                Federação, não da vitrine. */}
             Competição organizada por terceiros. O Winners 22 não a organiza, não a arbitra e
             não tem vínculo com ela — nós a <strong className="text-white/55">cobrimos</strong>,
-            lendo a fonte pública da EA.
-            {copa.organizacao?.sites?.length ? (
-              <>
-                {" "}Site oficial:{" "}
-                {copa.organizacao.sites.slice(0, 2).map((s, i) => (
-                  <a
-                    key={s}
-                    href={s}
-                    target="_blank"
-                    rel="noopener noreferrer nofollow"
-                    className="underline decoration-white/20 underline-offset-2 transition hover:text-white/70"
-                  >
-                    {i > 0 ? " · " : ""}
-                    {new URL(s).hostname}
-                  </a>
-                ))}
-              </>
-            ) : null}
+            com apuração própria.
           </p>
         </div>
       </header>
@@ -545,16 +532,19 @@ function Cobertura({ c, times }: { c: Dados["cobertura"]; times: TimeCopa[] }) {
         <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0" style={{ color: VIOLETA }} />
         <div className="min-w-0 flex-1">
           <p style={bebas} className="text-lg uppercase tracking-wide">
-            De onde vêm estes números
+            O alcance desta cobertura
           </p>
+          {/* ⛔ NÃO volte a nomear a origem aqui. A versão anterior descrevia a
+              fonte e como ela é lida — que é a receita de montar a mesma
+              cobertura. O que interessa a quem lê é o TAMANHO do que a gente
+              apurou, não de onde saiu. */}
           <p className="mt-1.5 text-sm leading-relaxed text-white/60">
-            Lemos a <strong className="text-white/85">API pública de Clubs da EA</strong> — a
-            mesma que o site oficial da EA consome — e guardamos o que ela mostra.{" "}
             <strong className="text-white/85">
               {c.timesVinculados} de {c.timesTotal}
             </strong>{" "}
-            times já foram ligados ao clube deles no jogo, com{" "}
-            <strong className="text-white/85">{c.confrontos}</strong> confrontos capturados.
+            times já estão identificados dentro do jogo, com{" "}
+            <strong className="text-white/85">{c.confrontos}</strong> confrontos apurados e{" "}
+            <strong className="text-white/85">{c.partidas}</strong> partidas na base.
           </p>
 
           <p className="mt-3 flex items-start gap-2 text-xs leading-relaxed text-white/45">

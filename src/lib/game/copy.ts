@@ -300,10 +300,10 @@ const pt: GameCopy = {
       'O jogo guarda espaços duplos. "Flamengo     00" tem cinco espaços entre as palavras — por isso a busca daqui compara palavra por palavra, ignorando espaço, acento e maiúscula.',
       'PS4 e Xbox One vivem numa piscina separada de PS5, Xbox Series e PC. Deixe "Todas" marcado se não tiver certeza.',
       'Se souber o número do clube, digite só o número: a busca vai direto pela ficha, sem depender do nome.',
-      'Clube recém-criado, que ainda não terminou uma temporada, pode não estar no índice público da EA. Nesse caso só o número resolve.',
+      'Clube recém-criado, que ainda não terminou uma temporada, pode não estar no índice público. Nesse caso só o número resolve.',
     ],
     idHint: 'Dica: digitar só números busca pelo ID do clube.',
-    throttled: 'Muitas buscas seguidas. Aguarde {n}s — o teto existe para não sobrecarregar a fonte da EA.',
+    throttled: 'Muitas buscas seguidas. Aguarde {n}s — o teto existe para não sobrecarregar a apuração.',
     scanned: '{n} clubes varridos na fonte da EA',
     approxTitle: 'Nenhum casou exatamente. Os mais próximos que apareceram:',
     divisionShort: 'Div',
@@ -320,7 +320,7 @@ const pt: GameCopy = {
     steps: [
       {
         title: '1 · Conecte o clube',
-        text: 'Busque pelo nome, confirme o clube e pronto: importamos campanha, elenco e histórico direto da fonte pública da EA. Nunca pedimos senha da EA ou da PSN.',
+        text: 'Busque pelo nome, confirme o clube e pronto: importamos campanha, elenco e histórico pela apuração da FayAI. Nunca pedimos senha da EA ou da PSN.',
         art: 'passo-conectar',
         alt: 'Mão segurando um celular com a lista do elenco na tela, a partida na TV ao fundo',
       },
@@ -390,7 +390,7 @@ const pt: GameCopy = {
       {
         period: 'Agora',
         title: 'Fundação',
-        text: 'Portal no ar, conexão de clube pela fonte pública da EA, fila da liga piloto e pedido formal de parceria à EA.',
+        text: 'Portal no ar, conexão de clube pela apuração da FayAI, fila da liga piloto e pedido formal de parceria à EA.',
         status: 'now',
         from: 0,
         to: 0,
@@ -462,7 +462,7 @@ const pt: GameCopy = {
   ranking: {
     title: 'Ranking global do Clubs',
     subtitle:
-      'Os melhores clubes do modo Clubs de todos os tempos, lidos ao vivo da fonte pública da EA. Toda célula é número medido — nada aqui é exemplo.',
+      'Os melhores clubes do modo Clubs de todos os tempos, apurados ao vivo pelos sistemas proprietários da FayAI. Toda célula é número medido — nada aqui é exemplo.',
     badge: 'Dado ao vivo',
     platformLabel: 'Geração',
     platformGen5: 'PS5 · Series · PC',
@@ -503,7 +503,7 @@ const pt: GameCopy = {
     live: 'Ao vivo da fonte da EA',
     mirror: 'Do nosso acervo · {quando}',
     mirrorWhy:
-      'A EA recusa leitura vinda de servidor (só IP residencial passa), então quem lê a fonte é uma máquina nossa, que grava aqui. O número é o que a EA publicava na hora da leitura.',
+      'A leitura roda em máquina própria da FayAI e o resultado fica gravado aqui. O número é o que estava valendo na hora da apuração.',
     empty: 'Este clube ainda não está no nosso acervo. Use a busca por nome para trazê-lo.',
     justNow: 'agora há pouco',
     minutes: 'há {n} min',
@@ -578,13 +578,13 @@ const pt: GameCopy = {
     sortHint: 'Ordenar por',
     form: 'Forma',
     formEmpty: 'Sem partidas registradas nesta modalidade.',
-    matchesEmpty: 'Nenhuma partida deste tipo nos registros públicos da EA.',
+    matchesEmpty: 'Nenhuma partida deste tipo nos nossos registros.',
     momBadge: 'Craque do jogo',
     topScorer: 'Artilheiro',
     perGame: 'por jogo',
     matches: 'Últimas partidas',
     matchTypes: { leagueMatch: 'Liga', playoffMatch: 'Playoff', friendlyMatch: 'Amistoso' },
-    sourceBadge: 'Fonte: API pública da EA · grau B',
+    sourceBadge: 'Auditado pelos sistemas proprietários da FayAI · grau B',
     sourceNote:
       'Dados lidos ao vivo da fonte pública do modo Clubs. A estatística das competições do Winners 22 terá verificação adicional por consenso de capitães.',
     link: 'Este clube é meu — vincular à minha conta',
@@ -677,7 +677,7 @@ const en: GameCopy = {
       'The game stores double spaces. "Flamengo     00" has five spaces between the words — which is why this search compares word by word, ignoring spacing, accents and case.',
       'PS4 and Xbox One live in a pool separate from PS5, Xbox Series and PC. Leave "All" selected if you are unsure.',
       'If you know the club number, type only the number: the search goes straight to the record, no name involved.',
-      "A brand-new club that hasn't finished a season yet may be missing from EA's public index. Only the number finds it then.",
+      "A brand-new club that hasn't finished a season yet may be missing from the public index. Only the number finds it then.",
     ],
     idHint: 'Tip: typing digits only searches by club ID.',
     throttled: 'Too many searches in a row. Wait {n}s — the cap keeps us from hammering EA’s source.',
@@ -697,7 +697,7 @@ const en: GameCopy = {
     steps: [
       {
         title: '1 · Connect your club',
-        text: "Search by name, confirm your club, done: we import record, squad and history straight from EA's public source. We never ask for EA or PSN passwords.",
+        text: "Search by name, confirm your club, done: we import record, squad and history through FayAI's own audit. We never ask for EA or PSN passwords.",
         art: 'passo-conectar',
         alt: 'A hand holding a phone showing the squad list, the match on the TV behind',
       },
@@ -734,7 +734,7 @@ const en: GameCopy = {
     monthsLabel: '2026 → 2027',
     months: ['AUG', 'SEP', 'OCT', 'NOV', 'DEC', '2027'],
     phases: [
-      { period: 'Now', title: 'Foundation', text: "Portal live, club connection via EA's public source, pilot-league queue and formal partnership request to EA.", status: 'now', from: 0, to: 0, marks: [{ day: 'AUG 23', label: 'Portal live' }] },
+      { period: 'Now', title: 'Foundation', text: "Portal live, club connection via FayAI's own audit, pilot-league queue and formal partnership request to EA.", status: 'now', from: 0, to: 0, marks: [{ day: 'AUG 23', label: 'Portal live' }] },
       { period: 'Sep 2026', title: 'Championship engine', text: 'Competition creation, check-in, result consensus, automatic match ingestion and the statistics ledger.', status: 'next', from: 1, to: 1, marks: [{ day: 'SEP 25', label: 'FC 27 launch' }] },
       { period: 'Oct 2026', title: 'Pilot league on FC 27', text: '8–16 invited clubs, online, free. Dual evidence (API + post-match capture) and public match pages.', status: 'next', from: 2, to: 2, marks: [{ day: 'OCT', label: 'Matchday 1' }] },
       { period: 'Nov–Dec 2026', title: 'First season', text: '32–64 clubs, divisions and playoffs, a transfer window, scouting profiles and records.', status: 'next', from: 3, to: 4, marks: [{ day: 'DEC', label: 'Playoffs' }] },
@@ -754,7 +754,7 @@ const en: GameCopy = {
   ranking: {
     title: 'Global Clubs ranking',
     subtitle:
-      "The best Clubs sides of all time, read live from EA's public source. Every cell is a measured number — nothing here is a sample.",
+      "The best Clubs sides of all time, audited live by FayAI's proprietary systems. Every cell is a measured number — nothing here is a sample.",
     badge: 'Live data',
     platformLabel: 'Generation',
     platformGen5: 'PS5 · Series · PC',
@@ -858,13 +858,13 @@ const en: GameCopy = {
     sortHint: 'Sort by',
     form: 'Form',
     formEmpty: 'No matches recorded in this mode.',
-    matchesEmpty: "No matches of this type in EA's public records.",
+    matchesEmpty: "No matches of this type in our records.",
     momBadge: 'Man of the match',
     topScorer: 'Top scorer',
     perGame: 'per game',
     matches: 'Recent matches',
     matchTypes: { leagueMatch: 'League', playoffMatch: 'Playoff', friendlyMatch: 'Friendly' },
-    sourceBadge: 'Source: EA public API · grade B',
+    sourceBadge: 'Audited by FayAI proprietary systems · grade B',
     sourceNote:
       "Data read live from the Clubs public source. Winners 22 competition statistics get additional verification via captain consensus.",
     link: 'This is my club — link to my account',

@@ -191,6 +191,27 @@ export interface IGameCopa extends Document {
    * é o estado inicial do chaveamento deles, não um empate. Por isso o campo é
    * `placar?: {...}` e quem grava decide: só preenche o que for resultado.
    */
+  /**
+   * A LINHA DO TEMPO — a história da competição, dia a dia.
+   *
+   * É o que transforma um punhado de tabelas em cobertura: quem chega
+   * procurando "super copa dos streamers" quer saber o que aconteceu, e não
+   * consegue reconstruir isso de uma tabela de pontos.
+   *
+   * Cada entrada é um FATO com data. Nada aqui é opinião, previsão ou
+   * "provavelmente": se a origem não disse, não entra. `tipo` existe para a
+   * tela dar peso visual diferente a um resultado e a um anúncio, não para
+   * mudar o valor de verdade de nenhum deles.
+   */
+  linhaDoTempo?: Array<{
+    em: Date;
+    tipo: 'marco' | 'resultado' | 'classificacao' | 'eliminacao' | 'destaque' | 'anuncio';
+    titulo: string;
+    texto: string;
+    /** Times envolvidos, para a tela ligar a entrada às fichas deles. */
+    times?: string[];
+  }>;
+
   chaveamento?: Array<{
     fase: string;
     casa: string;
@@ -296,6 +317,20 @@ const GameCopaSchema = new Schema<IGameCopa>(
     oficialCapturadaEm: { type: Date },
     faseAtual: { type: String },
     faseDeclaradaEm: { type: Date },
+    linhaDoTempo: [
+      {
+        _id: false,
+        em: { type: Date, required: true },
+        tipo: {
+          type: String,
+          enum: ['marco', 'resultado', 'classificacao', 'eliminacao', 'destaque', 'anuncio'],
+          default: 'marco',
+        },
+        titulo: { type: String, required: true },
+        texto: { type: String, required: true },
+        times: { type: [String], default: [] },
+      },
+    ],
     chaveamento: [
       {
         _id: false,
