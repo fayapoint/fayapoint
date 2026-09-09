@@ -42,6 +42,7 @@ const footerLinks = {
   empresa: [
     { key: "links.company.items.about", href: "/sobre" },
     { key: "links.company.items.whatWeDo", href: "/o-que-fazemos" },
+    { key: "links.company.items.fabrica", href: "/fabrica" },
     { key: "links.company.items.services", href: "/servicos" },
     { key: "links.company.items.instructors", href: "/instrutores" },
     { key: "links.company.items.partners", href: "/parcerias" },

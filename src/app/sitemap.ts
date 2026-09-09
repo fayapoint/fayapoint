@@ -41,7 +41,7 @@ const LOCALES = ["pt-BR", "en"] as const;
  * sitemap (redirecionamento anunciado gasta rastreio sem entregar página) e o
  * `hreflang` dessas rotas declara só `pt-BR`, via `alternates(p, true)`.
  */
-const SO_EM_PORTUGUES = new Set(["/fundadores"]);
+const SO_EM_PORTUGUES = new Set(["/fundadores", "/fabrica"]);
 
 /**
  * O par de idiomas de um caminho, no formato que o sitemap do Next espera.
@@ -116,6 +116,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/contato",
     "/agendar-consultoria",
     "/precos",
+    // A oferta da Fábrica Autônoma. Só em português, pelo mesmo motivo de
+    // `/fundadores`: é uma oferta para quem compra no Brasil, e a página em
+    // `/en` responde `noindex` enquanto o texto não for traduzido de verdade.
+    "/fabrica",
     "/sobre",
     // Hub dos cinco serviços. Existia no menu da home e no sitemap-de-intenção
     // (tinha layout com canônica), mas não tinha `page.tsx` — respondia 404 até
@@ -198,9 +202,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   for (const locale of LOCALES) {
     for (const p of staticPaths) {
+      // ⚠️ A REGRA DE "SÓ EM PORTUGUÊS" VALE NAS DUAS LISTAS.
+      //
+      // Ela existia só no laço de `secondaryPaths`. Uma rota portuguesa posta
+      // aqui em cima — como `/fabrica` — passava direto e o sitemap anunciava
+      // `/en/...` para uma página que responde `noindex` em português: a mesma
+      // contradição que o Search Console reclamou em 16/08, e ninguém percebe
+      // porque o sitemap continua válido.
+      if (locale !== "pt-BR" && SO_EM_PORTUGUES.has(p)) continue;
+
       entries.push({
         url: url(`/${locale}${p}`),
-        alternates: alternates(p),
+        alternates: alternates(p, SO_EM_PORTUGUES.has(p)),
         lastModified: now,
         changeFrequency: p === "" ? "daily" : "weekly",
         priority: p === "" ? 1 : 0.7,
