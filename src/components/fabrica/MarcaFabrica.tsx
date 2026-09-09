@@ -93,8 +93,14 @@ export function MarcaFabrica({
                 rx={4}
                 fill="none"
                 stroke="#f5c04e"
-                strokeOpacity={0.55}
-                strokeWidth={1}
+                strokeOpacity={0.7}
+                /* ⚠️ 1px com o filtro de brilho por cima some no tamanho
+                   nativo (168px) e a laje lê como contorno partido — logo a
+                   borda que a peça inteira usa como "chapa pegando luz".
+                   `non-scaling-stroke` mantém a espessura quando a animação
+                   escala a torre. */
+                strokeWidth={1.6}
+                vectorEffect="non-scaling-stroke"
               />
               {/* A ranhura da laje: é ela que dá leitura de máquina, não de caixa. */}
               <line

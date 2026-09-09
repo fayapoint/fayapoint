@@ -28,28 +28,52 @@ import { PeleFabrica } from "./PeleFabrica";
  */
 
 export const EVENTO_DESMONTAR = "fabrica:desmontar";
+/** Avisa que a corrida acabou e um pedido novo pode entrar. */
+const EVENTO_LIBERAR = "fabrica:desmontar-fim";
 
 export type PedidoDeDesmontagem = { origem: Origem; duracao: number };
 
 export function PalcoDesmontagem() {
-  const [pedido, setPedido] = useState<PedidoDeDesmontagem | null>(null);
+  const [pedido, setPedido] = useState<(PedidoDeDesmontagem & { n: number }) | null>(null);
 
   useEffect(() => {
+    /**
+     * ⚠️ UM PEDIDO POR VEZ, E CADA UM COM INSTÂNCIA NOVA.
+     *
+     * Sem a trava, dois cliques rápidos no banner trocavam a geometria (o
+     * estilo estático das peças saltava para o novo `getBoundingClientRect`)
+     * enquanto as animações já em voo continuavam mirando o alvo calculado com
+     * a geometria antiga — porque a coreografia é montada uma vez só, no
+     * `useLayoutEffect` com dependências vazias. O `n` crescente vira `key` e
+     * força uma instância nova; a trava evita até isso na maioria dos casos.
+     */
+    let emVoo = false;
     const ouvir = (e: Event) => {
       const d = (e as CustomEvent<PedidoDeDesmontagem>).detail;
-      if (d?.origem) setPedido(d);
+      if (!d?.origem || emVoo) return;
+      emVoo = true;
+      setPedido({ ...d, n: Date.now() });
     };
+    const liberar = () => { emVoo = false; };
     window.addEventListener(EVENTO_DESMONTAR, ouvir);
-    return () => window.removeEventListener(EVENTO_DESMONTAR, ouvir);
+    window.addEventListener(EVENTO_LIBERAR, liberar);
+    return () => {
+      window.removeEventListener(EVENTO_DESMONTAR, ouvir);
+      window.removeEventListener(EVENTO_LIBERAR, liberar);
+    };
   }, []);
 
   if (!pedido) return null;
 
   return (
     <Desmontagem
+      key={pedido.n}
       origem={pedido.origem}
       duracao={pedido.duracao}
-      onFim={() => setPedido(null)}
+      onFim={() => {
+        setPedido(null);
+        window.dispatchEvent(new Event(EVENTO_LIBERAR));
+      }}
     >
       <PeleFabrica aceso />
     </Desmontagem>

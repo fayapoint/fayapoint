@@ -14,15 +14,25 @@ import "./desmontagem.css";
  *   3. REORGANIZA os painéis convergem e se empilham em seis lajes
  *   4. TRAVA      a luz varre de baixo para cima e a torre fica
  *
- * ## Por que ela pode durar 8 segundos
+ * ## Oito segundos, e a verdade sobre eles
  *
- * Porque ela não está fazendo o leitor esperar: **a página carrega por baixo
- * dela.** O clique dispara a navegação no mesmo quadro em que a cortina sobe.
- * Quando a animação acaba, a rota já está pronta na maioria das conexões — e o
- * que se vê é continuidade, não carregamento.
+ * ⚠️ **Isto é espetáculo de marca, não carregamento disfarçado.** A navegação
+ * começa no mesmo quadro em que a cortina sobe, e a rota é pré-buscada já no
+ * `hover` — então numa conexão comum **a página fica pronta muito antes dos 8
+ * segundos acabarem**. Escrever aqui que "a página carrega por baixo" seria
+ * confortável e falso: na maioria dos cliques não há nada para esconder.
  *
- * Quem já viu recebe a versão de 2 segundos (`localStorage`), porque
- * espetáculo repetido vira pedágio.
+ * O que os 8 segundos compram é outra coisa, e ela é legítima: a peça é a
+ * porta de uma oferta de cinco dígitos, e a transformação é o argumento —
+ * "isto se monta sozinho" dito em movimento, não em adjetivo.
+ *
+ * O que essa honestidade obriga:
+ *
+ *   · **o botão de pular existe desde 1,6 s** e sai da frente de quem não
+ *     quer o espetáculo, porque não há carregamento para justificar a espera;
+ *   · **quem já viu recebe 2 segundos** — espetáculo repetido vira pedágio;
+ *   · **e a animação nunca ATRASA quem tem conexão ruim**: quando a rota
+ *     demora de verdade, ela cobre a espera em vez de somar a ela.
  *
  * ## A regra que não se quebra
  *
@@ -31,8 +41,22 @@ import "./desmontagem.css";
  * e o piscar apaga os 8 segundos inteiros.
  */
 
-const COLUNAS = 6;
-const LINHAS = 4;
+/**
+ * ⚠️ MENOS PAINÉIS NO CELULAR, e não por capricho.
+ *
+ * Cada painel é uma cópia inteira da pele (~35 nós) dentro de um contexto 3D
+ * com `will-change`: 24 deles são ~900 nós e 24 camadas de composição na GPU,
+ * criadas de uma vez no clique. Em aparelho médio isso é exatamente o que
+ * derruba a taxa de quadros — e quem mais vê a versão de 8 segundos é quem
+ * chega pela primeira vez, muitas vezes no telefone.
+ *
+ * 12 painéis (4×3) continuam lendo como "máquina se abrindo"; o que se perde é
+ * densidade, não a ideia.
+ */
+const GRADE_PAINEIS = () => {
+  const estreito = typeof window !== "undefined" && window.innerWidth < 768;
+  return estreito ? { colunas: 4, linhas: 3 } : { colunas: 6, linhas: 4 };
+};
 const LAJES = 6;
 
 /** A chave que lembra quem já assistiu. */
@@ -60,11 +84,15 @@ export function Desmontagem({
   children: ReactNode;
   onFim: () => void;
 }) {
+  // Fixado na montagem: mudar de tamanho no meio da coreografia recalcularia
+  // alvos que as animações em voo não conhecem.
+  const [{ colunas: COLUNAS, linhas: LINHAS }] = useState(GRADE_PAINEIS);
   const palco = useRef<HTMLDivElement>(null);
   const corpo = useRef<HTMLDivElement>(null);
   const marca = useRef<HTMLDivElement>(null);
   const varredura = useRef<HTMLDivElement>(null);
   const interior = useRef<HTMLDivElement>(null);
+  const pular = useRef<HTMLButtonElement>(null);
   const [saindo, setSaindo] = useState(false);
   const acabou = useRef(false);
 
@@ -159,9 +187,17 @@ export function Desmontagem({
       const larguraAlvo = (largLaje * fator) / (pecas.length / LAJES);
       const alturaAlvo = 26 - laje * 2;
 
+      // O deslocamento até a laje, em relação ao lugar onde a peça já está.
+      //
+      // ⚠️ A versão anterior tinha três termos `W/2` que se anulavam e um
+      // `+W/2` que se anulava de novo contra o `- W/2` de quem consumia. Estava
+      // certo por acidente de álgebra, e qualquer limpeza bem-intencionada
+      // quebrava a animação. A forma reduzida diz o que de fato acontece: **o
+      // destino não depende de onde a peça começou** — só da vaga dela na laje.
       const alvoX =
-        -W / 2 + (posNaLaje + 0.5) * larguraAlvo + (largLaje * fator) / -2 + W / 2 - col * larguraPeca - larguraPeca / 2 + W / 2;
-      const alvoY = TORRE_ALTURA / 2 - (LAJES - laje) * 34 - lin * alturaPeca - alturaPeca / 2 + H / 2;
+        (posNaLaje + 0.5) * larguraAlvo - (largLaje * fator) / 2 - (col + 0.5) * larguraPeca;
+      const alvoY =
+        TORRE_ALTURA / 2 - (LAJES - laje) * 34 - (lin + 0.5) * alturaPeca;
 
       animacoes.push(
         peca.animate(
@@ -178,17 +214,17 @@ export function Desmontagem({
             },
             // reorganiza: converge para a laje, endireitando
             {
-              transform: `translate3d(${alvoX - W / 2}px, ${alvoY - H / 2}px, 0) rotateX(0) rotateY(0) scale(${larguraAlvo / larguraPeca}, ${alturaAlvo / alturaPeca})`,
+              transform: `translate3d(${alvoX}px, ${alvoY}px, 0) rotateX(0) rotateY(0) scale(${larguraAlvo / larguraPeca}, ${alturaAlvo / alturaPeca})`,
               opacity: 1,
               offset: T(6000) / duracao,
             },
             // trava: entrega o lugar para a torre de verdade
             {
-              transform: `translate3d(${alvoX - W / 2}px, ${alvoY - H / 2}px, 0) rotateX(0) rotateY(0) scale(${larguraAlvo / larguraPeca}, ${alturaAlvo / alturaPeca})`,
+              transform: `translate3d(${alvoX}px, ${alvoY}px, 0) rotateX(0) rotateY(0) scale(${larguraAlvo / larguraPeca}, ${alturaAlvo / alturaPeca})`,
               opacity: 0,
               offset: T(7000) / duracao,
             },
-            { transform: `translate3d(${alvoX - W / 2}px, ${alvoY - H / 2}px, 0)`, opacity: 0, offset: 1 },
+            { transform: `translate3d(${alvoX}px, ${alvoY}px, 0)`, opacity: 0, offset: 1 },
           ],
           {
             duration: duracao,
@@ -232,11 +268,40 @@ export function Desmontagem({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- roda uma vez: a coreografia é imutável depois de montada
   }, []);
 
-  // Trava a rolagem enquanto o palco está no ar, e devolve ao sair.
+  /**
+   * ⛔ QUEM USA TECLADO TAMBÉM PRECISA SAIR.
+   *
+   * A primeira versão tinha `aria-hidden` no palco — que cobre a tela inteira —
+   * com um `<button>` focável dentro. É o defeito `aria-hidden-focus` do WCAG
+   * 4.1.2: o leitor de tela não anuncia o botão, mas o Tab continua chegando
+   * nele, porque `aria-hidden` num ancestral não tira nada da ordem de
+   * tabulação (só `inert` faz isso). E como o palco é montado DEPOIS do
+   * conteúdo no layout, o botão era o último elemento focável do site inteiro:
+   * a pessoa atravessava o cabeçalho e a home inteira — escondidos atrás de uma
+   * cortina opaca, sem foco visível — para só então alcançar "pular".
+   *
+   * Agora o palco é um diálogo de verdade: o foco entra nele ao abrir, **Escape
+   * encerra**, e o foco volta para o banner ao fechar.
+   */
   useEffect(() => {
     const antes = document.body.style.overflow;
+    const focoAnterior = document.activeElement as HTMLElement | null;
     document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = antes; };
+    pular.current?.focus({ preventScroll: true });
+
+    const naTecla = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { e.preventDefault(); encerrar(); }
+    };
+    window.addEventListener("keydown", naTecla);
+
+    return () => {
+      window.removeEventListener("keydown", naTecla);
+      document.body.style.overflow = antes;
+      // Devolve o foco a quem o tinha — senão a pessoa volta para o topo da
+      // página e perde o lugar onde estava.
+      if (focoAnterior && document.contains(focoAnterior)) focoAnterior.focus({ preventScroll: true });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- monta e desmonta uma vez
   }, []);
 
   const pecas = Array.from({ length: COLUNAS * LINHAS }, (_, i) => {
@@ -252,8 +317,9 @@ export function Desmontagem({
       ref={palco}
       className="dm-palco"
       data-saindo={saindo ? "1" : "0"}
-      role="presentation"
-      aria-hidden
+      role="dialog"
+      aria-modal="true"
+      aria-label="Abrindo a Fábrica Autônoma"
     >
       <div
         ref={corpo}
@@ -326,7 +392,7 @@ export function Desmontagem({
         style={{ top: `calc(50% - 45px)` }}
       />
 
-      <button type="button" className="dm-pular" onClick={encerrar}>
+      <button ref={pular} type="button" className="dm-pular" onClick={encerrar}>
         pular
       </button>
     </div>

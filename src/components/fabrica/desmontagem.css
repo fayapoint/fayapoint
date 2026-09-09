@@ -205,10 +205,20 @@
  * ⛔ QUEM PEDIU MENOS MOVIMENTO RECEBE MENOS MOVIMENTO.
  *
  * Oito segundos de rotação 3D em tela cheia não é preferência estética para
- * quem tem desordem vestibular: é náusea. Aqui a animação inteira vira um
- * escurecimento de 400ms, e a pessoa chega na mesma página pelo mesmo caminho.
+ * quem tem desordem vestibular: é náusea.
+ *
+ * ⚠️ QUEM DE FATO IMPEDE A COREOGRAFIA É O JAVASCRIPT, não esta regra:
+ * `Desmontagem.tsx` checa `prefers-reduced-motion` e **retorna antes de criar
+ * qualquer `.animate()`** — as animações do Web Animations API não são
+ * `animation` de CSS e não seriam alcançadas por `animation: none`. Esta regra
+ * é o cinto de segunda instância, para o que for CSS puro.
+ *
+ * O seletor precisa incluir `.dm-palco` além dos descendentes: as cortinas de
+ * entrada e saída estão declaradas no próprio palco, e `.dm-palco *` não as
+ * alcança.
  */
 @media (prefers-reduced-motion: reduce) {
+  .dm-palco,
   .dm-palco * {
     animation: none !important;
     transition: none !important;

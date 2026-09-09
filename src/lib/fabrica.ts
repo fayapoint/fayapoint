@@ -39,6 +39,46 @@ export const INVENTARIO = {
   mesesDeConstrucao: 5,
 } as const;
 
+/**
+ * A GRADE DE UM DIA REAL — a fonte única, para o banner e para a página.
+ *
+ * ⚠️ Ela estava escrita à mão em DOIS arquivos, com textos diferentes para a
+ * mesma operação: `PeleFabrica.tsx` e a página. Nada garantia que os dois
+ * dissessem a mesma coisa, e eles já não diziam. Mudar um horário exigiria
+ * lembrar de dois lugares — que é exatamente como um número numa página de
+ * venda começa a mentir.
+ *
+ * `curta` é a linha do banner (cabe em uma tela pequena); `longa` é a da
+ * página, onde há espaço para o porquê.
+ */
+export const GRADE_DO_DIA = [
+  {
+    hora: "10:30",
+    curta: "escreve, desenha e narra as peças",
+    longa: "O turno acorda os serviços, escreve, desenha e narra as peças de hoje e de amanhã.",
+  },
+  {
+    hora: "12:00",
+    curta: "publica o carrossel",
+    longa: "O carrossel sai. A arte é da sua marca, a letra sai da fonte, nunca do modelo.",
+  },
+  {
+    hora: "19:00",
+    curta: "publica o reel, com a sua voz",
+    longa: "O reel sai narrado com a sua voz — e só depois de a transcrição bater com o roteiro.",
+  },
+  {
+    hora: "a cada 15 min",
+    curta: null,
+    longa: "O publicador pergunta o que venceu o horário e ainda não saiu. Ele se recupera sozinho.",
+  },
+  {
+    hora: "quando você abrir",
+    curta: null,
+    longa: "A mesa mostra o que precisa de você. Aprovar é um clique; pedir mudança, dois.",
+  },
+] as const;
+
 export type Faixa = {
   id: "pasta" | "instalacao" | "fabrica";
   nome: string;
@@ -112,7 +152,7 @@ export const FAIXAS: Faixa[] = [
     nome: "A Fábrica Inteira",
     preco: 50000,
     para: "Você tem acervo e quer que ele vire livro, áudio, aula e filme sozinho.",
-    corte: "Tudo. É esta a operação que escreveu o kit.",
+    corte: "Tudo da Instalação, mais o que transforma o que você já tem em livro, áudio, aula e filme.",
     inclui: [
       "Tudo da Instalação",
       "As esteiras longas: texto → livro → audiobook com lente → aula em vídeo → YouTube",
@@ -122,9 +162,10 @@ export const FAIXAS: Faixa[] = [
       "A memória que não repete erro: a sua, escrita pelo agente, a cada defeito",
       "Seis meses de acompanhamento",
     ],
-    naoTem: [
-      "Não vendemos o resultado. Vendemos a operação — o que isto não promete está escrito acima.",
-    ],
+    // Vazio de propósito: não há nada excluído nesta faixa, e pôr o slogan da
+    // casa aqui embaixo do ícone de exclusão ensinaria o leitor a desconfiar
+    // dos outros dois X, que são exclusões de verdade.
+    naoTem: [],
     vagasPorMes: 2,
     destaque: true,
   },
@@ -148,8 +189,18 @@ export const NAO_PROMETE = [
 /** O custo mensal de OPERAR, que é de quem compra e não vai para nós. */
 export const CUSTO_DE_OPERACAO = {
   assinaturaAgenteUSD: [100, 200] as const,
+  /**
+   * ⚠️ O GRÁTIS VEM PRIMEIRO.
+   *
+   * A primeira versão abria com "US$ 100–200/mês" e só chegava ao grátis nas
+   * últimas quatro palavras, atrás de três cláusulas de custo. Quem lê uma
+   * página de preço para de ler no primeiro número — e o número que estava na
+   * frente era o que assusta, não o que tranquiliza.
+   */
   observacao:
-    "A assinatura do agente é sua e vai direto para quem a fornece. Imagem e voz rodam na sua placa, de graça; sem placa, existe o caminho por API, em centavos por peça. O banco é grátis.",
+    "O banco é grátis: o nível gratuito da MongoDB Atlas, sem cartão e sem prazo. " +
+    "Imagem e voz rodam de graça na sua placa; sem placa, existe o caminho por API, em centavos por peça. " +
+    "O único custo recorrente é a assinatura do agente — que é sua, e vai direto para quem a fornece.",
 };
 
 export const brl = (n: number) =>

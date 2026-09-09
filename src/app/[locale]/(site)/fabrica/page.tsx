@@ -9,6 +9,7 @@ import {
   INVENTARIO,
   NAO_PROMETE,
   CUSTO_DE_OPERACAO,
+  GRADE_DO_DIA,
   MEDIDO_EM,
   brl,
 } from "@/lib/fabrica";
@@ -69,14 +70,6 @@ export async function generateMetadata({
   return meta;
 }
 
-const DIA = [
-  { hora: "10:30", oque: "O turno acorda os serviços, escreve, desenha e narra as peças de hoje e de amanhã." },
-  { hora: "12:00", oque: "O carrossel sai. A arte é da sua marca, a letra sai da fonte, nunca do modelo." },
-  { hora: "19:00", oque: "O reel sai narrado com a sua voz — e só depois de a transcrição bater com o roteiro." },
-  { hora: "a cada 15 min", oque: "O publicador pergunta o que venceu o horário e ainda não saiu. Ele se recupera sozinho." },
-  { hora: "quando você abrir", oque: "A mesa mostra o que precisa de você. Aprovar é um clique; pedir mudança, dois." },
-];
-
 export default async function PaginaFabrica() {
   return (
     <Entrada>
@@ -118,7 +111,7 @@ export default async function PaginaFabrica() {
             Um dia da máquina
           </h2>
           <ul className="grid gap-2">
-            {DIA.map((d) => (
+            {GRADE_DO_DIA.map((d) => (
               <li
                 key={d.hora}
                 className="glass rounded-2xl px-4 py-3 flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4"
@@ -134,7 +127,7 @@ export default async function PaginaFabrica() {
                   {d.hora}
                 </span>
                 <span className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,.76)" }}>
-                  {d.oque}
+                  {d.longa}
                 </span>
               </li>
             ))}
@@ -213,17 +206,33 @@ export default async function PaginaFabrica() {
                   {f.para}
                 </p>
 
-                <p className="mt-4 text-3xl sm:text-4xl tabular-nums" style={{ ...bebas, color: "#f5c04e" }}>
-                  {brl(f.preco)}
-                </p>
-                <p className="text-[12px]" style={{ color: "rgba(255,255,255,.5)" }}>
+                {/* ⚠️ O CORTE VEM ANTES DO PREÇO.
+                    Ele é a frase que explica a diferença entre 10, 30 e 50 mil
+                    — e estava saindo em 12px apagado, colado embaixo de um
+                    preço enorme em ouro. O olho parava no número e nunca
+                    chegava na razão dele, que é o inverso do que uma escada de
+                    preço precisa fazer. */}
+                <p className="mt-3 text-sm leading-snug" style={{ color: "rgba(255,255,255,.82)" }}>
                   {f.corte}
+                </p>
+                <p className="mt-2 text-3xl sm:text-4xl tabular-nums" style={{ ...bebas, color: "#f5c04e" }}>
+                  {brl(f.preco)}
                 </p>
                 {f.vagasPorMes !== null && (
                   <p className="mt-2 text-[12px]" style={{ color: "rgba(245,192,78,.75)" }}>
                     {f.vagasPorMes} por mês — é tempo de gente, e ele acaba.
                   </p>
                 )}
+
+                {/* ⚠️ O CUSTO DE OPERAR APARECE EM CADA FAIXA, e não só uma vez
+                    no rodapé da grade. Preço em 36px de ouro e custo em 14px
+                    apagado lá embaixo não é "peso igual" — é letra miúda com
+                    outro nome. Aqui ele fica logo abaixo do preço, na mesma
+                    coluna do olho. */}
+                <p className="mt-2 text-[13px] leading-snug" style={{ color: "rgba(255,255,255,.62)" }}>
+                  + US$ {CUSTO_DE_OPERACAO.assinaturaAgenteUSD[0]}–{CUSTO_DE_OPERACAO.assinaturaAgenteUSD[1]}/mês
+                  {" "}para operar, que <b style={{ color: "rgba(255,255,255,.82)" }}>não vem para nós</b>.
+                </p>
 
                 <ul className="mt-4 grid gap-2 flex-1">
                   {f.inclui.map((i) => (
@@ -233,7 +242,7 @@ export default async function PaginaFabrica() {
                     </li>
                   ))}
                   {f.naoTem.map((n) => (
-                    <li key={n} className="flex gap-2 text-[13px] leading-snug" style={{ color: "rgba(255,255,255,.45)" }}>
+                    <li key={n} className="flex gap-2 text-[13px] leading-snug" style={{ color: "rgba(255,255,255,.6)" }}>
                       <X size={15} className="shrink-0 mt-0.5" style={{ color: "rgba(255,255,255,.3)" }} />
                       <span>{n}</span>
                     </li>
@@ -256,9 +265,32 @@ export default async function PaginaFabrica() {
             ))}
           </div>
 
-          {/* O custo que NÃO é nosso, com o mesmo peso do preço. */}
+          {/* ⚠️ O GRÁTIS TEM SELO PRÓPRIO.
+              Ele estava como uma oração no meio de um parágrafo sobre custo —
+              o leitor tinha de cavar um texto que começa em "US$ 100–200/mês"
+              para achar a parte que tranquiliza. Numa página de preço, quem
+              lê para no primeiro número. */}
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            {[
+              ["O banco", "grátis, para sempre", "MongoDB Atlas M0: 512 MB, sem cartão e sem prazo. E a fábrica roda sem banco nenhum."],
+              ["A imagem e a voz", "grátis na sua placa", "Rodam local. Sem placa, existe o caminho por API — centavos por peça."],
+              ["As atualizações", "grátis por 12 meses", "O kit cresce; o que entrar nesse período é seu, em qualquer faixa."],
+            ].map(([o, q, p]) => (
+              <div
+                key={o}
+                className="rounded-2xl border p-4"
+                style={{ borderColor: "rgba(245,192,78,.28)", background: "rgba(245,192,78,.05)" }}
+              >
+                <p className="text-[11px] uppercase tracking-[0.18em]" style={{ color: "rgba(255,255,255,.5)" }}>{o}</p>
+                <p className="mt-1 text-xl tracking-wide" style={{ ...bebas, color: "#f5c04e" }}>{q}</p>
+                <p className="mt-1.5 text-[12px] leading-snug" style={{ color: "rgba(255,255,255,.65)" }}>{p}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* O custo que NÃO é nosso. */}
           <div
-            className="mt-5 rounded-2xl border p-4 sm:p-5"
+            className="mt-3 rounded-2xl border p-4 sm:p-5"
             style={{ borderColor: "rgba(255,255,255,.13)", background: "rgba(255,255,255,.02)" }}
           >
             <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,.72)" }}>
@@ -283,14 +315,14 @@ export default async function PaginaFabrica() {
             tem um comando que o produz — nenhum é estimativa.
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <Cartao n={INVENTARIO.blueprints} r="blueprints, em ordem de dependência" />
-            <Cartao n={INVENTARIO.armadilhas} r="armadilhas com sintoma, causa e vacina" />
-            <Cartao n={INVENTARIO.portoes} r="portões executáveis" />
-            <Cartao n={INVENTARIO.promptsNoKit} r="pedidos reais, por tema" />
-            <Cartao n={INVENTARIO.arquivosDeMotor} r="arquivos de motor já adaptados" />
-            <Cartao n={INVENTARIO.linhasDeCodigo} r="linhas de código que você recebe" />
-            <Cartao n={INVENTARIO.perguntas} r="grupos de perguntas na entrevista" />
-            <Cartao n={INVENTARIO.mesesDeConstrucao} r="meses de construção medida" />
+            <Cartao n={INVENTARIO.blueprints} r="blueprints prontos para rodar, sem edição" />
+            <Cartao n={INVENTARIO.armadilhas} r="erros que já foram pagos por outra pessoa" />
+            <Cartao n={INVENTARIO.portoes} r="medições que barram a peça ruim antes do ar" />
+            <Cartao n={INVENTARIO.promptsNoKit} r="pedidos reais, com o que NÃO copiar" />
+            <Cartao n={INVENTARIO.arquivosDeMotor} r="arquivos que já leem a sua entrevista" />
+            <Cartao n={INVENTARIO.linhasDeCodigo} r="linhas de código que você não escreve do zero" />
+            <Cartao n={INVENTARIO.perguntas} r="grupos de perguntas, e acabou a sua parte" />
+            <Cartao n={INVENTARIO.mesesDeConstrucao} r="meses de construção medida, dia a dia" />
           </div>
         </div>
       </section>

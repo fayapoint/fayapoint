@@ -17,16 +17,9 @@
  * precisar de JavaScript dentro da pele.
  */
 
-import { INVENTARIO } from "@/lib/fabrica";
+import { INVENTARIO, GRADE_DO_DIA } from "@/lib/fabrica";
 
 const bebas = { fontFamily: "var(--font-bebas), sans-serif" } as const;
-
-/** A grade de um dia real — o que a máquina faz sozinha, em três linhas. */
-const GRADE = [
-  { hora: "10:30", oque: "escreve, desenha e narra as peças" },
-  { hora: "12:00", oque: "publica o carrossel" },
-  { hora: "19:00", oque: "publica o reel, com a sua voz" },
-];
 
 export function PeleFabrica({ aceso = false }: { aceso?: boolean }) {
   return (
@@ -73,6 +66,15 @@ export function PeleFabrica({ aceso = false }: { aceso?: boolean }) {
               <br />
               <span style={{ color: "#f5c04e" }}>trabalha sem você</span>
             </h2>
+            {/* ⚠️ A LINHA QUE DIZ O QUE É.
+                Sem ela, um estranho lê "uma pasta, um comando" e "a fábrica que
+                trabalha sem você" e não sabe se isto automatiza venda, e-mail
+                ou uma fábrica de verdade. A grade de horários embaixo só
+                comunica para quem já sabe que carrossel e reel são Instagram.
+                Três segundos é todo o tempo que este banner tem. */}
+            <p className="mt-2.5 text-[13px] sm:text-sm" style={{ color: "rgba(255,255,255,.66)" }}>
+              Publica o seu Instagram sozinha, todo dia, com a sua voz.
+            </p>
           </div>
 
           {/* O selo de contagem: números medidos, nunca redondos de propósito. */}
@@ -88,7 +90,7 @@ export function PeleFabrica({ aceso = false }: { aceso?: boolean }) {
 
         {/* A grade do dia: o argumento inteiro em três linhas de horário. */}
         <ul className="flex flex-col gap-1.5">
-          {GRADE.map((g) => (
+          {GRADE_DO_DIA.filter((g) => g.curta).map((g) => (
             <li key={g.hora} className="flex items-center gap-3 text-[12px] sm:text-[13px]">
               <span
                 className="tabular-nums shrink-0 rounded-md px-1.5 py-0.5 text-[11px]"
@@ -100,14 +102,18 @@ export function PeleFabrica({ aceso = false }: { aceso?: boolean }) {
               >
                 {g.hora}
               </span>
-              <span style={{ color: "rgba(255,255,255,.72)" }}>{g.oque}</span>
+              <span style={{ color: "rgba(255,255,255,.72)" }}>{g.curta}</span>
             </li>
           ))}
         </ul>
 
         <div className="flex items-end justify-between gap-4">
           <p className="text-[12px] sm:text-[13px] leading-snug" style={{ color: "rgba(255,255,255,.5)" }}>
-            Você responde 12 grupos de perguntas.
+            {/* ⚠️ O número sai de `INVENTARIO`, nunca digitado. Este "12"
+                estava cravado aqui — na peça mais vista do site — enquanto a
+                página ao lado já lia da fonte. É assim que um número começa a
+                divergir de si mesmo. */}
+            Você responde {INVENTARIO.perguntas} grupos de perguntas.
             <br className="hidden sm:block" /> O agente constrói o resto.
           </p>
           <span

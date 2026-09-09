@@ -16,8 +16,10 @@ import { EVENTO_DESMONTAR, type PedidoDeDesmontagem } from "./PalcoDesmontagem";
  * 1. **Antes do clique**, no primeiro `hover` ou `focus`, a rota é pré-buscada.
  *    Quem passa o mouse já baixou a página que ainda não pediu.
  * 2. **No clique**, três coisas acontecem no MESMO quadro: a cortina sobe, a
- *    navegação começa, e a coreografia dispara. A página carrega POR BAIXO da
- *    animação — é isso que compra os 8 segundos sem cobrar espera de ninguém.
+ *    navegação começa, e a coreografia dispara. ⚠️ Numa conexão comum a rota
+ *    já está pronta bem antes de a animação acabar — os 8 segundos são
+ *    espetáculo, não espera disfarçada, e é por isso que o botão de pular
+ *    existe. Ver o cabeçalho de `Desmontagem.tsx`.
  * 3. **No fim**, a cortina sai por cima de `/fabrica/loading.tsx`, que já
  *    desenhou a mesma torre no mesmo lugar. Sem piscar, sem corte.
  *
