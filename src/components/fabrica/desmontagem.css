@@ -1,0 +1,219 @@
+/**
+ * A DESMONTAGEM — o banner vira torre, e a torre vira a página.
+ *
+ * ## O contrato de continuidade
+ *
+ * O último quadro desta animação é IDÊNTICO ao primeiro quadro de
+ * `/fabrica/loading.tsx`: mesma torre, mesma posição (centro da tela), mesma
+ * escala. Por isso a troca de rota não pisca — não há corte, há sobreposição.
+ * Se você mexer na geometria de um, mexa no outro no mesmo commit.
+ *
+ * ## Por que só `transform` e `opacity`
+ *
+ * São as duas únicas propriedades que o navegador anima sem recalcular layout
+ * nem repintar. Com 24 painéis em 3D, qualquer outra propriedade animada
+ * derruba a taxa de quadros no celular — e uma animação de 8 segundos que
+ * engasga é pior que não ter animação.
+ */
+
+.dm-palco {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: #05060c;
+  /* A cortina entra em 260ms para cobrir a navegação que acontece por baixo. */
+  animation: dm-cortina 260ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  perspective: 1400px;
+  perspective-origin: 50% 45%;
+  overflow: hidden;
+}
+
+@keyframes dm-cortina {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* O palco some por cima do loading, que já está desenhado igual embaixo. */
+.dm-palco[data-saindo="1"] {
+  animation: dm-sair 340ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+@keyframes dm-sair {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ── O corpo que se desmonta ─────────────────────────────────────────────── */
+
+.dm-corpo {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Um halo atrás do módulo: dá centro à composição quando os painéis se
+   afastam, e é o que evita que o meio da animação seja um retângulo preto. */
+.dm-corpo::before {
+  content: "";
+  position: absolute;
+  inset: -60%;
+  background: radial-gradient(ellipse at center, rgba(245, 192, 78, 0.14), transparent 62%);
+  transform: translateZ(-140px);
+  pointer-events: none;
+}
+
+/**
+ * ⚠️ A BORDA ACESA NÃO É ENFEITE — É O QUE TORNA A PEÇA VISÍVEL.
+ *
+ * O banner é escuro e o palco é quase preto. Com a borda fraca (14% de ouro),
+ * a desmontagem inteira acontecia no escuro: 24 painéis escuros girando sobre
+ * fundo escuro, e o que se via era uma tela preta com uns cacos de texto. O
+ * efeito existia e ninguém conseguia ver.
+ *
+ * O contorno forte dá a leitura de CHAPA DE METAL pegando luz — é ele que faz
+ * o olho seguir a peça girando, e é o que separa "máquina se abrindo" de
+ * "coisas sumindo".
+ */
+.dm-peca {
+  position: absolute;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+  box-shadow:
+    inset 0 0 0 1px rgba(245, 192, 78, 0.55),
+    inset 0 0 18px rgba(245, 192, 78, 0.10),
+    0 14px 40px -14px rgba(0, 0, 0, 0.95),
+    0 0 26px -6px rgba(245, 192, 78, 0.28);
+}
+
+/* A "pele": uma cópia do banner inteiro, deslocada para que cada peça mostre
+   exatamente o seu pedaço. É o que garante que o banner se parta em si mesmo,
+   sem imagem exportada e sem duplicar o desenho. */
+.dm-pele {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+/* ── O interior revelado ─────────────────────────────────────────────────── */
+
+.dm-interior {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateZ(-90px);
+}
+
+/* A entrada E a saída do interior são UMA animação só, em `Desmontagem.tsx`.
+   Quando eram duas (animação para entrar, classe para sair), a saída não
+   pegava e o maquinário ficava aceso atrás da torre montada. */
+
+.dm-trilho {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245, 192, 78, 0.85), transparent);
+  box-shadow: 0 0 10px rgba(245, 192, 78, 0.45);
+}
+
+.dm-no {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #f5c04e;
+  box-shadow: 0 0 12px 2px rgba(245, 192, 78, 0.7);
+}
+
+/* ── A varredura de luz que tranca a torre ───────────────────────────────── */
+
+/* Ela varre a TORRE, e não a tela: atravessando a largura toda, lia como
+   linha do horizonte em vez de luz correndo pela peça. */
+.dm-varredura {
+  position: absolute;
+  left: 50%;
+  width: 260px;
+  margin-left: -130px;
+  height: 90px;
+  opacity: 0;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    rgba(245, 192, 78, 0.16) 45%,
+    rgba(255, 255, 255, 0.5) 50%,
+    rgba(245, 192, 78, 0.16) 55%,
+    transparent
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* ── A marca que aparece no fim, e que o loading repete ──────────────────── */
+
+/**
+ * ⚠️ A centralização é SÓ por `transform`, nunca pela propriedade `translate`.
+ *
+ * Com as duas, o -50% era aplicado duas vezes (uma pelo CSS, outra pelos
+ * quadros da animação) e a torre nascia meia tela acima do centro — quer
+ * dizer, fora do lugar em que `loading.tsx` a desenha. A emenda entre a
+ * animação e a página aparecia exatamente no quadro que ninguém pode ver.
+ */
+.dm-marca {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* ── O botão de pular ────────────────────────────────────────────────────── */
+
+.dm-pular {
+  position: absolute;
+  right: clamp(12px, 4vw, 32px);
+  bottom: clamp(12px, 4vw, 32px);
+  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.62);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0;
+  animation: dm-pular-entra 400ms ease-out 1600ms both;
+  transition: color 160ms, border-color 160ms, background 160ms;
+}
+.dm-pular:hover,
+.dm-pular:focus-visible {
+  color: #f5c04e;
+  border-color: rgba(245, 192, 78, 0.45);
+  background: rgba(245, 192, 78, 0.08);
+}
+@keyframes dm-pular-entra {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/**
+ * ⛔ QUEM PEDIU MENOS MOVIMENTO RECEBE MENOS MOVIMENTO.
+ *
+ * Oito segundos de rotação 3D em tela cheia não é preferência estética para
+ * quem tem desordem vestibular: é náusea. Aqui a animação inteira vira um
+ * escurecimento de 400ms, e a pessoa chega na mesma página pelo mesmo caminho.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .dm-palco * {
+    animation: none !important;
+    transition: none !important;
+  }
+  .dm-corpo { display: none; }
+  .dm-marca { opacity: 1; }
+  .dm-pular { opacity: 1; animation: none; }
+}

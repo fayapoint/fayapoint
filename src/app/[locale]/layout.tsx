@@ -25,6 +25,7 @@ import { VinculoDeIndicacao } from "@/components/VinculoDeIndicacao";
 import { UserProvider } from "@/contexts/UserContext";
 import { ServiceCartProvider } from "@/contexts/ServiceCartContext";
 import { PostHogProvider } from "@/components/PostHogProvider";
+import { PalcoDesmontagem } from "@/components/fabrica/PalcoDesmontagem";
 import { UsoTracker } from "@/components/UsoTracker";
 import { FaviconVivo } from "@/components/marca/FaviconVivo";
 import { routing } from "@/i18n/routing";
@@ -389,6 +390,14 @@ export default async function RootLayout({
             }
           `}} />
           {children}
+          {/* ⛔ O PALCO DA DESMONTAGEM MORA AQUI, e não em `(site)`.
+              A home é `[locale]/page.tsx` — irmã do grupo `(site)`, não filha
+              dele. Montado no layout de `(site)`, o palco simplesmente não
+              existia na home: o banner disparava o evento, ninguém escutava, e
+              a navegação acontecia sem animação nenhuma. Nada quebrava; só
+              faltava o efeito inteiro, e no lugar mais fácil de não notar.
+              Este layout é o único que a home e `/fabrica` compartilham. */}
+          <PalcoDesmontagem />
           {/* Mede a banda de verdade (imagem e vídeo do CDN, que não passam por
               rota nossa) e devolve um evento por navegação. Não renderiza nada
               e nunca lança — ver `UsoTracker`. */}

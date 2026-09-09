@@ -24,6 +24,7 @@ import { ArcadeShowcase } from "@/components/landing/ArcadeShowcase";
 import { GameShowcase } from "@/components/landing/GameShowcase";
 import { RadarSection } from "@/components/landing/RadarSection";
 import { LogoFayai } from "@/components/marca/LogoFayai";
+import { BannerFabrica } from "@/components/fabrica/BannerFabrica";
 import { BotaoIdioma } from "@/components/layout/BotaoIdioma";
 import { TrilhoParallax, type ItemTrilho } from "@/components/biblioteca/TrilhoParallax";
 
@@ -863,6 +864,15 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           )}
         </div>
       </main>
+
+      {/* ============================== A FÁBRICA AUTÔNOMA ==============================
+          O produto mais caro da casa entra na home como uma MÁQUINA, não como
+          um anúncio: o banner mostra a grade de um dia real e as juntas por
+          onde ele se abre. O clique desmonta a peça e monta a torre que a
+          página de destino já está desenhando — a animação não faz ninguém
+          esperar, porque a rota carrega por baixo dela.
+          Ver `components/fabrica/` e `lib/fabrica.ts` (a fonte dos números). */}
+      <BannerFabrica />
 
       {/* ============================== O CURSO COM A SUA CARA ==============================
           A coisa mais rara que o FayAI faz não aparecia na primeira página.
