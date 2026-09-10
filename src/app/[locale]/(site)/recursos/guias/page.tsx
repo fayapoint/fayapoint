@@ -1,97 +1,126 @@
-import { obterT } from "@/i18n/dicionario-servidor";
-
-import { getTranslations } from "next-intl/server";
-import { FileText, Download, Clock, Star } from "lucide-react";
+import type { Metadata } from "next";
+import { FileText, Clock, ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import { guias } from "@/data/guias";
+import { generatePageMetadata } from "@/lib/metadata";
 
-type Guide = {
-  title: string;
-  description: string;
-  category: string;
-  readTime: string;
-  downloads: number;
-  featured: boolean;
-};
+/**
+ * A vitrine dos guias.
+ *
+ * ⚠️ O que esta página era até 10/09/2026, e por que foi trocada: ela listava
+ * SEIS guias escritos à mão no dicionário de tradução (`Guides.list` em
+ * messages/pt-BR.json), cada um com uma contagem de downloads — "12.500",
+ * "8.300", "9.100". Nenhum dos seis existia. Não havia rota de guia, os cartões
+ * não eram links e não havia uma linha de conteúdo por trás. Era número
+ * inventado numa página pública, da mesma família da `/afiliados` que prometia
+ * 30% de comissão sem ter motor que pagasse.
+ *
+ * Agora a lista vem de `@/data/guias`, que é o conteúdo de verdade, e a
+ * contagem de downloads não voltou: não se mede o que não se entrega. O que
+ * cada cartão mostra — tempo de leitura e categoria — sai do próprio texto.
+ */
 
-export default async function GuidesPage({
+export const revalidate = 3600;
+
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? process.env.SITE_URL ?? "https://fayai.com.br";
+
+export async function generateMetadata({
   params,
 }: {
   params: Promise<{ locale: string }>;
-}) {
+}): Promise<Metadata> {
   const { locale } = await params;
-  const T = await obterT(locale);
-  const t = await getTranslations({ locale, namespace: "Guides" });
-  const guides = t.raw("list") as Guide[];
+  const base = generatePageMetadata({
+    locale,
+    path: "/recursos/guias",
+    title: "Guias práticos de IA",
+    description:
+      "Guias escritos para as perguntas que as pessoas realmente digitam: como funciona, como usar, qual escolher.",
+  });
 
+  /* Só-português, pelo mesmo motivo da página de cada guia — o comentário
+   * longo está lá, em `[slug]/page.tsx`. O sitemap acompanha por
+   * `SO_EM_PORTUGUES`; os três lugares mudam juntos quando houver tradução. */
+  const soPt = {
+    ...base,
+    alternates: {
+      ...base.alternates,
+      languages: {
+        "x-default": `${SITE_URL}/pt-BR/recursos/guias`,
+        "pt-BR": `${SITE_URL}/pt-BR/recursos/guias`,
+      },
+    },
+  };
+
+  if (locale !== "pt-BR") return { ...soPt, robots: { index: false, follow: true } };
+  return soPt;
+}
+
+export default function GuidesPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
-      
       <main className="pt-32 pb-20">
-        {/* Hero */}
-        <section className="container mx-auto px-4 text-center mb-16">
-          <div className="entra"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6">
+        <section className="container mx-auto mb-16 px-4 text-center">
+          <div className="entra">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-blue-500/10 px-4 py-2">
               <FileText size={16} className="text-blue-400" />
-              <span className="text-sm text-blue-300">{t("badge")}</span>
+              <span className="text-sm text-blue-300">Grátis, sem cadastro</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("title")}</h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">{t("description")}</p>
+            <h1 className="mb-4 text-4xl font-bold md:text-5xl">Guias práticos de IA</h1>
+            <p className="mx-auto max-w-2xl text-xl text-muted-foreground">
+              Escritos para a pergunta que você digitaria — não para o assunto que soa bonito.
+            </p>
           </div>
         </section>
 
-        {/* Guides Grid */}
         <section className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {guides.map((guide, idx) => (
-              <div
-                key={guide.title}
-                className="entra-2 group bg-secondary border border-border rounded-xl p-6 hover:bg-white/10 hover:border-blue-500/50 transition-all"
+          <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {guias.map((guia) => (
+              <Link
+                key={guia.slug}
+                href={`/recursos/guias/${guia.slug}`}
+                className="entra-2 group flex flex-col rounded-xl border border-border bg-secondary p-6 transition-all hover:border-blue-500/50 hover:bg-white/10"
               >
-                {guide.featured && (
-                  <div className="flex items-center gap-1 text-yellow-400 text-sm mb-3">
-                    <Star size={14} fill="currentColor" />
-                    <span>{t("featured")}</span>
-                  </div>
-                )}
-                <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-500/20">
                   <FileText className="text-blue-400" size={24} />
                 </div>
-                <span className="text-xs text-blue-400 uppercase tracking-wide">{T(guide.category)}</span>
-                <h3 className="text-xl font-semibold mt-2 mb-3 group-hover:text-blue-400 transition-colors">
-                  {T(guide.title)}
-                </h3>
-                <p className="text-muted-foreground text-sm mb-4 line-clamp-2">{T(guide.description)}</p>
+                <span className="text-xs uppercase tracking-wide text-blue-400">
+                  {guia.categoria}
+                </span>
+                <h2 className="mb-3 mt-2 text-xl font-semibold transition-colors group-hover:text-blue-400">
+                  {guia.titulo}
+                </h2>
+                <p className="mb-5 flex-1 text-sm text-muted-foreground">{guia.descricao}</p>
                 <div className="flex items-center justify-between text-sm text-muted-foreground">
                   <span className="flex items-center gap-1">
-                    <Clock size={14} /> {T(guide.readTime)}
+                    <Clock size={14} /> {guia.leitura} min
                   </span>
-                  <span className="flex items-center gap-1">
-                    <Download size={14} /> {guide.downloads.toLocaleString()}
+                  <span className="flex items-center gap-1 text-blue-400 opacity-0 transition-opacity group-hover:opacity-100">
+                    Ler <ArrowRight size={14} />
                   </span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </section>
 
-        {/* CTA */}
-        <section className="container mx-auto px-4 mt-20">
-          <div
-            className="entra-3 max-w-2xl mx-auto text-center bg-gradient-to-r from-blue-900/20 to-amber-900/20 border border-border rounded-2xl p-10"
-          >
-            <h2 className="text-2xl font-bold mb-3">{t("cta.title")}</h2>
-            <p className="text-muted-foreground mb-6">{t("cta.description")}</p>
+        <section className="container mx-auto mt-20 px-4">
+          <div className="entra-3 mx-auto max-w-2xl rounded-2xl border border-border bg-gradient-to-r from-blue-900/20 to-amber-900/20 p-10 text-center">
+            <h2 className="mb-3 text-2xl font-bold">O guia mostra o caminho. O curso anda com você.</h2>
+            <p className="mb-6 text-muted-foreground">
+              Cada guia aponta para o curso que aprofunda o mesmo assunto, com exercício e exemplo
+              pronto.
+            </p>
             <Link
-              href="/registro"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors font-medium"
+              href="/cursos"
+              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-medium transition-colors hover:bg-blue-700"
             >
-              {t("cta.button")}
+              Ver os cursos <ArrowRight size={17} />
             </Link>
           </div>
         </section>
       </main>
-      
     </div>
   );
 }

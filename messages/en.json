@@ -3212,67 +3212,6 @@
       }
     ]
   },
-  "Guides": {
-    "badge": "Free Guides",
-    "title": "Practical AI Guides",
-    "description": "Complete materials to master Artificial Intelligence tools and techniques.",
-    "featured": "Featured",
-    "list": [
-      {
-        "title": "ChatGPT for Beginners",
-        "description": "Learn to use ChatGPT efficiently for work and studies.",
-        "category": "Beginner",
-        "readTime": "15 min",
-        "downloads": 12500,
-        "featured": true
-      },
-      {
-        "title": "Advanced Prompt Engineering",
-        "description": "Advanced techniques to extract the most from language models.",
-        "category": "Advanced",
-        "readTime": "25 min",
-        "downloads": 8300,
-        "featured": true
-      },
-      {
-        "title": "Automation with n8n",
-        "description": "Create automated workflows without code using n8n.",
-        "category": "Intermediate",
-        "readTime": "20 min",
-        "downloads": 6700,
-        "featured": false
-      },
-      {
-        "title": "Introduction to AI Agents",
-        "description": "Understand how autonomous agents work and how to implement them.",
-        "category": "Advanced",
-        "readTime": "30 min",
-        "downloads": 4200,
-        "featured": false
-      },
-      {
-        "title": "AI for Content Creation",
-        "description": "Use AI to create high-quality text, images and videos.",
-        "category": "Intermediate",
-        "readTime": "18 min",
-        "downloads": 9100,
-        "featured": false
-      },
-      {
-        "title": "RAG in Practice",
-        "description": "Implement semantic search systems with augmented generation.",
-        "category": "Advanced",
-        "readTime": "35 min",
-        "downloads": 3800,
-        "featured": false
-      }
-    ],
-    "cta": {
-      "title": "Want to Learn More?",
-      "description": "Access our complete courses for structured learning.",
-      "button": "View Courses"
-    }
-  },
   "Templates": {
     "badge": "Templates & Prompts",
     "title": "Ready-to-Use Templates",

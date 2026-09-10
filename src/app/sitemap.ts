@@ -4,6 +4,7 @@ import { getAllProducts } from "@/lib/products";
 import { getAllNews } from "@/lib/ai-news";
 import { toolsData } from "@/data/tools-complete";
 import { microcursos } from "@/data/microcursos";
+import { guias } from "@/data/guias";
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
@@ -41,7 +42,7 @@ const LOCALES = ["pt-BR", "en"] as const;
  * sitemap (redirecionamento anunciado gasta rastreio sem entregar página) e o
  * `hreflang` dessas rotas declara só `pt-BR`, via `alternates(p, true)`.
  */
-const SO_EM_PORTUGUES = new Set(["/fundadores", "/fabrica"]);
+const SO_EM_PORTUGUES = new Set(["/fundadores", "/fabrica", "/recursos/guias"]);
 
 /**
  * O par de idiomas de um caminho, no formato que o sitemap do Next espera.
@@ -281,6 +282,30 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
           lastModified: new Date(m.publicadoEm),
           changeFrequency: "monthly",
           priority: 0.75,
+        });
+      }
+    }
+
+    /**
+     * ⚠️ Os guias também entram só em português (10/09/2026), pelo mesmo
+     * motivo dos microcursos logo acima: `/en/recursos/guias/*` serve o texto
+     * português e declara `noindex` na própria rota. Some o `if` e o `noindex`
+     * de lá quando a tradução existir.
+     *
+     * Prioridade 0,8 — acima das secundárias e das páginas de curso. Cada guia
+     * foi escrito para uma busca medida no mapa de demanda de 10/09
+     * (`cursos/relatorios/mapa_demanda_2026-09-10.md`), com 97 a 990 buscas no
+     * grupo. São as únicas URLs do site escritas a partir da pergunta que
+     * alguém digita, e não a partir do assunto.
+     */
+    if (locale === "pt-BR") {
+      for (const g of guias) {
+        entries.push({
+          url: url(`/${locale}/recursos/guias/${g.slug}`),
+          alternates: alternates(`/recursos/guias/${g.slug}`, true),
+          lastModified: new Date(g.atualizadoEm),
+          changeFrequency: "monthly",
+          priority: 0.8,
         });
       }
     }

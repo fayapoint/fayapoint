@@ -3302,67 +3302,6 @@
       }
     ]
   },
-  "Guides": {
-    "badge": "Guias Gratuitos",
-    "title": "Guias Práticos de IA",
-    "description": "Materiais completos para você dominar ferramentas e técnicas de Inteligência Artificial.",
-    "featured": "Destaque",
-    "list": [
-      {
-        "title": "ChatGPT para Iniciantes",
-        "description": "Aprenda a usar o ChatGPT de forma eficiente para trabalho e estudos.",
-        "category": "Iniciante",
-        "readTime": "15 min",
-        "downloads": 12500,
-        "featured": true
-      },
-      {
-        "title": "Prompt Engineering Avançado",
-        "description": "Técnicas avançadas para extrair o máximo dos modelos de linguagem.",
-        "category": "Avançado",
-        "readTime": "25 min",
-        "downloads": 8300,
-        "featured": true
-      },
-      {
-        "title": "Automação com n8n",
-        "description": "Crie workflows automatizados sem código usando n8n.",
-        "category": "Intermediário",
-        "readTime": "20 min",
-        "downloads": 6700,
-        "featured": false
-      },
-      {
-        "title": "Introdução a Agentes de IA",
-        "description": "Entenda como funcionam agentes autônomos e como implementá-los.",
-        "category": "Avançado",
-        "readTime": "30 min",
-        "downloads": 4200,
-        "featured": false
-      },
-      {
-        "title": "IA para Criação de Conteúdo",
-        "description": "Use IA para criar textos, imagens e vídeos de alta qualidade.",
-        "category": "Intermediário",
-        "readTime": "18 min",
-        "downloads": 9100,
-        "featured": false
-      },
-      {
-        "title": "RAG na Prática",
-        "description": "Implemente sistemas de busca semântica com geração aumentada.",
-        "category": "Avançado",
-        "readTime": "35 min",
-        "downloads": 3800,
-        "featured": false
-      }
-    ],
-    "cta": {
-      "title": "Quer Aprender Mais?",
-      "description": "Acesse nossos cursos completos para um aprendizado estruturado.",
-      "button": "Ver Cursos"
-    }
-  },
   "Templates": {
     "badge": "Templates & Prompts",
     "title": "Templates Prontos para Usar",
