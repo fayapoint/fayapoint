@@ -55,12 +55,36 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, jaTinha: true });
   }
 
-  // Só reserva se estiver livre e não revogado — a condição é a trava.
-  const reservado = await PastaVivaCodigo.findOneAndUpdate(
-    { codigo, revogado: false, usadoPor: null },
-    { $set: { usadoPor: authUser.id, usadoEm: new Date() } },
+  /**
+   * Duas naturezas de código, e a diferença nasceu de um defeito medido.
+   *
+   * ⚠️ **Código de TIRAGEM (`tiragem: true`) não trava na primeira conta.** A
+   * Hotmart entrega o MESMO arquivo PDF para todo mundo; com um código de uso
+   * único impresso nele, o primeiro comprador a resgatar deixaria todos os
+   * outros de fora, tendo pago. Descoberto em 10/09/2026 com a coleção ainda
+   * vazia — ou seja, antes de alguém ser prejudicado, mas com a página de
+   * vendas já prometendo o acesso.
+   *
+   * É atrito, não segurança: quem receber o PDF de um amigo resgata igual.
+   * Trava de verdade só com webhook da Hotmart, que não existe.
+   *
+   * **Código individual** (`tiragem: false`) mantém o comportamento antigo:
+   * uma conta, travado em `usadoPor`. Serve para entrega um-a-um fora da
+   * Hotmart.
+   */
+  const daTiragem = await PastaVivaCodigo.findOneAndUpdate(
+    { codigo, revogado: false, tiragem: true },
+    { $inc: { resgates: 1 }, $set: { usadoEm: new Date() } },
     { new: true },
   );
+
+  const reservado =
+    daTiragem ||
+    (await PastaVivaCodigo.findOneAndUpdate(
+      { codigo, revogado: false, tiragem: { $ne: true }, usadoPor: null },
+      { $set: { usadoPor: authUser.id, usadoEm: new Date() }, $inc: { resgates: 1 } },
+      { new: true },
+    ));
 
   if (!reservado) {
     const existe = await PastaVivaCodigo.findOne({ codigo }).select("usadoPor revogado").lean();
@@ -68,6 +92,12 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { erro: "Código não encontrado. Confira as letras — ele está na primeira página do PDF." },
         { status: 404 },
+      );
+    }
+    if (existe.revogado) {
+      return NextResponse.json(
+        { erro: "Este código foi cancelado. Fale com o suporte pelo contato@fayai.com.br." },
+        { status: 409 },
       );
     }
     return NextResponse.json(

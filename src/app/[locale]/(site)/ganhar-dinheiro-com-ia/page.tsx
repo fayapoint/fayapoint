@@ -41,7 +41,7 @@ import { TIER_CONFIGS } from "@/lib/course-tiers";
  */
 
 /** Medidos no PDF em 09/09/2026 — ver FATOS_HOTMART_2026-09-09.md. */
-const PAGINAS = 120;
+const PAGINAS = 121;
 const CAPITULOS = 30;
 const MODULOS = 6;
 

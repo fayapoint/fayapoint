@@ -13,7 +13,7 @@
  * ## ⛔ SÃO 30 CAPÍTULOS. Nunca 31.
  *
  * Medido no arquivo, não estimado: `Capítulo 1:` a `Capítulo 30:` em
- * `produtos/ebook/_corpo.html`, e 120 páginas (`/Type /Page` exato, sem casar
+ * `produtos/ebook/_corpo.html`. As páginas eram 120 e passaram a 121 (`/Type /Page` exato, sem casar
  * com `/Type /Pages`) no PDF.
  *
  * O 31º `<h1 class="cap">` do corpo é o **título do livro**, não um capítulo.
@@ -42,8 +42,16 @@ import { HOTMART_CHECKOUT, PRECO_EBOOK } from "@/lib/pasta-viva/config";
 
 export { HOTMART_CHECKOUT, PRECO_EBOOK };
 
-/** Medido no PDF em 10/09/2026: `/Type /Page` exato = 120. */
-export const PAGINAS = 120;
+/**
+ * Medido no PDF: `/Type /Page` exato.
+ *
+ * ⚠️ Passou de 120 para **121** em 10/09/2026, quando o bloco de acesso à
+ * Pasta Viva entrou na abertura do livro. O PDF não mencionava o acervo em
+ * lugar nenhum e não trazia o código — quem comprasse não tinha como entrar,
+ * embora esta página prometesse o acesso. O bloco vale uma página e ela é bem
+ * gasta.
+ */
+export const PAGINAS = 121;
 
 /** Medido em `produtos/ebook/_corpo.html`: `Capítulo 1:` … `Capítulo 30:`. */
 export const CAPITULOS = 30;

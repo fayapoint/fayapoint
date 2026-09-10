@@ -37,6 +37,29 @@ export interface IPastaVivaCodigo extends Document {
   usadoEm?: Date | null;
   /** Invalidado à mão (vazamento de lote, estorno). */
   revogado: boolean;
+
+  /**
+   * ⚠️ Código de TIRAGEM: vale para muitas contas, não trava na primeira.
+   *
+   * Descoberto em 10/09/2026, com a coleção ainda vazia: o desenho original
+   * (`usadoPor` singular) só funciona se cada comprador receber um código
+   * diferente — e **a Hotmart entrega o MESMO arquivo PDF para todo mundo**.
+   * Com um código impresso nesse PDF único, o primeiro comprador a resgatar
+   * travaria o código e todos os outros ficariam de fora, tendo pago.
+   *
+   * Então o código que vai impresso no PDF nasce com `tiragem: true`, e o
+   * resgate dele registra a matrícula sem marcar `usadoPor`. Isso é **atrito,
+   * não segurança** — quem receber o PDF de um amigo resgata igual —, e essa
+   * já era a natureza do mecanismo: trava de verdade só existiria com webhook
+   * da Hotmart, que não existe.
+   *
+   * Códigos individuais (`tiragem: false`) continuam valendo para entrega
+   * um-a-um, fora da Hotmart.
+   */
+  tiragem: boolean;
+
+  /** Quantas contas já entraram por um código de tiragem. Só para medir. */
+  resgates: number;
 }
 
 const PastaVivaCodigoSchema = new Schema<IPastaVivaCodigo>(
@@ -47,6 +70,8 @@ const PastaVivaCodigoSchema = new Schema<IPastaVivaCodigo>(
     usadoPor: { type: Schema.Types.ObjectId, ref: 'User', default: null },
     usadoEm: { type: Date, default: null },
     revogado: { type: Boolean, default: false },
+    tiragem: { type: Boolean, default: false },
+    resgates: { type: Number, default: 0 },
   },
   { collection: 'pastaVivaCodigos' },
 );
