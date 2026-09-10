@@ -47,7 +47,9 @@
     ".next-lente/types/**/*.ts",
     ".next-lente/dev/types/**/*.ts",
     ".next-apostas/types/**/*.ts",
-    ".next-apostas/dev/types/**/*.ts"
+    ".next-apostas/dev/types/**/*.ts",
+    ".next-webpack/types/**/*.ts",
+    ".next-webpack/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
