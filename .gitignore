@@ -92,3 +92,4 @@ scripts/precos/*.log
 
 # Backups da rotacao de credencial: guardam a senha MORTA, nunca sobem.
 *.bak-rotacao-*
+.gstack/

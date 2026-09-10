@@ -92,6 +92,28 @@ const config: NextConfig = {
    */
   htmlLimitedBots: /.*/,
 
+  /**
+   * ⚠️ O build morria em `Generating static pages (393/525)` — e não era o
+   * código.
+   *
+   * Medido em 10/09/2026: em duas execuções seguidas, o build encerrou com
+   * código 1 depois de 3 tentativas em `/en/curso/n8n-automacao-avancada` e
+   * depois em `/en/curso/chatgpt-zero` — rotas diferentes a cada corrida, e na
+   * segunda vez **24 rotas estouraram o limite ao mesmo tempo**. Rota que muda
+   * de nome a cada execução não é rota lenta: é contenção.
+   *
+   * A máquina é compartilhada. Na hora da falha ela estava com CPU em 67%, com
+   * o Wirecast aberto (1,5 GB) e a GPU em 70% — trabalho do Ricardo rodando ao
+   * lado. O padrão do Next é **60 s por página**, e sob essa carga a geração de
+   * uma rota de curso (que lê o Mongo) passa disso sem estar quebrada. O Mongo,
+   * medido na mesma janela, responde em 454 ms.
+   *
+   * 180 s dá folga para a máquina ocupada sem esconder rota genuinamente
+   * quebrada: uma rota que trave de verdade continua estourando, só que três
+   * vezes mais tarde.
+   */
+  staticPageGenerationTimeout: 180,
+
   // Enable experimental features for better performance
   experimental: {
     // Optimize package imports

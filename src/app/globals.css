@@ -97,6 +97,31 @@ body {
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* ── O dourado da marca e a fonte de display, como TOKENS ───────────────
+   *
+   * Os dois nasceram aqui em 10/09/2026, na rodada 2 do gauntlet da landing
+   * do ebook, e o motivo é medido: o crítico de sistema reprovou a página
+   * duas vezes pelo mesmo defeito de fundo.
+   *
+   * Na rodada 1 existiam **dois dourados no mesmo site** — `amber-400` do
+   * Tailwind (#fbbf24) na landing contra `#f5c04e` na `/fabrica`, o mesmo
+   * conceito com dois valores. Na rodada 2, depois de centralizar a cor numa
+   * constante JS, ele reprovou de novo e com razão: centralizar não é
+   * tokenizar. Hex cru em `style={{}}` não compõe com opacidade, e por isso o
+   * código concatenava alpha à mão (`${OURO}40`, `${OURO}0f`) — coisa que
+   * `bg-ouro/[0.06]` resolve sozinho.
+   *
+   * Mesma história para o Bebas: `const bebas = { fontFamily: ... }` estava
+   * duplicado à mão em cada página que queria um título grande.
+   *
+   * Use `text-ouro`, `border-ouro/25`, `bg-ouro/[0.06]` e `font-display`.
+   * ⚠️ A `/fabrica` ainda usa `#f5c04e` inline em 12 lugares e o seu próprio
+   * `bebas`; ela migra para estes tokens quando alguém encostar nela.
+   */
+  --color-ouro: var(--ouro);
+  --color-ouro-foreground: var(--ouro-foreground);
+  --font-display: var(--font-bebas), sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -159,6 +184,15 @@ body {
 
   /* Warm light palette — #f0ece3 bg, #0d0d14 fg, #3a6e00 green accent */
   --background: oklch(0.94 0.01 85);
+  /* O dourado da marca. Vive aqui, e nao no @theme, para seguir o padrao
+   * de indirecao de todos os outros tokens da casa: o @theme aponta para
+   * esta variavel, e um tema futuro pode redefini-la sem tocar no @theme.
+   * `--ouro-foreground` e a tinta que vai EM CIMA do dourado (texto do
+   * botao): um quase-preto quente, do mesmo eixo OKLCH do fundo do site --
+   * o `text-neutral-950` do Tailwind que estava ali era frio e destoava. */
+  --ouro: #f5c04e;
+  --ouro-foreground: oklch(0.16 0.012 65);
+
   --foreground: oklch(0.15 0.01 280);
   --card: oklch(0.96 0.008 85);
   --card-foreground: oklch(0.15 0.01 280);
@@ -195,6 +229,15 @@ body {
   /* Warm dark palette v3 — #1c1814 bg, #ede8df fg, #d4a84b gold accent */
   --_cache-bust: 3;
   --background: oklch(0.16 0.012 65);
+  /* O dourado da marca. Vive aqui, e nao no @theme, para seguir o padrao
+   * de indirecao de todos os outros tokens da casa: o @theme aponta para
+   * esta variavel, e um tema futuro pode redefini-la sem tocar no @theme.
+   * `--ouro-foreground` e a tinta que vai EM CIMA do dourado (texto do
+   * botao): um quase-preto quente, do mesmo eixo OKLCH do fundo do site --
+   * o `text-neutral-950` do Tailwind que estava ali era frio e destoava. */
+  --ouro: #f5c04e;
+  --ouro-foreground: oklch(0.16 0.012 65);
+
   --foreground: oklch(0.93 0.01 80);
   --card: oklch(0.21 0.016 60);
   --card-foreground: oklch(0.93 0.01 80);
@@ -756,7 +799,14 @@ body {
   .shadow-glow-cyan {
     box-shadow: 0 0 30px rgba(34, 211, 238, 0.3);
   }
-  
+
+  /* O brilho do dourado da marca — entrou em 10/09/2026 pelo gauntlet da
+   * landing do ebook. O CTA tinha nascido com um `shadow-[0_0_42px_-12px]`
+   * arbitrário, escrito à mão, ignorando esta família que já existia. */
+  .shadow-glow-ouro {
+    box-shadow: 0 0 42px -12px var(--ouro);
+  }
+
   /* 3D transform utilities */
   .transform-3d {
     transform-style: preserve-3d;

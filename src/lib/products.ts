@@ -199,6 +199,35 @@ export interface Product {
  */
 export const SEM_APOSENTADOS = { aposentado: { $ne: true } } as const;
 
+/**
+ * TODOS os slugs de curso — inclusive `draft` e aposentado.
+ *
+ * Existe para o `generateStaticParams` de `/curso/[slug]`, que desde 10/09/2026
+ * roda com `dynamicParams = false` para o 404 sair com status 404 em vez de
+ * 200. Com o parâmetro desligado, **slug que não sai daqui não tem página** —
+ * então esta lista precisa ser a mais larga possível, e é por isso que ela não
+ * usa `getAllProducts`.
+ *
+ * ⚠️ Medido no primeiro build depois da mudança: `getAllProducts` filtra
+ * `status: 'active'` e `SEM_APOSENTADOS`, e por isso
+ * `/pt-BR/curso/ganhar-dinheiro-com-ia` — que está como `draft` no banco —
+ * respondeu **404**. Uma página de produto real desaparecendo é bem pior que o
+ * soft 404 que a mudança foi consertar.
+ *
+ * O aposentado continua entrando de propósito: a página dele já respondia 200
+ * antes, e quem impede a compra é a guarda do checkout, não a ausência de
+ * rota. Tirá-lo daqui mudaria um comportamento que ninguém pediu para mudar.
+ */
+export async function getTodosSlugsDeCurso(): Promise<string[]> {
+  const collection = await getProductsCollection();
+  const docs = await collection
+    .find({ type: "course" }, { projection: { slug: 1, _id: 0 } })
+    .toArray();
+  return docs
+    .map((d) => (d as { slug?: string }).slug)
+    .filter((s): s is string => typeof s === "string" && s.length > 0);
+}
+
 function normalizeProduct(product: unknown): Product {
   const safeProduct = (product || {}) as Product;
   const detailedCurriculum = Array.isArray(safeProduct.detailedCurriculum)

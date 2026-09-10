@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CourseSalesPage from "./CourseSalesPage";
 import { allCourses } from "@/data/courses";
-import { getProductBySlug, paraIdioma, paraObjetoSimples } from "@/lib/products";
+import { getProductBySlug, getTodosSlugsDeCurso, paraIdioma, paraObjetoSimples } from "@/lib/products";
 import { generatePageMetadata } from "@/lib/metadata";
 import { schemaCurso, schemaTrilha } from "@/lib/structured-data";
 import { ogDaCapa } from "@/lib/capa-og";
@@ -17,10 +17,68 @@ type Props = {
 // apareceria no deploy seguinte. 900s é o mesmo intervalo já usado nas matérias.
 export const revalidate = 900;
 
+/**
+ * ⚠️ `dynamicParams = false` — é o que faz `/curso/nao-existe` responder 404.
+ *
+ * Medido em 10/09/2026, no build de produção servido por `next start`, com
+ * User-Agent de navegador (sem `-A` o proxy devolve 403 e a medição mente):
+ * `/pt-BR/curso/nao-existe` respondia **HTTP 200** servindo a página de 404,
+ * com `x-nextjs-cache: HIT` e `x-nextjs-prerender: 1` no cabeçalho.
+ *
+ * A causa está nesses dois cabeçalhos: com `dynamicParams` ligado (o padrão), o
+ * Next renderiza a resposta do `notFound()` sob demanda, guarda no cache de
+ * prerender — esta rota tem `revalidate = 900` logo acima — e passa a servi-la
+ * como página válida. O `notFound()` dispara e o corpo está certo; o que se
+ * perde é o STATUS. Isso é soft 404, e num site cujo problema medido é
+ * indexação (442 URLs para 358 impressões, 8% indexado) é orçamento de rastreio
+ * gasto em URL fantasma que o Google aprende que existe.
+ *
+ * ⛔ Não tente consertar criando `app/not-found.tsx` na raiz (testado em 10/09,
+ * NÃO resolve) nem `app/layout.tsx` (já existiu e derrubou a renderização
+ * estática do site inteiro — o aviso está em `[locale]/layout.tsx`).
+ */
+export const dynamicParams = false;
+
+/**
+ * Os slugs vêm do BANCO, não da lista estática — e as duas proteções abaixo
+ * existem porque `dynamicParams = false` transforma "slug ausente daqui" em
+ * 404 de verdade.
+ *
+ * 1. **Nem a lista estática, nem `getAllProducts`.** `@/data/courses` ficou defasada
+ *    das fusões e arquivamentos de 19/07: anunciava curso arquivado e omitia
+ *    curso ativo. Com `dynamicParams` desligado, cada curso ativo que faltasse
+ *    nela viraria 404 — desindexando página que vende. E `getAllProducts`
+ *    também não serve: ele filtra `status: 'active'`, e o primeiro build
+ *    desta mudança fez `/curso/ganhar-dinheiro-com-ia`, que está `draft`,
+ *    responder 404. Por isso `getTodosSlugsDeCurso`, que não filtra nada.
+ *
+ * 2. **União, nunca substituição.** O resultado é a união do banco com a lista
+ *    estática: um curso que exista só num dos dois lados continua tendo página.
+ *
+ * 3. **Se o banco falhar, o build FALHA.** Antes disto, uma queda do Mongo
+ *    durante o build geraria o site inteiro sem os cursos do banco e, com
+ *    `dynamicParams = false`, publicaria 404 em massa — que é exatamente o
+ *    desastre que o `notFound()` desta página foi escrito para evitar (ver o
+ *    comentário dele mais abaixo). Falhar o build é barulhento e reversível;
+ *    desindexar 26 páginas de venda não é.
+ *
+ * ⚠️ O custo consciente: curso criado no banco só ganha página no próximo
+ * build. Para publicar um curso novo, rode o deploy.
+ */
 export async function generateStaticParams() {
-  return allCourses.map((course) => ({
-    slug: course.slug,
-  }));
+  const doBanco = await getTodosSlugsDeCurso().catch(() => null);
+
+  if (doBanco === null) {
+    throw new Error(
+      "generateStaticParams de /curso/[slug]: o banco não respondeu. " +
+        "Build abortado de propósito — seguir com a lista estática publicaria " +
+        "404 para todo curso ativo que não estivesse nela.",
+    );
+  }
+
+  const slugs = new Set<string>([...doBanco, ...allCourses.map((c) => c.slug)]);
+
+  return Array.from(slugs).map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
