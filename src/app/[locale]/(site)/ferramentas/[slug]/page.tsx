@@ -163,6 +163,41 @@ const logoMap: Record<string, string> = {
   "claude-code": "https://claude.ai/images/claude_app_icon.png",
 };
 
+/**
+ * ⚠️ `dynamicParams = false` — sem isto, o 404 desta rota sai com status 200.
+ *
+ * Medido em 10/09/2026, no build de produção servido por `next start`, com
+ * User-Agent de navegador (sem `-A` o proxy devolve 403 e a medição mente):
+ *
+ *   curl -sD- .../pt-BR/ferramentas/nao-existe
+ *   HTTP/1.1 200 OK
+ *   x-nextjs-cache: HIT
+ *   x-nextjs-prerender: 1
+ *
+ * O corpo era a página de 404 — o `notFound()` dispara e o texto certo
+ * aparece. O que se perde é o STATUS: com `dynamicParams` ligado (o padrão), o
+ * Next renderiza a resposta do `notFound()` sob demanda, guarda no cache de
+ * prerender e passa a servi-la como página válida. O mesmo acontecia em
+ * `/curso/`, `/inventando/` e `/blog/`. É soft 404 — página que anuncia a
+ * própria ausência com status de sucesso —, e num site cujo problema medido é
+ * indexação (442 URLs para 358 impressões, 8% indexado) significa rastreio
+ * queimado em URL fantasma que o Google aprende que existe.
+ *
+ * Aqui a lista é FECHADA e LOCAL (`toolsMap`, de `@/data/tools-complete` mais
+ * os apelidos legados), então desligar `dynamicParams` não esconde nada: slug
+ * fora dela nem chega a renderizar e cai no mecanismo de rota-inexistente do
+ * Next, que devolve 404 de verdade. Os apelidos legados continuam servidos,
+ * porque são chaves de `toolsMap`.
+ *
+ * ⛔ Não tente consertar isto criando `app/not-found.tsx` na raiz — foi
+ * testado em 10/09 e NÃO resolve. E ⛔ nunca crie `app/layout.tsx`: já existiu
+ * um e derrubou a renderização estática do site inteiro (o aviso está em
+ * `[locale]/layout.tsx`). ⛔ Este contorno também não serve para `/curso` e
+ * `/noticias`, cujos slugs vêm do banco: ali um curso novo sumiria até o
+ * próximo build.
+ */
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   return Object.keys(toolsMap).map((slug) => ({
     slug,

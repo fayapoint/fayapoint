@@ -34,6 +34,34 @@ type Props = { params: Promise<{ locale: string; slug: string }> };
  */
 export const revalidate = 3600;
 
+/**
+ * ⚠️ `dynamicParams = false` — sem isto, o 404 desta rota sai com status 200.
+ *
+ * Medido em 10/09/2026, no build de produção servido por `next start`, com
+ * User-Agent de navegador (sem `-A` o proxy devolve 403 e a medição mente):
+ *
+ *   curl -sD- .../pt-BR/inventando/nao-existe
+ *   HTTP/1.1 200 OK
+ *   x-nextjs-cache: HIT
+ *   x-nextjs-prerender: 1
+ *
+ * O `notFound()` dispara e o corpo servido É a página de 404; o que se perde é
+ * o STATUS. Com `dynamicParams` ligado (o padrão), o Next renderiza a resposta
+ * do `notFound()` sob demanda, guarda no cache de prerender — este arquivo tem
+ * `revalidate = 3600` logo acima — e passa a servi-la como página válida. O
+ * mesmo acontecia em `/curso/`, `/ferramentas/` e `/blog/`.
+ *
+ * Aqui a lista é FECHADA e LOCAL (`getTodosSlugs()`, de `@/data/microcursos`),
+ * então desligar `dynamicParams` não esconde nada: microcurso novo entra no
+ * próximo build, que é quando ele passa a existir de qualquer forma.
+ *
+ * ⛔ Não conserte isto com `app/not-found.tsx` na raiz (testado, não resolve)
+ * nem com `app/layout.tsx` (derruba a renderização estática do site inteiro —
+ * ver o aviso em `[locale]/layout.tsx`). ⛔ E não copie para `/curso` e
+ * `/noticias`: lá os slugs vêm do banco.
+ */
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   return getTodosSlugs().map((slug) => ({ slug }));
 }
