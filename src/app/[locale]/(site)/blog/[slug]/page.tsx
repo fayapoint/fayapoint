@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getBlogPostContent } from "@/data/blog-posts";
+import { getBlogPostContent, blogPostContents } from "@/data/blog-posts";
 import { generatePageMetadata } from "@/lib/metadata";
 import BlogPostView from "./BlogPostView";
 
@@ -29,6 +29,33 @@ type Props = {
  *    soft 404. Aqui os dois casos caem no mesmo `notFound()`: sem corpo, sem
  *    página.
  */
+/**
+ * ⚠️ `dynamicParams = false` — sem isto o 404 desta rota sai com status 200.
+ *
+ * Medido em 10/09/2026 no build de produção, com User-Agent de navegador (sem
+ * `-A` o proxy devolve 403 e a medição mente): `/pt-BR/blog/nao-existe`
+ * respondia **HTTP 200** servindo a página de 404 por dentro. É o mesmo soft
+ * 404 que `/curso/`, `/ferramentas/` e `/inventando/` tinham — página que
+ * anuncia a própria ausência com status de sucesso, gastando rastreio num site
+ * cujo problema medido é indexação.
+ *
+ * Aqui o conserto é o mais seguro dos quatro: a lista é **fechada, local e
+ * congelada**. `blogPostContents` são os 15 artigos legados que ainda têm
+ * corpo, escritos à mão em `@/data/blog-posts`; `/blog` responde 308 para
+ * `/noticias` desde então e nenhum artigo novo entra aqui. Slug fora da lista
+ * nunca teve conteúdo — o `notFound()` abaixo já o mandava para a página de
+ * erro, só que com o número errado.
+ *
+ * ⛔ Não copie isto para `/noticias/[slug]`: lá os slugs vêm do banco e o
+ * Estúdio Social publica três por dia. Com `dynamicParams` desligado, matéria
+ * nova ficaria sem página até o próximo build.
+ */
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return blogPostContents.map((p) => ({ slug: p.slug }));
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const content = getBlogPostContent(slug);
