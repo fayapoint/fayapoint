@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --port 3000",
-    "prebuild": "node scripts/i18n/fatiar-por-rota.mjs",
+    "prebuild": "node scripts/i18n/fatiar-por-rota.mjs && node scripts/gerar-slugs-curso.mjs",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",

@@ -12,6 +12,7 @@ import {
   generateRequestFingerprint
 } from "@/lib/bot-detection";
 import { routing, type Locale } from "./i18n/routing";
+import slugsDeCurso from "./gerado/slugs-curso.json";
 
 // JWT secret for Edge runtime verification (jose)
 const JWT_SECRET_BYTES = new TextEncoder().encode(process.env.JWT_SECRET || "");
@@ -291,8 +292,52 @@ function redirecionaParaIdioma(request: NextRequest, url: URL) {
   return response;
 }
 
+/**
+ * Os slugs de curso que existem — gerados no `prebuild` por
+ * `scripts/gerar-slugs-curso.mjs`, porque aqui na edge não há Mongo.
+ *
+ * ⚠️ Lista VAZIA significa "não sei", e o corte abaixo é desligado. Nunca o
+ * contrário: uma lista incompleta transformaria curso real em 404, que é como
+ * se desindexa uma página de venda.
+ */
+const SLUGS_DE_CURSO = new Set<string>(
+  Array.isArray((slugsDeCurso as { slugs?: unknown }).slugs)
+    ? ((slugsDeCurso as { slugs: string[] }).slugs)
+    : [],
+);
+
+/** `/pt-BR/curso/<slug>` e `/en/curso/<slug>` — e só a página do curso em si. */
+const ROTA_DE_CURSO = /^\/(?:pt-BR|en)\/curso\/([^/]+)\/?$/;
+
 export default async function middleware(request: NextRequest) {
   const { pathname, searchParams } = request.nextUrl;
+
+  // =========================================================================
+  // SOFT 404 DE /curso — o corte tem de acontecer AQUI, antes do Next
+  // =========================================================================
+  //
+  // `/pt-BR/curso/<qualquer-coisa>` respondia HTTP 200 servindo a página de
+  // 404. Com `dynamicParams` ligado, o Next renderiza a resposta do
+  // `notFound()` sob demanda, guarda no cache de prerender e passa a servi-la
+  // como página válida.
+  //
+  // `dynamicParams = false` consertou `/ferramentas`, `/inventando`,
+  // `/recursos/guias` e `/blog` — medido em produção em 10/09/2026. Em
+  // `/curso` NÃO consertou: depois do deploy, `/pt-BR/curso/nao-existe`
+  // continuou 200, com `Cache-Status: fwd=bypass` e `no-store` (renderizado na
+  // hora, não cache velho). A diferença é que `/curso/[slug]` é a única das
+  // cinco com subrota `force-dynamic` (`/meu`), e um filho assim mantém o
+  // segmento pai roteável dinamicamente.
+  //
+  // Daí o corte no proxy, que roda antes de tudo e não passa pelo cache de
+  // prerender. Só a página do curso entra na regra: `/continuar`, `/meu` e
+  // `/previa` seguem intactas, porque a regex exige o fim do caminho.
+  if (SLUGS_DE_CURSO.size > 0) {
+    const casou = pathname.match(ROTA_DE_CURSO);
+    if (casou && !SLUGS_DE_CURSO.has(decodeURIComponent(casou[1]))) {
+      return new NextResponse(null, { status: 404 });
+    }
+  }
 
   // =========================================================================
   // SEO FILES - Must NEVER be locale-redirected or blocked (Googlebot reads these)
