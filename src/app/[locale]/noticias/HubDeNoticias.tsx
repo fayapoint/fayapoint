@@ -1,6 +1,7 @@
 import { obterT } from "@/i18n/dicionario-servidor";
 import Link from "next/link";
-import { getAllNews } from "@/lib/ai-news";
+import { notFound } from "next/navigation";
+import { getAllNewsComEstado } from "@/lib/ai-news";
 import { SEED_NEWS } from "@/data/landing/seed-news";
 import { ExperienceNav } from "@/components/layout/ExperienceNav";
 import { comIdioma } from "@/lib/rota-idioma";
@@ -44,9 +45,15 @@ function formatarData(data: string, locale: string, mes: "long" | "short") {
 export async function HubDeNoticias({ locale, tag }: { locale: string; tag?: string }) {
   const T = await obterT(locale);
   const t = await getTranslations({ locale, namespace: "NewsHub" });
-  const all = await getAllNews(60, locale);
+  const { items: all, bancoRespondeu } = await getAllNewsComEstado(60, locale);
   const tags = [...new Set(all.map((n) => n.tag))].slice(0, 8);
   const filtered = tag ? all.filter((n) => n.tag === tag) : all;
+  // SOFT 404 DE TAG — sem isto, `/noticias/tag/<qualquer-coisa>` respondia
+  // HTTP 200 com o hub vazio, `index, follow` e canonical apontando para si:
+  // toda palavra inventada virava URL indexável (medido em produção, 11/09/2026).
+  // Só vira 404 com o banco respondendo — queda do Mongo continua 200 vazio.
+  // Os chips saem destas mesmas 60 matérias, então nenhum link interno cai aqui.
+  if (tag && bancoRespondeu && filtered.length === 0) notFound();
   const [featured, ...rest] = filtered;
 
   return (

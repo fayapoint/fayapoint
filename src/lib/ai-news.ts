@@ -207,22 +207,36 @@ export async function getAiNews(
   }
 }
 
-/** Hub /noticias — histórico (até um trimestre). */
-export async function getAllNews(limit = 60, locale = IDIOMA_PADRAO): Promise<AiNewsArticle[]> {
+/**
+ * Hub /noticias — histórico (até um trimestre), dizendo se o banco respondeu.
+ *
+ * ⚠️ `bancoRespondeu` separa "não há matéria" de "o Mongo caiu". As duas dão
+ * lista vazia, e só a primeira pode virar 404: se a queda virasse 404, o Google
+ * desindexaria todas as tags de uma vez — a mesma regra de `curso/[slug]`.
+ */
+export async function getAllNewsComEstado(
+  limit = 60,
+  locale = IDIOMA_PADRAO,
+): Promise<{ items: AiNewsArticle[]; bancoRespondeu: boolean }> {
   try {
     await dbConnect();
     const db = mongoose.connection.db;
-    if (!db) return [];
+    if (!db) return { items: [], bancoRespondeu: false };
     const docs = await db
       .collection("ainews")
       .find({})
       .sort({ publishedAt: -1 })
       .limit(limit)
       .toArray();
-    return docs.map((d, i) => mapDoc(d, i, locale));
+    return { items: docs.map((d, i) => mapDoc(d, i, locale)), bancoRespondeu: true };
   } catch {
-    return [];
+    return { items: [], bancoRespondeu: false };
   }
+}
+
+/** Hub /noticias — histórico (até um trimestre). */
+export async function getAllNews(limit = 60, locale = IDIOMA_PADRAO): Promise<AiNewsArticle[]> {
+  return (await getAllNewsComEstado(limit, locale)).items;
 }
 
 export async function getNewsBySlug(slug: string, locale = IDIOMA_PADRAO): Promise<AiNewsArticle | null> {
