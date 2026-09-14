@@ -107,7 +107,7 @@ export default function ConsultPage() {
               <div className="mt-8">
                 <p className="text-sm text-muted-foreground mb-3">{T("Prefere falar direto com o time?")}</p>
                 <Button asChild variant="outline">
-                  <a href="https://wa.me/5521971908530" target="_blank" rel="noreferrer">
+                  <a href="https://wa.me/5521971763780" target="_blank" rel="noreferrer">
                     
                     {T("WhatsApp Business")}
                   </a>

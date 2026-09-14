@@ -49,7 +49,7 @@ const footerLinks = {
     { key: "links.company.items.contact", href: "/contato" },
   ],
   suporte: [
-    { key: "links.support.items.whatsapp", href: "https://wa.me/5521971908530" },
+    { key: "links.support.items.whatsapp", href: "https://wa.me/5521971763780" },
     { key: "links.support.items.help", href: "/ajuda" },
     { key: "links.support.items.resources", href: "/recursos" },
     { key: "links.support.items.terms", href: "/termos" },
@@ -253,8 +253,8 @@ export function Footer() {
               </div>
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
-                <a href="tel:+5521971908530" className="hover:text-white">
-                  (21) 97190-8530
+                <a href="tel:+5521971763780" className="hover:text-white">
+                  (21) 97176-3780
                 </a>
               </div>
               <div className="flex items-center gap-2">

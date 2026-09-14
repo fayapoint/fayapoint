@@ -119,7 +119,7 @@ function courseToProductDocument(course: CourseData) {
       },
       whatsapp: {
         enabled: true,
-        number: '+5521971908530',
+        number: '+5521971763780',
         message: `Olá! Gostaria de saber mais sobre o ${course.title}`,
       },
     },

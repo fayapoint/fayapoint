@@ -13,7 +13,7 @@ import {
   X,
 } from "lucide-react";
 
-const phoneNumber = "5521971908530";
+const phoneNumber = "5521971763780";
 
 /**
  * As três mensagens prontas. O TEXTO vem das mensagens (`WhatsApp.quick1..3`)

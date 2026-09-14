@@ -481,7 +481,7 @@ export default function FreeClassPage() {
                     <ArrowRight className="ml-2" size={20} />
                   </Button>
                 </Link>
-                <Link href="https://wa.me/5521971908530">
+                <Link href="https://wa.me/5521971763780">
                   <Button variant="outline" className="border-green-500 text-green-400 hover:bg-green-500/10 px-8 py-6 text-lg">
                     <MessageCircle className="mr-2" size={20} />
                     {isPtBr ? T("Tirar Dúvidas no WhatsApp") : T("Ask Questions on WhatsApp")}

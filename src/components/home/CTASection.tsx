@@ -36,7 +36,7 @@ export function CTASection() {
     primary: (chunks) => <span className="text-primary font-bold">{chunks}</span>,
   });
   const whatsappMessage = encodeURIComponent(t("whatsapp.message"));
-  const whatsappUrl = `https://wa.me/5521971908530?text=${whatsappMessage}`;
+  const whatsappUrl = `https://wa.me/5521971763780?text=${whatsappMessage}`;
 
   useEffect(() => {
     setMounted(true);
