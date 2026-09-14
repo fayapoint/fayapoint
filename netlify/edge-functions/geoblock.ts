@@ -52,6 +52,13 @@ const BYPASS_PATHS = [
   // Meta data deletion callback (called by Meta servers)
   "/api/auth/data-deletion",
 
+  // Casos: a vitrine de portfólio. Os produtos em inglês do Gumroad e o perfil
+  // da Apify apontam para cá, e o comprador de fora do Brasil recebia 403 no
+  // único link de prova que a gente dá. Liberado por decisão do Ricardo em
+  // 14/09/2026 — só esta seção, o resto do bloqueio segue igual.
+  "/pt-BR/casos",
+  "/en/casos",
+
   // Legal/policy pages (must be accessible for Meta, Google, app stores)
   "/pt-BR/privacidade",
   "/pt-BR/termos",
