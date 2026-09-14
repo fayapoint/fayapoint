@@ -1,294 +1,109 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { ArrowRight, Lock, FolderOpen, CalendarDays } from "lucide-react";
+import { ArrowRight, BookOpenCheck, CalendarDays, CheckCircle2, FolderOpen, Lock, Sparkles } from "lucide-react";
 import { getAcessoPastaViva } from "@/lib/pasta-viva/acesso";
 import { PASTA_DRIVE_URL, HOTMART_CHECKOUT, PRECO_EBOOK } from "@/lib/pasta-viva/config";
 import { SEMENTES } from "@/data/pasta-viva/sementes";
 import { GraficoMetodos } from "@/components/pasta-viva/GraficoMetodos";
+import { AcervoExplorer } from "@/components/pasta-viva/AcervoExplorer";
 import { TIER_CONFIGS } from "@/lib/course-tiers";
-
-/**
- * A PÁGINA VIVA — 10/09/2026
- *
- * O acervo que acompanha o ebook "Ganhar dinheiro com IA". Duas portas entram
- * aqui (assinante Expert e comprador do ebook), e o corte é no servidor: quem
- * não tem acesso não recebe o conteúdo no HTML, recebe a página de convite.
- *
- * ## As três decisões que sustentam esta página
- *
- * 1. **Nenhum número de resultado é prometido.** O gráfico mede tempo de
- *    trabalho e custo de início, que são fatos do método. Retorno tem coluna
- *    própria e ela diz "ainda não medimos" enquanto for verdade — em palavras,
- *    nunca com um traço, que lê como tabela quebrada.
- *
- * 2. **Toda linha tem fonte.** Um método sem fonte não entra no acervo. É o que
- *    separa este material de uma lista de dicas.
- *
- * 3. **O acervo não apaga.** Método que sai de moda é arquivado, não deletado,
- *    e continua acessível pela URL. A série temporal de o que funcionava em
- *    cada momento é a única coisa aqui que não dá para copiar.
- */
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Pasta Viva — Ganhar dinheiro com IA | FayAI",
-  description:
-    "O acervo que se atualiza: métodos de prestar serviço com IA, com a fonte de cada um, quanto custa começar e quanto tempo leva até a primeira entrega.",
+  description: "Um acervo editorial de métodos para prestar serviços com IA: fontes, passos, custo de início, tempo de trabalho e histórico de revisão.",
 };
+
+const DATA_DA_PRIMEIRA_EDICAO = "10 de setembro de 2026";
 
 export default async function PastaVivaPage() {
   const acesso = await getAcessoPastaViva();
-
+  // O portão vem antes de montar qualquer prop que contenha o acervo.
   if (!acesso.liberado) return <Convite acesso={acesso} />;
 
-  const metodos = SEMENTES.map((s) => ({
-    slug: s.slug,
-    titulo: s.titulo,
-    categoria: s.categoria,
-    tempoConclusaoHoras: s.tempoConclusaoHoras,
-    investimentoReais: s.investimentoReais,
-    dificuldade: s.dificuldade,
-    temMedicao: false,
+  const metodos = SEMENTES.map((semente) => ({
+    slug: semente.slug,
+    titulo: semente.titulo,
+    tldr: semente.tldr,
+    categoria: semente.categoria,
+    tempoConclusaoHoras: semente.tempoConclusaoHoras,
+    investimentoReais: semente.investimentoReais,
+    dificuldade: semente.dificuldade,
+    revisadoEm: semente.revisadoEm,
+    capa: `/pasta-viva/capas/${semente.slug}-v1.png`,
   }));
-
-  const fontesUnicas = new Set(SEMENTES.flatMap((s) => s.fontes.map((f) => f.id)));
-  const categorias = [...new Set(SEMENTES.map((s) => s.categoria))];
+  const dadosDoGrafico = metodos.map((metodo) => ({ ...metodo, temMedicao: false }));
+  const fontesUnicas = new Set(SEMENTES.flatMap((semente) => semente.fontes.map((fonte) => fonte.id)));
+  const categorias = [...new Set(SEMENTES.map((semente) => semente.categoria))];
+  const primeiroMetodo = metodos.find((metodo) => metodo.slug === "mapa-de-oportunidades-na-lista-de-contatos");
 
   return (
-    <main className="mx-auto max-w-5xl px-4 py-12">
-      <header className="mb-10">
-        <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-          Pasta Viva
-        </p>
-        <h1 className="mt-2 text-3xl font-bold text-foreground sm:text-4xl">
-          O acervo de métodos, e o que já sabemos sobre cada um
-        </h1>
-        <p className="mt-3 max-w-2xl text-sm text-muted-foreground">
-          Cada método aqui tem uma página própria com a fonte que o sustenta, o
-          passo a passo de implementação e o que medimos até agora. Nada é
-          apagado: um método que sai de uso é arquivado e continua consultável.
-        </p>
-        <p className="mt-2 text-xs text-muted-foreground">
-          Você entrou {acesso.porta === "expert" ? "pelo plano Expert" : "pela compra do ebook"}.
-        </p>
-      </header>
-
-      <section className="mb-10 grid gap-3 sm:grid-cols-4">
-        <Ficha valor={String(SEMENTES.length)} rotulo="métodos no acervo" />
-        <Ficha valor={String(categorias.length)} rotulo="etapas cobertas" />
-        <Ficha valor={String(fontesUnicas.size)} rotulo="fontes citadas" />
-        <Ficha valor="0" rotulo="com retorno medido por nós" vazio />
-      </section>
-
-      <GraficoMetodos metodos={metodos} />
-
-      <section className="my-12">
-        <h2 className="mb-1 text-lg font-semibold text-foreground">O acervo</h2>
-        <p className="mb-4 text-xs text-muted-foreground">
-          Ordenado por etapa do trabalho: escolher o serviço, achar cliente,
-          orçar, entregar, cobrar, escalar.
-        </p>
-
-        <div className="overflow-x-auto rounded-lg border border-border">
-          <table className="w-full min-w-[46rem] text-sm">
-            <thead className="bg-muted/50 text-xs uppercase tracking-wide text-muted-foreground">
-              <tr>
-                <th className="px-4 py-3 text-left font-medium">Método</th>
-                <th className="px-4 py-3 text-left font-medium">Etapa</th>
-                <th className="px-4 py-3 text-right font-medium">Começar custa</th>
-                <th className="px-4 py-3 text-right font-medium">Até a 1ª entrega</th>
-                <th className="px-4 py-3 text-left font-medium">Retorno</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-border">
-              {SEMENTES.map((m) => (
-                <tr key={m.slug} className="hover:bg-muted/30">
-                  <td className="px-4 py-3">
-                    <Link
-                      href={`/pasta-viva/metodo/${m.slug}`}
-                      className="font-medium text-foreground underline-offset-4 hover:underline"
-                    >
-                      {m.titulo}
-                    </Link>
-                    <p className="mt-0.5 text-xs text-muted-foreground">{m.tldr}</p>
-                  </td>
-                  <td className="px-4 py-3 text-muted-foreground">{m.categoria}</td>
-                  <td className="px-4 py-3 text-right tabular-nums text-foreground">
-                    {m.investimentoReais === 0
-                      ? "R$ 0"
-                      : `R$ ${m.investimentoReais.toLocaleString("pt-BR")}`}
-                  </td>
-                  <td className="px-4 py-3 text-right tabular-nums text-foreground">
-                    {m.tempoConclusaoHoras}h
-                  </td>
-                  <td className="px-4 py-3">
-                    <SemMedicao />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+    <main className="pb-16">
+      <section className="relative isolate overflow-hidden border-b border-border bg-[#15130f] text-white">
+        <Image src="/pasta-viva/hero-v1.png" alt="" fill priority sizes="100vw" className="-z-20 object-cover object-center opacity-80" />
+        <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(10,10,9,.98)_0%,rgba(10,10,9,.87)_42%,rgba(10,10,9,.28)_100%)]" aria-hidden />
+        <div className="mx-auto grid min-h-[32rem] max-w-5xl content-center px-4 py-16 sm:px-6">
+          <div className="max-w-2xl">
+            <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/25 px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-[#f5c04e] backdrop-blur-sm"><Sparkles className="h-3.5 w-3.5" aria-hidden /> Pasta Viva</p>
+            <h1 className="mt-5 font-display text-5xl leading-[.92] tracking-wide text-white sm:text-6xl">O livro termina. O acervo continua sendo cuidado.</h1>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg">Métodos para prestar serviços com IA, cada um com fonte, percurso de implementação e uma separação honesta entre o que sabemos e o que ainda não medimos.</p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a href="#acervo" className="inline-flex min-h-11 items-center gap-2 rounded-lg bg-ouro px-5 py-2.5 text-sm font-bold text-ouro-foreground transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">Explorar o acervo <ArrowRight className="h-4 w-4" aria-hidden /></a>
+              {primeiroMetodo && <Link href={`/pasta-viva/metodo/${primeiroMetodo.slug}`} className="inline-flex min-h-11 items-center gap-2 rounded-lg border border-white/30 bg-black/15 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-sm hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">Por onde começo <BookOpenCheck className="h-4 w-4" aria-hidden /></Link>}
+            </div>
+          </div>
         </div>
-
-        <p className="mt-3 text-xs text-muted-foreground">
-          A coluna de retorno começa vazia de propósito. Ela só recebe número em
-          duas situações: quando uma fonte externa declarar um resultado — e aí
-          entra com a fonte ao lado, como afirmação dela — ou quando nós
-          medirmos, com data e tamanho da amostra. Estimativa não entra.
-        </p>
       </section>
 
-      <section className="my-12 rounded-xl border border-border bg-card p-6">
-        <h2 className="flex items-center gap-2 text-lg font-semibold text-foreground">
-          <FolderOpen className="h-5 w-5 text-primary" aria-hidden />
-          A pasta de arquivos
-        </h2>
-        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-          Os modelos prontos para baixar — planilha do mapa de contatos, modelo
-          de combinado, modelo de orçamento. O acervo vive aqui no site, que é
-          onde ele se atualiza; a pasta guarda o que você leva embora.
-        </p>
-        <a
-          href={PASTA_DRIVE_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-4 inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
-        >
-          Abrir a pasta <ArrowRight className="h-4 w-4" aria-hidden />
-        </a>
-      </section>
+      <div className="mx-auto max-w-5xl px-4 sm:px-6">
+        <section className="relative -mt-7 grid gap-3 sm:grid-cols-4" aria-label="Resumo do acervo">
+          <Ficha valor={String(SEMENTES.length)} rotulo="métodos no acervo" />
+          <Ficha valor={String(categorias.length)} rotulo="etapas cobertas" />
+          <Ficha valor={String(fontesUnicas.size)} rotulo="fontes citadas" />
+          <Ficha valor="0" rotulo="retornos medidos por nós" vazio />
+        </section>
 
-      <section className="my-12 rounded-xl border border-dashed border-border p-6">
-        <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
-          <CalendarDays className="h-5 w-5 text-primary" aria-hidden />
-          A edição de hoje
-        </h2>
-        <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-          Ainda não há edição publicada. A primeira sai quando o debate diário
-          entrar no ar — e a partir daí esta seção mostra o que entrou no
-          acervo, o que mudou de posição e o que foi avaliado e recusado, com o
-          motivo da recusa.
-        </p>
-      </section>
+        <section className="mt-12 grid gap-6 rounded-2xl border border-border bg-card p-6 shadow-sm md:grid-cols-[1.1fr_.9fr] md:p-8">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Trilha de entrada</p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground">Comece com um método que cabe no que você tem hoje.</h2>
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">O mapa de oportunidades começa com a sua própria lista de contatos, não exige investimento e organiza hipóteses antes de qualquer abordagem. É uma porta de entrada, não uma promessa de resultado.</p>
+            {primeiroMetodo && <Link href={`/pasta-viva/metodo/${primeiroMetodo.slug}`} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-primary underline-offset-4 hover:underline">Abrir o método de R$ 0 e 2 horas <ArrowRight className="h-4 w-4" aria-hidden /></Link>}
+          </div>
+          <div className="rounded-xl border border-primary/20 bg-primary/5 p-5">
+            <p className="text-sm font-semibold text-foreground">O compromisso editorial</p>
+            <ul className="mt-4 space-y-3 text-sm leading-relaxed text-muted-foreground">
+              <li className="flex gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> Toda sugestão nasce com fonte.</li>
+              <li className="flex gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> Retorno só entra com declaração identificada ou medição nossa datada.</li>
+              <li className="flex gap-2"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden /> Método que envelhece é arquivado, com URL e histórico preservados.</li>
+            </ul>
+          </div>
+        </section>
+
+        <section className="mt-16">
+          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end"><div><p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">Leitura estrutural</p><h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground">Custo de início e tempo de trabalho — não ROI.</h2></div><p className="max-w-md text-sm text-muted-foreground">O gráfico ajuda a comparar pontos de partida. A coluna de retorno continua declaradamente vazia enquanto não houver dado.</p></div>
+          <div className="mt-6"><GraficoMetodos metodos={dadosDoGrafico} /></div>
+        </section>
+
+        <AcervoExplorer metodos={metodos} />
+
+        <section className="my-16 grid gap-6 lg:grid-cols-2">
+          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm"><h2 className="flex items-center gap-2 text-lg font-semibold text-foreground"><FolderOpen className="h-5 w-5 text-primary" aria-hidden /> A pasta de arquivos</h2><p className="mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">Modelos que você leva para usar — mapa de contatos, combinado e orçamento. O acervo fica no site para que as revisões e o histórico continuem visíveis.</p><a href={PASTA_DRIVE_URL} target="_blank" rel="noopener noreferrer" className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">Abrir a pasta <ArrowRight className="h-4 w-4" aria-hidden /></a></div>
+          <div className="rounded-2xl border border-border bg-muted/30 p-6"><h2 className="flex items-center gap-2 text-lg font-semibold text-foreground"><CalendarDays className="h-5 w-5 text-primary" aria-hidden /> O que mudou nesta edição</h2><p className="mt-3 text-sm font-medium text-foreground">{DATA_DA_PRIMEIRA_EDICAO}</p><ul className="mt-3 space-y-2 text-sm leading-relaxed text-muted-foreground"><li>• O acervo foi aberto com 12 métodos ligados aos capítulos do livro.</li><li>• Cada método ganhou data de revisão, capa editorial e página própria com fontes.</li><li>• A busca e os filtros passaram a permitir voltar ao ponto que faz sentido para você.</li></ul><p className="mt-4 text-xs leading-relaxed text-muted-foreground">Próximas propostas passam por revisão antes de entrar. Este registro não será reescrito como se o acervo tivesse começado antes.</p></div>
+        </section>
+      </div>
     </main>
   );
 }
 
-function Ficha({
-  valor,
-  rotulo,
-  vazio = false,
-}: {
-  valor: string;
-  rotulo: string;
-  vazio?: boolean;
-}) {
-  return (
-    <div className="rounded-lg border border-border bg-card p-4">
-      <p
-        className={`text-2xl font-bold tabular-nums ${vazio ? "text-muted-foreground" : "text-foreground"}`}
-      >
-        {valor}
-      </p>
-      <p className="mt-1 text-xs text-muted-foreground">{rotulo}</p>
-    </div>
-  );
-}
-
-/**
- * O estado vazio da coluna de retorno.
- *
- * Faixa hachurada com a frase escrita, nunca um traço: em 26/08 uma tabela do
- * game com traços repetidos foi lida como carregamento quebrado, e o traço não
- * distingue "não temos" de "falhou" ([[reference_estado_vazio_tabela]]).
- */
-function SemMedicao() {
-  return (
-    <span
-      className="inline-flex items-center rounded px-2 py-1 text-xs text-muted-foreground"
-      style={{
-        backgroundImage:
-          "repeating-linear-gradient(135deg, color-mix(in oklab, currentColor 12%, transparent) 0 6px, transparent 6px 12px)",
-      }}
-    >
-      ainda não medimos
-    </span>
-  );
+function Ficha({ valor, rotulo, vazio = false }: { valor: string; rotulo: string; vazio?: boolean }) {
+  return <div className="rounded-xl border border-border bg-card p-4 shadow-sm"><p className={`text-2xl font-bold tabular-nums ${vazio ? "text-muted-foreground" : "text-foreground"}`}>{valor}</p><p className="mt-1 text-xs text-muted-foreground">{rotulo}</p></div>;
 }
 
 function Convite({ acesso }: { acesso: Awaited<ReturnType<typeof getAcessoPastaViva>> }) {
   return (
-    <main className="mx-auto max-w-3xl px-4 py-16">
-      <div className="rounded-xl border border-border bg-card p-8">
-        <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-primary">
-          <Lock className="h-4 w-4" aria-hidden />
-          Pasta Viva
-        </p>
-        <h1 className="mt-3 text-3xl font-bold text-foreground">
-          O acervo que se atualiza — e as duas formas de entrar
-        </h1>
-        <p className="mt-3 text-sm text-muted-foreground">
-          Métodos de prestar serviço com IA, cada um com a fonte que o sustenta,
-          quanto custa começar, quanto tempo leva até a primeira entrega e o que
-          já foi medido. Nada é apagado: o acervo guarda o histórico inteiro.
-        </p>
-
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
-          <div className="rounded-lg border border-border p-5">
-            <h2 className="text-sm font-semibold text-foreground">
-              Comprou o ebook
-            </h2>
-            <p className="mt-2 text-xs text-muted-foreground">
-              O código está na primeira página do PDF. Resgate uma vez e o acesso
-              fica na sua conta.
-            </p>
-            <Link
-              href="/pasta-viva/entrar"
-              className="mt-4 inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted"
-            >
-              Resgatar código <ArrowRight className="h-4 w-4" aria-hidden />
-            </Link>
-          </div>
-
-          <div className="rounded-lg border border-border p-5">
-            <h2 className="text-sm font-semibold text-foreground">
-              Ainda não comprou
-            </h2>
-            <p className="mt-2 text-xs text-muted-foreground">
-              O ebook custa R$ {PRECO_EBOOK} e vem com a Pasta Viva. Ou assine o
-              plano {TIER_CONFIGS.expert.displayName}, que abre esta e todas as
-              outras áreas do site.
-            </p>
-            <div className="mt-4 flex flex-wrap gap-2">
-              <a
-                href={HOTMART_CHECKOUT}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90"
-              >
-                Comprar o ebook
-              </a>
-              <Link
-                href="/precos"
-                className="inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted"
-              >
-                Ver o {TIER_CONFIGS.expert.displayName}
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {!acesso.autenticado && (
-          <p className="mt-6 text-xs text-muted-foreground">
-            Já tem acesso?{" "}
-            <Link href="/login" className="underline underline-offset-4">
-              Entre na sua conta
-            </Link>
-            .
-          </p>
-        )}
-      </div>
-    </main>
+    <main className="mx-auto max-w-3xl px-4 py-16 sm:py-24"><div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm"><div className="relative min-h-52 overflow-hidden bg-[#15130f] p-7 text-white sm:p-9"><Image src="/pasta-viva/hero-v1.png" alt="" fill sizes="(min-width: 768px) 768px, 100vw" className="object-cover opacity-50" /><div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/65 to-transparent" aria-hidden /><div className="relative max-w-lg"><p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[#f5c04e]"><Lock className="h-4 w-4" aria-hidden /> Pasta Viva</p><h1 className="mt-3 text-3xl font-bold tracking-tight">O acervo que continua depois da última página.</h1><p className="mt-3 text-sm leading-relaxed text-white/80">Métodos com fonte, percurso e histórico de revisão — liberados por compra do ebook ou pelo plano Expert.</p></div></div><div className="grid gap-4 p-6 sm:grid-cols-2 sm:p-8"><div className="rounded-xl border border-border p-5"><h2 className="text-sm font-semibold text-foreground">Comprou o ebook</h2><p className="mt-2 text-sm leading-relaxed text-muted-foreground">O código está na primeira página do PDF. Resgate uma vez e o acesso fica na sua conta.</p><Link href="/pasta-viva/entrar" className="mt-5 inline-flex min-h-10 items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted">Resgatar código <ArrowRight className="h-4 w-4" aria-hidden /></Link></div><div className="rounded-xl border border-border p-5"><h2 className="text-sm font-semibold text-foreground">Ainda não comprou</h2><p className="mt-2 text-sm leading-relaxed text-muted-foreground">O ebook custa R$ {PRECO_EBOOK} e inclui a Pasta Viva. O plano {TIER_CONFIGS.expert.displayName} também libera esta área.</p><div className="mt-5 flex flex-wrap gap-2"><a href={HOTMART_CHECKOUT} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-10 items-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90">Comprar o ebook</a><Link href="/precos" className="inline-flex min-h-10 items-center rounded-lg border border-border px-4 py-2 text-sm font-semibold text-foreground hover:bg-muted">Ver o {TIER_CONFIGS.expert.displayName}</Link></div></div></div>{!acesso.autenticado && <p className="px-8 pb-8 text-sm text-muted-foreground">Já tem acesso? <Link href="/login" className="underline underline-offset-4">Entre na sua conta</Link>.</p>}</div></main>
   );
 }

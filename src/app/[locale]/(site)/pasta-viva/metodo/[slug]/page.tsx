@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
+import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { ArrowLeft, Clock, Wallet, Gauge } from "lucide-react";
+import { ArrowLeft, Clock, Wallet, Gauge, CalendarDays, Route } from "lucide-react";
 import { getAcessoPastaViva } from "@/lib/pasta-viva/acesso";
 import { SEMENTES } from "@/data/pasta-viva/sementes";
 
@@ -72,12 +73,20 @@ export default async function MetodoPage({
         Voltar ao acervo
       </Link>
 
-      <header className="mt-4">
-        <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-          {metodo.categoria}
-        </p>
-        <h1 className="mt-2 text-3xl font-bold text-foreground">{metodo.titulo}</h1>
-        <p className="mt-3 text-base text-muted-foreground">{metodo.tldr}</p>
+      <header className="mt-4 grid gap-6 sm:grid-cols-[1fr_11rem] sm:items-end">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+            {metodo.categoria}
+          </p>
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground">{metodo.titulo}</h1>
+          <p className="mt-3 text-base leading-relaxed text-muted-foreground">{metodo.tldr}</p>
+          <p className="mt-4 inline-flex items-center gap-2 text-xs text-muted-foreground">
+            <CalendarDays className="h-3.5 w-3.5 text-primary" aria-hidden /> Revisado em {metodo.revisadoEm}
+          </p>
+        </div>
+        <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-border bg-muted shadow-sm">
+          <Image src={`/pasta-viva/capas/${metodo.slug}-v1.png`} alt="" fill sizes="176px" className="object-cover" />
+        </div>
       </header>
 
       <section className="mt-6 grid gap-3 sm:grid-cols-3">
@@ -118,6 +127,24 @@ export default async function MetodoPage({
           ))}
         </ol>
       </section>
+
+      {metodo.tutorial.length >= 4 && (
+        <section className="mt-10 rounded-2xl border border-border bg-card p-5">
+          <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
+            <Route className="h-4 w-4 text-primary" aria-hidden /> Fluxo do método
+          </h2>
+          <ol className="mt-5 grid gap-2 sm:grid-cols-4">
+            {metodo.tutorial.map((passo, index) => (
+              <li key={passo.passo} className="relative rounded-lg border border-border bg-background p-3">
+                {index < metodo.tutorial.length - 1 && <span className="absolute -right-2 top-1/2 hidden h-px w-4 bg-primary/40 sm:block" aria-hidden />}
+                <span className="text-xs font-bold text-primary">{String(passo.passo).padStart(2, "0")}</span>
+                <p className="mt-1 text-xs font-medium leading-snug text-foreground">{passo.titulo}</p>
+              </li>
+            ))}
+          </ol>
+          <p className="mt-4 text-xs leading-relaxed text-muted-foreground">O diagrama resume a ordem do tutorial; os detalhes e limites continuam nos passos acima.</p>
+        </section>
+      )}
 
       <section className="mt-10 rounded-xl border border-border bg-card p-5">
         <h2 className="text-sm font-semibold text-foreground">O que já medimos</h2>

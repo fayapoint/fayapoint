@@ -237,8 +237,12 @@ export default function VendaGanharDinheiroComIA() {
       <section className="mt-10 flex items-center justify-center gap-2 text-xs text-muted-foreground">
         <FileText className="h-3.5 w-3.5" aria-hidden />
         Quer divulgar e ganhar comissão?{" "}
-        <Link href="/afiliados" className="underline underline-offset-4">
-          Veja o programa de afiliados
+        {/* /afiliados virou 308 para /fundadores em 06/09/2026: apontar direto
+            evita o salto e, sobretudo, evita repetir o nome de um programa que
+            não existe mais. O percentual sai de lib/fundadores.ts — não se
+            escreve número de comissão em texto de página. */}
+        <Link href="/fundadores" className="underline underline-offset-4">
+          Veja o programa Fundadores 1.000
         </Link>
       </section>
     </main>

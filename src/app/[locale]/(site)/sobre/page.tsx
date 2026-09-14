@@ -153,7 +153,7 @@ export default async function AboutPage({
                         <Linkedin className="w-5 h-5" />
                       </Button>
                     </a>
-                    <a href="https://youtube.com/@ricardofaya" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.youtube.com/@fayaioficial" target="_blank" rel="noopener noreferrer">
                       <Button variant="outline" size="icon" className="border-border">
                         <Youtube className="w-5 h-5" />
                       </Button>

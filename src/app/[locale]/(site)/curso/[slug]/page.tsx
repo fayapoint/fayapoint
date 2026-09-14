@@ -2,7 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CourseSalesPage from "./CourseSalesPage";
 import { allCourses } from "@/data/courses";
-import { getProductBySlug, getTodosSlugsDeCurso, paraIdioma, paraObjetoSimples } from "@/lib/products";
+import {
+  getProductBySlug,
+  getTodosSlugsDeCurso,
+  paraIdioma,
+  paraObjetoSimples,
+  produtoCompletoNoIdioma,
+} from "@/lib/products";
 import { generatePageMetadata } from "@/lib/metadata";
 import { schemaCurso, schemaTrilha } from "@/lib/structured-data";
 import { ogDaCapa } from "@/lib/capa-og";
@@ -136,7 +142,25 @@ export default async function Page({ params }: Props) {
     // Nome, resumo, benefícios, módulos e FAQ no idioma da URL. `i18n` sai da
     // saída — a página de venda é Client Component e levaria as duas versões
     // do texto inteiro para o navegador.
-    product = bruto ? paraIdioma(bruto, locale) : null;
+    //
+    // ⚠️ `paraIdioma` SOZINHO NÃO BASTA AQUI. Ele funde só o subdocumento
+    // `i18n.en`, e o `detailedCurriculum` — a ementa aula por aula, que é o
+    // que esta página mostra mais abaixo — é traduzido na coleção separada
+    // `conteudoTraduzido`, por causa do tamanho. Medido em produção em
+    // 13/09/2026, em `/en/curso/chatgpt-zero`: das 72 linhas do currículo
+    // detalhado, 71 saíam em português — e a tradução das 72 já estava no
+    // banco desde 06/08. A página abria inteira em inglês e só a lista de
+    // aulas voltava ao português, que é o tipo de defeito que nenhuma
+    // contagem acusa. `produtoCompletoNoIdioma` é quem lê a coleção.
+    const completo = bruto ? await produtoCompletoNoIdioma(bruto, locale) : null;
+    // ⚠️ E o `courseContent` NÃO ATRAVESSA. `produtoCompletoNoIdioma` serve as
+    // rotas de LEITURA de aula e traz o corpo do curso junto (~250 KB); esta
+    // página é vitrine e o `product` vai inteiro para um Client Component logo
+    // abaixo. Sem esta linha, cada página inglesa de curso passaria a mandar um
+    // curso completo para o navegador — o mesmo peso que a `PROJECAO_DE_LISTA`
+    // existe para manter fora.
+    if (completo) delete (completo as { courseContent?: string }).courseContent;
+    product = completo;
   } catch {
     bancoRespondeu = false;
   }

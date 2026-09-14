@@ -42,6 +42,8 @@ export interface MetodoSemente {
   investimentoReais: number;
   tempoConclusaoHoras: number;
   dificuldade: "baixa" | "media" | "alta";
+  /** Data editorial visível; uma revisão não é uma promessa de resultado. */
+  revisadoEm: string;
   fontes: IFonte[];
   tutorial: { passo: number; titulo: string; detalhe: string }[];
 }
@@ -55,6 +57,7 @@ export const SEMENTES: MetodoSemente[] = [
     investimentoReais: 0,
     tempoConclusaoHoras: 2,
     dificuldade: "baixa",
+    revisadoEm: "10 set. 2026",
     fontes: [LIVRO(3, "Como escolher o serviço que você vai prestar (e cobrar por ele)")],
     tutorial: [
       { passo: 1, titulo: "Abra uma planilha em branco", detalhe: "Colunas: Contato, Profissão, Problema que ele tem, Como a IA resolve, Entrega tangível, Preço estimado." },
@@ -71,6 +74,7 @@ export const SEMENTES: MetodoSemente[] = [
     investimentoReais: 0,
     tempoConclusaoHoras: 3,
     dificuldade: "baixa",
+    revisadoEm: "10 set. 2026",
     fontes: [
       LIVRO(4, "O primeiro cliente está na sua lista de contatos, não na internet"),
       LIVRO(10, "A abordagem que não parece spam: a mensagem que fala do problema"),
@@ -89,6 +93,7 @@ export const SEMENTES: MetodoSemente[] = [
     investimentoReais: 0,
     tempoConclusaoHoras: 2,
     dificuldade: "media",
+    revisadoEm: "10 set. 2026",
     fontes: [
       LIVRO(5, "Precificar sem chutar: o valor do problema, não do tempo"),
       LIVRO(11, "Orçamento: esforço, mínimo e valor percebido"),
@@ -107,6 +112,7 @@ export const SEMENTES: MetodoSemente[] = [
     investimentoReais: 0,
     tempoConclusaoHoras: 1,
     dificuldade: "baixa",
+    revisadoEm: "10 set. 2026",
     fontes: [LIVRO(17, "ChatGPT como primeiro rascunho: o valor está na edição")],
     tutorial: [
       { passo: 1, titulo: "Peça o rascunho com o contexto do cliente", detalhe: "Sem contexto real o texto sai genérico — e é exatamente isso que o cliente percebe e recusa." },
@@ -122,6 +128,7 @@ export const SEMENTES: MetodoSemente[] = [
     investimentoReais: 0,
     tempoConclusaoHoras: 1,
     dificuldade: "baixa",
+    revisadoEm: "10 set. 2026",
     fontes: [LIVRO(18, "Claude como revisor: a crítica que melhora a entrega")],
     tutorial: [
       { passo: 1, titulo: "Peça crítica, não revisão", detalhe: "Perguntar o que está fraco e por quê rende mais do que pedir para revisar." },
@@ -137,6 +144,7 @@ export const SEMENTES: MetodoSemente[] = [
     investimentoReais: 0,
     tempoConclusaoHoras: 2,
     dificuldade: "media",
+    revisadoEm: "10 set. 2026",
     fontes: [LIVRO(19, "Gemini como pesquisador: fonte e checagem")],
     tutorial: [
       { passo: 1, titulo: "Peça afirmação e fonte na mesma linha", detalhe: "Separadas, checar depois custa mais do que pesquisar do zero." },
@@ -152,6 +160,7 @@ export const SEMENTES: MetodoSemente[] = [
     investimentoReais: 0,
     tempoConclusaoHoras: 1,
     dificuldade: "baixa",
+    revisadoEm: "10 set. 2026",
     fontes: [LIVRO(20, "Canva: o acabamento visual que faz o cliente perceber valor")],
     tutorial: [
       { passo: 1, titulo: "Escolha um modelo e não mude mais", detalhe: "Um formato repetido vira sua assinatura. Trocar a cada entrega gasta tempo e não constrói nada." },
@@ -167,6 +176,7 @@ export const SEMENTES: MetodoSemente[] = [
     investimentoReais: 0,
     tempoConclusaoHoras: 1,
     dificuldade: "baixa",
+    revisadoEm: "10 set. 2026",
     fontes: [
       LIVRO(14, "O contrato simples que protege os dois"),
       LIVRO(15, "Depósito e pagamento antecipado: o filtro do cliente sério"),
@@ -185,6 +195,7 @@ export const SEMENTES: MetodoSemente[] = [
     investimentoReais: 0,
     tempoConclusaoHoras: 1,
     dificuldade: "media",
+    revisadoEm: "10 set. 2026",
     fontes: [LIVRO(21, "Cobrar sem constrangimento: parte do serviço")],
     tutorial: [
       { passo: 1, titulo: "Combine a data da cobrança junto do escopo", detalhe: "Cobrança combinada no começo não é cobrança: é cronograma." },
@@ -200,6 +211,7 @@ export const SEMENTES: MetodoSemente[] = [
     investimentoReais: 0,
     tempoConclusaoHoras: 2,
     dificuldade: "media",
+    revisadoEm: "10 set. 2026",
     fontes: [
       LIVRO(23, "Recorrência: transformar projeto em contrato mensal"),
       LIVRO(29, "Pacotes: aumentar o ticket sem aumentar o esforço"),
@@ -218,6 +230,7 @@ export const SEMENTES: MetodoSemente[] = [
     investimentoReais: 0,
     tempoConclusaoHoras: 6,
     dificuldade: "alta",
+    revisadoEm: "10 set. 2026",
     fontes: [LIVRO(24, "n8n: automatizar o que é repetitivo sem substituir seu valor")],
     tutorial: [
       { passo: 1, titulo: "Liste o que você faz igual toda vez", detalhe: "Só entra na automação o que não muda entre clientes. O resto é o seu valor." },
@@ -233,6 +246,7 @@ export const SEMENTES: MetodoSemente[] = [
     investimentoReais: 0,
     tempoConclusaoHoras: 2,
     dificuldade: "baixa",
+    revisadoEm: "10 set. 2026",
     fontes: [
       LIVRO(26, "Sistema de captação: a lista que nunca esfria"),
       LIVRO(27, "Google Planilhas: o funil de vendas que você controla"),

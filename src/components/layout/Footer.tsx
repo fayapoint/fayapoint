@@ -58,8 +58,19 @@ const footerLinks = {
   ],
 };
 
+/**
+ * ⚠️ `@fayai` no YouTube NÃO EXISTE — medido em 14/09/2026, HTTP 404.
+ *
+ * O rodapé aparece em toda página do site, então o link morto era o link mais
+ * distribuído da casa. O canal real é `@ricardofaya` (UCK6067oss263F0lOX252f1g),
+ * aberto há três anos, e é para ele que a página /sobre já apontava. Os dois
+ * lugares agora dizem a mesma coisa.
+ *
+ * Antes de trocar um destes por um handle novo, abra o endereço: os outros
+ * quatro responderam 200 em 14/09.
+ */
 const socialLinks = [
-  { icon: Youtube, href: "https://youtube.com/@fayai", label: "YouTube" },
+  { icon: Youtube, href: "https://www.youtube.com/@fayaioficial", label: "YouTube" },
   { icon: Instagram, href: "https://instagram.com/fayai", label: "Instagram" },
   { icon: Linkedin, href: "https://linkedin.com/company/fayai", label: "LinkedIn" },
   { icon: Twitter, href: "https://twitter.com/fayai", label: "Twitter" },
