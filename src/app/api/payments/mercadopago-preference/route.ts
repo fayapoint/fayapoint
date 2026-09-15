@@ -12,6 +12,12 @@ import {
   resolveCheckoutItems,
 } from '@/lib/checkout-catalog';
 
+// ⚠️ A imagem que o Mercado Pago mostra no checkout. Até 15/09/2026 estas URLs apontavam para
+// `/images/plans/*-thumb.png` e `/images/fayai-logo-social.png`, arquivos que nunca existiram em `public/` —
+// e o plugin do Cloudinary ainda transformava o 404 em 401. É o logo oficial (itálico), o mesmo conferido
+// contra `D:/fayai/fayai_logo.png` e usado no cabeçalho da /fabrica.
+const LOGO_NO_CHECKOUT = "https://fayai.com.br/fabrica/fayai-original.png";
+
 // Plan details for rich MP checkout
 const PLAN_DETAILS: Record<string, {
   emoji: string;
@@ -21,17 +27,17 @@ const PLAN_DETAILS: Record<string, {
   explorador: {
     emoji: '🧭',
     features: ['3 cursos iniciantes/mês', '100 créditos IA', 'Certificados verificáveis', '10% desconto'],
-    pictureUrl: 'https://fayai.com.br/images/plans/explorador-thumb.png',
+    pictureUrl: LOGO_NO_CHECKOUT,
   },
   profissional: {
     emoji: '🚀',
     features: ['8 cursos todos os níveis/mês', '300 créditos IA', 'Suporte prioritário', '20% desconto'],
-    pictureUrl: 'https://fayai.com.br/images/plans/profissional-thumb.png',
+    pictureUrl: LOGO_NO_CHECKOUT,
   },
   expert: {
     emoji: '👑',
     features: ['14 cursos todos os níveis/mês', '800 créditos IA', 'Suporte VIP', '50% desconto', 'Consultoria mensal'],
-    pictureUrl: 'https://fayai.com.br/images/plans/expert-thumb.png',
+    pictureUrl: LOGO_NO_CHECKOUT,
   },
 };
 
@@ -70,7 +76,7 @@ export async function POST(request: NextRequest) {
     let checkoutItems: IPaymentItem[];
     let checkoutTitle: string;
     let checkoutDescription: string;
-    let pictureUrl = 'https://fayai.com.br/images/fayai-logo-social.png';
+    let pictureUrl = LOGO_NO_CHECKOUT;
 
     if (Array.isArray(items)) {
       checkoutItems = await resolveCheckoutItems(items, {

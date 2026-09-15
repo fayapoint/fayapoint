@@ -26,12 +26,15 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Cloudinary image optimization
-[[plugins]]
-  package = "netlify-plugin-cloudinary"
-  [plugins.inputs]
-    cloudName = "dfd7iigzq"
-    deliveryType = "fetch"
+# ⛔ SEM `netlify-plugin-cloudinary` (retirado em 15/09/2026).
+#
+# Ele desviava todo `/images/*` com 302 para
+# `res.cloudinary.com/dfd7iigzq/image/fetch/...`, e o Cloudinary respondia 401
+# com um gif de 0 byte — inclusive para arquivo que existia (o logo do cabeçalho
+# da /fabrica saiu quebrado no ar). No `next dev` e no `next start` o plugin não
+# roda, então nada acusava. Não havia ganho a proteger: `public/images/` já não
+# tinha nenhum arquivo publicado. As imagens do Cloudinary que o site usa são
+# URLs `res.cloudinary.com` diretas, que não passam por plugin nenhum.
 
 # =============================================================================
 # HEADERS - Security & Caching
