@@ -131,8 +131,13 @@ export default async function PaginaFabrica() {
     <main className="fx-page">
       <header className="fx-mast">
         <Link href="/" className="fx-brand" aria-label="FayAi — início">
+          {/* ⚠️ O logo mora em `/fabrica/`, NUNCA em `/images/`. Em produção o
+              `netlify-plugin-cloudinary` desvia todo `/images/*` para o Cloudinary, que
+              responde 401 — no ar em 15/09/2026, o cabeçalho mostrava imagem quebrada
+              enquanto no `next dev` (sem o plugin) tudo carregava. É o mesmo arquivo,
+              conferido contra `D:\fayai\fayai_logo.png`. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/images/fabrica-2026/fayai-original.png" alt="FayAi" width={190} height={72} />
+          <img src="/fabrica/fayai-original.png" alt="FayAi" width={190} height={72} />
           <span>Fábrica Autônoma</span>
         </Link>
         <nav className="fx-nav" aria-label="Nesta página">
