@@ -15,6 +15,8 @@
 // TYPES
 // =============================================================================
 
+import { preferenciaDeProvedor } from './roteamento';
+
 export type ModelTier = 'free' | 'budget' | 'premium';
 
 export interface ModelConfig {
@@ -261,6 +263,13 @@ async function callOpenRouter(
   };
   if (opts.json) {
     body.response_format = { type: 'json_object' };
+  }
+  // ⚠️ 15/09/2026: a ordem de provedor de config/openrouter-roteamento.json
+  // NUNCA chegou a este corpo — o roteamento.ts existia sem ninguém importar.
+  // Sem ela o V4.1 Flash pode cair a 0,30/1,20 em vez de 0,15/0,60. Só para
+  // DeepSeek: a ordem padrão lista provedores que não servem Gemini e afins.
+  if (model.includes('deepseek')) {
+    body.provider = preferenciaDeProvedor(model);
   }
 
   const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {

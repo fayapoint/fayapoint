@@ -13,6 +13,7 @@ import { CREDIT_PACKS, TIER_CONFIGS, resolvePlan } from '@/lib/course-tiers';
 import { precoDe } from '@/lib/precos-runtime';
 import { getCourseBySlug } from '@/data/courses';
 import { getQuizConfig } from '@/config/quiz-config';
+import { preferenciaDeProvedor } from '@/lib/ai/roteamento';
 import { resolveContentFacts } from '@/lib/content-facts';
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || '';
@@ -213,6 +214,8 @@ async function callOpenRouterForQuiz(
       ],
       temperature,
       max_tokens: maxTokens,
+      // 15/09/2026: ordem de provedor só para DeepSeek (ver lib/ai/roteamento.ts).
+      ...(model.includes('deepseek') && { provider: preferenciaDeProvedor(model) }),
     }),
   });
 

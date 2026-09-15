@@ -3,6 +3,7 @@ import dbConnect from '@/lib/mongodb';
 import User from '@/models/User';
 import SocialAccount from '@/models/SocialAccount';
 import { getAuthUser } from '@/lib/auth';
+import { preferenciaDeProvedor } from '@/lib/ai/roteamento';
 
 export const dynamic = 'force-dynamic';
 
@@ -97,7 +98,12 @@ export async function POST() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'meta-llama/llama-3.3-70b-instruct:free',
+        // 15/09/2026: o llama-3.3-70b:free saiu da OpenRouter (404) e esta rota
+        // respondia 502 para todo mundo. DeepSeek raciocina: 4000 de max_tokens
+        // é requisito, não folga (ver reference_deepseek_v4_raciocinio).
+        model: '~deepseek/deepseek-v4-flash-latest',
+        max_tokens: 4000,
+        provider: preferenciaDeProvedor('~deepseek/deepseek-v4-flash-latest'),
         messages: [
           { role: 'system', content: SYSTEM_PROMPT },
           { role: 'user', content: userData },
