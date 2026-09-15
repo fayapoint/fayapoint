@@ -581,57 +581,91 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                   <ArrowRight size={15} className="text-white/50 group-hover:text-white transition-colors" />
                 </Link>
               )}
-              <h1 className="text-4xl sm:text-6xl md:text-7xl leading-[0.95] tracking-wide" style={bebas}>
+              {/* A ENTRADA — redesenhada em 15/09/2026, quando o Ricardo achou a
+                  entrada "muito feia" logo depois de aprovar a /fabrica nova.
+                  Três decisões (registradas em IDENTIDADE_VISUAL §13):
+                  · o título em Plus Jakarta e caixa normal, a língua da /fabrica,
+                    em vez de Bebas em caixa alta;
+                  · as quatro portas usam só a arte de fusão (v6 e v7). Sortear entre
+                    ela e os vetores chapados (v1–v5) era metade da bagunça: cada
+                    visita montava uma vitrine sem direção;
+                  · cada porta diz uma mágica de verdade, tirada dos exemplos —
+                    "Trabalho" sozinho não dá vontade de clicar em nada. */}
+              <style dangerouslySetInnerHTML={{ __html: `
+                .nl-titulo { margin: 0; font-family: var(--font-plus-jakarta), system-ui, sans-serif; font-weight: 700;
+                  font-size: clamp(38px, 5.6vw, 76px); line-height: .98; letter-spacing: -.045em; color: #f5f7fb; text-wrap: balance; }
+                /* A coluna do minigame tem 768 px: dentro dela, "O que a IA faz por você" quebrava em
+                   duas linhas e o título virava três. Em tela larga ele sai da coluna, como as portas. */
+                @media (min-width: 1024px) { .nl-titulo { margin-inline: -12%; } }
+                .nl-titulo-grad { background: linear-gradient(92deg, #5cc8ff 0%, #a78bfa 55%, #f472b6 100%);
+                  -webkit-background-clip: text; background-clip: text; color: transparent; padding-right: .04em; }
+                .nl-sub { margin: 18px auto 0; max-width: 34rem; font-size: clamp(15px, 1.25vw, 18px); line-height: 1.6; color: rgba(235,240,250,.66); }
+                .nl-portas { margin-top: clamp(28px, 4vw, 44px); display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(10px, 1.4vw, 18px); }
+                @media (min-width: 1024px) { .nl-portas { margin-inline: -12%; } }
+                @media (max-width: 639px) { .nl-portas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+                .nl-porta { position: relative; display: block; aspect-ratio: 3 / 4; border-radius: 22px; overflow: hidden; cursor: pointer;
+                  text-align: left; background: #0b0e1a; border: 1px solid rgba(255,255,255,.10); box-shadow: 0 18px 40px -22px rgba(0,0,0,.9);
+                  transition: transform .45s cubic-bezier(.22,1,.36,1), border-color .35s, box-shadow .45s; }
+                .nl-porta::before { content: ""; position: absolute; inset: 0 0 auto; height: 2px; z-index: 3; background: var(--cor); opacity: .85; }
+                .nl-porta:hover, .nl-porta:focus-visible { transform: translateY(-6px);
+                  border-color: color-mix(in srgb, var(--cor) 55%, transparent);
+                  box-shadow: 0 26px 60px -24px color-mix(in srgb, var(--cor) 55%, transparent); }
+                .nl-porta:focus-visible { outline: 2px solid var(--cor); outline-offset: 3px; }
+                .nl-porta-arte { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.02);
+                  filter: saturate(.95) brightness(.9); transition: transform .8s cubic-bezier(.22,1,.36,1), filter .5s; }
+                .nl-porta:hover .nl-porta-arte { transform: scale(1.08); filter: saturate(1.05) brightness(1); }
+                .nl-porta-sombra { position: absolute; inset: 0; z-index: 1;
+                  background: linear-gradient(180deg, rgba(6,8,16,0) 36%, rgba(6,8,16,.64) 64%, rgba(6,8,16,.95) 100%); }
+                .nl-porta-texto { position: absolute; inset: auto 0 0; z-index: 2; display: grid; gap: 6px; padding: clamp(12px, 1.5vw, 18px); }
+                .nl-porta-rotulo { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-dm-mono, ui-monospace), monospace;
+                  font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--cor); }
+                .nl-porta-rotulo::before { content: ""; width: 6px; height: 6px; border-radius: 99px; background: var(--cor); box-shadow: 0 0 10px var(--cor); }
+                .nl-porta-magica { font-family: var(--font-plus-jakarta), system-ui, sans-serif; font-weight: 650; font-size: clamp(13px, 1.15vw, 16px);
+                  line-height: 1.25; letter-spacing: -.01em; color: #fff; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+                .nl-porta-cta { display: inline-flex; align-items: center; gap: 6px; margin-top: 2px; font-size: 12px; font-weight: 600;
+                  color: rgba(255,255,255,.62); transition: color .3s, gap .3s; }
+                .nl-porta:hover .nl-porta-cta { color: #fff; gap: 9px; }
+                @media (max-width: 639px) { .nl-porta { aspect-ratio: 4 / 5; border-radius: 18px; } .nl-porta-magica { -webkit-line-clamp: 2; } }
+                @media (prefers-reduced-motion: reduce) {
+                  .nl-porta, .nl-porta-arte, .nl-porta-cta { transition: none; }
+                  .nl-porta:hover, .nl-porta:focus-visible { transform: none; }
+                  .nl-porta:hover .nl-porta-arte { transform: scale(1.02); }
+                }
+              ` }} />
+              <h1 className="nl-titulo">
                 {t.rich("heroTitle", {
-                  destaque,
+                  destaque: (c) => <span>{c}</span>,
                   br: () => <br />,
-                  gradiente: (c) => (
-                    <span
-                      style={{
-                        background: "linear-gradient(90deg,#38bdf8,#a78bfa,#f472b6)",
-                        WebkitBackgroundClip: "text",
-                        backgroundClip: "text",
-                        color: "transparent",
-                      }}
-                    >
-                      {c}
-                    </span>
-                  ),
+                  gradiente: (c) => <span className="nl-titulo-grad">{c}</span>,
                 })}
               </h1>
-              <p className="mt-4 text-base sm:text-lg text-white/65 max-w-xl mx-auto">
-                {t("heroSubtitle")}
-              </p>
+              <p className="nl-sub">{t("heroSubtitle")}</p>
 
-              <div className="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {CATEGORIES.map((cat, i) => {
+              <div className="nl-portas">
+                {CATEGORIES.map((cat) => {
                   const st = CATEGORY_STYLE[cat.id];
+                  // O sorteio de 1 a 7 continua; ele só é dobrado para dentro das duas artes de fusão.
+                  const arte = 6 + ((artVariants[cat.id] - 1) % 2);
+                  const magica = MAGIC_EXAMPLES.find((e) => e.category === cat.id);
                   return (
                     <motion.button
                       key={cat.id}
-                      whileHover={{ y: -6, rotate: i % 2 === 0 ? -1.5 : 1.5 }}
-                      whileTap={{ scale: 0.96 }}
+                      type="button"
+                      whileTap={{ scale: 0.97 }}
                       onClick={() => pickExample(cat.id)}
-                      className="group rounded-3xl overflow-hidden cursor-pointer text-left"
-                      style={{
-                        border: `2.5px solid ${st.color}55`,
-                        background: "#141731",
-                        boxShadow: `0 10px 30px -8px ${st.color}44`,
-                      }}
+                      className="nl-porta"
+                      style={{ ["--cor" as string]: st.color } as import("react").CSSProperties}
                     >
-                      <span className="block relative overflow-hidden" style={{ aspectRatio: "1 / 1" }}>
-                        {/* eslint-disable-next-line @next/next/no-img-element -- arte local estática, sem otimizador */}
-                        <img
-                          src={catArt(cat.id, artVariants[cat.id])}
-                          alt={T(cat.label)}
-                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                      </span>
-                      <span
-                        className="block px-3 py-2.5 font-bold text-center text-sm sm:text-base"
-                        style={{ color: st.color }}
-                      >
-                        {T(cat.label)}
+                      {/* eslint-disable-next-line @next/next/no-img-element -- arte local estática, sem otimizador */}
+                      <img src={catArt(cat.id, arte)} alt="" className="nl-porta-arte" />
+                      <span className="nl-porta-sombra" aria-hidden />
+                      <span className="nl-porta-texto">
+                        <span className="nl-porta-rotulo">{T(cat.label)}</span>
+                        {magica && <span className="nl-porta-magica">{T(magica.title)}</span>}
+                        <span className="nl-porta-cta">
+                          {t("seeMagic")}
+                          <ArrowRight size={14} aria-hidden />
+                        </span>
                       </span>
                     </motion.button>
                   );

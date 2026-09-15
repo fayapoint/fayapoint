@@ -48,8 +48,8 @@ export function MarcaFabrica({
     >
       <defs>
         <linearGradient id="tf-laje" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#f5c04e" stopOpacity="0.95" />
-          <stop offset="100%" stopColor="#f5c04e" stopOpacity="0.42" />
+          <stop offset="0%" stopColor="#3aa8ff" stopOpacity="0.95" />
+          <stop offset="100%" stopColor="#3aa8ff" stopOpacity="0.42" />
         </linearGradient>
         <filter id="tf-brilho" x="-60%" y="-60%" width="220%" height="220%">
           <feGaussianBlur stdDeviation="5" result="b" />
@@ -92,7 +92,7 @@ export function MarcaFabrica({
                 height={l.h}
                 rx={4}
                 fill="none"
-                stroke="#f5c04e"
+                stroke="#3aa8ff"
                 strokeOpacity={0.7}
                 /* ⚠️ 1px com o filtro de brilho por cima some no tamanho
                    nativo (168px) e a laje lê como contorno partido — logo a
@@ -108,7 +108,7 @@ export function MarcaFabrica({
                 y1={topo + l.h / 2}
                 x2={w / 2 - 8}
                 y2={topo + l.h / 2}
-                stroke="#f5c04e"
+                stroke="#3aa8ff"
                 strokeOpacity={0.28}
                 strokeWidth={1}
                 strokeDasharray="3 5"

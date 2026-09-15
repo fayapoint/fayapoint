@@ -275,3 +275,13 @@ A evolução do mix: em vez de compor camadas no front, a fusão acontece **na g
 **Pós-processo:** `ffmpeg -i in.png -vf scale=768:-1 -quality 80 out.webp` (≤40KB). Vídeo: WebM mudo ≤400KB, sempre com poster + fallback `motion-reduce`.
 
 **Exemplos vivos:** capas do blog (`public/blog/covers/`), cenários dos minigames (`public/portal/arcade/batalha/`, `caca/`), celebrações (`public/fx/`), widgets do dashboard (`public/portal/dash/`), abas de Minha Conta (`public/portal/conta/`).
+
+---
+
+## 13. A entrada da home e o banner da Fábrica (v1.4 — 15/09/2026)
+
+O Ricardo achou a entrada da home e o banner da Fábrica "muito feios" logo depois de aprovar a /fabrica redesenhada ("perfeita"). A decisão, registrada aqui porque contraria o §2 e o §3:
+
+- **Título de entrada em Plus Jakarta, caixa normal** (700, tracking −0,045em), e não Bebas em caixa alta. As páginas cinematográficas — a /fabrica e agora a entrada da home — falam essa língua; o Bebas continua valendo no resto do site.
+- **As quatro portas do minigame usam só a arte de fusão (v6–v7, §12.1).** O sorteio entre ela e os vetores chapados (v1–v5) montava, a cada visita, uma vitrine sem direção. Cada porta mostra uma mágica real tirada de `src/data/landing/examples.ts`.
+- **O banner da Fábrica sai do ouro para o azul da página que vende** (`#3aa8ff`), com a foto do estúdio montado (`public/fabrica/banner-estudio.webp`). O ouro continua sendo recompensa (§2), e a fábrica não é recompensa. A desmontagem, a torre (`MarcaFabrica`) e o `loading` da /fabrica foram para o mesmo azul, para a troca de rota não mudar de cor no meio.

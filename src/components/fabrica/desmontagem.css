@@ -58,7 +58,7 @@
   content: "";
   position: absolute;
   inset: -60%;
-  background: radial-gradient(ellipse at center, rgba(245, 192, 78, 0.14), transparent 62%);
+  background: radial-gradient(ellipse at center, rgba(58, 168, 255, 0.14), transparent 62%);
   transform: translateZ(-140px);
   pointer-events: none;
 }
@@ -66,7 +66,7 @@
 /**
  * ⚠️ A BORDA ACESA NÃO É ENFEITE — É O QUE TORNA A PEÇA VISÍVEL.
  *
- * O banner é escuro e o palco é quase preto. Com a borda fraca (14% de ouro),
+ * O banner é escuro e o palco é quase preto. Com a borda fraca (14% de cor),
  * a desmontagem inteira acontecia no escuro: 24 painéis escuros girando sobre
  * fundo escuro, e o que se via era uma tela preta com uns cacos de texto. O
  * efeito existia e ninguém conseguia ver.
@@ -82,10 +82,10 @@
   backface-visibility: hidden;
   will-change: transform, opacity;
   box-shadow:
-    inset 0 0 0 1px rgba(245, 192, 78, 0.55),
-    inset 0 0 18px rgba(245, 192, 78, 0.10),
+    inset 0 0 0 1px rgba(58, 168, 255, 0.55),
+    inset 0 0 18px rgba(58, 168, 255, 0.10),
     0 14px 40px -14px rgba(0, 0, 0, 0.95),
-    0 0 26px -6px rgba(245, 192, 78, 0.28);
+    0 0 26px -6px rgba(58, 168, 255, 0.28);
 }
 
 /* A "pele": uma cópia do banner inteiro, deslocada para que cada peça mostre
@@ -114,8 +114,8 @@
 .dm-trilho {
   position: absolute;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(245, 192, 78, 0.85), transparent);
-  box-shadow: 0 0 10px rgba(245, 192, 78, 0.45);
+  background: linear-gradient(90deg, transparent, rgba(58, 168, 255, 0.85), transparent);
+  box-shadow: 0 0 10px rgba(58, 168, 255, 0.45);
 }
 
 .dm-no {
@@ -123,8 +123,8 @@
   width: 6px;
   height: 6px;
   border-radius: 999px;
-  background: #f5c04e;
-  box-shadow: 0 0 12px 2px rgba(245, 192, 78, 0.7);
+  background: #3aa8ff;
+  box-shadow: 0 0 12px 2px rgba(58, 168, 255, 0.7);
 }
 
 /* ── A varredura de luz que tranca a torre ───────────────────────────────── */
@@ -141,9 +141,9 @@
   background: linear-gradient(
     180deg,
     transparent,
-    rgba(245, 192, 78, 0.16) 45%,
+    rgba(58, 168, 255, 0.16) 45%,
     rgba(255, 255, 255, 0.5) 50%,
-    rgba(245, 192, 78, 0.16) 55%,
+    rgba(58, 168, 255, 0.16) 55%,
     transparent
   );
   mix-blend-mode: screen;
@@ -192,9 +192,9 @@
 }
 .dm-pular:hover,
 .dm-pular:focus-visible {
-  color: #f5c04e;
-  border-color: rgba(245, 192, 78, 0.45);
-  background: rgba(245, 192, 78, 0.08);
+  color: #3aa8ff;
+  border-color: rgba(58, 168, 255, 0.45);
+  background: rgba(58, 168, 255, 0.08);
 }
 @keyframes dm-pular-entra {
   from { opacity: 0; transform: translateY(6px); }

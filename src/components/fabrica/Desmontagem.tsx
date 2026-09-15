@@ -379,7 +379,7 @@ export function Desmontagem({
             fontSize: 11,
             letterSpacing: "0.34em",
             textTransform: "uppercase",
-            color: "rgba(245,192,78,.75)",
+            color: "rgba(58,168,255,.75)",
           }}
         >
           Fábrica Autônoma

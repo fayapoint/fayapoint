@@ -86,7 +86,8 @@ export function BannerFabrica() {
   return (
     <section className="relative px-4 sm:px-8 pb-3 shrink-0">
       {/* O movimento ambiente vive AQUI, fora da pele: ele não é clonado, então
-          as 24 peças não herdam 24 relógios fora de sincronia. */}
+          as 24 peças não herdam 24 relógios fora de sincronia. As luzes são o
+          azul da fábrica e o violeta da casa — o ouro saiu com o desenho de 15/09. */}
       <div
         aria-hidden
         className="fx-orb"
@@ -95,7 +96,7 @@ export function BannerFabrica() {
           height: 340,
           left: "8%",
           top: -60,
-          background: "radial-gradient(circle, rgba(245,192,78,.34), transparent 65%)",
+          background: "radial-gradient(circle, rgba(58,168,255,.30), transparent 65%)",
           animation: "fx-drift-a 14s ease-in-out infinite",
         }}
       />
@@ -107,7 +108,7 @@ export function BannerFabrica() {
           height: 280,
           right: "10%",
           top: 30,
-          background: "radial-gradient(circle, rgba(56,189,248,.26), transparent 65%)",
+          background: "radial-gradient(circle, rgba(167,139,250,.22), transparent 65%)",
           animation: "fx-drift-b 17s ease-in-out infinite",
         }}
       />
@@ -122,7 +123,7 @@ export function BannerFabrica() {
           onBlur={() => setAceso(false)}
           onClick={abrir}
           aria-label="Conhecer a Fábrica Autônoma"
-          className="block rounded-3xl outline-none focus-visible:ring-2 focus-visible:ring-amber-400/70"
+          className="block rounded-3xl outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70"
           style={{
             // A elevação no hover é a promessa física: a peça já está solta.
             transform: aceso ? "translateY(-3px)" : "none",
