@@ -244,7 +244,9 @@ export const MODELOS_ESCOLHIVEIS = [
   'auto',
   'google/gemini-3-flash-preview',
   '~deepseek/deepseek-v4-flash-latest',
-  'deepseek/deepseek-v4-pro',
+  // 15/09: substituiu o deepseek/deepseek-v4-pro (+268%). Config antiga com o
+  // Pro gravado cai em 'auto' pela normalização de `lerAjustes`.
+  '~deepseek/deepseek-flash-latest',
 ] as const;
 
 /**
@@ -281,7 +283,7 @@ export const MODELOS_ESCOLHIVEIS = [
 export const ACRESCIMO_POR_MODELO: Record<string, number> = {
   auto: 0,
   '~deepseek/deepseek-v4-flash-latest': 0,
-  'deepseek/deepseek-v4-pro': 0.2,
+  '~deepseek/deepseek-flash-latest': 0.2,
   'google/gemini-3-flash-preview': 0.4,
 };
 

@@ -15,28 +15,27 @@
 // MODEL CATALOG
 // ═══════════════════════════════════════════════════════════════════════════
 
+// Revisto em 15/09/2026 contra GET /api/v1/models: 16 dos 33 IDs desta lista
+// não existiam mais (toda a leva `:free` antiga, grok-4.20-beta, mimo-v2,
+// claude-opus-4-7, mistral-large-2411) e o seletor os oferecia como vivos.
 export const FREE_MODELS = [
   'openrouter/free',                                    // Smart router — auto-selects best free model
-  'google/gemini-3-flash-preview-20251217:free',       // Gemini 3 Flash Preview — academic/science
-  'anthropic/claude-sonnet-4-6:free',                  // Claude Sonnet 4.6 — BR Portuguese, balanced
-  'anthropic/claude-opus-4-7:free',                    // Claude Opus 4.7 — adaptive cognition
-  'deepseek/deepseek-v3.2-20251201:free',              // DeepSeek V3.2 — GPT-5 class reasoning
-  'google/gemini-2.5-flash:free',                      // Gemini 2.5 Flash — versatile, 1M context
-  'openai/gpt-oss-120b:free',                          // GPT-OSS 120B — OpenAI open-weight
-  'openai/gpt-4.1-mini-2025-04-14:free',              // GPT-4.1 Mini — efficient, reliable
-  'x-ai/grok-4.1-fast:free',                           // Grok 4.1 Fast — multi-domain, creative
-  'xiaomi/mimo-v2-pro-20260318:free',                  // MiMo V2 Pro — 1T+ params, agentic
-  'xiaomi/mimo-v2-flash-20251210:free',                // MiMo V2 Flash — fast, good quality
-  'stepfun/step-3.5-flash:free',                       // Step 3.5 Flash — MoE, 256K context
-  'google/gemini-2.5-flash-lite:free',                 // Gemini 2.5 Flash Lite — ultra fast
+  'nvidia/nemotron-3.5-lightning:free',                 // Nemotron 3.5 Lightning — 1M context
+  'thinkingmachines/inkling:free',                      // Inkling — 1M context
+  'nvidia/nemotron-3-super-120b-a12b:free',             // Nemotron 3 Super 120B
+  'poolside/laguna-s-2.1:free',                         // Laguna S 2.1
+  'nex-agi/nex-n2.5-pro:free',                          // Nex N2.5 Pro
+  'z-ai/glm-5.2:free',                                  // GLM 5.2 — 32K context
 ];
 
 export const PREMIUM_MODELS = [
+  '~deepseek/deepseek-flash-latest',                   // DeepSeek V4.1 Flash — best value (15/09)
   'openai/gpt-5.5',                                    // GPT-5.5 — frontier intelligence
   'google/gemini-3.1-pro-preview',                     // Gemini 3.1 Pro Preview — 2M context
   'google/gemini-3.1-flash-lite-preview',              // Gemini 3.1 Flash Lite — high efficiency
-  'anthropic/claude-opus-4-7',                         // Claude Opus 4.7 — adaptive cognition
-  'anthropic/claude-sonnet-4.6',                       // Claude Sonnet 4.6 — best value premium
+  'anthropic/claude-opus-5',                           // Claude Opus 5 — top of the line
+  'anthropic/claude-sonnet-5',                         // Claude Sonnet 5 — best value premium
+  'anthropic/claude-sonnet-4.6',                       // Claude Sonnet 4.6 — legacy
   'openai/gpt-5.4',                                    // GPT-5.4 — affordable frontier fallback
   'deepseek/deepseek-v3.2',                            // DeepSeek V3.2 — STEM, math, competition
   'google/gemini-3-flash-preview',                     // Gemini 3 Flash Preview — fast reasoning
@@ -45,13 +44,12 @@ export const PREMIUM_MODELS = [
   'anthropic/claude-sonnet-4.5',                       // Claude Sonnet 4.5 — proven, Portuguese
   'openai/gpt-5.2',                                    // GPT-5.2 — legacy fallback, consistent
   'openai/gpt-5',                                      // GPT-5 — core reasoning
-  'x-ai/grok-4.20-beta',                               // Grok 4.20 Beta — creative, unconventional
+  'x-ai/grok-4.6',                                     // Grok 4.6 — creative, unconventional
   'google/gemini-2.5-pro',                             // Gemini 2.5 Pro — professional, 1M context
   'qwen/qwen3.5-397b-a17b',                           // Qwen 3.5 397B — massive, analytical
   'openai/gpt-5.4-nano',                               // GPT-5.4 Nano — cheapest premium
-  'xiaomi/mimo-v2-pro',                                // MiMo V2 Pro — 1T+ params, agentic
   'deepseek/deepseek-r1',                              // DeepSeek R1 — chain-of-thought reasoning
-  'mistralai/mistral-large-2411',                      // Mistral Large — multilingual, structured
+  'mistralai/mistral-large-2512',                      // Mistral Large — multilingual, structured
 ];
 
 export const MODEL_CATALOG = {
@@ -226,7 +224,8 @@ export const DEFAULT_QUIZ_CONFIG: QuizConfig = {
   activeModels: [
     '~deepseek/deepseek-v4-flash-latest',
     'openrouter/free',
-    'stepfun/step-3.5-flash:free',
+    // 15/09: stepfun/step-3.5-flash:free saiu da OpenRouter.
+    'nvidia/nemotron-3.5-lightning:free',
   ],
 
   modelCatalog: MODEL_CATALOG,

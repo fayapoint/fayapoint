@@ -82,7 +82,9 @@ const CUSTO_POR_ACAO = {
 /** Preço por milhão de tokens. Conferido contra provider.ts na execução. */
 const PRECOS = {
   budget: { entrada: 0.09, saida: 0.18, id: "~deepseek/deepseek-v4-flash-latest" },
-  premium: { entrada: 0.44, saida: 0.87, id: "~deepseek/deepseek-v4-pro-latest" },
+  // 15/09: o id anterior (`~deepseek/deepseek-v4-pro-latest`) nunca existiu, e
+  // o conferidor passava em silêncio porque não achava o bloco no provider.ts.
+  premium: { entrada: 0.15, saida: 0.6, id: "~deepseek/deepseek-flash-latest" },
 };
 
 /**

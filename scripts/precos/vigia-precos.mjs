@@ -51,8 +51,9 @@ const EM_USO = [
     papel: "volume",
   },
   {
-    id: "deepseek/deepseek-v4-pro",
-    onde: "provider.ts (premium) · traduzir.mjs (vitrine)",
+    // 15/09: substituiu o deepseek/deepseek-v4-pro (0,435/0,87 → 1,60/3,20).
+    id: "~deepseek/deepseek-flash-latest",
+    onde: "provider.ts (premium) · traduzir.mjs (vitrine) · atelie.ts · estudio-social/copy.mjs · cursos/audio/portao-verdade.mjs",
     papel: "qualidade",
   },
 ];
@@ -103,6 +104,7 @@ async function catalogo() {
  */
 const BUILD_DO_ALIAS = {
   "~deepseek/deepseek-v4-flash-latest": "deepseek/deepseek-v4-flash-0731",
+  "~deepseek/deepseek-flash-latest": "deepseek/deepseek-v4.1-flash",
 };
 
 async function provedores(modeloId) {

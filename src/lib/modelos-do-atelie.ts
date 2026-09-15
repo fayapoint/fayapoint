@@ -89,15 +89,29 @@ export const MODELOS_DO_ATELIE: FichaDeModelo[] = [
     cores: ["#4D6BFE", "#818CF8"],
   },
   {
+    id: "~deepseek/deepseek-flash-latest",
+    nome: "DeepSeek V4.1 Flash",
+    fabricante: "DeepSeek",
+    oQueE: "O reforço da fila, chamado quando os outros falham.",
+    boaEm: "Capítulos difíceis, onde o assunto exige raciocínio mais longo.",
+    jeitoDeEscrever:
+      "Mais cuidadoso e mais denso que o V4 Flash. Aparece pouco, só quando precisa.",
+    velocidade: "rápido",
+    custo1M: 0.6,
+    cores: ["#7C3AED", "#22D3EE"],
+  },
+  {
+    // Fora da fila desde 15/09 (subiu para US$ 3,20). Fica aqui porque
+    // capítulos antigos têm `modelUsed` com este id.
     id: "deepseek/deepseek-v4-pro",
     nome: "DeepSeek V4 Pro",
     fabricante: "DeepSeek",
-    oQueE: "O caro da fila, chamado quando os outros falham.",
+    oQueE: "O caro da fila até setembro de 2026.",
     boaEm: "Capítulos difíceis, onde o assunto exige raciocínio mais longo.",
     jeitoDeEscrever:
-      "Mais cuidadoso e mais denso. Custa cinco vezes o Flash e aparece pouco, só quando precisa.",
+      "Mais cuidadoso e mais denso. Escreveu capítulos antigos, quando os outros falhavam.",
     velocidade: "médio",
-    custo1M: 0.87,
+    custo1M: 3.2,
     cores: ["#7C3AED", "#F472B6"],
   },
   {

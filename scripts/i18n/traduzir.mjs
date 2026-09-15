@@ -71,10 +71,13 @@ function prateleira(idDoModelo) {
     : { ordem: ROTEAMENTO.ordemPadrao, cacheEntrada: 0 };
 }
 
-/** Flash para volume, Pro quando a frase é vitrine. Preço em USD por milhão. */
+/**
+ * Flash para volume, V4.1 Flash quando a frase é vitrine. Preço em USD por milhão.
+ * 15/09/2026: a vitrine era o deepseek-v4-pro, que subiu para 1,60/3,20 (+268%).
+ */
 export const MODELOS = {
   volume: { id: "~deepseek/deepseek-v4-flash-latest", entrada: 0.09, saida: 0.18 },
-  vitrine: { id: "deepseek/deepseek-v4-pro", entrada: 0.4225, saida: 0.845 },
+  vitrine: { id: "~deepseek/deepseek-flash-latest", entrada: 0.15, saida: 0.6 },
 };
 
 const INSTRUCAO = `You are a professional pt-BR → en translator working on FayAI, a Brazilian platform that teaches people to use AI.

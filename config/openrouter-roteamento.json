@@ -10,14 +10,25 @@
 
   "ordemPorModelo": {
     "deepseek-v4-flash": {
-      "ordem": ["DeepInfra", "BaseTen", "CoreWeave", "Fireworks"],
-      "_medido": "DeepInfra 0,09/0,18 · BaseTen 0,13/0,26 · CoreWeave 0,13/0,28 · Fireworks 0,14/0,28. A segunda colocada custa 44% a mais pela mesma resposta.",
-      "cacheEntrada": 0.018
+      "ordem": ["DeepInfra", "Baidu", "StreamLake", "Together"],
+      "_medido": "15/09/2026 (build 0731): DeepInfra 0,06/0,18 · Baidu 0,06/0,18 · StreamLake 0,057/0,172 · Together 0,14/0,28. BaseTen e CoreWeave saíram da ordem: não aceitam response_format JSON neste build.",
+      "cacheEntrada": 0.015
+    },
+    "deepseek-flash-latest": {
+      "ordem": ["Alibaba", "DeepSeek", "DeepInfra", "Fireworks"],
+      "_medido": "15/09/2026 — o alias resolve para deepseek-v4.1-flash. Alibaba 0,15/0,60 · DeepSeek 0,15/0,60 (dobra no horário de pico dele) · DeepInfra 0,20/0,60 · Fireworks 0,22/0,66. Sem ordem, a bancada caiu na GMICloud (0,21/0,84) e na SiliconFlow (0,30/1,20).",
+      "cacheEntrada": 0.015
+    },
+    "deepseek-v4.1-flash": {
+      "ordem": ["Alibaba", "DeepSeek", "DeepInfra", "Fireworks"],
+      "_medido": "Mesmo modelo do alias deepseek-flash-latest, com build fixado.",
+      "cacheEntrada": 0.015
     },
     "deepseek-v4-pro": {
       "ordem": ["Baidu", "DeepSeek", "StreamLake", "GMICloud"],
       "_medido": "Baidu 0,4225/0,845 · DeepSeek 0,435/0,87 · StreamLake 0,65/1,31 · GMICloud 0,66/1,32. A DeepInfra, que lidera o Flash, aqui cobra 1,30/2,60 — 3× a Baidu.",
       "_sobreODeepSeek": "Fica em segundo mesmo sendo ele quem anunciou aumento: hoje custa 3% a mais que a Baidu e é a origem dos pesos. Se o aumento sair, o vigia das 09:30 avisa e a ordem se resolve aqui, numa linha.",
+      "_aposentado": "15/09/2026: o aumento saiu (US$ 1,60/3,20 no anúncio; StreamLake 0,935/1,869 e Baidu 0,936/1,873 nos provedores). Nada mais chama este modelo; o premium virou deepseek-flash-latest. A entrada fica para quem ainda tiver o id gravado.",
       "cacheEntrada": 0.035
     }
   },

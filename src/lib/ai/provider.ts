@@ -66,6 +66,13 @@ export interface BudgetStatus {
 //   budget  → deepseek v4 flash  US$ 0,09 / 0,18 por M  (era 0,15 / 0,60)
 //   premium → deepseek v4 pro    US$ 0,44 / 0,87 por M  (era 3,00 / 15,00)
 //
+// TROCA 15/09/2026: o V4 Pro subiu para US$ 1,60 / 3,20 (+268%, alerta do
+// vigia). O premium virou o V4.1 Flash, pelo alias "flash latest" da DeepSeek
+// (US$ 0,15 / 0,60): na bancada da casa achou as mesmas 3 falhas graves que o
+// Pro no juiz de verdade, custando ~10× menos por chamada. Continua sendo um
+// modelo DIFERENTE do budget (0731), então o escalonamento abaixo segue valendo.
+// A ordem de provedor dele mora em config/openrouter-roteamento.json.
+//
 // O tier premium continua sendo um modelo DIFERENTE do budget de propósito:
 // `api/user/curso-personalizado` escala de um para o outro quando o JSON volta
 // com chave vazia. Se os dois fossem o mesmo modelo, esse escalonamento viraria
@@ -125,14 +132,25 @@ const DEFAULT_MODELS: ModelConfig[] = [
   },
   // Premium tier
   {
-    id: 'deepseek/deepseek-v4-pro',
-    name: 'DeepSeek V4 Pro',
+    id: '~deepseek/deepseek-flash-latest',
+    name: 'DeepSeek V4.1 Flash',
     provider: 'openrouter',
-    costPer1MInput: 0.435,
-    costPer1MOutput: 0.87,
+    costPer1MInput: 0.15,
+    costPer1MOutput: 0.6,
     tier: 'premium',
     maxTokens: 16384,
     enabled: true,
+  },
+  // Aposentado em 15/09: subiu de 0,435/0,87 para 1,60/3,20.
+  {
+    id: 'deepseek/deepseek-v4-pro',
+    name: 'DeepSeek V4 Pro',
+    provider: 'openrouter',
+    costPer1MInput: 1.6,
+    costPer1MOutput: 3.2,
+    tier: 'premium',
+    maxTokens: 16384,
+    enabled: false,
   },
   // ——— Aposentados em 02/08. Mantidos desabilitados como registro de preço.
   {

@@ -1,29 +1,29 @@
 {
-  "em": "2026-08-07T00:33:51.960Z",
+  "em": "2026-09-15T21:23:55.921Z",
   "precos": {
     "~deepseek/deepseek-v4-flash-latest": {
-      "entrada": 0.09,
-      "saida": 0.18,
-      "contexto": 1048576,
-      "provedorMaisBarato": "DeepInfra",
-      "provedorPreco": "0.09/0.18",
-      "quantosProvedores": 22
+      "entrada": 0.04,
+      "saida": 0.1,
+      "contexto": 1310720,
+      "provedorMaisBarato": "OpenInference",
+      "provedorPreco": "0.04/0.1",
+      "quantosProvedores": 28
     },
     "deepseek/deepseek-v4-flash-0731": {
-      "entrada": 0.09,
-      "saida": 0.18,
-      "contexto": 1048576,
-      "provedorMaisBarato": "DeepInfra",
-      "provedorPreco": "0.09/0.18",
-      "quantosProvedores": 22
+      "entrada": 0.06,
+      "saida": 0.12,
+      "contexto": 1310720,
+      "provedorMaisBarato": "OpenInference",
+      "provedorPreco": "0.04/0.1",
+      "quantosProvedores": 28
     },
-    "deepseek/deepseek-v4-pro": {
-      "entrada": 0.435,
-      "saida": 0.87,
+    "~deepseek/deepseek-flash-latest": {
+      "entrada": 0.15,
+      "saida": 0.6,
       "contexto": 1048576,
-      "provedorMaisBarato": "Baidu",
-      "provedorPreco": "0.4225/0.845",
-      "quantosProvedores": 18
+      "provedorMaisBarato": "Alibaba",
+      "provedorPreco": "0.15/0.6",
+      "quantosProvedores": 17
     }
   }
 }
