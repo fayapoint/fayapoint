@@ -23,6 +23,24 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
 
   if (bare) return <>{children}</>;
 
+  // /fabrica abre com um filme em tela cheia e tem cabeçalho próprio por cima
+  // dele. O rodapé do site continua: a página de venda não pode virar beco sem
+  // saída. Comparação exata, para nenhuma outra rota perder o cabeçalho.
+  if (path === "/fabrica") {
+    return (
+      <>
+        <a
+          href="#conteudo"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[1000] focus:rounded-lg focus:bg-primary focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        >
+          Pular para o conteúdo
+        </a>
+        <div id="conteudo" className="min-h-screen">{children}</div>
+        <Footer />
+      </>
+    );
+  }
+
   return (
     <>
       {/*

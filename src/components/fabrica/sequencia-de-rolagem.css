@@ -1,0 +1,168 @@
+/* O trilho: a altura dele é o tempo do filme. O palco fica preso no topo. */
+.seq {
+  --seq-margem: clamp(20px, 5vw, 72px);
+  position: relative;
+  height: calc(var(--seq-telas, 3.2) * 100svh);
+  background: #04060a;
+}
+
+.seq-palco {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.seq-inicio,
+.seq-parado,
+.seq-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.seq-inicio img,
+.seq-parado img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.seq-parado {
+  display: none;
+}
+
+/* O canvas só cobre o `<img>` depois que desenhou o primeiro quadro: nunca há
+   um instante de tela preta entre o HTML do servidor e o filme. */
+.seq-canvas {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+.seq[data-viva="pronta"] .seq-canvas {
+  opacity: 1;
+}
+
+/* Legibilidade: escurece o pé e a esquerda, onde as frases moram. */
+.seq-palco::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(4, 6, 10, 0.78) 0%, rgba(4, 6, 10, 0.2) 42%, transparent 64%),
+    linear-gradient(0deg, rgba(4, 6, 10, 0.85) 0%, transparent 34%),
+    linear-gradient(180deg, rgba(4, 6, 10, 0.55) 0%, transparent 18%);
+}
+
+/* A pilha: quadro (0) · sombra de leitura (1) · frases de trás (2) ·
+   objetos da frente (3) · frases da frente (4).
+   ⚠️ As frases moram num contêiner SÓ, na ordem do texto, e quem as põe atrás ou na
+   frente é o z-index de cada uma. Por isso o contêiner NÃO tem z-index: com ele, viraria
+   um contexto de empilhamento e prenderia todas as frases do mesmo lado do tripé. */
+.seq-batidas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.seq-batidas > .seq-batida {
+  z-index: 4;
+}
+.seq-batidas > .seq-batida[data-camada="atras"] {
+  z-index: 2;
+}
+
+/* "atras" vale para o TÍTULO: a frase é desenhada duas vezes no mesmo lugar. Na cópia de
+   trás só o título aparece (o resto guarda o espaço, invisível); na da frente o título fica
+   transparente e o sobretítulo e o parágrafo seguem legíveis. Medido em 15/09/2026: com o
+   bloco inteiro atrás do tripé, o "S" de "Sua voz" sumia e o parágrafo virava pedaços —
+   tripé cruzando letra grande se lê; cruzando letra de 16 px, não.
+   Sem JavaScript ou com movimento reduzido não há `data-viva`: só a cópia da frente, normal. */
+.seq:not([data-viva]) .seq-batida[data-camada="atras"] {
+  display: none;
+}
+.seq[data-viva] .seq-batida[data-camada="atras"] * {
+  visibility: hidden;
+}
+.seq[data-viva] .seq-batida[data-camada="atras"] :is(h1, h2),
+.seq[data-viva] .seq-batida[data-camada="atras"] :is(h1, h2) * {
+  visibility: visible;
+}
+/* A sombra de leitura vem herdada do bloco: sem `text-shadow: none`, o título transparente
+   ainda desenharia o próprio contorno por cima do tripé. */
+.seq[data-viva] .seq-batida[data-camada="frente"] :is(h1, h2),
+.seq[data-viva] .seq-batida[data-camada="frente"] :is(h1, h2) * {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+}
+.seq-canvas--frente,
+.seq-inicio-frente {
+  z-index: 3;
+  pointer-events: none;
+}
+.seq-inicio-frente {
+  position: absolute;
+  inset: 0;
+}
+.seq-inicio-frente img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* Enquanto o canvas da frente não desenhou, o `<img>` do servidor segura o efeito;
+   quando ele desenha, o `<img>` sai para não ficar congelado no quadro 1. */
+.seq[data-viva="pronta"] .seq-inicio-frente {
+  display: none;
+}
+
+.seq-batida {
+  position: absolute;
+  max-width: min(600px, calc(100% - 2 * var(--seq-margem)));
+  will-change: opacity, transform;
+}
+.seq-batida :is(a, button) {
+  pointer-events: auto;
+}
+
+.seq-batida--esquerda {
+  left: var(--seq-margem);
+  bottom: clamp(56px, 14svh, 150px);
+}
+.seq-batida--direita {
+  right: var(--seq-margem);
+  bottom: clamp(56px, 14svh, 150px);
+  text-align: right;
+}
+.seq-batida--centro {
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  text-align: center;
+}
+.seq-batida--base {
+  left: var(--seq-margem);
+  right: var(--seq-margem);
+  bottom: clamp(40px, 9svh, 96px);
+  max-width: none;
+}
+
+@media (max-width: 760px) {
+  .seq-palco::after {
+    background:
+      linear-gradient(0deg, rgba(4, 6, 10, 0.92) 0%, rgba(4, 6, 10, 0.35) 44%, transparent 62%),
+      linear-gradient(180deg, rgba(4, 6, 10, 0.6) 0%, transparent 20%);
+  }
+  .seq-batida--esquerda,
+  .seq-batida--direita {
+    left: var(--seq-margem);
+    right: var(--seq-margem);
+    bottom: clamp(40px, 10svh, 110px);
+    text-align: left;
+    max-width: none;
+  }
+}

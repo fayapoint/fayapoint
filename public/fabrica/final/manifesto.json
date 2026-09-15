@@ -1,0 +1,16 @@
+{
+  "video": "final_seedance20_1080p_logo",
+  "duracao": 6,
+  "quadros": 144,
+  "reverso": false,
+  "largo": {
+    "quadros": 144,
+    "bytes": 7849014,
+    "mediaKB": 53
+  },
+  "movel": {
+    "quadros": 144,
+    "bytes": 6785230,
+    "mediaKB": 46
+  }
+}

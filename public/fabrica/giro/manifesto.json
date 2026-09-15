@@ -1,0 +1,16 @@
+{
+  "video": "giro360_seedance20_1080p",
+  "duracao": 7.5,
+  "quadros": 180,
+  "reverso": false,
+  "largo": {
+    "quadros": 180,
+    "bytes": 11944312,
+    "mediaKB": 65
+  },
+  "movel": {
+    "quadros": 180,
+    "bytes": 7285500,
+    "mediaKB": 40
+  }
+}

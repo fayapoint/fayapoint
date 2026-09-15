@@ -1,0 +1,16 @@
+{
+  "video": "abertura_seedance20_1080p_telas",
+  "duracao": 6,
+  "quadros": 144,
+  "reverso": false,
+  "largo": {
+    "quadros": 144,
+    "bytes": 9891116,
+    "mediaKB": 67
+  },
+  "movel": {
+    "quadros": 144,
+    "bytes": 7848614,
+    "mediaKB": 53
+  }
+}
