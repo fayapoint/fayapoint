@@ -13,7 +13,7 @@
  * gerada inventa letra.
  */
 
-export type Visual = "arquetipos" | "divisoes" | "formacoes" | "amps" | "mapa" | "valor" | "negociacao" | "glossario" | "posicoes";
+export type Visual = "portas" | "arquetipos" | "divisoes" | "formacoes" | "amps" | "mapa" | "valor" | "negociacao" | "glossario" | "posicoes";
 
 export type Bloco =
   | { t: "p"; texto: string }
@@ -30,8 +30,9 @@ export interface Secao {
   grupo: string;
   titulo: string;
   resumo: string;
-  img: string;
-  alt: string;
+  /** Foto da seção. Sem foto quando o conteúdo é o próprio visual (glossário, portas). */
+  img?: string;
+  alt?: string;
   blocos: Bloco[];
 }
 
@@ -81,6 +82,18 @@ export const FORMACOES: Array<{ nome: string; uso: string; uso_en: string; ponto
   { nome: "4-2-3-1 aberto", uso: "Time equilibrado", uso_en: "Balanced team", pontos: [[50, 6, "GOL"], [15, 24, "LAT"], [38, 20, "ZAG"], [62, 20, "ZAG"], [85, 24, "LAT"], [38, 38, "VOL"], [62, 38, "VOL"], [15, 62, "PON"], [50, 60, "MEI"], [85, 62, "PON"], [50, 84, "ATA"]] },
   { nome: "4-1-4-1", uso: "Estabilidade e meio-campo cheio", uso_en: "Stability, crowded midfield", pontos: [[50, 6, "GOL"], [15, 24, "LAT"], [38, 20, "ZAG"], [62, 20, "ZAG"], [85, 24, "LAT"], [50, 36, "VOL"], [15, 58, "PON"], [38, 54, "MC"], [62, 54, "MC"], [85, 58, "PON"], [50, 82, "ATA"]] },
   { nome: "3-5-2", uso: "Controle do meio-campo", uso_en: "Midfield control", pontos: [[50, 6, "GOL"], [28, 20, "ZAG"], [50, 18, "ZAG"], [72, 20, "ZAG"], [10, 48, "ALA"], [36, 40, "VOL"], [64, 40, "VOL"], [90, 48, "ALA"], [50, 58, "MEI"], [38, 82, "ATA"], [62, 82, "ATA"]] },
+];
+
+/** As portas do Winners 22 — o fecho do tutorial. Artes da casa em `public/game/w22/`. */
+export const PORTAS: Array<{ href: string; img: string; cor: string; titulo: [string, string]; texto: [string, string]; cta: [string, string] }> = [
+  { href: "/game", img: "pitch-aereo", cor: "#a3e635", titulo: ["Busca e central do clube", "Club search & hub"], texto: ["Ache o seu clube do FC 27 e veja elenco, notas, forma das 10 últimas, calendário de partidas e a régua da divisão.", "Find your FC 27 club: squad, ratings, last-10 form, match calendar and the division bar."], cta: ["Procurar meu clube", "Find my club"] },
+  { href: "/game/mercado", img: "corredor", cor: "#38bdf8", titulo: ["Mercado da bola", "Transfer board"], texto: ["Clube procurando jogador e jogador procurando clube, com filtro de posição, plataforma e horário — e cartaz pronto para os grupos.", "Clubs recruiting and free agents, filtered by position, platform and schedule — with a ready-made poster."], cta: ["Ver vagas", "See openings"] },
+  { href: "/game/mercado/negociacoes", img: "controle", cor: "#f5c04e", titulo: ["Compra e venda", "Buy & sell"], texto: ["Compre a gestão de um clube ou contrate um jogador em fichas, com valor de mercado tirado do dado da EA e custódia até todo mundo dizer sim.", "Buy a club's management or sign a player in chips, valued from EA data and held in escrow until everyone agrees."], cta: ["Negociar", "Negotiate"] },
+  { href: "/game/campeonatos", img: "duelo", cor: "#a78bfa", titulo: ["Campeonatos", "Championships"], texto: ["Monte ou entre numa competição: pontos corridos, mata-mata ou grupos, com tabela, chaveamento e placar confirmado pelos dois capitães.", "Create or join a competition — league, knockout or groups — with tables, brackets and scores confirmed by both captains."], cta: ["Ver campeonatos", "See championships"] },
+  { href: "/game/copa/super-copa-dos-streamers", img: "trofeu", cor: "#f5c04e", titulo: ["Super Copa dos Streamers", "Streamers Super Cup"], texto: ["A copa com placar conferido na fonte da EA, partida por partida, e a linha do tempo de tudo o que aconteceu.", "The cup with every score checked against EA's source and a timeline of everything that happened."], cta: ["Ver a copa", "See the cup"] },
+  { href: "/game/apostas", img: "fichas", cor: "#a3e635", titulo: ["A mesa: palpites em fichas", "The table: chip picks"], texto: ["Palpite em partidas, times e jogadores com um modelo calibrado para Pro Clubs. 100 fichas para começar; ficha não vale dinheiro.", "Picks on matches, teams and players with a Pro Clubs-calibrated model. 100 chips to start; chips have no cash value."], cta: ["Ir à mesa", "Go to the table"] },
+  { href: "/game/federacao", img: "selo", cor: "#f472b6", titulo: ["Federação", "Federation"], texto: ["Aprova clubes, cuida da integridade das partidas e decide por escrito, com direito de defesa. Evidência automática, sanção humana.", "Approves clubs, watches match integrity and rules in writing, with a right of defence. Automatic evidence, human sanctions."], cta: ["Conhecer", "Learn more"] },
+  { href: "/game", img: "tunel", cor: "#38bdf8", titulo: ["Comunidade e perfil do jogador", "Community & player profile"], texto: ["Quem está online agora, o seu perfil com carreira e reputação em 5 categorias, e as avaliações de quem jogou com você.", "Who's online now, your profile with career stats and a 5-category reputation, and reviews from teammates."], cta: ["Entrar na comunidade", "Join the community"] },
 ];
 
 /** Exemplo de avaliação de mercado — números de jogador fictício, conta real (`valor-mercado.ts`). */
@@ -370,7 +383,7 @@ const PT: Tutorial = {
     {
       id: "provar-posse", grupo: "Winners 22", titulo: "Provar que o clube é seu (gestão)",
       resumo: "Qualquer um digita o nome de um clube. Dono é quem prova: um código no nome do Pro, conferido nos dados da EA.",
-      img: "clube", alt: "Amigos reunidos no sofá de uma sala de clube planejando no tablet",
+      img: "provar-posse", alt: "Mãos no controle com um escudo verde de verificação flutuando acima",
       blocos: [
         { t: "passos", itens: [
           "Na central do clube, abra \"Gestão\" e peça a gestão, explicando quem você é no clube.",
@@ -411,7 +424,7 @@ const PT: Tutorial = {
     {
       id: "compra-venda", grupo: "Winners 22", titulo: "Compra e venda de clubes e jogadores",
       resumo: "Negociações em fichas, com custódia, avaliação de mercado a partir de dado real e consentimento de todos os lados.",
-      img: "mercado", alt: "Duas pessoas apertando as mãos numa mesa de escritório de clube",
+      img: "compra-venda", alt: "Contrato assinado sobre a mesa ao lado de fichas verdes, uma bola e chuteiras",
       blocos: [
         { t: "p", texto: "No Winners 22 você pode comprar a GESTÃO de um clube (virar o dono dele na plataforma) ou contratar um jogador para o seu clube. O pagamento é em fichas — a moeda de jogo, que não se compra, não se saca e não vale fora do Winners 22." },
         { t: "visual", v: "negociacao" },
@@ -477,8 +490,15 @@ const PT: Tutorial = {
     {
       id: "glossario", grupo: "Fim", titulo: "Glossário",
       resumo: "As palavras do modo e as da comunidade brasileira.",
-      img: "comunicacao", alt: "Jogadora de headset falando no microfone com o controle na mão",
       blocos: [{ t: "visual", v: "glossario" }],
+    },
+    {
+      id: "winners22-completo", grupo: "Fim", titulo: "Tudo o que o Winners 22 oferece",
+      resumo: "O Winners 22 é a liga do Pro Clubs da FayAI: pega o que a EA publica sobre o seu clube e transforma em estatística com procedência, mercado, campeonato, fichas e uma federação que arbitra com direito de defesa. Tudo de graça, sem senha e sem instalar nada.",
+      blocos: [
+        { t: "visual", v: "portas" },
+        { t: "p", texto: "Chegou agora? Procure o seu clube, clique em \"Sou eu\" no seu nome e escolha uma porta: quem quer time vai ao Mercado, quem já tem time vai aos Campeonatos, quem quer torcer vai à Mesa." },
+      ],
     },
   ],
   glossario: [
@@ -574,11 +594,11 @@ const EN: Tutorial = {
     { id: "winners22", grupo: "Winners 22", titulo: "Find your club and player on Winners 22", resumo: "No password, no install: we read what EA publishes.", img: "conectar", alt: "Phone with a list of clubs", blocos: [
       { t: "passos", itens: ["Search your club name at fayai.com.br/game (one word is enough).", "Open the club hub.", "Click \"That's me\" on your name to link your gamertag."] },
     ] },
-    { id: "provar-posse", grupo: "Winners 22", titulo: "Prove the club is yours", resumo: "A W22 code in your Pro's name, checked against EA data.", img: "clube", alt: "Friends in a club lounge", blocos: [
+    { id: "provar-posse", grupo: "Winners 22", titulo: "Prove the club is yours", resumo: "A W22 code in your Pro's name, checked against EA data.", img: "provar-posse", alt: "Hands on a controller with a green verification shield above", blocos: [
       { t: "passos", itens: ["Request management on the club hub.", "Generate the code (W22 + 10 characters, valid 48 h).", "Put it in your Pro's name in game.", "Wait for the next mirror capture and verify.", "The federation approves."] },
     ] },
     { id: "mercado", grupo: "Winners 22", titulo: "Transfer board", resumo: "Openings and free agents with position, platform, schedule and the club's real division.", img: "mercado", alt: "Handshake across a desk", blocos: [{ t: "visual", v: "glossario" }] },
-    { id: "compra-venda", grupo: "Winners 22", titulo: "Buying and selling clubs and players", resumo: "Chip-based deals with escrow, market value from real data and consent from every side.", img: "mercado", alt: "Handshake across a desk", blocos: [
+    { id: "compra-venda", grupo: "Winners 22", titulo: "Buying and selling clubs and players", resumo: "Chip-based deals with escrow, market value from real data and consent from every side.", img: "compra-venda", alt: "Signed contract on a desk beside green chips, a ball and boots", blocos: [
       { t: "visual", v: "negociacao" },
       { t: "visual", v: "valor" },
       { t: "lista", itens: ["Offers must fall between half and double the market value.", "Chips are held in escrow until the answer; refunded if declined, cancelled or expired (7 days).", "Players always consent.", "The federation keeps 10% of every completed sale.", "Off-platform payment is forbidden — chips have no monetary value."] },
@@ -589,7 +609,8 @@ const EN: Tutorial = {
     { id: "integridade", grupo: "Winners 22", titulo: "Integrity", resumo: "Automatic evidence, human and reasoned sanctions.", img: "integridade", alt: "Magnifying glass over a match timeline", blocos: [
       { t: "lista", itens: ["A full match lasts ~5,500 seconds of game time; walkovers last seconds.", "EA's DNF flag marks who WON by abandonment.", "Idle time is shown as information, never as an accusation."] },
     ] },
-    { id: "glossario", grupo: "End", titulo: "Glossary", resumo: "Mode and community terms.", img: "comunicacao", alt: "Gamer with a headset", blocos: [{ t: "visual", v: "glossario" }] },
+    { id: "glossario", grupo: "End", titulo: "Glossary", resumo: "Mode and community terms.", blocos: [{ t: "visual", v: "glossario" }] },
+    { id: "winners22-completo", grupo: "End", titulo: "Everything Winners 22 offers", resumo: "Winners 22 is FayAI's Pro Clubs league: it turns what EA publishes about your club into sourced stats, a transfer market, championships, chips and a federation that rules with a right of defence. Free, no password, no install.", blocos: [{ t: "visual", v: "portas" }] },
   ],
 };
 

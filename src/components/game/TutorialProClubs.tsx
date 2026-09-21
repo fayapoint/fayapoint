@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { ArrowLeft, Lightbulb, TriangleAlert, FlaskConical } from "lucide-react";
+import { ArrowLeft, ArrowRight, Lightbulb, TriangleAlert, FlaskConical, Search } from "lucide-react";
 import { LIMA, OURO, CIANO, VIOLETA, ROSA, LARANJA, bebas, superficie } from "@/lib/game/tema";
-import { ARQUETIPOS, FORMACOES, EXEMPLO_JOGADOR, type Tutorial, type Bloco, type Visual } from "@/lib/game/tutorial";
+import { ARQUETIPOS, FORMACOES, EXEMPLO_JOGADOR, PORTAS, type Tutorial, type Bloco, type Visual } from "@/lib/game/tutorial";
 import { avaliarJogador } from "@/lib/game/valor-mercado";
 import type { DivisaoEA } from "@/lib/game/ea-api";
 
@@ -56,9 +56,11 @@ export function TutorialProClubs({ t, divisoes, en }: { t: Tutorial; divisoes: D
               <p className="text-xs font-bold uppercase tracking-widest" style={{ color: LIMA }}>{String(i + 1).padStart(2, "0")} · {s.grupo}</p>
               <h2 className="mt-1 text-3xl leading-none sm:text-4xl" style={bebas}>{s.titulo.toUpperCase()}</h2>
               <p className="mt-3 max-w-3xl text-[15px] leading-relaxed text-white/75">{s.resumo}</p>
-              <div className="relative mt-5 aspect-[3/2] w-full overflow-hidden rounded-2xl border border-white/10 sm:aspect-[16/7]">
-                <Image src={`/game/tutorial/${s.img}.webp`} alt={s.alt} fill sizes="(max-width: 1024px) 100vw, 860px" className="object-cover" loading={i < 2 ? "eager" : "lazy"} />
-              </div>
+              {s.img && (
+                <div className="relative mt-5 aspect-[3/2] w-full overflow-hidden rounded-2xl border border-white/10 sm:aspect-[16/7]">
+                  <Image src={`/game/tutorial/${s.img}.webp`} alt={s.alt ?? ""} fill sizes="(max-width: 1024px) 100vw, 860px" className="object-cover" loading={i < 2 ? "eager" : "lazy"} />
+                </div>
+              )}
               <div className="mt-6 space-y-5">
                 {s.blocos.map((b, j) => <BlocoTutorial key={j} b={b} t={t} divisoes={divisoes} en={en} />)}
               </div>
@@ -295,6 +297,44 @@ function VisualTutorial({ v, t, divisoes, en }: { v: Visual; t: Tutorial; diviso
         </ol>
       );
     }
+    case "portas":
+      return (
+        <div className="space-y-5">
+          <div className="grid gap-4 sm:grid-cols-2">
+            {PORTAS.map((p, k) => (
+              <Link
+                key={p.titulo[0]}
+                href={p.href}
+                className={`group relative flex min-h-[15rem] flex-col justify-end overflow-hidden rounded-2xl border transition-transform duration-300 hover:-translate-y-1 ${k === 0 ? "sm:col-span-2 sm:min-h-[18rem]" : ""}`}
+                style={{ borderColor: `${p.cor}55`, boxShadow: `0 18px 40px -22px ${p.cor}` }}
+              >
+                <Image src={`/game/w22/${p.img}.webp`} alt="" fill sizes="(max-width: 640px) 100vw, 640px" className="object-cover transition-transform duration-700 group-hover:scale-105" />
+                <span aria-hidden className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(12,14,29,.05) 0%, rgba(12,14,29,.55) 45%, rgba(12,14,29,.96) 100%)" }} />
+                <span className="relative block px-5 pb-5">
+                  <span className="block text-3xl leading-none" style={{ ...bebas, color: p.cor }}>{(en ? p.titulo[1] : p.titulo[0]).toUpperCase()}</span>
+                  <span className="mt-2 block max-w-xl text-[14px] leading-relaxed text-white/80">{en ? p.texto[1] : p.texto[0]}</span>
+                  <span className="mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12.5px] font-bold" style={{ background: p.cor, color: "#0c0e1d" }}>
+                    {en ? p.cta[1] : p.cta[0]} <ArrowRight size={13} aria-hidden className="transition-transform group-hover:translate-x-0.5" />
+                  </span>
+                </span>
+              </Link>
+            ))}
+          </div>
+          <Link
+            href="/game"
+            className="flex flex-col items-start gap-3 rounded-2xl border px-6 py-6 sm:flex-row sm:items-center sm:justify-between"
+            style={{ borderColor: `${LIMA}66`, background: `linear-gradient(90deg, ${LIMA}22, ${CIANO}14)` }}
+          >
+            <span>
+              <span className="block text-3xl leading-none" style={bebas}>{en ? "START WITH YOUR CLUB" : "COMECE PELO SEU CLUBE"}</span>
+              <span className="mt-1 block text-sm text-white/75">{en ? "Type your club's name — FC 27, PS5, Xbox Series, PC or Switch 2. Free, no password." : "Digite o nome do seu clube — FC 27, PS5, Xbox Series, PC ou Switch 2. De graça, sem senha."}</span>
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-xl px-5 py-3 font-bold" style={{ background: LIMA, color: "#0c0e1d" }}>
+              <Search size={16} aria-hidden /> {en ? "Search my club" : "Procurar meu clube"}
+            </span>
+          </Link>
+        </div>
+      );
     case "glossario":
       return (
         <dl className="grid max-w-3xl gap-2 sm:grid-cols-2">
