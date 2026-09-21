@@ -150,7 +150,8 @@ export async function aplicarLancamento(params: {
   if (valor < 0) filtro.saldo = { $gte: -valor };
 
   const incremento: Record<string, number> = { saldo: valor };
-  if (valor < 0) incremento.totalApostado = -valor;
+  // Custódia de negociação não é aposta: não entra no "total apostado".
+  if (valor < 0) { if (!tipo.startsWith("negociacao")) incremento.totalApostado = -valor; }
   else if (tipo === "premio" || tipo === "premiacao-campeonato") incremento.totalGanho = valor;
   else if (tipo === "bonus-boas-vindas" || tipo === "recarga-diaria") incremento.totalRecebido = valor;
 

@@ -39,7 +39,9 @@ export type OrcamentoGame =
   | "avaliar"
   | "carteira"
   | "aposta-leitura"
-  | "aposta-escrita";
+  | "aposta-escrita"
+  | "negociacao-leitura"
+  | "negociacao-escrita";
 
 /** Teto por IP, por minuto. O custo real de cada rota está no comentário. */
 const ORCAMENTOS: Record<OrcamentoGame, number> = {
@@ -75,6 +77,10 @@ const ORCAMENTOS: Record<OrcamentoGame, number> = {
   // Aqui o teto não é economia de recurso — é a primeira barreira contra
   // script que tenta explorar corrida no débito.
   "aposta-escrita": 15,
+  // Avaliação e quadro de transferências: leitura do espelho, sem ir à EA.
+  "negociacao-leitura": 60,
+  // Proposta, aceite, recusa: mexe em custódia de fichas. Teto baixo, como a aposta.
+  "negociacao-escrita": 10,
 };
 
 export interface Veredito {

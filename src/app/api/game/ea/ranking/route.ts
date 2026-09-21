@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { type EaPlatform } from "@/lib/game/ea-api";
+import { plataformaDe, type EaPlatform } from "@/lib/game/ea-api";
 import { rankingComEspelho, divisoesComEspelho } from "@/lib/game/espelho";
 import { cobrar } from "@/lib/game/limite";
 
@@ -26,7 +26,7 @@ export async function GET(req: Request) {
 
   const url = new URL(req.url);
   const pedida = url.searchParams.get("plataforma");
-  const plataforma: EaPlatform = pedida === "common-gen4" ? "common-gen4" : "common-gen5";
+  const plataforma: EaPlatform = plataformaDe(pedida);
   const limite = Math.min(100, Math.max(5, Number(url.searchParams.get("limite") ?? 25)));
 
   const [r, divs] = await Promise.all([rankingComEspelho(plataforma, limite), divisoesComEspelho()]);

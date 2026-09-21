@@ -215,7 +215,7 @@ export async function montarRodada(params?: {
   equilibrio?: number;
   /** Minutos até a primeira partida. Dá tempo de as apostas entrarem. */
   minutosAteAPrimeira?: number;
-  plataforma?: "common-gen5" | "common-gen4";
+  plataforma?: "common-gen5" | "nx";
 }): Promise<Array<{ slug: string; confronto: string; comecaEm: Date }>> {
   await dbConnect();
 

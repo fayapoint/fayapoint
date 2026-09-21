@@ -95,7 +95,7 @@ export function TabelaRanking({ copy }: { copy: GameCopy }) {
         {(
           [
             ["common-gen5", r.platformGen5],
-            ["common-gen4", r.platformGen4],
+            ["nx", r.platformNx],
           ] as const
         ).map(([valor, rotulo]) => (
           <button

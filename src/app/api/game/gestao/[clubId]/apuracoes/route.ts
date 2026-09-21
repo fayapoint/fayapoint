@@ -8,7 +8,7 @@ import { cobrar } from "@/lib/game/limite";
 
 export const dynamic = "force-dynamic";
 type Ctx = { params: Promise<{ clubId: string }> };
-const comum = { plataforma: z.enum(["common-gen5", "common-gen4"]), versao: z.number().int().nonnegative() };
+const comum = { plataforma: z.enum(["common-gen5", "nx"]), versao: z.number().int().nonnegative() };
 const texto = z.string().trim().min(10).max(2000);
 const esquema = z.discriminatedUnion("acao", [
   z.object({ ...comum, acao: z.literal("abrir"), motivo: texto, evidencia: texto, cautelar: z.boolean() }).strict(),

@@ -4,7 +4,7 @@ import GameTime from "@/models/GameTime";
 import { cobrar } from "@/lib/game/limite";
 import { carregarCompeticao, ehOrganizador, paraObjectId } from "@/lib/game/competicao-servidor";
 import { clubeComEspelho } from "@/lib/game/espelho";
-import type { EaPlatform } from "@/lib/game/ea-api";
+import { plataformaDe } from "@/lib/game/ea-api";
 
 /**
  * POST   /api/game/campeonato/[slug]/times   — inscreve um time
@@ -57,9 +57,7 @@ export async function POST(
   }
 
   const eaClubId = String(body.eaClubId ?? "").trim();
-  const plataforma = (
-    body.plataforma === "common-gen4" ? "common-gen4" : "common-gen5"
-  ) as EaPlatform;
+  const plataforma = plataformaDe(body.plataforma);
 
   let nome = String(body.nome ?? "").trim();
   let cor: string | undefined;

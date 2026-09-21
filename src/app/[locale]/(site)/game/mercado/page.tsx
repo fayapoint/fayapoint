@@ -5,7 +5,7 @@ import { Mercado } from "@/components/game/Mercado";
 import { generatePageMetadata } from "@/lib/metadata";
 import { getGameCopy } from "@/lib/game/copy";
 import { getCopyMercado } from "@/lib/game/copy-mercado";
-import { FUNDO, LIMA, CIANO, bebas } from "@/lib/game/tema";
+import { FUNDO, LIMA, CIANO, OURO, bebas } from "@/lib/game/tema";
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -76,6 +76,13 @@ export default async function MercadoPage({ params }: Props) {
         >
           {copy.hub.badge}
         </p>
+        <Link
+          href="/game/mercado/negociacoes"
+          className="relative ml-2 mt-2 inline-block rounded-full px-3 py-1 text-[11px] font-bold"
+          style={{ background: `${OURO}14`, color: OURO, border: `1px solid ${OURO}33` }}
+        >
+          {locale === "en" ? "Buy & sell clubs and players →" : "Compra e venda de clubes e jogadores →"}
+        </Link>
 
         <div className="relative mt-8">
           <Mercado copy={copy} locale={locale} />

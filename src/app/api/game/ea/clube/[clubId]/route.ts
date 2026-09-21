@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { type EaPlatform } from "@/lib/game/ea-api";
+import { ehPlataforma, type EaPlatform } from "@/lib/game/ea-api";
 import { clubeComEspelho, divisoesComEspelho } from "@/lib/game/espelho";
 import { cobrar } from "@/lib/game/limite";
 
@@ -31,7 +31,7 @@ export async function GET(
   const url = new URL(req.url);
   const pedida = url.searchParams.get("plataforma");
   const plataforma: EaPlatform | undefined =
-    pedida === "common-gen5" || pedida === "common-gen4" ? pedida : undefined;
+    ehPlataforma(pedida) ? pedida : undefined;
 
   if (!/^\d{1,12}$/.test(clubId)) {
     return NextResponse.json({ error: "clubId inválido" }, { status: 400 });

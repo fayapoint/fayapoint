@@ -47,7 +47,7 @@ const SEMENTE = {
   slug: SLUG,
   nome: "Super Copa dos Streamers",
   edicao: "Edição 2",
-  jogo: "EA SPORTS FC 26",
+  jogo: "EA SPORTS FC 27",
   descricao:
     "O maior campeonato de Pro Clubs entre criadores de conteúdo do Brasil: 20 times presididos por streamers, mais de 150 criadores em campo.",
   organizacao: {

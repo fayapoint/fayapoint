@@ -30,7 +30,13 @@ export type TipoLancamento =
   | 'devolucao'
   | 'ajuste'
   | 'premiacao-campeonato'
-  | 'multa';
+  | 'multa'
+  /** Compra e venda: a proposta prende as fichas de quem compra (custódia). */
+  | 'negociacao-reserva'
+  /** Proposta recusada, cancelada ou vencida: a custódia volta a quem ofereceu. */
+  | 'negociacao-devolucao'
+  /** Venda concluída: quem vende recebe o valor menos a taxa da federação. */
+  | 'negociacao-recebimento';
 
 export interface IGameLancamento extends Document {
   userId: mongoose.Types.ObjectId;
@@ -67,6 +73,9 @@ const GameLancamentoSchema = new Schema<IGameLancamento>(
         'ajuste',
         'premiacao-campeonato',
         'multa',
+        'negociacao-reserva',
+        'negociacao-devolucao',
+        'negociacao-recebimento',
       ],
       required: true,
     },

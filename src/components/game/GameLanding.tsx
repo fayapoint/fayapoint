@@ -324,6 +324,13 @@ export function GameLanding({
                 >
                   {copyMerc.abas.clubes}
                 </Link>
+                <Link
+                  href="/game/mercado/negociacoes"
+                  className="inline-flex items-center gap-2 rounded-xl border px-6 py-3 font-semibold transition-colors hover:bg-white/[0.04]"
+                  style={{ borderColor: `${OURO}55`, color: OURO }}
+                >
+                  {locale === "en" ? "Buy & sell" : "Compra e venda"}
+                </Link>
               </div>
             </div>
 

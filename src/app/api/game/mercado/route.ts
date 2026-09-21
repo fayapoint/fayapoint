@@ -24,7 +24,7 @@ import {
  */
 export const dynamic = "force-dynamic";
 
-const PLATAFORMAS = ["common-gen5", "common-gen4", "mista"];
+const PLATAFORMAS = ["common-gen5", "nx", "mista"];
 const ORDENS = ["recentes", "divisao", "overall"];
 
 export async function GET(req: Request) {
@@ -167,8 +167,8 @@ export async function POST(req: Request) {
       // do espelho — e sobe de "declarado" (E) para "fonte pública" (B).
       //
       // ⚠️ A PLATAFORMA ENTRA NA CONSULTA. `clubId` é único DENTRO de uma
-      // piscina, não entre elas: `common-gen5` (PS5/Series/PC) e `common-gen4`
-      // (PS4/Xbox One) são mundos separados da EA, com numeração própria. Sem
+      // piscina, não entre elas: `common-gen5` (PS5/Series/PC) e `nx`
+      // (Switch 2) são mundos separados da EA, com numeração própria. Sem
       // isto, uma vaga anunciada por um clube da gen4 nasceria carimbada com a
       // divisão e a campanha de um clube gen5 de mesmo número — e com selo de
       // "fonte pública" por cima, que é o que torna o erro grave.
@@ -179,13 +179,13 @@ export async function POST(req: Request) {
       // filtre por `clubId` sozinho vai repetir de novo.
       //
       // `"mista"` é plataforma de VAGA (o clube aceita gente das duas
-      // gerações), não de CLUBE — o espelho só conhece gen5 e gen4. Filtrar
+      // gerações), não de CLUBE — o espelho só conhece gen5 e nx. Filtrar
       // por ela não acharia nada e a vaga perderia o enriquecimento em
       // silêncio, que é como se conserta um defeito criando outro. Nesse caso
       // a busca cai nas duas piscinas e fica com a que existir.
       const filtroClube =
         plataforma === "mista"
-          ? { clubId: eaClubId, platform: { $in: ["common-gen5", "common-gen4"] } }
+          ? { clubId: eaClubId, platform: { $in: ["common-gen5", "nx"] } }
           : { clubId: eaClubId, platform: plataforma };
       const doc = (await GameEaClube.findOne(filtroClube)
         .select("clubId name currentDivision skillRating wins ties losses gamesPlayed crestAssetId")

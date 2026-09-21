@@ -14,7 +14,8 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
  * `verified` já existe para não haver migração quando ela chegar.
  */
 
-export type GamePlatform = 'common-gen5' | 'common-gen4';
+/** `common-gen4` só existe em documento antigo (FC 26); o FC 27 é gen5 + Switch 2 (`nx`). */
+export type GamePlatform = 'common-gen5' | 'nx' | 'common-gen4';
 
 export interface IGamePlayer extends Document {
   /** Gamertag como a EA publica no elenco. É a chave de identidade. */
@@ -48,7 +49,7 @@ export interface IGamePlayer extends Document {
 const GamePlayerSchema = new Schema<IGamePlayer>(
   {
     gamertag: { type: String, required: true, index: true },
-    platform: { type: String, enum: ['common-gen5', 'common-gen4'], default: 'common-gen5' },
+    platform: { type: String, enum: ['common-gen5', 'nx', 'common-gen4'], default: 'common-gen5' },
     eaClubId: { type: String, required: true, index: true },
     clubName: { type: String },
     proName: { type: String },

@@ -26,9 +26,9 @@ export function ehFederacao(role: string | null | undefined): boolean {
   return role === "admin";
 }
 
-export function chaveClube(clubId: unknown, plataforma: unknown): { eaClubId: string; plataforma: "common-gen5" | "common-gen4" } {
+export function chaveClube(clubId: unknown, plataforma: unknown): { eaClubId: string; plataforma: "common-gen5" | "nx" } {
   if (typeof clubId !== "string" || !/^\d{1,12}$/.test(clubId)) throw new Error("Clube inválido.");
-  if (plataforma !== "common-gen5" && plataforma !== "common-gen4") throw new Error("Plataforma inválida.");
+  if (plataforma !== "common-gen5" && plataforma !== "nx") throw new Error("Plataforma inválida.");
   return { eaClubId: clubId.replace(/^0+(?=\d)/, ""), plataforma };
 }
 

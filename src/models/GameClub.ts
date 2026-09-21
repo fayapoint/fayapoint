@@ -10,7 +10,8 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
  * E = manual); tudo que nasce da API pública entra como "B".
  */
 
-export type GamePlatform = 'common-gen5' | 'common-gen4';
+/** `common-gen4` só existe em documento antigo (FC 26); o FC 27 é gen5 + Switch 2 (`nx`). */
+export type GamePlatform = 'common-gen5' | 'nx' | 'common-gen4';
 
 export interface IGameClub extends Document {
   eaClubId: string;
@@ -40,7 +41,7 @@ export interface IGameClub extends Document {
 const GameClubSchema = new Schema<IGameClub>(
   {
     eaClubId: { type: String, required: true, index: true },
-    platform: { type: String, enum: ['common-gen5', 'common-gen4'], default: 'common-gen5' },
+    platform: { type: String, enum: ['common-gen5', 'nx', 'common-gen4'], default: 'common-gen5' },
     name: { type: String, required: true },
     ownerUserId: { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
     crestAssetId: { type: String },

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import { getAuthUser } from "@/lib/auth";
 import GamePlayer from "@/models/GamePlayer";
-import { type EaPlatform } from "@/lib/game/ea-api";
+import { plataformaDe } from "@/lib/game/ea-api";
 import { clubeComEspelho } from "@/lib/game/espelho";
 
 /**
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
 
   const eaClubId = String(body.eaClubId ?? "").trim();
   const gamertag = String(body.gamertag ?? "").trim();
-  const plataforma = (body.plataforma === "common-gen4" ? "common-gen4" : "common-gen5") as EaPlatform;
+  const plataforma = plataformaDe(body.plataforma);
 
   if (!/^\d{1,12}$/.test(eaClubId) || gamertag.length < 2 || gamertag.length > 40) {
     return NextResponse.json({ error: "dados inválidos" }, { status: 400 });

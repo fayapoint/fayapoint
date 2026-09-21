@@ -224,8 +224,8 @@ export function ClubeHub({
                 style={{ borderColor: "rgba(255,255,255,.14)" }}
               >
                 <Gamepad2 size={11} />
-                {dado.plataforma === "common-gen4"
-                  ? copy.search.platformGen4
+                {dado.plataforma === "nx"
+                  ? copy.search.platformNx
                   : copy.search.platformGen5}
               </span>
               {dado.info?.stadName && (

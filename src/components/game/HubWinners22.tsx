@@ -1,6 +1,7 @@
 "use client";
 
 import { Link, useRouter } from "@/i18n/navigation";
+import Image from "next/image";
 import {
   Coins,
   Trophy,
@@ -83,6 +84,14 @@ const DESTINOS: Destino[] = [
     cor: VIOLETA,
   },
   {
+    href: "/game/mercado/negociacoes",
+    titulo: "Compra e venda",
+    linha: "Compre a gestão de um clube ou contrate um jogador, em fichas, com valor de mercado tirado da EA.",
+    icone: Coins,
+    cor: OURO,
+    selo: "novo",
+  },
+  {
     href: "/game/federacao",
     titulo: "Federação",
     linha: "Aprovação de clubes, integridade das partidas e apuração com direito de defesa.",
@@ -101,31 +110,30 @@ export function HubWinners22({ locale }: { locale: string }) {
             Por onde começar
           </h2>
           <p className="mt-1 max-w-xl text-sm text-white/55">
-            Cinco portas, e nenhuma delas exige que você jogue Pro Clubs para entrar.
+            Seis portas, e nenhuma delas exige que você jogue Pro Clubs para entrar.
           </p>
         </div>
         <BuscaDeJogador locale={locale} />
       </div>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <Link
+        href="/game/tutorial"
+        className="group relative mt-6 flex min-h-[8.5rem] items-end overflow-hidden rounded-2xl border px-5 py-4"
+        style={{ borderColor: `${LIMA}55` }}
+      >
+        <Image src="/game/tutorial/grounds.webp" alt="" fill sizes="(max-width: 1024px) 100vw, 1024px" className="object-cover opacity-50 transition-transform duration-500 group-hover:scale-105" />
+        <span className="relative">
+          <span className="block text-[11px] font-bold uppercase tracking-widest" style={{ color: LIMA }}>Novo · FC 27</span>
+          <span style={bebas} className="block text-3xl uppercase leading-none">Tutorial completo do Pro Clubs</span>
+          <span className="mt-1 block text-sm text-white/75">The Grounds, 13 arquétipos, Maestrias, Amps, liga, táticas — e como usar o Winners 22. →</span>
+        </span>
+      </Link>
+
+      <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {DESTINOS.map((d) => (
           <Cartao key={d.href} d={d} locale={locale} />
         ))}
 
-        {/* A sexta célula da grade não é um destino — é a arte que fecha a
-            fileira. Deixar um buraco com cinco cartões numa grade de três
-            colunas é o tipo de vazio que parece defeito. */}
-        <div className="hidden lg:block">
-          <FaixaDeCena
-            cena="trofeu"
-            alt="Troféu do Winners 22 com a marca FayAi gravada na base"
-            altura="h-full min-h-[13rem]"
-            titulo="A taça"
-            linha="Quem está ganhando a Super Copa."
-            href="/game/copa/super-copa-dos-streamers"
-            locale={locale}
-          />
-        </div>
       </div>
 
       {/* A faixa larga que amarra o hub à identidade da seção. */}

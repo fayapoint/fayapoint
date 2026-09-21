@@ -152,7 +152,7 @@ export function PerfilJogador({
                   {perfil.plataforma && (
                     <span className="inline-flex items-center gap-1.5">
                       <Gamepad2 size={13} className="text-white/40" />
-                      {perfil.plataforma === "common-gen4" ? "PS4 · Xbox One" : "PS5 · Series · PC"}
+                      {perfil.plataforma === "nx" ? "Nintendo Switch 2" : perfil.plataforma === "common-gen4" ? "PS4 · Xbox One (FC 26)" : "PS5 · Series · PC"}
                     </span>
                   )}
                 </div>

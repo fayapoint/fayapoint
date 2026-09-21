@@ -7,7 +7,7 @@ import { atorGestao, autorizado, atualizarComVersao, corpoGestao, desafioGestao,
 
 export const dynamic = "force-dynamic";
 type Contexto = { params: Promise<{ clubId: string }> };
-const plataforma = z.enum(["common-gen5", "common-gen4"]);
+const plataforma = z.enum(["common-gen5", "nx"]);
 const solicitar = z.object({ plataforma, justificativa: z.string().trim().min(10).max(2000) }).strict();
 const editar = z.discriminatedUnion("acao", [
   z.object({ plataforma, versao: z.number().int().nonnegative(), acao: z.literal("adicionar-responsavel"), email: z.string().trim().email().max(254), funcao: z.enum(["capitao", "vice", "recrutador"]) }).strict(),

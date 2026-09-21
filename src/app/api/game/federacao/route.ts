@@ -5,7 +5,7 @@ import { cobrar } from "@/lib/game/limite";
 import { atorGestao, atualizarComVersao, corpoGestao, erroResposta, ErroGestao, filtroClube, perfilParaTela } from "@/lib/game/gestao-servidor";
 
 export const dynamic = "force-dynamic";
-const decisao = z.object({ clubId: z.string(), plataforma: z.enum(["common-gen5", "common-gen4"]), versao: z.number().int().nonnegative(),
+const decisao = z.object({ clubId: z.string(), plataforma: z.enum(["common-gen5", "nx"]), versao: z.number().int().nonnegative(),
   acao: z.enum(["aprovar", "recusar", "suspender", "reativar"]), motivo: z.string().trim().min(10).max(2000),
   donoUserId: z.string().regex(/^[a-f\d]{24}$/i).optional(),
 }).strict();

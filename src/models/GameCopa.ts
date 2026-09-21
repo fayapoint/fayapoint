@@ -50,7 +50,7 @@ export interface TimeDaCopa {
   /** O de-para. Afirmação nossa — ver o cabeçalho. */
   eaClubId?: string;
   eaClubName?: string;
-  eaPlatform?: 'common-gen5' | 'common-gen4';
+  eaPlatform?: 'common-gen5' | 'nx' | 'common-gen4';
   vinculo: GrauVinculo;
   /** Por que acreditamos. Vai a tela, em texto humano. */
   evidencia: string[];
@@ -233,7 +233,7 @@ const GameCopaSchema = new Schema<IGameCopa>(
     slug: { type: String, required: true, unique: true, index: true },
     nome: { type: String, required: true },
     edicao: { type: String },
-    jogo: { type: String, default: 'EA SPORTS FC 26' },
+    jogo: { type: String, default: 'EA SPORTS FC 27' },
     descricao: { type: String },
     organizacao: {
       nome: { type: String },
@@ -265,7 +265,7 @@ const GameCopaSchema = new Schema<IGameCopa>(
         },
         eaClubId: { type: String },
         eaClubName: { type: String },
-        eaPlatform: { type: String, enum: ['common-gen5', 'common-gen4'] },
+        eaPlatform: { type: String, enum: ['common-gen5', 'nx', 'common-gen4'] },
         vinculo: {
           type: String,
           enum: ['confirmado', 'provavel', 'nao-encontrado'],

@@ -61,6 +61,7 @@ import {
   type ClubSearchResult,
   type EaPlatform,
 } from "../../src/lib/game/ea-api";
+import { colecaoEspelho } from "../../src/lib/game/edicao";
 
 const uri = process.env.MONGODB_URI;
 if (!uri) {
@@ -93,8 +94,9 @@ const client = new MongoClient(uri, {
 // `client.db()` não abre conexão — a abertura fica no `main()`, porque o tsx
 // compila este arquivo para CJS e `await` de topo não existe lá.
 const db = client.db("fayapoint");
-const colClubes = db.collection("game_ea_clubes");
-const colPartidas = db.collection("game_ea_partidas");
+// O espelho da edição corrente (FC 27). O do FC 26 ficou arquivado nas coleções sem sufixo.
+const colClubes = db.collection(colecaoEspelho("game_ea_clubes"));
+const colPartidas = db.collection(colecaoEspelho("game_ea_partidas"));
 
 const contas = { indice: 0, fundo: 0, partidas: 0, falhas: 0 };
 

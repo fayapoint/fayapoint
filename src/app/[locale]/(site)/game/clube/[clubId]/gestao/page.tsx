@@ -5,6 +5,6 @@ export const metadata = { title: "Gestão do clube — Winners 22", robots: { in
 export default async function GestaoPage({ params, searchParams }: { params: Promise<{ locale: string; clubId: string }>; searchParams: Promise<{ plataforma?: string }> }) {
   const { locale, clubId } = await params;
   const plataforma = (await searchParams).plataforma ?? "common-gen5";
-  if (!/^\d{1,12}$/.test(clubId) || !["common-gen5", "common-gen4"].includes(plataforma)) notFound();
+  if (!/^\d{1,12}$/.test(clubId) || !["common-gen5", "nx"].includes(plataforma)) notFound();
   return <GestaoClube clubId={clubId} locale={locale} plataforma={plataforma} />;
 }

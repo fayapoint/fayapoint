@@ -63,6 +63,7 @@ const SIGLA = new Map(POSICOES.map((p) => [p.code, p]));
 const PLAT: Record<string, string> = {
   "common-gen5": "PS5 · SERIES · PC",
   "common-gen4": "PS4 · XBOX ONE",
+  nx: "NINTENDO SWITCH 2",
   mista: "CROSS-GEN",
 };
 const DIA_SIGLA: Record<string, string> = {

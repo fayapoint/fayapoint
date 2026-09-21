@@ -7,7 +7,7 @@ import type { EaPlatform } from "@/lib/game/ea-api";
 
 interface Props {
   params: Promise<{ locale: string; clubId: string }>;
-  /** `?p=common-gen4` vem da busca, que já sabe em que piscina achou o clube. */
+  /** `?p=nx` vem da busca, que já sabe em que piscina achou o clube. */
   searchParams: Promise<{ p?: string }>;
 }
 
@@ -36,7 +36,7 @@ export default async function ClubePage({ params, searchParams }: Props) {
   // Só as duas piscinas da EA passam; qualquer outra coisa vira descoberta
   // automática no servidor (tenta as duas), que é o comportamento seguro.
   const plataforma: EaPlatform | undefined =
-    p === "common-gen4" || p === "common-gen5" ? p : undefined;
+    p === "nx" || p === "common-gen5" ? p : undefined;
 
   return (
     <main

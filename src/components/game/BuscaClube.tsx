@@ -137,7 +137,7 @@ export function BuscaClube({ copy }: { copy: GameCopy }) {
           [
             ["todas", c.platformAll],
             ["common-gen5", c.platformGen5],
-            ["common-gen4", c.platformGen4],
+            ["nx", c.platformNx],
           ] as const
         ).map(([valor, rotulo]) => (
           <button
@@ -282,7 +282,7 @@ export function BuscaClube({ copy }: { copy: GameCopy }) {
 function CartaoResultado({ clube, copy }: { clube: ClubSearchResult; copy: GameCopy }) {
   const c = copy.search;
   const jogou = clube.gamesPlayed > 0;
-  const gen4 = clube.platform === "common-gen4";
+  const gen4 = clube.platform === "nx";
 
   return (
     <Link
@@ -313,7 +313,7 @@ function CartaoResultado({ clube, copy }: { clube: ClubSearchResult; copy: GameC
               className="rounded px-1.5 py-px text-[10px] font-bold uppercase tracking-wider"
               style={{ background: "rgba(255,255,255,.07)", color: "rgba(255,255,255,.6)" }}
             >
-              {c.platformGen4}
+              {c.platformNx}
             </span>
           )}
         </p>

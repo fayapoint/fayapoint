@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { PLATAFORMAS, type EaPlatform } from "@/lib/game/ea-api";
+import { PLATAFORMAS, ehPlataforma, type EaPlatform } from "@/lib/game/ea-api";
 import { buscarComEspelho, clubeComEspelho } from "@/lib/game/espelho";
 import { cobrar } from "@/lib/game/limite";
 
 /**
- * GET /api/game/ea/busca?nome=<clube|id>&plataforma=todas|common-gen5|common-gen4
+ * GET /api/game/ea/busca?nome=<clube|id>&plataforma=todas|common-gen5|nx
  *
  * Busca de clube. Pública, sem auth.
  *
@@ -38,7 +38,7 @@ export async function GET(req: Request) {
   const nome = (url.searchParams.get("nome") ?? "").trim();
   const pedida = url.searchParams.get("plataforma") ?? "todas";
   const plataformas: EaPlatform[] =
-    pedida === "common-gen5" || pedida === "common-gen4" ? [pedida] : PLATAFORMAS;
+    ehPlataforma(pedida) ? [pedida] : PLATAFORMAS;
 
   if (nome.length < 2) {
     return NextResponse.json({

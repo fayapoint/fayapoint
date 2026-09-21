@@ -33,7 +33,8 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
  * enfeite, é o que separa "divisão 3, medido" de "divisão 3, ele disse".
  */
 
-export type GamePlatform = 'common-gen5' | 'common-gen4';
+/** `common-gen4` só existe em documento antigo (FC 26); o FC 27 é gen5 + Switch 2 (`nx`). */
+export type GamePlatform = 'common-gen5' | 'nx' | 'common-gen4';
 export type PlataformaVaga = GamePlatform | 'mista';
 export type TipoVaga = 'clube' | 'jogador';
 export type StatusVaga = 'ativa' | 'preenchida' | 'expirada';
@@ -107,7 +108,7 @@ const GameVagaSchema = new Schema<IGameVaga>(
     posicoes: { type: [String], default: [] },
     plataforma: {
       type: String,
-      enum: ['common-gen5', 'common-gen4', 'mista'],
+      enum: ['common-gen5', 'nx', 'common-gen4', 'mista'],
       default: 'common-gen5',
     },
     dias: { type: [String], default: [] },

@@ -24,7 +24,7 @@ export interface IGameTime extends Document {
   sigla?: string;
   origem: OrigemTime;
   eaClubId?: string;
-  plataforma?: 'common-gen5' | 'common-gen4';
+  plataforma?: 'common-gen5' | 'nx' | 'common-gen4';
   /** Cor do clube (do uniforme da EA, ou escolhida na inscrição). */
   cor?: string;
   grupo?: string;
@@ -53,7 +53,7 @@ const GameTimeSchema = new Schema<IGameTime>(
     sigla: { type: String, maxlength: 4 },
     origem: { type: String, enum: ['ea', 'manual'], default: 'manual' },
     eaClubId: { type: String, index: true },
-    plataforma: { type: String, enum: ['common-gen5', 'common-gen4'] },
+    plataforma: { type: String, enum: ['common-gen5', 'nx', 'common-gen4'] },
     cor: { type: String },
     grupo: { type: String },
     semente: { type: Number },

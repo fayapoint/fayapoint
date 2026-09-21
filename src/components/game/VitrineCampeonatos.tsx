@@ -342,8 +342,8 @@ function FormularioCampeonato({
               <option value="common-gen5" style={{ color: "#000" }}>
                 PS5 · Series · PC
               </option>
-              <option value="common-gen4" style={{ color: "#000" }}>
-                PS4 · Xbox One
+              <option value="nx" style={{ color: "#000" }}>
+                Nintendo Switch 2
               </option>
               <option value="mista" style={{ color: "#000" }}>
                 Mista

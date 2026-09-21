@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
+import { colecaoEspelho, EDICAO_EA, type EdicaoEa } from '@/lib/game/edicao';
 
 /**
  * ESPELHO das partidas da EA — um documento por partida.
@@ -16,7 +17,8 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
  * duplica e não apaga o que saiu da janela.
  */
 
-export type GamePlatform = 'common-gen5' | 'common-gen4';
+/** `common-gen4` só existe em documento antigo (FC 26); o FC 27 é gen5 + Switch 2 (`nx`). */
+export type GamePlatform = 'common-gen5' | 'nx' | 'common-gen4';
 export type MatchType = 'leagueMatch' | 'playoffMatch' | 'friendlyMatch';
 
 export interface IGameEaPartida extends Document {
@@ -39,7 +41,7 @@ export interface IGameEaPartida extends Document {
 const GameEaPartidaSchema = new Schema<IGameEaPartida>(
   {
     matchId: { type: String, required: true },
-    platform: { type: String, enum: ['common-gen5', 'common-gen4'], required: true },
+    platform: { type: String, enum: ['common-gen5', 'nx', 'common-gen4'], required: true },
     matchType: {
       type: String,
       enum: ['leagueMatch', 'playoffMatch', 'friendlyMatch'],
@@ -52,7 +54,8 @@ const GameEaPartidaSchema = new Schema<IGameEaPartida>(
     sourceGrade: { type: String, enum: ['A', 'B', 'C', 'D', 'E'], default: 'B' },
     capturedAt: { type: Date, default: Date.now },
   },
-  { timestamps: true, collection: 'game_ea_partidas' }
+  // Uma coleção por edição do jogo — ver `lib/game/edicao.ts`.
+  { timestamps: true, collection: colecaoEspelho('game_ea_partidas') }
 );
 
 /** Uma partida é uma só. Recapturar atualiza; nunca duplica. */
@@ -65,3 +68,16 @@ const GameEaPartida: Model<IGameEaPartida> =
   mongoose.model<IGameEaPartida>('GameEaPartida', GameEaPartidaSchema);
 
 export default GameEaPartida;
+
+/**
+ * As partidas de OUTRA edição — hoje, o arquivo do FC 26, que a Super Copa dos
+ * Streamers ainda lê. A edição corrente é o modelo padrão acima.
+ */
+export function partidasDaEdicao(edicao: EdicaoEa): Model<IGameEaPartida> {
+  if (edicao === EDICAO_EA) return GameEaPartida;
+  const nome = `GameEaPartida_${edicao}`;
+  return (
+    (mongoose.models[nome] as Model<IGameEaPartida> | undefined) ||
+    mongoose.model<IGameEaPartida>(nome, GameEaPartidaSchema.clone().set('collection', colecaoEspelho('game_ea_partidas', edicao)))
+  );
+}

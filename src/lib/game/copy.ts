@@ -42,7 +42,7 @@ export interface GameCopy {
     platformLabel: string;
     platformAll: string;
     platformGen5: string;
-    platformGen4: string;
+    platformNx: string;
     /** O painel de ajuda — a queixa nº 1 da seção é "não acho meu clube". */
     helpTitle: string;
     helpItems: string[];
@@ -108,7 +108,7 @@ export interface GameCopy {
     badge: string;
     platformLabel: string;
     platformGen5: string;
-    platformGen4: string;
+    platformNx: string;
     cols: {
       rank: string;
       club: string;
@@ -293,12 +293,12 @@ const pt: GameCopy = {
     platformLabel: 'Plataforma',
     platformAll: 'Todas',
     platformGen5: 'PS5 · Series · PC',
-    platformGen4: 'PS4 · Xbox One',
+    platformNx: 'Switch 2',
     helpTitle: 'Não achou seu clube? Leia isto — o problema quase nunca é você',
     helpItems: [
       'A busca da EA casa só o COMEÇO do nome. "Sul" não acha "Leões do Sul"; "Leões" acha. Comece pela primeira palavra.',
       'O jogo guarda espaços duplos. "Flamengo     00" tem cinco espaços entre as palavras — por isso a busca daqui compara palavra por palavra, ignorando espaço, acento e maiúscula.',
-      'PS4 e Xbox One vivem numa piscina separada de PS5, Xbox Series e PC. Deixe "Todas" marcado se não tiver certeza.',
+      'No FC 27, PS5, Xbox Series e PC jogam juntos; o Nintendo Switch 2 vive numa piscina separada. Deixe "Todas" marcado se não tiver certeza.',
       'Se souber o número do clube, digite só o número: a busca vai direto pela ficha, sem depender do nome.',
       'Clube recém-criado, que ainda não terminou uma temporada, pode não estar no índice público. Nesse caso só o número resolve.',
     ],
@@ -381,17 +381,17 @@ const pt: GameCopy = {
   },
   roadmap: {
     title: 'Calendário da temporada',
-    subtitle: 'FC 27 chega em 25 de setembro de 2026, com o Clubs dentro do The Grounds. A plataforma nasce junto.',
+    subtitle: 'O FC 27 já está no acesso antecipado e lança em 25 de setembro de 2026, com o Clubs dentro do The Grounds. A plataforma já lê os clubes do FC 27.',
     kickoff: { label: 'Pontapé inicial', date: '25 SET', note: 'Lançamento do EA SPORTS FC™ 27' },
     statusLabel: { done: 'Concluído', now: 'Em andamento', next: 'Programado' },
     monthsLabel: '2026 → 2027',
     months: ['AGO', 'SET', 'OUT', 'NOV', 'DEZ', '2027'],
     phases: [
       {
-        period: 'Agora',
+        period: 'Ago/2026',
         title: 'Fundação',
         text: 'Portal no ar, conexão de clube pela apuração da FayAI, fila da liga piloto e pedido formal de parceria à EA.',
-        status: 'now',
+        status: 'done',
         from: 0,
         to: 0,
         marks: [{ day: '23 AGO', label: 'Portal no ar' }],
@@ -400,7 +400,7 @@ const pt: GameCopy = {
         period: 'Set/2026',
         title: 'Motor de campeonato',
         text: 'Criação de competições, check-in, consenso de resultado, ingestão automática de partidas e ledger de estatísticas.',
-        status: 'next',
+        status: 'now',
         from: 1,
         to: 1,
         marks: [{ day: '25 SET', label: 'FC 27 lança' }],
@@ -466,7 +466,7 @@ const pt: GameCopy = {
     badge: 'Dado ao vivo',
     platformLabel: 'Geração',
     platformGen5: 'PS5 · Series · PC',
-    platformGen4: 'PS4 · Xbox One',
+    platformNx: 'Switch 2',
     cols: {
       rank: '#',
       club: 'Clube',
@@ -670,12 +670,12 @@ const en: GameCopy = {
     platformLabel: 'Platform',
     platformAll: 'All',
     platformGen5: 'PS5 · Series · PC',
-    platformGen4: 'PS4 · Xbox One',
+    platformNx: 'Switch 2',
     helpTitle: "Can't find your club? Read this — it is almost never your fault",
     helpItems: [
       'EA only matches the START of the name. "Sul" will not find "Leões do Sul"; "Leões" will. Start with the first word.',
       'The game stores double spaces. "Flamengo     00" has five spaces between the words — which is why this search compares word by word, ignoring spacing, accents and case.',
-      'PS4 and Xbox One live in a pool separate from PS5, Xbox Series and PC. Leave "All" selected if you are unsure.',
+      'In FC 27, PS5, Xbox Series and PC play together; Nintendo Switch 2 lives in a separate pool. Leave "All" selected if you are unsure.',
       'If you know the club number, type only the number: the search goes straight to the record, no name involved.',
       "A brand-new club that hasn't finished a season yet may be missing from the public index. Only the number finds it then.",
     ],
@@ -728,14 +728,14 @@ const en: GameCopy = {
   },
   roadmap: {
     title: 'Season calendar',
-    subtitle: 'FC 27 launches September 25, 2026, with Clubs inside The Grounds. The platform launches with it.',
+    subtitle: 'FC 27 is already in early access and launches September 25, 2026, with Clubs inside The Grounds. The platform already reads FC 27 clubs.',
     kickoff: { label: 'Kick-off', date: 'SEP 25', note: 'EA SPORTS FC™ 27 launch' },
     statusLabel: { done: 'Done', now: 'In progress', next: 'Scheduled' },
     monthsLabel: '2026 → 2027',
     months: ['AUG', 'SEP', 'OCT', 'NOV', 'DEC', '2027'],
     phases: [
-      { period: 'Now', title: 'Foundation', text: "Portal live, club connection via FayAI's own audit, pilot-league queue and formal partnership request to EA.", status: 'now', from: 0, to: 0, marks: [{ day: 'AUG 23', label: 'Portal live' }] },
-      { period: 'Sep 2026', title: 'Championship engine', text: 'Competition creation, check-in, result consensus, automatic match ingestion and the statistics ledger.', status: 'next', from: 1, to: 1, marks: [{ day: 'SEP 25', label: 'FC 27 launch' }] },
+      { period: 'Aug 2026', title: 'Foundation', text: "Portal live, club connection via FayAI's own audit, pilot-league queue and formal partnership request to EA.", status: 'done', from: 0, to: 0, marks: [{ day: 'AUG 23', label: 'Portal live' }] },
+      { period: 'Sep 2026', title: 'Championship engine', text: 'Competition creation, check-in, result consensus, automatic match ingestion and the statistics ledger.', status: 'now', from: 1, to: 1, marks: [{ day: 'SEP 25', label: 'FC 27 launch' }] },
       { period: 'Oct 2026', title: 'Pilot league on FC 27', text: '8–16 invited clubs, online, free. Dual evidence (API + post-match capture) and public match pages.', status: 'next', from: 2, to: 2, marks: [{ day: 'OCT', label: 'Matchday 1' }] },
       { period: 'Nov–Dec 2026', title: 'First season', text: '32–64 clubs, divisions and playoffs, a transfer window, scouting profiles and records.', status: 'next', from: 3, to: 4, marks: [{ day: 'DEC', label: 'Playoffs' }] },
       { period: '2027', title: 'Licensed platform', text: 'EA data partnership, international competitions, certified feed and — only then, licensed — regulated betting partners.', status: 'next', from: 5, to: 5 },
@@ -758,7 +758,7 @@ const en: GameCopy = {
     badge: 'Live data',
     platformLabel: 'Generation',
     platformGen5: 'PS5 · Series · PC',
-    platformGen4: 'PS4 · Xbox One',
+    platformNx: 'Switch 2',
     cols: {
       rank: '#',
       club: 'Club',

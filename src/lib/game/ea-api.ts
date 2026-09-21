@@ -7,10 +7,20 @@
  *
  *  1. A borda (Akamai) recusa requisição que não parece navegador — os headers
  *     abaixo imitam um Chrome comum. Sem eles: 403.
- *  2. Não há contrato: endpoint muda sem aviso a cada título (FC 24 → 25 → 26).
- *     Por isso TODA resposta aqui é normalizada para os nossos tipos e o
- *     chamador nunca vê o formato cru da EA — quando o FC 27 mudar o shape,
- *     o conserto é só neste arquivo.
+ *  2. Não há contrato: endpoint muda sem aviso a cada título (FC 24 → 25 → 26
+ *     → 27). Por isso TODA resposta aqui é normalizada para os nossos tipos e o
+ *     chamador nunca vê o formato cru da EA — o conserto é só neste arquivo.
+ *
+ *  FC 27 — remedido em 21/09/2026, primeiro dia do acesso antecipado:
+ *     - mesmo endereço (`/api/fc`), base nova: ranking e numeração de clube
+ *       recomeçaram (ver `edicao.ts`, que separa o espelho por edição);
+ *     - `common-gen4` agora devolve **HTTP 400 "Invalid query parameter:
+ *       platform"** — o FC 27 não saiu para PS4/Xbox One;
+ *     - `nx` (Nintendo Switch 2) responde, e é piscina À PARTE: o crossplay do
+ *       FC 27 junta PS5, Series e PC, mas deixa o Switch 2 fora;
+ *     - `ps5` e `pc` são apelidos de `common-gen5` (mesmo ranking);
+ *     - `match_event_aggregate_0` voltou a vir preenchido (no FC 26 vinha vazio);
+ *     - `clubs/matches` exige `clubIds` (plural); `clubId` dá HTTP 400.
  *  3. **A EA devolve texto duplamente codificado** ("UniÃ£o" no lugar de
  *     "União"). Todo nome que sai daqui passa por `repararTexto`.
  *  4. **A busca só casa PREFIXO da string inteira, com espaço literal.**
@@ -26,17 +36,30 @@
 
 const BASE = "https://proclubs.ea.com/api/fc";
 
-/** PS5 + Xbox Series + PC compartilham a mesma piscina de Clubs. */
-export type EaPlatform = "common-gen5" | "common-gen4";
+/**
+ * As piscinas do FC 27. PS5 + Xbox Series + PC compartilham `common-gen5`;
+ * o Nintendo Switch 2 (`nx`) é mundo separado, com numeração própria.
+ */
+export type EaPlatform = "common-gen5" | "nx";
 
 /** As duas piscinas, na ordem em que a busca em leque as visita. */
-export const PLATAFORMAS: EaPlatform[] = ["common-gen5", "common-gen4"];
+export const PLATAFORMAS: EaPlatform[] = ["common-gen5", "nx"];
 
 /** Rótulo humano de cada piscina — o console, não a sigla da EA. */
 export const ROTULO_PLATAFORMA: Record<EaPlatform, string> = {
   "common-gen5": "PS5 · Xbox Series · PC",
-  "common-gen4": "PS4 · Xbox One",
+  nx: "Nintendo Switch 2",
 };
+
+/** Lê a piscina de um parâmetro de URL. Qualquer outra coisa (inclusive a gen4 do FC 26) vira a principal. */
+export function plataformaDe(v: unknown): EaPlatform {
+  return v === "nx" ? "nx" : "common-gen5";
+}
+
+/** Verdadeiro para uma piscina que o FC 27 aceita. */
+export function ehPlataforma(v: unknown): v is EaPlatform {
+  return v === "common-gen5" || v === "nx";
+}
 
 /**
  * Teto medido do `maxResultCount` da busca. 200 responde 200 OK; 250 em diante
@@ -234,7 +257,7 @@ export interface ClubOverallStats {
   relegations: number | null;
   bestDivision: number | null;
   bestFinishGroup: number | null;
-  /** Nível de reputação do clube no FC 26 (0–10). */
+  /** Nível de reputação do clube (0–10). */
   reputationTier: number | null;
   /** Sequência de vitórias em curso. */
   winStreak: number | null;
@@ -308,9 +331,14 @@ export interface MatchPlayer {
   /** Segundos parado. A EA publica; é o que denuncia quem largou o jogo. */
   secondsIdle: number | null;
   goalsConceded: number | null;
-  /** Arquétipo do FC 26 (o "molde" do Pro). Cru — a EA não publica o nome. */
+  /** Arquétipo do Pro (os 13 do FC 27). Cru — a EA publica só o número. */
   archetypeId: string | null;
   /**
+   * ✅ FC 27 (21/09/2026): `match_event_aggregate_0` VOLTOU a vir preenchido,
+   * como "0:4,1:3,10:1,108:3,…" — 30 a 40 pares por jogador. O filtro abaixo
+   * deixou o dado entrar sozinho, como previsto. Os códigos seguem sem
+   * significado confirmado; decifrar é trabalho separado.
+   *
    * ⛔ `match_event_aggregate_0..3` — MEDIDO VAZIO no FC 26, em 08/09/2026.
    *
    * O inventário de 25/08 chamou este campo de "o maior tesouro não decifrado":
@@ -818,8 +846,8 @@ export async function clubMatches(
         secondsIdle: numOrNull(p.realtimeidle),
         goalsConceded: numOrNull(p.goalsconceded),
         archetypeId: p.archetypeid ? String(p.archetypeid) : null,
-        // Os quatro agregados, na ordem, só os que vieram preenchidos — que
-        // hoje é nenhum. Ver o comentário de `eventosCrus` em `MatchPlayer`.
+        // Os quatro agregados, na ordem, só os que vieram preenchidos — no
+        // FC 27, o primeiro. Ver o comentário de `eventosCrus` em `MatchPlayer`.
         eventosCrus: [0, 1, 2, 3]
           .map((i) => p[`match_event_aggregate_${i}`])
           .filter((v): v is string => typeof v === "string" && v.length > 0),

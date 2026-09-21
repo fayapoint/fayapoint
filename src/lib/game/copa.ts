@@ -1,6 +1,7 @@
 import dbConnect from "@/lib/mongodb";
 import GameCopa, { type TimeDaCopa, type GrauVinculo } from "@/models/GameCopa";
-import GameEaPartida from "@/models/GameEaPartida";
+import { partidasDaEdicao } from "@/models/GameEaPartida";
+import { edicaoDoJogo } from "@/lib/game/edicao";
 import { ehWalkover } from "./simulacao";
 import type { ClubMatch } from "./ea-api";
 
@@ -529,7 +530,8 @@ export async function partidasDaCopa(slug: string): Promise<{
    * `clubIds` ser usado; `$setIsSubset` sozinho viraria varredura de coleção, e
    * o espelho só cresce.
    */
-  const docs = await GameEaPartida.find({
+  // A copa lê o espelho da edição em que foi jogada (a de 08/09 foi no FC 26).
+  const docs = await partidasDaEdicao(edicaoDoJogo(copa.jogo)).find({
     clubIds: { $in: ids },
     platform: { $in: plataformas },
     $expr: { $setIsSubset: ["$clubIds", ids] },

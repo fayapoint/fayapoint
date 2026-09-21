@@ -4,7 +4,7 @@ import type { ApuracaoClube } from "@/lib/game/federacao";
 
 export interface IGameClubePerfil {
   eaClubId: string;
-  plataforma: "common-gen5" | "common-gen4";
+  plataforma: "common-gen5" | "nx" | "common-gen4";
   nome: string;
   estado: EstadoClube;
   donoUserId: mongoose.Types.ObjectId | null;
@@ -13,6 +13,8 @@ export interface IGameClubePerfil {
   descricao: string;
   versao: number;
   apuracoes: ApuracaoClube[];
+  /** Anúncio de venda da gestão do clube (compra e venda). `null` = não está à venda. */
+  aVenda?: { preco: number; anunciadoEm: Date; nota: string } | null;
   historico: Array<{
     autorUserId: mongoose.Types.ObjectId;
     acao: string;
@@ -25,7 +27,7 @@ export interface IGameClubePerfil {
 
 const schema = new Schema<IGameClubePerfil>({
   eaClubId: { type: String, required: true, match: /^\d{1,12}$/ },
-  plataforma: { type: String, required: true, enum: ["common-gen5", "common-gen4"] },
+  plataforma: { type: String, required: true, enum: ["common-gen5", "nx", "common-gen4"] },
   nome: { type: String, required: true, maxlength: 100 },
   estado: { type: String, enum: ["pendente", "aprovado", "recusado", "suspenso"], default: "pendente" },
   donoUserId: { type: Schema.Types.ObjectId, ref: "User", default: null },
@@ -42,6 +44,7 @@ const schema = new Schema<IGameClubePerfil>({
     defesa: { texto: { type: String, maxlength: 2000 }, quando: Date, autor: String },
     decisao: { resultado: { type: String, enum: ["arquivar", "advertir", "suspender"] }, motivo: { type: String, maxlength: 2000 }, quando: Date, autor: String },
   }],
+  aVenda: { type: { preco: { type: Number, min: 1 }, anunciadoEm: Date, nota: { type: String, maxlength: 300 } }, default: null, _id: false },
   historico: [{ _id: false, autorUserId: { type: Schema.Types.ObjectId, ref: "User", required: true }, acao: { type: String, required: true }, motivo: { type: String, required: true, maxlength: 2000 }, quando: { type: Date, required: true } }],
 }, { timestamps: true, collection: "game_clube_perfis" });
 

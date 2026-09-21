@@ -10,7 +10,7 @@ export async function GET(req: Request) {
     const limite = await cobrar(req, "campeonato-leitura", "federacao-integridade"); if (!limite.ok) return limite.resposta!;
     const url = new URL(req.url); const plataforma = url.searchParams.get("plataforma") ?? "common-gen5";
     const pagina = Number(url.searchParams.get("pagina") ?? "0");
-    if (!["common-gen5", "common-gen4"].includes(plataforma) || !Number.isInteger(pagina) || pagina < 0 || pagina > 10000) throw new ErroGestao(400, "Plataforma ou página inválida.");
+    if (!["common-gen5", "nx"].includes(plataforma) || !Number.isInteger(pagina) || pagina < 0 || pagina > 10000) throw new ErroGestao(400, "Plataforma ou página inválida.");
     return NextResponse.json(await quadroIntegridade(plataforma, pagina), { headers: { "Cache-Control": "private, no-store" } });
   } catch (e) { return erroResposta(e); }
 }

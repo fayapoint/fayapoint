@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, Model } from 'mongoose';
+import { colecaoEspelho } from '@/lib/game/edicao';
 
 /**
  * ESPELHO da fonte pública da EA — um documento por (clubId, plataforma).
@@ -26,7 +27,8 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
  * dado. Espelho sem data é afirmação sem procedência.
  */
 
-export type GamePlatform = 'common-gen5' | 'common-gen4';
+/** `common-gen4` só existe em documento antigo (FC 26); o FC 27 é gen5 + Switch 2 (`nx`). */
+export type GamePlatform = 'common-gen5' | 'nx' | 'common-gen4';
 
 /** Profundidade do que foi capturado — nem todo clube vale uma captura funda. */
 export type ProfundidadeEspelho = 'indice' | 'completo';
@@ -72,7 +74,7 @@ export interface IGameEaClube extends Document {
 const GameEaClubeSchema = new Schema<IGameEaClube>(
   {
     clubId: { type: String, required: true },
-    platform: { type: String, enum: ['common-gen5', 'common-gen4'], required: true },
+    platform: { type: String, enum: ['common-gen5', 'nx', 'common-gen4'], required: true },
     name: { type: String, required: true },
     nomeNormalizado: { type: String, required: true, index: true },
     stadName: { type: String },
@@ -101,7 +103,8 @@ const GameEaClubeSchema = new Schema<IGameEaClube>(
     sourceGrade: { type: String, enum: ['A', 'B', 'C', 'D', 'E'], default: 'B' },
     capturedAt: { type: Date, default: Date.now, index: true },
   },
-  { timestamps: true, collection: 'game_ea_clubes' }
+  // Uma coleção por edição do jogo — ver `lib/game/edicao.ts`.
+  { timestamps: true, collection: colecaoEspelho('game_ea_clubes') }
 );
 
 /** A identidade do espelho. Re-capturar sempre atualiza, nunca duplica. */

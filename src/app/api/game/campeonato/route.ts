@@ -105,7 +105,7 @@ export async function POST(req: Request) {
     organizadorUserId: user.id,
     formato,
     preset: preset?.id,
-    plataforma: ["common-gen5", "common-gen4", "mista"].includes(String(body.plataforma))
+    plataforma: ["common-gen5", "nx", "mista"].includes(String(body.plataforma))
       ? String(body.plataforma)
       : "common-gen5",
     status: "inscricoes",

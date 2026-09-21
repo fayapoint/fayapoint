@@ -51,6 +51,7 @@ import {
 const PLAT_ROTULO: Record<string, string> = {
   "common-gen5": "PS5 · Series · PC",
   "common-gen4": "PS4 · Xbox One",
+  nx: "Nintendo Switch 2",
   mista: "Cross-gen",
 };
 
@@ -234,7 +235,7 @@ export function Mercado({ copy, locale }: { copy: CopyMercado; locale: string })
             >
               <option value="" style={{ color: "#000" }}>{copy.filtros.todasPlat}</option>
               <option value="common-gen5" style={{ color: "#000" }}>{copy.filtros.gen5}</option>
-              <option value="common-gen4" style={{ color: "#000" }}>{copy.filtros.gen4}</option>
+              <option value="nx" style={{ color: "#000" }}>{copy.filtros.gen4}</option>
               <option value="mista" style={{ color: "#000" }}>{copy.filtros.mista}</option>
             </select>
           </label>
@@ -1037,7 +1038,7 @@ function FormPublicar({
         <Campo rotulo={copy.publicar.plataforma}>
           <select value={plataforma} onChange={(e) => setPlataforma(e.target.value)} className={INPUT}>
             <option value="common-gen5" style={{ color: "#000" }}>{copy.filtros.gen5}</option>
-            <option value="common-gen4" style={{ color: "#000" }}>{copy.filtros.gen4}</option>
+            <option value="nx" style={{ color: "#000" }}>{copy.filtros.gen4}</option>
             <option value="mista" style={{ color: "#000" }}>{copy.filtros.mista}</option>
           </select>
         </Campo>

@@ -28,7 +28,7 @@ export interface IGameCompeticao extends Document {
   formato: FormatoCompeticao;
   /** Preset que originou a competição — só para contar o que as pessoas usam. */
   preset?: string;
-  plataforma: 'common-gen5' | 'common-gen4' | 'mista';
+  plataforma: 'common-gen5' | 'nx' | 'common-gen4' | 'mista';
   status: StatusCompeticao;
   vagas: number;
   regras: {
@@ -68,7 +68,7 @@ const GameCompeticaoSchema = new Schema<IGameCompeticao>(
     preset: { type: String },
     plataforma: {
       type: String,
-      enum: ['common-gen5', 'common-gen4', 'mista'],
+      enum: ['common-gen5', 'nx', 'common-gen4', 'mista'],
       default: 'common-gen5',
     },
     status: {
