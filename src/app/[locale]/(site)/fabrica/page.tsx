@@ -6,6 +6,7 @@ import { SequenciaDeRolagem } from "@/components/fabrica/SequenciaDeRolagem";
 import { MesaDePecas } from "@/components/fabrica/FabricaExperience";
 import { GiroDoEstudio, type PontoDoEstudio } from "@/components/fabrica/GiroDoEstudio";
 import { MonteSuaFabrica } from "@/components/fabrica/MonteSuaFabrica";
+import { BotaoTour, TourFabrica } from "@/components/fabrica/TourFabrica";
 import "@/components/fabrica/fabrica-experience.css";
 import { FAIXAS, INVENTARIO, NAO_PROMETE, CUSTO_DE_OPERACAO, GRADE_DO_DIA, MEDIDO_EM, brl } from "@/lib/fabrica";
 
@@ -141,6 +142,7 @@ export default async function PaginaFabrica() {
           <span>Fábrica Autônoma</span>
         </Link>
         <nav className="fx-nav" aria-label="Nesta página">
+          <BotaoTour compacto />
           <a href="#entregas">O que sai</a>
           <a href="#rotina">O dia</a>
           <a href="#faixas">Investimento</a>
@@ -180,10 +182,11 @@ export default async function PaginaFabrica() {
                   medir e relatar todo dia, com a sua identidade.
                 </p>
                 <div className="fx-actions">
-                  <a className="fx-button fx-button-blue" href="#faixas">
+                  <BotaoTour />
+                  <a className="fx-button fx-button-ghost" href="#faixas">
                     Ver as três faixas <ArrowDown size={16} aria-hidden="true" />
                   </a>
-                  <span className="fx-rolar">Role para abrir a pasta</span>
+                  <span className="fx-rolar">Ou role para abrir a pasta</span>
                 </div>
               </div>
             ),
@@ -593,6 +596,8 @@ export default async function PaginaFabrica() {
           },
         ]}
       />
+
+      <TourFabrica />
     </main>
   );
 }

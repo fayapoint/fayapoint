@@ -199,8 +199,14 @@ export function SequenciaDeRolagem({
           .finally(resolve);
       });
 
+    // O tour (`TourFabrica`) lê estes dois números para saber se pode rolar sem quadro faltando.
+    let feitos = 0;
+    raiz.dataset.total = String(quadros);
+    raiz.dataset.feitos = "0";
     const carregar = async (i: number) => {
       await Promise.all(camadas.map((c) => carregarUma(c, i)));
+      raiz.dataset.feitos = String(++feitos);
+      raiz.dispatchEvent(new CustomEvent("seq:progresso", { bubbles: true }));
       if (Math.abs(i - Math.round(atual)) <= PASSO_GROSSO) {
         desenhado = -1;
         pedir();
@@ -215,10 +221,9 @@ export function SequenciaDeRolagem({
       await Promise.all(Array.from({ length: simultaneos }, trabalhador));
     };
 
-    let cargaIniciada = false;
-    const iniciarCarga = async () => {
-      if (cargaIniciada) return;
-      cargaIniciada = true;
+    let carga: Promise<void> | null = null;
+    const iniciarCarga = () => (carga ??= carregarTudo());
+    const carregarTudo = async () => {
       const todos = Array.from({ length: quadros }, (_, i) => i);
       await emFila(todos.filter((i) => i % PASSO_GROSSO === 0 || i === quadros - 1), 6);
       await emFila(todos.filter((i) => i % PASSO_GROSSO !== 0), 4);
@@ -329,6 +334,10 @@ export function SequenciaDeRolagem({
 
     // Só trabalha perto da tela: carrega a uma tela e meia de distância e
     // para de desenhar quando sai.
+    // O tour pede a carga inteira antes de rolar, mesmo com a sequência longe da tela.
+    const aoPedirCarga = () => void iniciarCarga();
+    raiz.addEventListener("seq:carregar", aoPedirCarga);
+
     const observador = new IntersectionObserver(
       ([entrada]) => {
         visivel = entrada.isIntersecting;
@@ -349,6 +358,7 @@ export function SequenciaDeRolagem({
 
     return () => {
       cancelado = true;
+      raiz.removeEventListener("seq:carregar", aoPedirCarga);
       cancelAnimationFrame(pedido);
       observador.disconnect();
       redimensionar.disconnect();
@@ -361,6 +371,7 @@ export function SequenciaDeRolagem({
       ref={raizRef}
       id={id}
       className={`seq ${className ?? ""}`}
+      data-quadros={quadros}
       style={{ ["--seq-telas" as string]: telas }}
     >
       <style>{`@media (prefers-reduced-motion: reduce){${REGRAS_PARADAS}}`}</style>
