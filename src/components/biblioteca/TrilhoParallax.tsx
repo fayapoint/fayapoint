@@ -1105,6 +1105,10 @@ export function TrilhoParallax({
               // começa, já estão desenhadas quando o dedo encosta. Era o
               // "aparece vazio no meio do movimento" do handoff.
               loading={i < itens.length ? "eager" : "lazy"}
+              // Ansioso, mas no fim da fila: sem isto o React pré-carregava as
+              // 22 capas no <head> com a mesma prioridade do banner da primeira
+              // tela, para um trilho que fica três telas abaixo.
+              fetchPriority="low"
               decoding="async"
               width={254}
               height={365}

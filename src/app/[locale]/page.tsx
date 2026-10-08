@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { NovaLanding } from "@/components/landing/NovaLanding";
 import { WhatsAppButton } from "@/components/conversion/WhatsAppButton";
 import { getAiNews } from "@/lib/ai-news";
+import { CATEGORIES } from "@/data/landing/examples";
 import { getAllProducts, paraIdiomaLista } from "@/lib/products";
 import { generatePageMetadata } from "@/lib/metadata";
 import { ORDEM_POR_VARIACAO_DE_CAPA } from "@/data/ordem-variacao-capas";
@@ -27,6 +28,18 @@ export async function generateMetadata({
   const { locale } = await params;
   const { alternates } = generatePageMetadata({ locale, path: "" });
   return { alternates };
+}
+
+/**
+ * A arte de cada porta do herói: v6 ou v7, sorteada AQUI.
+ *
+ * A página é ISR (30 min), então o sorteio vale por meia hora e não por visita —
+ * a vitrine continua mudando ao longo do dia. Em troca, o HTML já chega com a
+ * arte certa: o cliente não sorteia de novo, não baixa imagem em dobro e não
+ * troca nada depois de pintar.
+ */
+function sortearArtes() {
+  return Object.fromEntries(CATEGORIES.map((c) => [c.id, 6 + Math.floor(Math.random() * 2)]));
 }
 
 export default async function Home({
@@ -90,7 +103,7 @@ export default async function Home({
 
   return (
     <ProvedorDeRota locale={locale} fatia={fatia}>
-      <NovaLanding news={items} featuredCourses={featuredCourses} />
+      <NovaLanding news={items} featuredCourses={featuredCourses} artes={sortearArtes()} />
       <WhatsAppButton />
     </ProvedorDeRota>
   );

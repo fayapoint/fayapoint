@@ -35,8 +35,12 @@ export default function CountUp({
   const ref = useRef<HTMLSpanElement>(null);
   const motionValue = useMotionValue(direction === 'down' ? to : from);
 
-  const damping = 20 + 40 * (1 / duration);
-  const stiffness = 100 * (1 / duration);
+  // Mola criticamente amortecida que chega a 99% em `duration` segundos. A
+  // fórmula original ficava superamortecida: com 0.8 ela levava ~2,5 s para
+  // fechar, e o XP parava em "48" por um segundo antes de virar "50".
+  const omega = 6.6 / duration;
+  const damping = 2 * omega;
+  const stiffness = omega * omega;
 
   const springValue = useSpring(motionValue, {
     damping,

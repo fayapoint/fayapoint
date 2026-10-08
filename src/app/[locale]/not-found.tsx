@@ -29,7 +29,7 @@ export default function NotFound() {
       }}
     >
       {/* eslint-disable-next-line @next/next/no-img-element -- erro fofo §12 */}
-      <img src="/fx/erro-fofo.webp" alt="" aria-hidden className="mb-4 h-32 w-48 rounded-2xl object-cover border border-white/10" />
+      <img src="/fx/erro-fofo.webp" alt="" aria-hidden loading="lazy" className="mb-4 h-32 w-48 rounded-2xl object-cover border border-white/10" />
       <p className="text-8xl sm:text-9xl tracking-wide leading-none" style={{ ...bebas, color: GOLD }}>
         404
       </p>

@@ -43,9 +43,8 @@ const bebas = { fontFamily: "var(--font-bebas), sans-serif" } as const;
 
 // Paleta própria da landing — viva, "cartoon premium", independente do marrom do site
 const GOLD = "#f5c04e";
-// Cada categoria tem 5 artes monocromáticas na SUA cor — a cor é a navegação.
-// A variação é sorteada a cada visita (pós-montagem, para não divergir do SSR).
-const CAT_VARIANTS = 7; // v6-v7: fusão vetor+foto cinematográfica (14/07)
+// Cada categoria tem artes na SUA cor — a cor é a navegação. As portas usam só
+// as duas de fusão vetor+foto (v6 e v7); qual delas é sorteado no SERVIDOR.
 const CATEGORY_STYLE: Record<ExampleCategory, { color: string }> = {
   "trabalho": { color: "#38bdf8" },
   "estudos": { color: "#a78bfa" },
@@ -112,7 +111,23 @@ function capaDoTrilho(c: FeaturedCourse): string {
   return `https://res.cloudinary.com/${nuvem}/image/upload/${RECORTE}/fayai/courses/${c.slug}/capa-v2`;
 }
 
-export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]; featuredCourses?: FeaturedCourse[] }) {
+export function NovaLanding({
+  news,
+  featuredCourses = [],
+  artes = {},
+}: {
+  news: AiNewsItem[];
+  featuredCourses?: FeaturedCourse[];
+  /**
+   * A arte de cada porta (6 ou 7), sorteada no servidor.
+   *
+   * ⚠️ O sorteio era feito aqui, depois de montar: o HTML chegava com a v6 nas
+   * quatro portas, o navegador baixava e pintava as quatro, e ~1 s depois metade
+   * era trocada pela v7 na cara do visitante (medido em 08/10/2026: duas imagens
+   * a mais por visita, em média, e a troca visível na primeira tela).
+   */
+  artes?: Partial<Record<ExampleCategory, number>>;
+}) {
   const T = useT();
   const locale = useLocale();
   const t = useTranslations("Landing");
@@ -178,9 +193,6 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
   const [combo, setCombo] = useState(0);
   const [burst, setBurst] = useState(0); // chave do confete
   const cardRef = useRef<HTMLElement | null>(null);
-  const [artVariants, setArtVariants] = useState<Record<ExampleCategory, number>>({
-    "trabalho": 1, "estudos": 1, "criar": 1, "dia-a-dia": 1,
-  });
 
   // ===== P0: home do aluno — o XP do logado NUNCA é jogado fora =====
   const logged = mounted && isLoggedIn && !!user;
@@ -229,16 +241,6 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
     load();
     return () => { cancelled = true; };
   }, [logged]);
-
-  // Sorteia a arte de cada categoria a cada visita
-  useEffect(() => {
-    setArtVariants({
-      "trabalho": 1 + Math.floor(Math.random() * CAT_VARIANTS),
-      "estudos": 1 + Math.floor(Math.random() * CAT_VARIANTS),
-      "criar": 1 + Math.floor(Math.random() * CAT_VARIANTS),
-      "dia-a-dia": 1 + Math.floor(Math.random() * CAT_VARIANTS),
-    });
-  }, []);
 
   // Anônimo: gate de 3 exemplos → cadastro. Logado: joga até esgotar o banco.
   const limitReached = logged
@@ -463,8 +465,16 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
         {T("Pular para o conteúdo")}
       </a>
       {/* ============================== HEADER ============================== */}
-      <header className="flex items-center justify-between px-4 sm:px-8 pt-4 pb-2 shrink-0">
-        <span className="text-3xl sm:text-4xl tracking-wide select-none" style={bebas}>
+      {/* ⚠️ O cabeçalho CABE em 360 px, em português e em inglês (medido em
+          08/10/2026). Antes ele pedia 405: em todo Android comum o "Criar conta"
+          saía cortado pela borda e a pílula de XP quebrava em duas linhas.
+          No telefone cada peça encolhe um pouco — só o outro idioma no seletor,
+          botão sem seta — e nada quebra linha. O visitante sem conta não vê a
+          pílula de XP no telefone: "Entrar" e "Criar conta" não cabem ao lado
+          dela em inglês, e o XP ganho já é dito dentro do cartão do minigame.
+          Quem está logado vê a pílula sempre. */}
+      <header className="flex items-center justify-between gap-2 px-4 sm:px-8 pt-4 pb-2 shrink-0">
+        <span className="text-[26px] min-[380px]:text-3xl sm:text-4xl tracking-wide select-none" style={bebas}>
           <LogoFayai />
         </span>
         {/* Navegação no topo — 26/08/2026.
@@ -489,20 +499,20 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3">
           {/* A home é a única porta de entrada sem o cabeçalho do site — ela
               fica fora do grupo (site), que é onde o SiteChrome monta Header e
               Footer. Sem isto aqui, quem cai em `/en` não tem como voltar para
               o português, e quem cai em `/pt-BR` não tem como ir para o inglês:
               o seletor existia e simplesmente não aparecia na porta de entrada. */}
-          <BotaoIdioma />
+          <BotaoIdioma className="max-[479px]:[&>[aria-current]]:hidden" />
           <div
-            className="relative flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-bold text-[#1a1405]"
+            className={`relative ${logged ? "flex" : "hidden sm:flex"} items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 sm:px-3.5 py-1.5 text-sm font-bold text-[#1a1405]`}
             style={{ background: `linear-gradient(135deg, ${GOLD}, #ffdf8e)`, boxShadow: "0 4px 18px rgba(245,192,78,.35)" }}
           >
-            <Sparkles size={15} />
+            <Sparkles size={15} className="max-[399px]:hidden" />
             <span>
-              {logged && account ? `Nv ${account.level} · ` : ""}
+              {logged && account ? <span className="max-sm:hidden">{`Nv ${account.level} · `}</span> : null}
               {/* O total sobe contando: é a prova de que o XP entrou. */}
               <CountUp to={pillXp} duration={0.8} separator={(1000).toLocaleString(tagIntl(locale))[1]} /> XP
             </span>
@@ -524,14 +534,14 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           {mounted && isLoggedIn && user ? (
             <Link
               href={rota("/portal")}
-              className="fx-shine flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity"
+              className="fx-shine flex items-center gap-1.5 whitespace-nowrap rounded-full px-3 sm:px-4 py-1.5 text-sm font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity"
               style={{ background: `linear-gradient(135deg, ${GOLD}, #ffdf8e)`, boxShadow: "0 4px 18px rgba(245,192,78,.35)" }}
             >
               <span className="hidden sm:inline">
                 {t("greeting", { name: (user.name || t("studentFallback")).split(" ")[0] })}
               </span>
               <span>{t("myPortal")}</span>
-              <ArrowRight size={15} />
+              <ArrowRight size={15} className="max-sm:hidden" />
             </Link>
           ) : (
             /* A HOME NÃO TINHA PORTA DE CADASTRO (medido 05/09/2026).
@@ -548,16 +558,16 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                lado em peso menor: são intenções diferentes e não podem ter o
                mesmo destaque. */
             <>
-              <Link href={rota("/login")} className="inline-flex min-h-11 items-center text-sm font-semibold text-white/60 hover:text-white transition-colors sm:min-h-0">
+              <Link href={rota("/login")} className="inline-flex min-h-11 items-center whitespace-nowrap text-sm font-semibold text-white/60 hover:text-white transition-colors sm:min-h-0">
                 {t("signIn")}
               </Link>
               <Link
                 href={rota("/registro")}
-                className="fx-shine inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity sm:min-h-0"
+                className="fx-shine inline-flex min-h-11 items-center gap-1.5 whitespace-nowrap rounded-full px-3 sm:px-4 py-1.5 text-sm font-extrabold text-[#1a1405] hover:opacity-90 transition-opacity sm:min-h-0"
                 style={{ background: `linear-gradient(135deg, ${GOLD}, #ffdf8e)`, boxShadow: "0 4px 18px rgba(245,192,78,.35)" }}
               >
                 {t("createAccount")}
-                <ArrowRight size={15} />
+                <ArrowRight size={15} className="max-sm:hidden" />
               </Link>
             </>
           )}
@@ -666,8 +676,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               <div className="nl-portas">
                 {CATEGORIES.map((cat) => {
                   const st = CATEGORY_STYLE[cat.id];
-                  // O sorteio de 1 a 7 continua; ele só é dobrado para dentro das duas artes de fusão.
-                  const arte = 6 + ((artVariants[cat.id] - 1) % 2);
+                  const arte = artes[cat.id] ?? 6;
                   const magica = MAGIC_EXAMPLES.find((e) => e.category === cat.id);
                   return (
                     <SpotlightCard
@@ -1164,6 +1173,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                         src={item.image}
                         alt={T(item.title)}
                         data-paralaxe
+                        loading="lazy"
                         className="absolute inset-0 w-full h-full object-cover transition-[scale] duration-300 group-hover:scale-105"
                       />
                     </span>
