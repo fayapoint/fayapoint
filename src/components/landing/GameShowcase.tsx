@@ -2,10 +2,8 @@
 
 import Link from "next/link";
 import { useLocale } from "next-intl";
-import { motion } from "framer-motion";
 import { ArrowRight, Trophy, Shield, Search, Check } from "lucide-react";
 import { comIdioma } from "@/lib/rota-idioma";
-import { useReducedMotion } from "@/lib/arcade/engine";
 import { getGameCopy } from "@/lib/game/copy";
 import { VideoAmbiente } from "@/components/game/VideoAmbiente";
 import { LIMA, VIOLETA, bebas, FUNDO, TEXTO } from "@/lib/game/tema";
@@ -30,7 +28,6 @@ import { LIMA, VIOLETA, bebas, FUNDO, TEXTO } from "@/lib/game/tema";
 export function GameShowcase() {
   const locale = useLocale();
   const rota = (h: string) => comIdioma(h, locale);
-  const reduced = useReducedMotion();
   const copy = getGameCopy(locale);
   const s = copy.showcase;
 
@@ -61,13 +58,8 @@ export function GameShowcase() {
         }}
       />
 
-      <motion.div
-        initial={reduced ? false : { opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 0.4 }}
-        className="relative mx-auto max-w-5xl"
-      >
+      {/* A entrada é do `MovimentoDeRolagem` da home (`data-revela`). */}
+      <div className="relative mx-auto max-w-5xl" data-revela>
         <Link
           href={rota("/game")}
           className="group block overflow-hidden rounded-3xl border transition-transform hover:-translate-y-1"
@@ -229,7 +221,7 @@ export function GameShowcase() {
             </div>
           </div>
         </Link>
-      </motion.div>
+      </div>
     </section>
   );
 }

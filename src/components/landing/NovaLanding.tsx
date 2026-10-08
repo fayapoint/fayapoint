@@ -2,6 +2,7 @@
 import { useT } from "@/i18n/dicionario";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { comIdioma } from "@/lib/rota-idioma";
 import { tagIntl } from "@/lib/idioma";
@@ -23,10 +24,20 @@ import { useUser } from "@/contexts/UserContext";
 import { ArcadeShowcase } from "@/components/landing/ArcadeShowcase";
 import { GameShowcase } from "@/components/landing/GameShowcase";
 import { RadarSection } from "@/components/landing/RadarSection";
+import ShinyText from "@/components/ShinyText";
+import SpotlightCard from "@/components/SpotlightCard";
+import CountUp from "@/components/CountUp";
 import { LogoFayai } from "@/components/marca/LogoFayai";
 import { BannerFabrica } from "@/components/fabrica/BannerFabrica";
 import { BotaoIdioma } from "@/components/layout/BotaoIdioma";
 import { TrilhoParallax, type ItemTrilho } from "@/components/biblioteca/TrilhoParallax";
+
+// GSAP e Lenis só descem depois da hidratação: nada do que eles fazem aparece
+// na primeira tela, então não entram no JavaScript que a home espera para abrir.
+const MovimentoDeRolagem = dynamic(
+  () => import("@/components/landing/MovimentoDeRolagem").then((m) => m.MovimentoDeRolagem),
+  { ssr: false },
+);
 
 const bebas = { fontFamily: "var(--font-bebas), sans-serif" } as const;
 
@@ -397,6 +408,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
 
   return (
     <div
+      id="nl-raiz"
       className="min-h-dvh flex flex-col overflow-x-hidden text-[#f3f1ff]"
       style={{
         background:
@@ -436,6 +448,9 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           transform: perspective(900px) rotateX(2.2deg) translateY(-4px);
           box-shadow: inset 0 1px 0 rgba(255,255,255,.28), 0 22px 50px -16px rgba(0,0,0,.6);
         }
+        /* O contrato com o MovimentoDeRolagem: ele anima só os números, o transform é daqui. */
+        [data-inclina] { --rx: 0; --ry: 0; transform: perspective(900px) rotateX(calc(var(--rx) * 1deg)) rotateY(calc(var(--ry) * 1deg)); }
+        [data-paralaxe] { --py: 0; transform: translateY(calc(var(--py) * 1%)) scale(1.12); }
       ` }} />
       {/* "Pular para o conteúdo" — WCAG 2.4.1. A home mora fora do grupo
           (site) e não recebe o atalho do `SiteChrome`, então tem o seu.
@@ -488,7 +503,8 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
             <Sparkles size={15} />
             <span>
               {logged && account ? `Nv ${account.level} · ` : ""}
-              {pillXp.toLocaleString(tagIntl(locale))} XP
+              {/* O total sobe contando: é a prova de que o XP entrou. */}
+              <CountUp to={pillXp} duration={0.8} separator={(1000).toLocaleString(tagIntl(locale))[1]} /> XP
             </span>
             <AnimatePresence>
               {xpPop && (
@@ -605,9 +621,12 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                 @media (max-width: 639px) { .nl-portas { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
                 .nl-porta { position: relative; display: block; aspect-ratio: 3 / 4; border-radius: 22px; overflow: hidden; cursor: pointer;
                   text-align: left; background: #0b0e1a; border: 1px solid rgba(255,255,255,.10); box-shadow: 0 18px 40px -22px rgba(0,0,0,.9);
-                  transition: transform .45s cubic-bezier(.22,1,.36,1), border-color .35s, box-shadow .45s; }
+                  transition: translate .45s cubic-bezier(.22,1,.36,1), scale .2s, border-color .35s, box-shadow .45s; }
                 .nl-porta::before { content: ""; position: absolute; inset: 0 0 auto; height: 2px; z-index: 3; background: var(--cor); opacity: .85; }
-                .nl-porta:hover, .nl-porta:focus-visible { transform: translateY(-6px);
+                /* translate e scale, não transform: o transform da porta é a inclinação em 3D
+                   que segue o ponteiro. Na mesma propriedade, um apagaria o outro. */
+                .nl-porta:active { scale: .97; }
+                .nl-porta:hover, .nl-porta:focus-visible { translate: 0 -6px;
                   border-color: color-mix(in srgb, var(--cor) 55%, transparent);
                   box-shadow: 0 26px 60px -24px color-mix(in srgb, var(--cor) 55%, transparent); }
                 .nl-porta:focus-visible { outline: 2px solid var(--cor); outline-offset: 3px; }
@@ -628,7 +647,8 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                 @media (max-width: 639px) { .nl-porta { aspect-ratio: 4 / 5; border-radius: 18px; } .nl-porta-magica { -webkit-line-clamp: 2; } }
                 @media (prefers-reduced-motion: reduce) {
                   .nl-porta, .nl-porta-arte, .nl-porta-cta { transition: none; }
-                  .nl-porta:hover, .nl-porta:focus-visible { transform: none; }
+                  .nl-porta:hover, .nl-porta:focus-visible { translate: none; }
+                  .nl-porta:active { scale: none; }
                   .nl-porta:hover .nl-porta-arte { transform: scale(1.02); }
                 }
               ` }} />
@@ -639,7 +659,9 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                   gradiente: (c) => <span className="nl-titulo-grad">{c}</span>,
                 })}
               </h1>
-              <p className="nl-sub">{t("heroSubtitle")}</p>
+              {/* Um brilho ao chegar e depois um a cada 6 s: sem a pausa, o parágrafo
+                  era repintado a cada quadro, para sempre, na primeira tela. */}
+              <p className="nl-sub"><ShinyText text={t("heroSubtitle")} color="rgba(235,240,250,.66)" shineColor="#ffffff" speed={3} delay={6} /></p>
 
               <div className="nl-portas">
                 {CATEGORIES.map((cat) => {
@@ -648,12 +670,15 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                   const arte = 6 + ((artVariants[cat.id] - 1) % 2);
                   const magica = MAGIC_EXAMPLES.find((e) => e.category === cat.id);
                   return (
-                    <motion.button
+                    <SpotlightCard
+                      as="button"
                       key={cat.id}
                       type="button"
-                      whileTap={{ scale: 0.97 }}
+                      data-inclina
                       onClick={() => pickExample(cat.id)}
                       className="nl-porta"
+                      spotlightColor={st.color}
+                      borderGlow={1}
                       style={{ ["--cor" as string]: st.color } as import("react").CSSProperties}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element -- arte local estática, sem otimizador */}
@@ -667,7 +692,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                           <ArrowRight size={14} aria-hidden />
                         </span>
                       </span>
-                    </motion.button>
+                    </SpotlightCard>
                   );
                 })}
               </div>
@@ -931,7 +956,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                 movimento. No celular a arte vem PRIMEIRO — quem chega pelo
                 telefone decide na imagem antes de decidir no texto. */}
             <div className="grid gap-6 lg:grid-cols-[1.05fr_.95fr] lg:items-center">
-              <div className="order-2 lg:order-1">
+              <div className="order-2 lg:order-1" data-revela-filhos>
             <div className="flex items-baseline gap-3 flex-wrap">
               <h2 className="text-2xl sm:text-4xl tracking-wide" style={bebas}>
                 {t.rich("atelie.title", { destaque })}
@@ -951,13 +976,13 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               {t.rich("atelie.body", { forte })}
             </p>
 
-            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            <div className="mt-5 grid gap-3 sm:grid-cols-3" data-revela-filhos>
               {[
                 { n: "1", t: t("atelie.step1Title"), d: t("atelie.step1Desc") },
                 { n: "2", t: t("atelie.step2Title"), d: t("atelie.step2Desc") },
                 { n: "3", t: t("atelie.step3Title"), d: t("atelie.step3Desc") },
               ].map((p) => (
-                <div key={p.n} className="glass rounded-2xl px-4 py-3.5">
+                <SpotlightCard key={p.n} className="glass rounded-2xl px-4 py-3.5" spotlightColor={GOLD} proximity={0}>
                   <span
                     className="inline-flex h-6 w-6 items-center justify-center rounded-lg text-xs font-black text-black"
                     style={{ background: `linear-gradient(135deg, ${GOLD}, #ffdf8e)` }}
@@ -966,7 +991,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                   </span>
                   <p className="mt-2 text-sm font-bold text-white">{T(p.t)}</p>
                   <p className="mt-0.5 text-xs leading-relaxed text-white/50">{T(p.d)}</p>
-                </div>
+                </SpotlightCard>
               ))}
             </div>
 
@@ -992,7 +1017,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                   `preload="metadata"` e não `auto` — este vídeo fica logo
                   abaixo da primeira dobra, e baixá-lo inteiro disputaria banda
                   com as capas do trilho, que é o que a pessoa veio ver. */}
-              <div className="order-1 lg:order-2">
+              <div className="order-1 lg:order-2" data-revela>
                 <div className="relative overflow-hidden rounded-2xl border border-amber-400/25 bg-black shadow-[0_30px_70px_-36px_rgba(245,192,78,.5)]">
                   {/* ⚠️ Era um <video src="/home/atelie-loop.webm"> — e esse
                       arquivo NUNCA existiu no repositório: a home pedia,
@@ -1010,6 +1035,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                     aria-hidden="true"
                     loading="lazy"
                     decoding="async"
+                    data-paralaxe
                     className="aspect-video w-full object-cover"
                   />
                   <span
@@ -1104,7 +1130,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
         <div aria-hidden className="fx-orb" style={{ width: 260, height: 260, right: "10%", top: 30, background: "radial-gradient(circle, rgba(244,114,182,.35), transparent 65%)", animation: "fx-drift-b 13s ease-in-out infinite" }} />
         <div aria-hidden className="fx-orb" style={{ width: 240, height: 240, left: "44%", top: 60, background: "radial-gradient(circle, rgba(167,139,250,.35), transparent 65%)", animation: "fx-drift-a 15s ease-in-out infinite reverse" }} />
         <div className="relative max-w-5xl mx-auto">
-          <div className="flex items-baseline gap-3 mb-2.5">
+          <div className="flex items-baseline gap-3 mb-2.5" data-revela>
             <h2 className="text-xl sm:text-2xl tracking-wide" style={bebas}>
               {t.rich("news.title", { destaque })}
             </h2>
@@ -1117,16 +1143,19 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               {new Date().toLocaleDateString(tagIntl(locale), { day: "2-digit", month: "long", timeZone: "America/Sao_Paulo" })}
             </span>
           </div>
-          <div className="grid sm:grid-cols-3 gap-3">
+          <div className="grid sm:grid-cols-3 gap-3" data-revela-filhos>
             {news.map((item) => {
               const external = item.url?.startsWith("http");
               return (
-                <a
+                <SpotlightCard
+                  as="a"
                   key={item.slug}
                   href={external ? item.url! : rota(item.url || "/noticias")}
                   target={external ? "_blank" : undefined}
                   rel={external ? "noopener noreferrer" : undefined}
-                  className="glass glass-hover group rounded-2xl overflow-hidden"
+                  className="glass glass-hover group rounded-2xl"
+                  spotlightColor={GOLD}
+                  proximity={0}
                 >
                   {item.image && (
                     <span className="block relative overflow-hidden" style={{ aspectRatio: "3 / 2" }}>
@@ -1134,7 +1163,8 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                       <img
                         src={item.image}
                         alt={T(item.title)}
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        data-paralaxe
+                        className="absolute inset-0 w-full h-full object-cover transition-[scale] duration-300 group-hover:scale-105"
                       />
                     </span>
                   )}
@@ -1156,7 +1186,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                       </span>
                     )}
                   </span>
-                </a>
+                </SpotlightCard>
               );
             })}
           </div>
@@ -1170,7 +1200,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               pelo X), o botão do WhatsApp deixa de flutuar e pousa AQUI, entre
               a página e a grade de links. Vazio até lá, e sem custo. */}
           <div id="wpp-acoplado" className="empty:hidden mb-3" />
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3" data-revela-filhos>
             {[
               { href: "/cursos", icon: GraduationCap, label: t("links.courses"), desc: t("links.coursesDesc"), color: "#38bdf8" },
               { href: "/arcade", icon: Gamepad2, label: t("links.arcade"), desc: t("links.arcadeDesc"), color: "#f5c04e" },
@@ -1178,10 +1208,13 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
               { href: "/projetos", icon: Rocket, label: t("links.projects"), desc: t("links.projectsDesc"), color: "#f472b6" },
               { href: "/noticias", icon: BookOpen, label: t("links.blog"), desc: t("links.blogDesc"), color: "#a3e635" },
             ].map(({ href, icon: Icon, label, desc, color }) => (
-              <Link
+              <SpotlightCard
+                as={Link}
                 key={href}
                 href={rota(href)}
                 className="glass glass-hover group rounded-2xl px-4 py-3 flex items-center gap-3"
+                spotlightColor={color}
+                proximity={0}
               >
                 <span
                   className="flex items-center justify-center rounded-xl p-2 shrink-0"
@@ -1193,7 +1226,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
                   <span className="block text-sm font-bold">{T(label)}</span>
                   <span className="block text-[11px] text-white/45 truncate">{T(desc)}</span>
                 </span>
-              </Link>
+              </SpotlightCard>
             ))}
           </div>
           {/* Grade de links secundária — 20/08/2026.
@@ -1263,6 +1296,7 @@ export function NovaLanding({ news, featuredCourses = [] }: { news: AiNewsItem[]
           </motion.div>
         )}
       </AnimatePresence>
+      <MovimentoDeRolagem alvo="#nl-raiz" />
     </div>
   );
 }

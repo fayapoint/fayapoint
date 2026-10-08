@@ -20,10 +20,8 @@ import { useT } from "@/i18n/dicionario";
 import Link from "next/link";
 import { comIdioma } from "@/lib/rota-idioma";
 import { useLocale, useTranslations } from "next-intl";
-import { motion } from "framer-motion";
 import { ArrowRight, Gamepad2 } from "lucide-react";
 import { ArcadeVisual } from "@/components/portal/ArcadeVisual";
-import { useReducedMotion } from "@/lib/arcade/engine";
 
 const GOLD = "#f5c04e";
 
@@ -47,7 +45,6 @@ export function ArcadeShowcase() {
   // Link interno sem `/pt-BR` custa um 308 por clique e some da contagem de
   // link interno das ferramentas de auditoria. Ver [[reference_seo_armadilhas_locale]].
   const rota = (h: string) => comIdioma(h, locale);
-  const reduced = useReducedMotion();
 
   return (
     <section className="relative px-4 sm:px-8 pb-3 shrink-0">
@@ -76,7 +73,9 @@ export function ArcadeShowcase() {
         }}
       />
 
-      <div className="relative max-w-5xl mx-auto">
+      {/* A entrada (título, depois os cinco jogos em cascata) é do
+          `MovimentoDeRolagem` da home — as marcas `data-revela-filhos` são o contrato. */}
+      <div className="relative max-w-5xl mx-auto" data-revela-filhos>
         <div className="flex items-baseline gap-3 mb-1 flex-wrap">
           <h3
             className="text-xl sm:text-2xl tracking-wide"
@@ -90,18 +89,11 @@ export function ArcadeShowcase() {
         </div>
         <p className="text-sm text-white/55 mb-3 max-w-xl">{t("body")}</p>
 
-        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-3" data-revela-filhos>
           {GAMES.map((game, i) => {
             const titulo = t(`games.${game.id}.titulo`);
             return (
-            <motion.div
-              key={game.id}
-              initial={reduced ? false : { opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.35, delay: reduced ? 0 : i * 0.05 }}
-              className={i === 4 ? "col-span-2 lg:col-span-1" : undefined}
-            >
+            <div key={game.id} className={i === 4 ? "col-span-2 lg:col-span-1" : undefined}>
               <Link
                 href={rota(`/arcade?jogo=${game.id}`)}
                 className="group block h-full overflow-hidden rounded-2xl border transition-all hover:-translate-y-1"
@@ -138,7 +130,7 @@ export function ArcadeShowcase() {
                   </p>
                 </div>
               </Link>
-            </motion.div>
+            </div>
             );
           })}
         </div>
