@@ -1862,62 +1862,11 @@ html[data-virada-livro="tras"]::view-transition-new(pagina-direita) {
 }
 
 /* ── O REALCE É PINTADO PELO NAVEGADOR, NÃO POR ELEMENTOS ──────────────────
-   As regras abaixo eram `.lente-fala.lente-lida` etc., aplicadas a `<span>`
-   inseridos no Markdown renderizado. Aquilo derrubava a página: o DOM é do
-   React, e envolver um nó de texto tira ele do pai que o React conhece.
-   Ver o cabeçalho de `src/lib/lente-realce.ts`.
-
-   `::highlight()` pinta as mesmas faixas sem que exista elemento nenhum. Sem
-   transição: o realce nativo não anima, e é melhor assim — a troca de frase
-   fica instantânea em vez de arrastada. */
-
-/* O que ainda não foi narrado: azul discreto.
-   ⚠️ Só é PUBLICADO quando o modo foco está desligado — ver o comentário em
-   `LenteSobreposta`. Com o foco ligado, quem diz "ainda não" é o recuo de
-   contraste, e os dois juntos riscam a página inteira.
-   Visto na tela cheia, a primeira versão (0.28) pintava o capítulo inteiro de
-   azul e a página virava um formulário. O que ainda não foi lido é a maior
-   parte do texto quase sempre — então ele tem que ser o mais silencioso dos
-   três estados, quase um fio. */
-::highlight(lente-porvir) {
-  text-decoration: underline 1px rgba(56, 189, 248, 0.28);
-  text-underline-offset: 0.22em;
-}
-
-/* O que já passou: verde presente.
-   Este é o estado que RECOMPENSA — mostra o caminho andado — então pode falar
-   mais alto que o azul sem cansar: ele cresce devagar, ao longo da aula. */
-/* O que já passou.
-   ⚠️ QUIETO DE PROPÓSITO. O verde cresce até cobrir o capítulo inteiro — é o
-   estado que mais aparece ao fim de uma aula. Grosso, ele vira uma massa de
-   risco verde e cansa; fino, lê como caminho andado sem disputar com a frase
-   que está tocando, que é a única que precisa gritar. */
-::highlight(lente-lida) {
-  color: rgba(var(--reader-tint), 0.7);
-  text-decoration: underline 1.5px rgba(52, 211, 153, 0.42);
-  text-underline-offset: 0.22em;
-}
-
-/* O trecho que o aluno guardou.
-   Âmbar, e não verde nem azul: os três estados da narração são um eixo só (o
-   tempo), e o grifo é outra coisa — foi ELE que escolheu, não o relógio. */
-::highlight(lente-guardado) {
-  background-color: rgba(251, 191, 36, 0.18);
-  text-decoration: underline 1px rgba(251, 191, 36, 0.55);
-  text-underline-offset: 0.22em;
-}
-
-/* A frase que está tocando. */
-/* A frase que está tocando.
-   O `color` aqui é o que devolve o brilho cheio quando o resto recuou — por
-   isso ele é fixo e não `var(--reader-fg)`, que é justamente a variável que o
-   modo foco baixa. */
-::highlight(lente-atual) {
-  background-color: rgba(167, 139, 250, 0.28);
-  color: rgb(var(--reader-tint));
-  text-decoration: underline 2.5px rgba(167, 139, 250, 1);
-  text-underline-offset: 0.22em;
-}
+   As quatro regras do realce da lente (porvir, lida, guardado, atual) moram em
+   `src/lib/lente-realce.ts`, que as injeta num <style> ao publicar o primeiro
+   realce. ⛔ Não as traga de volta para cá: o analisador de CSS do Turbopack
+   recusa o pseudo-elemento de realce com nome, e `next dev` respondia 500 em
+   TODAS as páginas do site por causa de quatro regras do leitor (08/10/2026). */
 
 /* Quem pediu menos movimento recebe o aumento sem a animação dele. */
 @media (prefers-reduced-motion: reduce) {

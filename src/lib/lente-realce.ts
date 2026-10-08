@@ -190,12 +190,64 @@ const REGISTRO = ["lente-porvir", "lente-lida", "lente-guardado", "lente-atual"]
 export type NomeDeRealce = (typeof REGISTRO)[number];
 
 /**
+ * As cores dos quatro realces.
+ *
+ * ⚠️ Moram AQUI, num <style> injetado, e não no `globals.css`: o analisador de
+ * CSS do Turbopack (Next 16) recusa `::highlight(nome)` — "'highlight' is not
+ * recognized as a valid pseudo-element" — e o `next dev` respondia 500 em
+ * TODAS as páginas por causa destas quatro regras. O build de produção
+ * (webpack) só avisava, e por isso passou despercebido.
+ *
+ * Sem transição: o realce nativo não anima, e é melhor assim — a troca de frase
+ * fica instantânea em vez de arrastada.
+ */
+const ESTILO = `
+/* O que ainda não foi narrado: azul discreto, quase um fio. É a maior parte do
+   texto quase sempre, então é o mais silencioso dos estados (a 0.28 de fundo a
+   página virava um formulário). Só é publicado com o modo foco desligado. */
+::highlight(lente-porvir) {
+  text-decoration: underline 1px rgba(56, 189, 248, 0.28);
+  text-underline-offset: 0.22em;
+}
+/* O que já passou: verde, QUIETO DE PROPÓSITO. Ele cresce até cobrir o capítulo
+   inteiro; grosso, vira uma massa de risco verde e disputa com a frase atual. */
+::highlight(lente-lida) {
+  color: rgba(var(--reader-tint), 0.7);
+  text-decoration: underline 1.5px rgba(52, 211, 153, 0.42);
+  text-underline-offset: 0.22em;
+}
+/* O trecho que o aluno guardou: âmbar, porque não é o relógio que escolhe. */
+::highlight(lente-guardado) {
+  background-color: rgba(251, 191, 36, 0.18);
+  text-decoration: underline 1px rgba(251, 191, 36, 0.55);
+  text-underline-offset: 0.22em;
+}
+/* A frase que está tocando. A cor é fixa, e não var(--reader-fg), porque essa é
+   justamente a variável que o modo foco baixa. */
+::highlight(lente-atual) {
+  background-color: rgba(167, 139, 250, 0.28);
+  color: rgb(var(--reader-tint));
+  text-decoration: underline 2.5px rgba(167, 139, 250, 1);
+  text-underline-offset: 0.22em;
+}
+`;
+
+function garantirEstilo() {
+  if (document.getElementById("lente-realce")) return;
+  const el = document.createElement("style");
+  el.id = "lente-realce";
+  el.textContent = ESTILO;
+  document.head.appendChild(el);
+}
+
+/**
  * Publica os realces. A ORDEM importa: quando duas faixas se sobrepõem, quem tem
  * prioridade maior pinta por cima. A frase que toca precisa vencer o verde e o
  * azul, e o grifo do aluno precisa vencer os dois estados da narração.
  */
 export function publicarRealces(porNome: Partial<Record<NomeDeRealce, Range[]>>) {
   if (!temRealceNativo()) return;
+  garantirEstilo();
   REGISTRO.forEach((nome, ordem) => {
     const faixas = porNome[nome];
     if (!faixas || faixas.length === 0) { CSS.highlights.delete(nome); return; }
