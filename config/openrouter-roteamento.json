@@ -10,17 +10,21 @@
 
   "ordemPorModelo": {
     "deepseek-v4-flash": {
-      "ordem": ["DeepInfra", "Baidu", "StreamLake", "Together"],
-      "_medido": "15/09/2026 (build 0731): DeepInfra 0,06/0,18 · Baidu 0,06/0,18 · StreamLake 0,057/0,172 · Together 0,14/0,28. BaseTen e CoreWeave saíram da ordem: não aceitam response_format JSON neste build.",
+      "ordem": ["DeepInfra", "StreamLake", "Wafer", "DigitalOcean", "Together"],
+      "ignorar": ["Baidu", "AtlasCloud", "Cloudflare", "Relace", "Novita", "Phala", "GMICloud", "Inceptron"],
+      "_medido": "09/10/2026 (build 0731, custo real por chamada): DeepInfra 0,06/0,18 · Wafer 0,13/0,23 · DigitalOcean 0,119/0,238 · StreamLake 0,088/0,264 · Together 0,14/0,28 — os cinco aceitam response_format JSON. ⛔ A Baidu saiu: subiu de 0,06/0,18 para 0,44/1,32 (7×) e era a SEGUNDA da ordem; como a DeepInfra devolve 429 com frequência, 4 de 5 chamadas da bancada caíram nela a ~1,33 por M de saída. Com a ordem nova, 4 de 4 saíram a 0,27. `ignorar` barra quem cobra acima de 0,80 de saída mesmo quando a ordem inteira falha. BaseTen e CoreWeave seguem fora: não aceitam response_format JSON neste build.",
       "cacheEntrada": 0.015
     },
     "deepseek-flash-latest": {
-      "ordem": ["Alibaba", "DeepSeek", "DeepInfra", "Fireworks"],
+      "ordem": ["DeepInfra", "StreamLake", "Baidu", "Alibaba"],
+      "ignorar": ["Fireworks", "Wafer", "Together", "SiliconFlow", "OpenInference"],
+      "_medido09out": "09/10/2026 (custo real, mesma tarefa): DeepInfra 0,14/0,42 = US$ 0,00070 por post, contra US$ 0,00110 na Alibaba (0,15/0,60), que era a primeira. StreamLake 0,147/0,588 · Baidu 0,15/0,599. A Fireworks, quarta da ordem antiga, foi para 0,30/1,20. Decart (0,09/0,18) e Sail (0,08/0,40) são mais baratos mas servem o modelo em 4 bits (fp4) — ficam fora do texto publicado.",
       "_medido": "15/09/2026 — o alias resolve para deepseek-v4.1-flash. Alibaba 0,15/0,60 · DeepSeek 0,15/0,60 (dobra no horário de pico dele) · DeepInfra 0,20/0,60 · Fireworks 0,22/0,66. Sem ordem, a bancada caiu na GMICloud (0,21/0,84) e na SiliconFlow (0,30/1,20).",
       "cacheEntrada": 0.015
     },
     "deepseek-v4.1-flash": {
-      "ordem": ["Alibaba", "DeepSeek", "DeepInfra", "Fireworks"],
+      "ordem": ["DeepInfra", "StreamLake", "Baidu", "Alibaba"],
+      "ignorar": ["Fireworks", "Wafer", "Together", "SiliconFlow", "OpenInference"],
       "_medido": "Mesmo modelo do alias deepseek-flash-latest, com build fixado.",
       "cacheEntrada": 0.015
     },

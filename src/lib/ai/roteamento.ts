@@ -20,7 +20,7 @@ import roteamento from "../../../config/openrouter-roteamento.json";
 
 export const CACHE_LIGADO: boolean = roteamento.cache.ligado;
 
-type OrdemPorModelo = Record<string, { ordem: string[]; cacheEntrada: number }>;
+type OrdemPorModelo = Record<string, { ordem: string[]; ignorar?: string[]; cacheEntrada: number }>;
 
 /**
  * O bloco `provider` do corpo do pedido, para o modelo pedido.
@@ -41,6 +41,9 @@ export function preferenciaDeProvedor(modelo: string) {
   const achado = Object.keys(porModelo).find((chave) => modelo.includes(chave));
   return {
     order: achado ? porModelo[achado].ordem : roteamento.ordemPadrao,
+    // 09/10/2026: com queda permitida, esgotar a ordem levava ao provedor que a OpenRouter
+    // quisesse — e a Baidu passou a cobrar 7× pelo Flash. `ignorar` fecha essa porta.
+    ...(achado && porModelo[achado].ignorar?.length ? { ignore: porModelo[achado].ignorar } : {}),
     allow_fallbacks: roteamento.permitirQueda,
   };
 }

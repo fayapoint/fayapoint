@@ -1,29 +1,29 @@
 {
-  "em": "2026-09-15T21:23:55.921Z",
+  "em": "2026-10-09T19:53:32.659Z",
   "precos": {
     "~deepseek/deepseek-v4-flash-latest": {
-      "entrada": 0.04,
-      "saida": 0.1,
-      "contexto": 1310720,
+      "entrada": 0.0057,
+      "saida": 1.28,
+      "contexto": 1048576,
       "provedorMaisBarato": "OpenInference",
-      "provedorPreco": "0.04/0.1",
-      "quantosProvedores": 28
+      "provedorPreco": "0.0059/0.0107",
+      "quantosProvedores": 26
     },
     "deepseek/deepseek-v4-flash-0731": {
-      "entrada": 0.06,
-      "saida": 0.12,
-      "contexto": 1310720,
+      "entrada": 0.0057,
+      "saida": 1.28,
+      "contexto": 1048576,
       "provedorMaisBarato": "OpenInference",
-      "provedorPreco": "0.04/0.1",
-      "quantosProvedores": 28
+      "provedorPreco": "0.0059/0.0107",
+      "quantosProvedores": 26
     },
     "~deepseek/deepseek-flash-latest": {
-      "entrada": 0.15,
+      "entrada": 0.016,
       "saida": 0.6,
       "contexto": 1048576,
-      "provedorMaisBarato": "Alibaba",
-      "provedorPreco": "0.15/0.6",
-      "quantosProvedores": 17
+      "provedorMaisBarato": "Decart",
+      "provedorPreco": "0.09/0.18",
+      "quantosProvedores": 31
     }
   }
 }
