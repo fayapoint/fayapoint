@@ -140,7 +140,9 @@ const MIDIA_POR_CURSO: Record<string, MidiaDoCurso> = {
     cenas: [
       c("chatgpt-zero-1", "O primeiro dia sem a sensação de estar fazendo errado."),
       c("chatgpt-zero-2", "Pedir bem é uma habilidade curta de aprender — e é a que mais rende."),
-      c("chatgpt-zero-3", "Trinta e um capítulos curtos. Um por dia, e no fim do mês acabou."),
+      // 10/10/2026: o curso inteiro ganhou vídeo (29 aulas pós-produzidas); o vídeo de abertura
+      // acima passou a ser um corte dessas aulas, não mais um loop genérico.
+      c("chatgpt-zero-3", "29 aulas em vídeo, de uns 7 minutos cada. Uma por dia, e no fim do mês acabou."),
     ],
   },
   "primeiras-automacoes": {
