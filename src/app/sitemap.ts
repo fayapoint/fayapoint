@@ -42,7 +42,7 @@ const LOCALES = ["pt-BR", "en"] as const;
  * sitemap (redirecionamento anunciado gasta rastreio sem entregar página) e o
  * `hreflang` dessas rotas declara só `pt-BR`, via `alternates(p, true)`.
  */
-const SO_EM_PORTUGUES = new Set(["/fundadores", "/fabrica", "/recursos/guias"]);
+const SO_EM_PORTUGUES = new Set(["/fundadores", "/fabrica", "/recursos/guias", "/estilos"]);
 
 /**
  * O par de idiomas de um caminho, no formato que o sitemap do Next espera.
@@ -156,6 +156,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/recursos/guias",
     "/recursos/templates",
     "/recursos/calculadora-roi",
+    // Atlas de Estilos: biblioteca aberta de prompts de imagem, só em português.
+    "/estilos",
     "/cursos/por-ferramenta",
     "/cursos/por-setor",
     "/api-docs",

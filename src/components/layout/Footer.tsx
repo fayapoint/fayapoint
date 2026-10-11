@@ -52,6 +52,7 @@ const footerLinks = {
     { key: "links.support.items.whatsapp", href: "https://wa.me/5521971763780" },
     { key: "links.support.items.help", href: "/ajuda" },
     { key: "links.support.items.resources", href: "/recursos" },
+    { key: "links.support.items.styles", href: "/estilos" },
     { key: "links.support.items.terms", href: "/termos" },
     { key: "links.support.items.privacy", href: "/privacidade" },
     { key: "links.support.items.dataDeletion", href: "/exclusao-de-dados" },

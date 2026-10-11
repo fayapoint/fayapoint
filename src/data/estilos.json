@@ -1,0 +1,1663 @@
+{
+ "modelo": "Qwen-Image 2512",
+ "familias": [
+  [
+   "foto",
+   "Fotografia"
+  ],
+  [
+   "cine",
+   "Cinema"
+  ],
+  [
+   "anime",
+   "Animação e quadrinhos"
+  ],
+  [
+   "d3",
+   "3D e render"
+  ],
+  [
+   "ilus",
+   "Ilustração"
+  ],
+  [
+   "arte",
+   "Arte e movimentos"
+  ],
+  [
+   "design",
+   "Design gráfico"
+  ],
+  [
+   "mundo",
+   "Estéticas e mundos"
+  ],
+  [
+   "mao",
+   "Feito à mão"
+  ],
+  [
+   "video",
+   "Movimento de câmera"
+  ]
+ ],
+ "semLetras": "ABSOLUTE RULE: zero written characters anywhere — no labels, no captions, no titles, no letters, no numbers, no signage, no readable screen copy.",
+ "estilos": [
+  {
+   "id": "retrato-editorial",
+   "n": "Retrato editorial",
+   "f": "foto",
+   "d": "Luz de janela, fundo calmo, pele de verdade.",
+   "p": "editorial portrait photograph, 85mm lens at f/1.8, soft window key light with gentle falloff, subtle rim light, natural skin texture with visible pores, calm neutral backdrop, shallow depth of field, refined colour grade, magazine quality",
+   "ex": "portrait of a woman in her thirties with freckles and curly dark hair",
+   "al": "retrato portrait",
+   "top": 10
+  },
+  {
+   "id": "headshot-corporativo",
+   "n": "Headshot corporativo",
+   "f": "foto",
+   "d": "A foto de perfil que abre porta.",
+   "p": "professional corporate headshot, 85mm lens, soft even studio lighting, neutral grey seamless backdrop, sharp focus on the eyes, natural confident smile, business attire, clean retouching, profile photo quality",
+   "ex": "a confident businesswoman in a navy blazer",
+   "al": "linkedin perfil"
+  },
+  {
+   "id": "moda-de-revista",
+   "n": "Moda de revista",
+   "f": "foto",
+   "d": "Pose forte, luz dura, fundo de cor.",
+   "p": "high-fashion editorial photograph, bold confident pose, sculpted studio lighting with a hard key and deep shadow, seamless coloured backdrop, dramatic styling, medium-format sharpness, glossy magazine colour, strong graphic composition",
+   "ex": "a model in an oversized red wool coat",
+   "al": "vogue fashion"
+  },
+  {
+   "id": "campanha-publicitaria",
+   "n": "Campanha publicitária",
+   "f": "foto",
+   "d": "Gente bonita, uma cor forte, acabamento comercial.",
+   "p": "Brazilian advertising campaign portrait, photogenic subject with cared-for skin and neat hair, well-chosen wardrobe with one bold colour accent, warm natural light, confident relaxed posture, clean contemporary setting, polished commercial finish",
+   "ex": "a smiling young man in a mustard jacket leaning on a sunny balcony",
+   "al": "propaganda anuncio"
+  },
+  {
+   "id": "rua-35-mm",
+   "n": "Rua, 35 mm",
+   "f": "foto",
+   "d": "O instante que ninguém posou.",
+   "p": "candid street photograph, 35mm lens, zone focus, natural city light, layered foreground and background, decisive moment, slight motion blur, true-to-life colour, visible film grain, unposed and observational",
+   "ex": "a man with an umbrella crossing a rainy street with a yellow tram behind him",
+   "al": "street"
+  },
+  {
+   "id": "fotojornalismo",
+   "n": "Fotojornalismo",
+   "f": "foto",
+   "d": "Perto da ação, luz que havia.",
+   "p": "photojournalistic photograph, wide 28mm lens close to the action, available light, authentic unstaged emotion, environmental context around the subject, natural colour, slight grain, news magazine feature look",
+   "ex": "a fisherman hauling a net onto a wooden boat at dawn",
+   "al": "reportagem"
+  },
+  {
+   "id": "preto-e-branco-de-alto-contraste",
+   "n": "Preto e branco de alto contraste",
+   "f": "foto",
+   "d": "Sombra dura vira forma.",
+   "p": "high-contrast black and white photograph, deep blacks and bright highlights, strong directional light, hard shadows as graphic shapes, rich silver-gelatin tonality, coarse film grain, timeless reportage mood",
+   "ex": "an old sailor with a deeply lined face and a white beard",
+   "al": "pb black and white"
+  },
+  {
+   "id": "filme-analogico-quente",
+   "n": "Filme analógico quente",
+   "f": "foto",
+   "d": "Negativo colorido, pele cremosa, sol.",
+   "p": "analog 35mm film photograph, warm colour-negative palette, soft pastel highlights, creamy skin tones, gentle halation around light sources, fine organic grain, slightly lifted blacks, nostalgic sunlit mood",
+   "ex": "two friends laughing on a beach boardwalk in summer",
+   "al": "kodak portra analogica"
+  },
+  {
+   "id": "foto-instantanea",
+   "n": "Foto instantânea",
+   "f": "foto",
+   "d": "Química imperfeita, cor lavada.",
+   "p": "instant film photograph, soft focus, washed pastel colours, slight cyan cast in the shadows, creamy blown highlights, light vignette, imperfect chemical texture, intimate snapshot framing, square format",
+   "ex": "a birthday cake with lit candles on a kitchen table",
+   "al": "polaroid"
+  },
+  {
+   "id": "hora-dourada",
+   "n": "Hora dourada",
+   "f": "foto",
+   "d": "Sol baixo por trás do assunto.",
+   "p": "golden hour photograph, low warm sun backlighting the subject, glowing rim light, long soft shadows, sun flare drifting across the lens, honey and amber palette, shallow depth of field, serene atmosphere",
+   "ex": "a girl in a field of tall grass with her hair blowing in the wind",
+   "al": "golden hour por do sol"
+  },
+  {
+   "id": "hora-azul",
+   "n": "Hora azul",
+   "f": "foto",
+   "d": "Céu cobalto contra luz quente acesa.",
+   "p": "blue hour photograph, deep cobalt twilight sky, warm practical lights glowing in contrast, soft even ambient light, long-exposure smoothness, calm reflective surfaces, quiet cinematic mood",
+   "ex": "a small harbour town with fishing boats and lit windows",
+   "al": "blue hour"
+  },
+  {
+   "id": "produto-em-estudio",
+   "n": "Produto em estúdio",
+   "f": "foto",
+   "d": "Fundo infinito, reflexo controlado.",
+   "p": "premium studio product photograph, seamless backdrop, large softbox key with a crisp edge highlight, controlled reflections, soft contact shadow, perfectly clean surfaces, tack-sharp focus, minimal composition with generous negative space, advertising quality",
+   "ex": "a matte black perfume bottle on a stone pedestal",
+   "al": "ecommerce packshot"
+  },
+  {
+   "id": "comida-de-revista",
+   "n": "Comida de revista",
+   "f": "foto",
+   "d": "Luz lateral de janela, textura fresca.",
+   "p": "editorial food photograph, 45-degree angle, soft diffused side light from a window, fresh glistening texture, shallow depth of field, rustic surface with a few natural props, appetising warm colour, visible steam and crumbs",
+   "ex": "a bowl of ramen with a soft egg and spring onions",
+   "al": "food gastronomia"
+  },
+  {
+   "id": "arquitetura",
+   "n": "Arquitetura",
+   "f": "foto",
+   "d": "Verticais retas, geometria limpa.",
+   "p": "architectural photograph, perfectly straight verticals, tilt-shift lens precision, clean geometric composition, soft overcast light, subtle texture of concrete and glass, one tiny human figure for scale, calm minimal colour",
+   "ex": "a white modernist concrete house with a spiral staircase"
+  },
+  {
+   "id": "macro",
+   "n": "Macro",
+   "f": "foto",
+   "d": "O detalhe que o olho não alcança.",
+   "p": "extreme macro photograph, 100mm macro lens, razor-thin depth of field, intricate surface detail, tiny water droplets, soft diffused light, creamy blurred background, vivid natural colour",
+   "ex": "a ladybird on a dewy green leaf",
+   "al": "close"
+  },
+  {
+   "id": "aerea-de-drone",
+   "n": "Aérea de drone",
+   "f": "foto",
+   "d": "De cima, a terra vira padrão.",
+   "p": "aerial drone photograph looking straight down, strong graphic patterns of land and water, long shadows from a low sun, rich natural colour, tiny details that reveal scale, crisp high-resolution clarity",
+   "ex": "a turquoise river winding through salt flats",
+   "al": "drone aerea"
+  },
+  {
+   "id": "longa-exposicao",
+   "n": "Longa exposição",
+   "f": "foto",
+   "d": "Água de seda, nuvem riscada.",
+   "p": "long exposure photograph, silky smooth water and streaked clouds, light trails drawing lines through the frame, rock-steady static elements, cool twilight palette, serene minimal composition",
+   "ex": "a lighthouse on a rocky coast"
+  },
+  {
+   "id": "esporte-congelado",
+   "n": "Esporte congelado",
+   "f": "foto",
+   "d": "Teleobjetiva, o pico do lance.",
+   "p": "sports action photograph, 400mm telephoto lens, 1/4000s shutter freezing the motion, sweat and dust suspended mid-air, compressed blurred stadium background, peak-action moment, punchy contrast",
+   "ex": "a surfer carving a big wave with spray frozen in the air",
+   "al": "futebol"
+  },
+  {
+   "id": "flash-direto-anos-2000",
+   "n": "Flash direto anos 2000",
+   "f": "foto",
+   "d": "Câmera compacta de festa.",
+   "p": "direct on-camera flash photograph, harsh frontal light, hard shadow on the wall behind, saturated colours, slightly overexposed skin, candid party snapshot energy, early-2000s compact camera look",
+   "ex": "three friends dancing at a house party",
+   "al": "paparazzi indie sleaze"
+  },
+  {
+   "id": "dupla-exposicao",
+   "n": "Dupla exposição",
+   "f": "foto",
+   "d": "Silhueta preenchida de paisagem.",
+   "p": "double exposure photograph, a silhouette filled with a second image of landscape texture, soft blending at the edges, clean pale background, monochrome base with one muted colour accent, poetic and dreamlike",
+   "ex": "profile of a bearded man combined with a pine forest",
+   "al": "double exposure"
+  },
+  {
+   "id": "miniatura-tilt-shift",
+   "n": "Miniatura tilt-shift",
+   "f": "foto",
+   "d": "O mundo real com cara de maquete.",
+   "p": "tilt-shift miniature effect photograph, high vantage point, narrow band of sharp focus with strong blur above and below, boosted saturation, toy-like scale, bright midday light",
+   "ex": "a busy harbour with colourful shipping containers and cranes"
+  },
+  {
+   "id": "infravermelho",
+   "n": "Infravermelho",
+   "f": "foto",
+   "d": "Folhagem branca e rosa, céu escuro.",
+   "p": "infrared photograph, foliage glowing white and pink, dark dramatic sky, surreal dreamlike landscape, crisp contrast, ethereal otherworldly colour",
+   "ex": "a lone tree beside a lake"
+  },
+  {
+   "id": "low-key-dramatico",
+   "n": "Low-key dramático",
+   "f": "foto",
+   "d": "Uma fonte de luz, o resto no escuro.",
+   "p": "low-key photograph, a single hard light source from the side, most of the frame falling into deep shadow, sculpted highlights, rich blacks, moody and intimate",
+   "ex": "a violinist playing"
+  },
+  {
+   "id": "high-key-limpo",
+   "n": "High-key limpo",
+   "f": "foto",
+   "d": "Branco sobre branco, sem sombra.",
+   "p": "high-key photograph, bright airy exposure, white-on-white palette, soft shadowless wrap-around light, clean minimal styling, fresh and optimistic",
+   "ex": "a white ceramic teapot and two cups"
+  },
+  {
+   "id": "hiper-realismo",
+   "n": "Hiper-realismo",
+   "f": "foto",
+   "d": "Cada poro, cada fio, cada gota.",
+   "p": "hyperrealistic photograph, extreme fine detail, every pore, fibre and droplet visible, perfect natural lighting, true-to-life colour, razor-sharp focus, medium-format clarity",
+   "ex": "extreme close-up of an elderly woman's eye and weathered face",
+   "al": "realista hyperreal"
+  },
+  {
+   "id": "knolling",
+   "n": "Knolling",
+   "f": "foto",
+   "d": "Objetos alinhados, vistos de cima.",
+   "p": "knolling flat lay photograph, objects arranged in a precise grid at right angles, shot from directly above, even soft light, clean solid-colour background, orderly and satisfying",
+   "ex": "camping gear",
+   "al": "flat lay"
+  },
+  {
+   "id": "cinematografico-anamorfico",
+   "n": "Cinematográfico anamórfico",
+   "f": "cine",
+   "d": "Tela larga, bokeh oval, azul e laranja.",
+   "p": "cinematic film still, anamorphic lens, 2.39:1 widescreen framing, oval bokeh and horizontal blue lens flares, shallow depth of field, motivated practical lighting, teal and orange colour grade, subtle film grain, atmospheric haze",
+   "ex": "a woman in a leather jacket beside a vintage car at a desert gas station at dusk",
+   "al": "cinematic cinema filme",
+   "top": 5
+  },
+  {
+   "id": "film-noir",
+   "n": "Film noir",
+   "f": "cine",
+   "d": "Persiana, rua molhada, anos 40.",
+   "p": "film noir still, black and white, hard low-key lighting, venetian blind shadows across the scene, wet street reflections, smoky haze, deep contrast, 1940s detective mood, dramatic dutch angle",
+   "ex": "a detective in a trench coat and fedora under a streetlamp",
+   "top": 9
+  },
+  {
+   "id": "neon-noir",
+   "n": "Neon-noir",
+   "f": "cine",
+   "d": "Chuva, néon e silhueta.",
+   "p": "neon-noir film still, rain-slicked night street, magenta and cyan neon reflecting in puddles, backlit silhouette, dense atmospheric haze, anamorphic bokeh, moody high-contrast grade",
+   "ex": "a lone figure with an umbrella in a narrow alley",
+   "al": "blade runner"
+  },
+  {
+   "id": "technicolor-anos-50",
+   "n": "Technicolor anos 50",
+   "f": "cine",
+   "d": "Primárias saturadas, glamour de estúdio.",
+   "p": "1950s Technicolor film still, lush saturated primaries, glamorous soft studio lighting, painted-backdrop depth, rich reds and teals, velvety skin tones, classic Hollywood elegance",
+   "ex": "a glamorous woman in an emerald gown on a grand staircase",
+   "al": "hollywood"
+  },
+  {
+   "id": "simetria-pastel",
+   "n": "Simetria pastel",
+   "f": "cine",
+   "d": "Enquadramento centrado, cenário de livro.",
+   "p": "perfectly symmetrical film still, centred one-point perspective, flat frontal staging, curated pastel palette of pink, mustard and powder blue, meticulous vintage production design, soft even light, whimsical storybook tone",
+   "ex": "a bellboy in a purple uniform standing in front of a pink hotel",
+   "al": "wes anderson"
+  },
+  {
+   "id": "western",
+   "n": "Western",
+   "f": "cine",
+   "d": "Sol a pino, poeira ocre.",
+   "p": "spaghetti western film still, scorching desert sun, vast wide landscape, dusty ochre palette, deep hard shadows under hat brims, heat shimmer, coarse 1960s film grain",
+   "ex": "a lone rider on horseback on a ridge",
+   "al": "faroeste"
+  },
+  {
+   "id": "epico-de-fantasia",
+   "n": "Épico de fantasia",
+   "f": "cine",
+   "d": "Escala enorme, raios de luz na névoa.",
+   "p": "epic fantasy film still, vast sweeping landscape, towering scale, shafts of light breaking through mist, rich earthy palette with gold accents, intricate costume and prop detail, grand painterly composition",
+   "ex": "a knight facing a distant castle on a cliff",
+   "al": "senhor dos aneis"
+  },
+  {
+   "id": "ficcao-cientifica-limpa",
+   "n": "Ficção científica limpa",
+   "f": "cine",
+   "d": "Branco, grafite e um acento laranja.",
+   "p": "clean science-fiction film still, minimalist white and graphite interiors, soft indirect light panels, precise industrial design, cool desaturated palette with one orange accent, vast sense of scale, quiet and clinical",
+   "ex": "an astronaut walking down a long white corridor",
+   "al": "sci-fi"
+  },
+  {
+   "id": "terror-gotico",
+   "n": "Terror gótico",
+   "f": "cine",
+   "d": "Vela, névoa e arquitetura que oprime.",
+   "p": "gothic horror film still, candlelit darkness, cold moonlight through fog, towering shadowed architecture, desaturated palette with a deep crimson accent, heavy atmosphere, slow-burn dread",
+   "ex": "an abandoned mansion on a hill",
+   "al": "horror"
+  },
+  {
+   "id": "vhs-anos-80",
+   "n": "VHS anos 80",
+   "f": "cine",
+   "d": "Fita gasta, cor que vaza.",
+   "p": "1980s VHS footage still, soft low-resolution image, colour bleeding and chroma noise, tracking lines, slight warping, washed contrast, nostalgic home-video feel",
+   "ex": "kids riding bicycles down a suburban street",
+   "al": "stranger things"
+  },
+  {
+   "id": "expressionismo-alemao",
+   "n": "Expressionismo alemão",
+   "f": "cine",
+   "d": "Cenário torto, sombra pintada.",
+   "p": "German expressionist film still, black and white, distorted painted sets with jagged angles, exaggerated shadows stretching across walls, stark theatrical lighting, silent-era 1920s grain",
+   "ex": "a thin man in a top hat climbing a crooked staircase",
+   "al": "caligari"
+  },
+  {
+   "id": "documentario-de-natureza",
+   "n": "Documentário de natureza",
+   "f": "cine",
+   "d": "Tele longa, fundo cremoso.",
+   "p": "nature documentary still, 600mm telephoto compression, subject isolated against a soft creamy background, crisp detail in fur and feather, natural golden light, patient observational framing",
+   "ex": "a red fox in the snow",
+   "al": "national geographic"
+  },
+  {
+   "id": "blockbuster-de-acao",
+   "n": "Blockbuster de ação",
+   "f": "cine",
+   "d": "Ângulo baixo, faísca e poeira.",
+   "p": "blockbuster action film still, dynamic low angle, motion blur and flying debris, backlit dust and sparks, high-contrast teal and orange grade, intense dramatic lighting, large-format clarity",
+   "ex": "a firefighter sprinting away from an exploding bridge"
+  },
+  {
+   "id": "super-8-caseiro",
+   "n": "Super 8 caseiro",
+   "f": "cine",
+   "d": "Filme de família dos anos 70.",
+   "p": "Super 8 home movie still, warm faded colour, heavy grain, soft focus, light leaks and frame-edge burn, handheld intimacy, sunlit 1970s nostalgia",
+   "ex": "a family picnic by a lake"
+  },
+  {
+   "id": "anime-cel-shading",
+   "n": "Anime, cel shading",
+   "f": "anime",
+   "d": "Sombra chapada, cor viva.",
+   "p": "anime illustration, clean line art, flat cel shading with crisp shadow shapes, large expressive eyes, vibrant saturated colour, detailed painted background, dynamic composition, modern TV anime quality",
+   "ex": "a girl with a sword standing on a rooftop at sunset",
+   "al": "anime"
+  },
+  {
+   "id": "estudio-ghibli",
+   "n": "Estúdio Ghibli",
+   "f": "anime",
+   "d": "O anime pintado à mão que todo mundo pede.",
+   "p": "Studio Ghibli style, hand-painted anime film look, lush watercolour-like backgrounds, towering summer clouds, soft natural light, gentle nostalgic mood, simple warm character designs, rich greens and sky blues",
+   "ex": "a girl in a straw hat and her cat on a grassy hill above a seaside town",
+   "al": "ghibli miyazaki totoro",
+   "top": 1
+  },
+  {
+   "id": "ceu-luminoso",
+   "n": "Céu luminoso",
+   "f": "anime",
+   "d": "Crepúsculo, nuvem detalhada e brilho.",
+   "p": "anime film still with breathtaking luminous skies, hyper-detailed clouds and lens flares, glowing twilight colours, sparkling light reflections, photorealistic painted backgrounds, bittersweet emotional mood",
+   "ex": "two students on a train platform under a vast twilight sky with a comet",
+   "al": "shinkai your name"
+  },
+  {
+   "id": "anime-anos-90",
+   "n": "Anime anos 90",
+   "f": "anime",
+   "d": "Acetato, grão e madrugada.",
+   "p": "1990s retro anime cel, slightly muted colour, soft film grain, hand-painted cel shading, bold highlights in the hair, nostalgic late-night broadcast mood, subtle analogue softness",
+   "ex": "a pilot girl beside her motorcycle on a city street at night",
+   "al": "retro"
+  },
+  {
+   "id": "manga-preto-e-branco",
+   "n": "Mangá preto e branco",
+   "f": "anime",
+   "d": "Retícula e linha de velocidade.",
+   "p": "black and white manga art, crisp ink lines, screentone shading, dramatic speed lines, high contrast, expressive faces, one dynamic single panel",
+   "ex": "a samurai drawing his sword in the rain",
+   "al": "manga"
+  },
+  {
+   "id": "chibi-kawaii",
+   "n": "Chibi kawaii",
+   "f": "anime",
+   "d": "Cabeça grande, olho que brilha.",
+   "p": "chibi kawaii illustration, tiny body with an oversized head, huge sparkling eyes, soft pastel palette, rounded simple shapes, cute blush marks, clean outlines, cheerful sticker-like charm",
+   "ex": "a little wizard with a big hat and a tiny dragon"
+  },
+  {
+   "id": "quadrinho-americano",
+   "n": "Quadrinho americano",
+   "f": "anime",
+   "d": "Tinta grossa, pontos de retícula.",
+   "p": "American comic book art, bold inked outlines, dynamic foreshortened pose, halftone dot shading, saturated primary colours, dramatic lighting, classic superhero energy",
+   "ex": "a masked heroine in an emerald and gold suit leaping between rooftops",
+   "al": "marvel dc comics hq"
+  },
+  {
+   "id": "aranhaverso",
+   "n": "Aranhaverso",
+   "f": "anime",
+   "d": "3D com retícula e cor fora de registro.",
+   "p": "stylised comic-book 3D animation, visible halftone dots and misprinted colour offsets, hand-drawn ink lines over 3D forms, bold graphic shadows, vibrant neon palette, chromatic aberration, dynamic frame full of energy",
+   "ex": "a teenage hero in a hoodie leaping across city rooftops at night",
+   "al": "spider-verse spiderverse homem-aranha"
+  },
+  {
+   "id": "3d-pintado-a-mao",
+   "n": "3D pintado à mão",
+   "f": "anime",
+   "d": "Pincelada sobre modelo 3D, luz de recorte.",
+   "p": "painterly 3D animation style, hand-painted brushstroke textures on 3D models, dramatic rim lighting, rich moody colour, expressive angular faces, gritty industrial fantasy atmosphere, cinematic composition",
+   "ex": "a young inventor with blue braids in a cluttered workshop",
+   "al": "arcane"
+  },
+  {
+   "id": "animacao-2d-classica",
+   "n": "Animação 2D clássica",
+   "f": "anime",
+   "d": "Longa desenhado à mão dos anos 90.",
+   "p": "classic hand-drawn 2D animation, clean flowing ink outlines, soft cel painting, lush watercolour backgrounds, expressive graceful characters, warm storybook lighting, 1990s feature-film quality",
+   "ex": "a princess and a songbird in a forest clearing",
+   "al": "disney"
+  },
+  {
+   "id": "linha-clara",
+   "n": "Linha clara",
+   "f": "anime",
+   "d": "Contorno igual, cor sem sombra.",
+   "p": "ligne claire comic illustration, uniform clean outlines, flat colours without shading, precise detailed backgrounds, clear readable composition, classic Franco-Belgian adventure album look",
+   "ex": "a young reporter and his white dog running through a market",
+   "al": "tintin"
+  },
+  {
+   "id": "graphic-novel-sombria",
+   "n": "Graphic novel sombria",
+   "f": "anime",
+   "d": "Preto pesado e um vermelho.",
+   "p": "noir graphic novel art, heavy black ink shadows, stark chiaroscuro, limited palette with one red accent, gritty textured brushwork, moody urban atmosphere",
+   "ex": "a detective smoking in a rain-soaked alley",
+   "al": "sin city"
+  },
+  {
+   "id": "pixel-art-16-bits",
+   "n": "Pixel art 16 bits",
+   "f": "anime",
+   "d": "Console dos anos 90.",
+   "p": "16-bit pixel art, crisp visible pixels, limited 32-colour palette, careful dithering, side-scrolling game scene, charming retro console aesthetic, clean readable sprites",
+   "ex": "a knight approaching a castle at sunset",
+   "al": "8-bit retro game"
+  },
+  {
+   "id": "cartoon-anos-30",
+   "n": "Cartoon anos 30",
+   "f": "anime",
+   "d": "Braço de mangueira, olho de torta.",
+   "p": "1930s rubber hose cartoon, black and white, bendy noodle limbs, pie-cut eyes, white gloves, bouncy exaggerated poses, grainy film flicker, vintage animation charm",
+   "ex": "a cheerful dancing cat playing a banjo",
+   "al": "cuphead rubber hose"
+  },
+  {
+   "id": "desenho-de-sabado-de-manha",
+   "n": "Desenho de sábado de manhã",
+   "f": "anime",
+   "d": "Contorno grosso, cor chapada de TV.",
+   "p": "retro Saturday-morning cartoon style, thick outlines, flat bright colours, simple angular character design, limited-animation look, playful 1960s television charm",
+   "ex": "a family in a flying car",
+   "al": "hanna barbera jetsons"
+  },
+  {
+   "id": "animacao-3d-estilo-pixar",
+   "n": "Animação 3D (estilo Pixar)",
+   "f": "d3",
+   "d": "Longa de animação: olho grande, luz quente.",
+   "p": "Pixar-style 3D animated film render, appealing stylised characters with large expressive eyes, soft subsurface skin, rich material detail, warm key light against cool fill, shallow depth of field, soft volumetric glow, polished family-film look",
+   "ex": "a curious little girl with a red backpack and her scruffy dog",
+   "al": "pixar disney",
+   "top": 2
+  },
+  {
+   "id": "massinha",
+   "n": "Massinha",
+   "f": "d3",
+   "d": "Stop motion com digital à mostra.",
+   "p": "stop-motion claymation scene, handmade plasticine characters with visible fingerprints and tool marks, miniature handcrafted set, soft studio lighting, slightly imperfect shapes, shallow depth of field, charming tactile warmth",
+   "ex": "a grumpy sheep wearing a knitted scarf",
+   "al": "claymation aardman stop motion"
+  },
+  {
+   "id": "low-poly",
+   "n": "Low poly",
+   "f": "d3",
+   "d": "Facetas chapadas, poucos triângulos.",
+   "p": "low poly 3D render, faceted geometric forms, flat-shaded triangles, limited harmonious palette, soft gradient background, gentle ambient occlusion, clean minimal diorama composition",
+   "ex": "a fox on a mountain ridge with pine trees"
+  },
+  {
+   "id": "isometrico",
+   "n": "Isométrico",
+   "f": "d3",
+   "d": "Um mundinho numa plataforma.",
+   "p": "isometric 3D illustration, 30-degree orthographic view, tiny detailed diorama on a floating platform, soft clay-like materials, pastel palette, gentle global illumination, crisp clean edges, playful miniature world",
+   "ex": "a cosy coffee shop interior",
+   "al": "isometric"
+  },
+  {
+   "id": "voxel",
+   "n": "Voxel",
+   "f": "d3",
+   "d": "Tudo feito de cubinhos.",
+   "p": "voxel art 3D scene, everything built from small cubes, bright saturated palette, orthographic camera, soft ambient occlusion, tilt-shift depth of field, charming blocky miniature",
+   "ex": "a small island with a lighthouse and palm trees",
+   "al": "minecraft"
+  },
+  {
+   "id": "inflado",
+   "n": "Inflado",
+   "f": "d3",
+   "d": "Forma de balão, vinil brilhante.",
+   "p": "inflated 3D render, soft puffy balloon-like forms, glossy smooth vinyl surface, pastel candy palette, studio softbox reflections, subtle seams and squish, playful minimal background",
+   "ex": "a smiling cloud character and a star",
+   "al": "balao puffy"
+  },
+  {
+   "id": "vidro-fosco",
+   "n": "Vidro fosco",
+   "f": "d3",
+   "d": "Translúcido, com brilho por dentro.",
+   "p": "frosted glass 3D render, translucent rounded shapes with soft refraction, subtle inner glow, pastel gradient light passing through, floating layered composition, clean studio background, premium tech aesthetic",
+   "ex": "a camera icon"
+  },
+  {
+   "id": "cromo-liquido",
+   "n": "Cromo líquido",
+   "f": "d3",
+   "d": "Metal espelhado que escorre.",
+   "p": "liquid chrome 3D render, mirror-polished flowing metal forms, sharp environment reflections, iridescent highlights, deep black studio background, sleek futuristic mood",
+   "ex": "an abstract flower sculpture",
+   "al": "chrome metal"
+  },
+  {
+   "id": "boneco-de-vinil",
+   "n": "Boneco de vinil",
+   "f": "d3",
+   "d": "Art toy de colecionador.",
+   "p": "designer vinyl toy 3D render, chunky stylised figure with an oversized head, smooth matte plastic with glossy accents, studio product lighting, seamless pastel backdrop, collectible art-toy look",
+   "ex": "an astronaut bear",
+   "al": "funko art toy"
+  },
+  {
+   "id": "diorama-em-miniatura",
+   "n": "Diorama em miniatura",
+   "f": "d3",
+   "d": "Maquete com luz acesa dentro.",
+   "p": "miniature diorama, handcrafted scale model with tiny realistic details, visible model-making materials, macro lens with shallow depth of field, warm practical lights inside the scene, museum display mood",
+   "ex": "a tiny street with a noodle stall at night, paper lanterns glowing, plain unmarked shopfronts",
+   "al": "maquete"
+  },
+  {
+   "id": "render-fotorrealista",
+   "n": "Render fotorrealista",
+   "f": "d3",
+   "d": "Não dá para dizer que não é foto.",
+   "p": "photorealistic 3D render, physically based materials, ray-traced global illumination, accurate reflections and soft shadows, HDRI studio lighting, extreme fine detail, indistinguishable from a photograph",
+   "ex": "a mechanical wristwatch movement",
+   "al": "octane unreal"
+  },
+  {
+   "id": "holograma",
+   "n": "Holograma",
+   "f": "d3",
+   "d": "Linha ciano flutuando no escuro.",
+   "p": "holographic wireframe render, glowing translucent cyan line structure floating in dark space, fine grid and particle detail, soft bloom, volumetric light, futuristic mood",
+   "ex": "a human heart"
+  },
+  {
+   "id": "tijolinhos-estilo-lego",
+   "n": "Tijolinhos (estilo LEGO)",
+   "f": "d3",
+   "d": "Tudo construído de peças de encaixe.",
+   "p": "toy brick diorama, everything built from small interlocking plastic bricks, glossy studs, bright primary colours, macro photography with shallow depth of field, playful handmade build",
+   "ex": "a pirate ship on the sea",
+   "al": "lego"
+  },
+  {
+   "id": "vetor-chapado",
+   "n": "Vetor chapado",
+   "f": "ilus",
+   "d": "Formas simples, cinco cores, sem degradê.",
+   "p": "flat vector illustration, simple geometric shapes, bold solid colours, no gradients, clean crisp edges, limited five-colour palette, generous negative space, modern editorial style",
+   "ex": "a cyclist riding through a city park",
+   "al": "flat vector"
+  },
+  {
+   "id": "linha-continua",
+   "n": "Linha contínua",
+   "f": "ilus",
+   "d": "Um traço só, sem tirar a caneta.",
+   "p": "continuous single-line drawing, one unbroken elegant black line on a plain off-white background, minimalist contour, lots of empty space, calm and refined",
+   "ex": "a woman's face with a flower",
+   "al": "line art"
+  },
+  {
+   "id": "aquarela",
+   "n": "Aquarela",
+   "f": "ilus",
+   "d": "Mancha molhada, borda que sangra.",
+   "p": "watercolour painting, loose wet-on-wet washes, soft bleeding edges, visible paper texture, delicate translucent layers, light pencil underdrawing, airy pastel palette, white of the paper left as highlights",
+   "ex": "a hummingbird beside a hibiscus flower",
+   "al": "watercolor",
+   "top": 6
+  },
+  {
+   "id": "guache",
+   "n": "Guache",
+   "f": "ilus",
+   "d": "Tinta opaca, forma decidida.",
+   "p": "gouache illustration, opaque matte paint, flat confident brush shapes, slightly dry-brush texture at the edges, warm mid-century palette, charming simplified forms",
+   "ex": "a seaside village with striped umbrellas",
+   "al": "gouache"
+  },
+  {
+   "id": "nanquim",
+   "n": "Nanquim",
+   "f": "ilus",
+   "d": "Pena, pincel e hachura.",
+   "p": "ink illustration, confident black brush and pen lines, dense cross-hatching for shadow, stark white paper, expressive line weight variation, classic editorial drawing",
+   "ex": "an old lighthouse keeper with a pipe",
+   "al": "ink"
+  },
+  {
+   "id": "livro-infantil",
+   "n": "Livro infantil",
+   "f": "ilus",
+   "d": "Forma redonda, textura de pincel.",
+   "p": "children's picture book illustration, soft textured brushwork, rounded friendly shapes, warm gentle palette, cosy storytelling details, hand-painted charm, slightly grainy paper texture",
+   "ex": "a bear and a rabbit sharing an umbrella in the rain",
+   "al": "infantil crianca"
+  },
+  {
+   "id": "lapis",
+   "n": "Lápis",
+   "f": "ilus",
+   "d": "Esboço com a construção à mostra.",
+   "p": "graphite pencil sketch, loose construction lines left visible, soft hatching and smudged shading, textured sketchbook paper, unfinished edges fading into the page, studious and intimate",
+   "ex": "a pair of worn ballet shoes",
+   "al": "sketch esboco"
+  },
+  {
+   "id": "giz-pastel",
+   "n": "Giz pastel",
+   "f": "ilus",
+   "d": "Traço aveludado em papel de cor.",
+   "p": "soft pastel drawing, chalky velvety strokes on toned paper, blended luminous colour, visible grain of the paper, impressionistic edges, gentle glowing light",
+   "ex": "a bowl of peaches by a window"
+  },
+  {
+   "id": "risografia",
+   "n": "Risografia",
+   "f": "ilus",
+   "d": "Duas tintas fora de registro.",
+   "p": "risograph print illustration, two or three overlapping spot colours, slight misregistration, grainy halftone texture, fluorescent pink and blue ink on off-white paper, indie zine aesthetic",
+   "ex": "a cat sitting on a stack of books",
+   "al": "riso zine"
+  },
+  {
+   "id": "linogravura",
+   "n": "Linogravura",
+   "f": "ilus",
+   "d": "Forma entalhada, tinta irregular.",
+   "p": "linocut print, bold carved shapes, stark black ink on cream paper, visible gouge marks and uneven ink coverage, strong graphic contrast, handmade printmaking character",
+   "ex": "a heron standing among reeds",
+   "al": "linocut"
+  },
+  {
+   "id": "xilogravura-de-cordel",
+   "n": "Xilogravura de cordel",
+   "f": "ilus",
+   "d": "Arte popular do Nordeste.",
+   "p": "Brazilian cordel woodcut print, rough hand-carved black figures on raw paper, naive bold shapes, thick outlines, sertão folk motifs, uneven ink texture, northeastern Brazilian popular art",
+   "ex": "a cowboy on horseback with a guitar under a blazing sun",
+   "al": "nordeste"
+  },
+  {
+   "id": "ilustracao-tecnica",
+   "n": "Ilustração técnica",
+   "f": "ilus",
+   "d": "Planta de engenharia em papel azul.",
+   "p": "technical blueprint drawing, fine white lines on deep cyan-blue paper, orthographic views, precise construction lines, subtle grid, engineering draft aesthetic",
+   "ex": "a vintage motorcycle",
+   "al": "blueprint planta"
+  },
+  {
+   "id": "editorial-conceitual",
+   "n": "Editorial conceitual",
+   "f": "ilus",
+   "d": "Uma metáfora, um acento de cor.",
+   "p": "conceptual editorial illustration, one clever visual metaphor, limited palette with a single strong accent, subtle grain texture, simplified figures, generous negative space, magazine opinion-page style",
+   "ex": "a tiny person watering a giant light bulb that grows like a plant"
+  },
+  {
+   "id": "adesivo",
+   "n": "Adesivo",
+   "f": "ilus",
+   "d": "Contorno grosso e borda branca.",
+   "p": "die-cut sticker illustration, bold clean outlines, thick white border, vibrant flat colours with simple cel shading, cute simplified design, slight glossy highlight, plain background",
+   "ex": "a happy avocado giving a thumbs up",
+   "al": "sticker figurinha"
+  },
+  {
+   "id": "pagina-de-colorir",
+   "n": "Página de colorir",
+   "f": "ilus",
+   "d": "Só contorno, pronta para imprimir.",
+   "p": "black and white colouring book page, clean bold outlines, no shading, no grey, large simple closed shapes, pure white background, kid-friendly line art",
+   "ex": "a friendly dragon in a flower garden",
+   "al": "colorir coloring"
+  },
+  {
+   "id": "caricatura",
+   "n": "Caricatura",
+   "f": "ilus",
+   "d": "Cabeça enorme, corpo pequeno, humor.",
+   "p": "caricature illustration, hugely exaggerated head and facial features, tiny body, expressive humorous likeness, smooth digital painting, soft studio backdrop",
+   "ex": "a chef with a huge moustache holding a tiny frying pan",
+   "al": "caricature"
+  },
+  {
+   "id": "rabisco",
+   "n": "Rabisco",
+   "f": "ilus",
+   "d": "Canetinha de caderno.",
+   "p": "hand-drawn doodle illustration, wobbly marker lines, playful imperfect shapes, sparse pops of bright colour, notebook spontaneity, lots of white space",
+   "ex": "a rocket, a cat and a coffee cup",
+   "al": "doodle"
+  },
+  {
+   "id": "tatuagem-old-school",
+   "n": "Tatuagem old school",
+   "f": "ilus",
+   "d": "Contorno preto, quatro cores.",
+   "p": "American traditional tattoo flash, bold black outlines, limited palette of red, yellow, green and black, solid colour fills with whip shading, classic iconic motifs, aged cream paper",
+   "ex": "a swallow with a rose and a dagger",
+   "al": "tattoo"
+  },
+  {
+   "id": "gravura-botanica",
+   "n": "Gravura botânica",
+   "f": "ilus",
+   "d": "Prancha de história natural.",
+   "p": "vintage botanical engraving, fine hatched linework, hand-tinted soft watercolour, scientific accuracy, specimen arranged on aged cream paper, 19th-century natural history plate",
+   "ex": "a passion fruit branch with flower and fruit"
+  },
+  {
+   "id": "storyboard",
+   "n": "Storyboard",
+   "f": "ilus",
+   "d": "Marcador cinza, câmera clara.",
+   "p": "film storyboard frame, quick confident marker sketch in greyscale, bold shadow blocks, clear staging and camera angle, loose energetic lines, cinematic composition",
+   "ex": "a car chase through a narrow market street"
+  },
+  {
+   "id": "arte-conceitual",
+   "n": "Arte conceitual",
+   "f": "ilus",
+   "d": "Pintura digital de pré-produção.",
+   "p": "digital concept art, painterly brushwork, strong silhouette and value structure, atmospheric perspective, dramatic lighting, loose detail at the edges and a tight focal point, production design quality",
+   "ex": "a floating city above a canyon",
+   "al": "concept art"
+  },
+  {
+   "id": "impressionismo",
+   "n": "Impressionismo",
+   "f": "arte",
+   "d": "Pincelada curta, luz que treme.",
+   "p": "impressionist oil painting, short visible brushstrokes, broken colour, shimmering natural light, soft edges, plein-air atmosphere, vibrant complementary shadows",
+   "ex": "a garden pond with water lilies and a small bridge",
+   "al": "monet"
+  },
+  {
+   "id": "pos-impressionismo-van-gogh",
+   "n": "Pós-impressionismo (Van Gogh)",
+   "f": "arte",
+   "d": "Empasto grosso em redemoinho.",
+   "p": "post-impressionist oil painting, thick swirling impasto brushstrokes, intense vibrating colour, bold outlines, emotional energy in the sky and landscape, heavily textured paint",
+   "ex": "a village under a swirling night sky with a tall cypress tree",
+   "al": "van gogh",
+   "top": 7
+  },
+  {
+   "id": "pontilhismo",
+   "n": "Pontilhismo",
+   "f": "arte",
+   "d": "A imagem inteira em pontos de cor pura.",
+   "p": "pointillist painting, image built from thousands of tiny dots of pure colour, optical colour mixing, luminous shimmering light, calm structured composition",
+   "ex": "people relaxing in a riverside park on a Sunday afternoon",
+   "al": "seurat"
+  },
+  {
+   "id": "cubismo",
+   "n": "Cubismo",
+   "f": "arte",
+   "d": "Vários pontos de vista de uma vez.",
+   "p": "cubist painting, subject fractured into geometric planes, multiple viewpoints at once, muted ochre, grey and brown palette, overlapping angular facets, flattened space",
+   "ex": "a woman playing a guitar",
+   "al": "picasso"
+  },
+  {
+   "id": "surrealismo",
+   "n": "Surrealismo",
+   "f": "arte",
+   "d": "Sonho pintado com precisão, à maneira de Dalí.",
+   "p": "surrealist painting, dreamlike impossible scene, hyper-detailed realistic rendering, vast empty landscape with long shadows, unexpected juxtaposed objects, uncanny calm atmosphere",
+   "ex": "a giant pocket watch draped over a tree branch in a desert, with an elephant on stilt legs in the distance",
+   "al": "surrealista dali magritte",
+   "top": 4
+  },
+  {
+   "id": "expressionismo",
+   "n": "Expressionismo",
+   "f": "arte",
+   "d": "Forma torta, cor que grita.",
+   "p": "expressionist painting, distorted forms, raw agitated brushwork, intense non-natural colour, heavy dark outlines, emotional tension",
+   "ex": "a figure on a bridge under a blood-orange sky",
+   "al": "munch"
+  },
+  {
+   "id": "barroco",
+   "n": "Barroco",
+   "f": "arte",
+   "d": "Um facho de luz no breu.",
+   "p": "baroque oil painting, dramatic chiaroscuro, a single shaft of light cutting through deep darkness, rich warm earth tones, theatrical gesture, lifelike textures of cloth and skin, old-master varnish",
+   "ex": "an old scholar reading by candlelight",
+   "al": "caravaggio rembrandt"
+  },
+  {
+   "id": "renascimento",
+   "n": "Renascimento",
+   "f": "arte",
+   "d": "Equilíbrio, esfumado, serenidade.",
+   "p": "Renaissance oil painting, balanced harmonious composition, soft sfumato modelling, serene idealised figures, atmospheric landscape receding into blue distance, fine glazed detail",
+   "ex": "a young woman with a faint smile and folded hands",
+   "al": "da vinci mona lisa"
+  },
+  {
+   "id": "retrato-a-oleo-da-realeza",
+   "n": "Retrato a óleo da realeza",
+   "f": "arte",
+   "d": "Uniforme, medalha e veludo. Ótimo para pets.",
+   "p": "regal oil portrait in 18th-century style, subject dressed in a royal military uniform with medals, dark dramatic background, rich velvet drapery, old-master brushwork, museum feel",
+   "ex": "a golden retriever",
+   "al": "pet portrait rei"
+  },
+  {
+   "id": "art-nouveau",
+   "n": "Art nouveau",
+   "f": "arte",
+   "d": "Linha orgânica e ornamento floral.",
+   "p": "art nouveau poster illustration, flowing organic whiplash lines, ornamental floral borders, elegant elongated figure, muted gold, sage and rose palette, flat decorative colour with fine outlines",
+   "ex": "a woman with flowing hair crowned with flowers",
+   "al": "mucha"
+  },
+  {
+   "id": "folha-de-ouro",
+   "n": "Folha de ouro",
+   "f": "arte",
+   "d": "Ouro, padrão e figura alongada, à maneira de Klimt.",
+   "p": "art nouveau gold-leaf painting, shimmering gold background, flat ornamental patterns of spirals, squares and circles, elongated figures, mosaic-like robes, jewel-tone accents",
+   "ex": "an embracing couple wrapped in patterned robes",
+   "al": "klimt o beijo"
+  },
+  {
+   "id": "art-deco",
+   "n": "Art déco",
+   "f": "arte",
+   "d": "Geometria de luxo dos anos 20.",
+   "p": "art deco illustration, bold symmetrical geometry, sunburst and stepped motifs, sleek streamlined forms, black, gold and emerald palette, luxurious 1920s glamour",
+   "ex": "a skyscraper with a zeppelin passing",
+   "al": "gatsby"
+  },
+  {
+   "id": "bauhaus",
+   "n": "Bauhaus",
+   "f": "arte",
+   "d": "Círculo, quadrado, triângulo.",
+   "p": "Bauhaus design composition, primary circles, squares and triangles, red, yellow, blue and black on off-white, strict grid, functional asymmetric balance, clean modernist clarity",
+   "ex": "a geometric portrait of a face"
+  },
+  {
+   "id": "neoplasticismo",
+   "n": "Neoplasticismo",
+   "f": "arte",
+   "d": "Linha preta e cor primária, à maneira de Mondrian.",
+   "p": "De Stijl neoplasticism composition, black vertical and horizontal lines forming a grid, rectangles of pure red, yellow and blue on white, flat paint, strict geometric balance",
+   "ex": "a tree",
+   "al": "mondrian de stijl"
+  },
+  {
+   "id": "pop-art",
+   "n": "Pop art",
+   "f": "arte",
+   "d": "Retícula e cor de impressão em massa.",
+   "p": "pop art illustration, bold black outlines, halftone dots, flat saturated primary colours, high-contrast graphic treatment, comic-strip energy, mass-print aesthetic",
+   "ex": "a woman's face with a single tear",
+   "al": "warhol lichtenstein"
+  },
+  {
+   "id": "ukiyo-e",
+   "n": "Ukiyo-e",
+   "f": "arte",
+   "d": "Xilogravura japonesa do período Edo.",
+   "p": "ukiyo-e woodblock print, flat areas of colour, flowing black outlines, stylised waves and clouds, soft indigo, vermilion and cream palette, visible wood-grain texture, Edo-period composition",
+   "ex": "a great wave with a snow-capped mountain in the distance",
+   "al": "hokusai japones",
+   "top": 8
+  },
+  {
+   "id": "sumi-e",
+   "n": "Sumi-ê",
+   "f": "arte",
+   "d": "Poucas pinceladas, muito vazio.",
+   "p": "sumi-e ink wash painting, a few expressive black brushstrokes, soft grey gradients bleeding into rice paper, vast empty space, quiet meditative balance",
+   "ex": "bamboo and a small bird",
+   "al": "japones tinta"
+  },
+  {
+   "id": "minimalismo",
+   "n": "Minimalismo",
+   "f": "arte",
+   "d": "Uma forma num campo vazio.",
+   "p": "minimalist artwork, one simple form on a vast plain field, two-colour palette, perfect balance of negative space, crisp edges, quiet contemplative mood",
+   "ex": "a single red sailboat"
+  },
+  {
+   "id": "modernismo-brasileiro",
+   "n": "Modernismo brasileiro",
+   "f": "arte",
+   "d": "Figura arredondada e trópico, anos 20.",
+   "p": "1920s Brazilian modernist painting, rounded simplified figures, tropical vegetation in bold flat shapes, vivid warm palette of green, yellow, pink and blue, smooth volumetric shading, lush dreamlike landscape",
+   "ex": "workers resting under a banana tree beside colourful hillside houses",
+   "al": "tarsila abaporu"
+  },
+  {
+   "id": "arte-naif",
+   "n": "Arte naïf",
+   "f": "arte",
+   "d": "Festa de vila, perspectiva chapada.",
+   "p": "naive folk art painting, flattened perspective, bright cheerful colours, simple figures, densely patterned details, festive village life, hand-painted sincerity",
+   "ex": "a village festival with flags, musicians and dancers",
+   "al": "naif"
+  },
+  {
+   "id": "azulejo-portugues",
+   "n": "Azulejo português",
+   "f": "arte",
+   "d": "Cobalto pintado à mão sobre branco.",
+   "p": "Portuguese azulejo tile panel, hand-painted cobalt blue on glazed white ceramic, ornamental baroque borders, visible tile grid and slight glaze irregularities",
+   "ex": "sailing ships at sea"
+  },
+  {
+   "id": "vitral",
+   "n": "Vitral",
+   "f": "arte",
+   "d": "Vidro colorido e chumbo.",
+   "p": "stained glass window, jewel-toned glass pieces divided by bold black lead lines, glowing backlight, radiant saturated colour, gothic ornamental structure",
+   "ex": "a peacock",
+   "al": "stained glass"
+  },
+  {
+   "id": "mosaico-bizantino",
+   "n": "Mosaico bizantino",
+   "f": "arte",
+   "d": "Pastilha dourada, figura frontal.",
+   "p": "Byzantine mosaic, tiny shimmering tesserae, gold background, flat frontal stylised figures, deep blues and reds, hand-set irregular tiles",
+   "ex": "an owl"
+  },
+  {
+   "id": "construtivismo",
+   "n": "Construtivismo",
+   "f": "arte",
+   "d": "Diagonal, vermelho e preto.",
+   "p": "constructivist poster composition, bold diagonal dynamics, red, black and cream palette, photomontage cut-outs, strong geometric shapes, revolutionary graphic energy",
+   "ex": "a worker raising a megaphone",
+   "al": "sovietico"
+  },
+  {
+   "id": "psicodelia-anos-60",
+   "n": "Psicodelia anos 60",
+   "f": "arte",
+   "d": "Forma que derrete, cor que vibra.",
+   "p": "1960s psychedelic poster art, melting swirling forms, vibrating complementary colours, dense organic ornament, hypnotic symmetry, saturated orange, purple and acid green",
+   "ex": "a woman's face with flowing hair turning into waves",
+   "al": "hippie"
+  },
+  {
+   "id": "grafite",
+   "n": "Grafite",
+   "f": "arte",
+   "d": "Spray, escorrido e estêncil.",
+   "p": "street art mural, bold spray-paint colours, drips and overspray, stencil layers, rough concrete wall texture, energetic urban composition",
+   "ex": "a girl letting go of a heart-shaped balloon",
+   "al": "banksy street art"
+  },
+  {
+   "id": "op-art",
+   "n": "Op art",
+   "f": "arte",
+   "d": "Geometria que parece se mexer.",
+   "p": "op art composition, precise repeating black and white geometry, optical vibration and illusion of movement, warped grid, hypnotic high contrast",
+   "ex": "a sphere bulging out of a grid"
+  },
+  {
+   "id": "estilo-suico",
+   "n": "Estilo suíço",
+   "f": "design",
+   "d": "Grade rígida e espaço em branco. Tende a escrever letras.",
+   "p": "Swiss International Style poster, strict modular grid, asymmetric layout, large sans-serif shapes, flat red, black and white, objective photography, generous white space",
+   "ex": "a mountain railway, purely graphic shapes without any lettering",
+   "al": "swiss"
+  },
+  {
+   "id": "cartaz-de-viagem-vintage",
+   "n": "Cartaz de viagem vintage",
+   "f": "design",
+   "d": "Litografia dos anos 30.",
+   "p": "vintage travel poster illustration, simplified flat landscape shapes, warm limited palette, soft airbrushed gradients, bold silhouettes, 1930s lithograph texture, optimistic sunny mood",
+   "ex": "a bay with a tall rounded mountain and sailing boats",
+   "al": "poster"
+  },
+  {
+   "id": "memphis",
+   "n": "Memphis",
+   "f": "design",
+   "d": "Zigue-zague e bolinha dos anos 80.",
+   "p": "Memphis design pattern, playful geometric shapes, squiggles, dots and zigzags, clashing bright pastels with black accents, 1980s postmodern energy, flat graphic layout",
+   "ex": "abstract playful shapes"
+  },
+  {
+   "id": "neobrutalismo",
+   "n": "Neobrutalismo",
+   "f": "design",
+   "d": "Contorno preto e sombra dura.",
+   "p": "neo-brutalist graphic design, thick black outlines, hard offset drop shadows, flat loud colour blocks, raw unpolished layout, chunky shapes, bold attitude",
+   "ex": "a hand holding a phone",
+   "al": "brutalism"
+  },
+  {
+   "id": "colagem-editorial",
+   "n": "Colagem editorial",
+   "f": "design",
+   "d": "Recorte de foto antiga e papel rasgado.",
+   "p": "editorial mixed-media collage, cut-out vintage photographs, torn paper edges, halftone textures, bold colour blocks, hand-drawn marks, layered surreal composition",
+   "ex": "a woman with a bouquet of flowers for a head",
+   "al": "collage"
+  },
+  {
+   "id": "duotone",
+   "n": "Duotone",
+   "f": "design",
+   "d": "A imagem inteira em duas cores.",
+   "p": "duotone image, two-colour treatment of deep navy and electric coral, high contrast, smooth tonal gradation, bold graphic simplicity, modern poster look",
+   "ex": "a dancer leaping"
+  },
+  {
+   "id": "gradiente-granulado",
+   "n": "Gradiente granulado",
+   "f": "design",
+   "d": "Manchas de cor com ruído fino.",
+   "p": "abstract grainy gradient, soft blurred blobs of colour melting into each other, heavy fine noise texture, warm-to-cool transition, calm modern backdrop",
+   "ex": "abstract sunrise shapes",
+   "al": "grain"
+  },
+  {
+   "id": "holografico",
+   "n": "Holográfico",
+   "f": "design",
+   "d": "Folha iridescente.",
+   "p": "holographic iridescent foil texture, shifting pastel rainbow sheen, liquid light reflections, smooth pearlescent surface, futuristic glossy finish",
+   "ex": "flowing fabric",
+   "al": "iridescente"
+  },
+  {
+   "id": "glassmorphism",
+   "n": "Glassmorphism",
+   "f": "design",
+   "d": "Painel fosco sobre cor viva.",
+   "p": "glassmorphism illustration, frosted translucent panels with soft blur, thin light borders, vivid gradient blobs glowing behind, floating layered depth, clean modern look",
+   "ex": "a music player card and floating icons"
+  },
+  {
+   "id": "infografico-isometrico",
+   "n": "Infográfico isométrico",
+   "f": "design",
+   "d": "Ícone limpo, fluxo ligado.",
+   "p": "isometric vector infographic illustration, clean geometric icons, consistent line weight, limited brand palette, soft flat shadows, clear connected flow, tidy corporate clarity",
+   "ex": "a factory production line with conveyor belts"
+  },
+  {
+   "id": "meio-tom-de-jornal",
+   "n": "Meio-tom de jornal",
+   "f": "design",
+   "d": "Retícula grossa em papel-jornal.",
+   "p": "vintage newspaper halftone print, coarse black dot screen, off-white newsprint paper, slight ink bleed, high-contrast photocopied look",
+   "ex": "a boxer raising his gloves",
+   "al": "halftone"
+  },
+  {
+   "id": "minimal-japones",
+   "n": "Minimal japonês",
+   "f": "design",
+   "d": "Vazio calmo e um ponto preciso.",
+   "p": "Japanese minimalist graphic design, vast calm negative space, one small precise focal element, muted natural palette, delicate thin lines, quiet balance",
+   "ex": "a red sun over a single wave"
+  },
+  {
+   "id": "aerografo-anos-70",
+   "n": "Aerógrafo anos 70",
+   "f": "design",
+   "d": "Capa de ficção científica de bolso.",
+   "p": "1970s airbrush illustration, smooth chrome gradients, cosmic sunset horizon, surreal floating forms, soft glow, warm orange and purple palette, retro sci-fi paperback cover feel",
+   "ex": "a chrome spaceship over a desert planet",
+   "al": "airbrush"
+  },
+  {
+   "id": "logo-de-mascote-e-sports",
+   "n": "Logo de mascote e-sports",
+   "f": "design",
+   "d": "Cabeça de animal, traço grosso, três cores.",
+   "p": "esports mascot logo, bold vector illustration, thick outlines, aggressive stylised animal head, sharp angular shapes, limited three-colour palette with strong highlights, symmetrical emblem on a dark background",
+   "ex": "a fierce wolf head",
+   "al": "logo gaming"
+  },
+  {
+   "id": "icone-de-app-3d",
+   "n": "Ícone de app 3D",
+   "f": "design",
+   "d": "Quadrado arredondado, material brilhante.",
+   "p": "3D app icon, rounded square shape, soft glossy materials, smooth gradients, one playful simple symbol in the centre, studio lighting with soft shadow, clean pastel background",
+   "ex": "a paper plane",
+   "al": "icon"
+  },
+  {
+   "id": "carta-de-taro",
+   "n": "Carta de tarô",
+   "f": "design",
+   "d": "Borda ornamental e figura simbólica.",
+   "p": "tarot card illustration, ornate decorative border, symbolic central figure, art nouveau linework, muted gold, deep blue and burgundy palette, celestial motifs, aged paper texture",
+   "ex": "the moon above two towers with a wolf and a dog howling",
+   "al": "tarot"
+  },
+  {
+   "id": "cyberpunk",
+   "n": "Cyberpunk",
+   "f": "mundo",
+   "d": "Megacidade, chuva e néon.",
+   "p": "cyberpunk cityscape, towering dense megacity at night, magenta and cyan neon haze, rain, holographic glow, layered cables and glowing sign shapes, high-tech low-life mood, cinematic depth",
+   "ex": "a street food stall under giant holograms",
+   "al": "2077",
+   "top": 3
+  },
+  {
+   "id": "lo-fi",
+   "n": "Lo-fi",
+   "f": "mundo",
+   "d": "Quarto aconchegante, chuva e estudo.",
+   "p": "lo-fi anime aesthetic, cosy warm room at night, soft purple and orange glow, rain on the window, headphones and notebooks, gentle grain, calm studying mood, flat soft colours",
+   "ex": "a girl studying at a desk by a window with her cat",
+   "al": "lofi girl",
+   "top": 11
+  },
+  {
+   "id": "synthwave",
+   "n": "Synthwave",
+   "f": "mundo",
+   "d": "Sol listrado sobre a grade.",
+   "p": "synthwave retrowave artwork, glowing striped sunset sun, neon magenta grid receding to the horizon, purple mountains, chrome reflections, 1980s retro-futuristic glow",
+   "ex": "a sports car driving toward the horizon",
+   "al": "retrowave outrun",
+   "top": 12
+  },
+  {
+   "id": "vaporwave",
+   "n": "Vaporwave",
+   "f": "mundo",
+   "d": "Busto de mármore e rosa-pastel.",
+   "p": "vaporwave aesthetic, pastel pink and teal gradients, classical marble bust, checkerboard floor, palm trees, glitchy retro computer graphics, dreamy nostalgic surrealism",
+   "ex": "a marble bust beside a palm tree and an old computer"
+  },
+  {
+   "id": "steampunk",
+   "n": "Steampunk",
+   "f": "mundo",
+   "d": "Latão, engrenagem e vapor.",
+   "p": "steampunk aesthetic, polished brass and copper machinery, exposed gears and pipes, leather and rivets, warm gaslight glow, drifting steam, Victorian industrial elegance",
+   "ex": "an airship captain with brass goggles"
+  },
+  {
+   "id": "solarpunk",
+   "n": "Solarpunk",
+   "f": "mundo",
+   "d": "Futuro verde e otimista.",
+   "p": "solarpunk aesthetic, lush greenery woven into elegant architecture, solar panels and wind turbines, warm optimistic sunlight, clean flowing organic forms, vibrant community life, hopeful future",
+   "ex": "a rooftop garden city with glass towers"
+  },
+  {
+   "id": "dieselpunk",
+   "n": "Dieselpunk",
+   "f": "mundo",
+   "d": "Aço rebitado, anos 40.",
+   "p": "dieselpunk aesthetic, heavy riveted steel machines, art-deco industrial design, smoke and grease, sepia and gunmetal palette, 1940s retro-futurism",
+   "ex": "a giant armoured locomotive"
+  },
+  {
+   "id": "afrofuturismo",
+   "n": "Afrofuturismo",
+   "f": "mundo",
+   "d": "Realeza, padrão e cosmos.",
+   "p": "afrofuturist artwork, regal figures in ornate futuristic attire, bold geometric patterns inspired by African textiles, gold and cosmic violet palette, advanced technology fused with tradition, majestic and visionary",
+   "ex": "a queen with a golden halo crown",
+   "al": "wakanda"
+  },
+  {
+   "id": "fantasia-sombria",
+   "n": "Fantasia sombria",
+   "f": "mundo",
+   "d": "Ruína, névoa fria e brasa.",
+   "p": "dark fantasy artwork, ominous ruined landscape, towering gothic silhouettes, cold mist, desaturated palette with ember-orange accents, intricate armour detail, heavy dramatic atmosphere",
+   "ex": "a hooded knight before a ruined cathedral",
+   "al": "dark souls elden ring"
+  },
+  {
+   "id": "gotico-caprichoso",
+   "n": "Gótico caprichoso",
+   "f": "mundo",
+   "d": "Figura esguia, olho fundo, listras.",
+   "p": "whimsical gothic style, spindly elongated figures with huge sunken eyes, crooked spiralling architecture, black and white stripes, pale desaturated palette with one eerie accent, darkly charming fairy-tale mood",
+   "ex": "a pale boy with wild hair and his ghost dog on a crooked hill",
+   "al": "tim burton"
+  },
+  {
+   "id": "rpg-de-fantasia",
+   "n": "RPG de fantasia",
+   "f": "mundo",
+   "d": "Retrato de personagem de livro de regras.",
+   "p": "fantasy RPG character portrait, painterly digital art, intricate armour and gear, dramatic rim light, rich detailed background, heroic pose, rulebook illustration quality",
+   "ex": "an elven ranger with a longbow",
+   "al": "d&d dungeons dragons"
+  },
+  {
+   "id": "dark-academia",
+   "n": "Dark academia",
+   "f": "mundo",
+   "d": "Biblioteca antiga à luz de vela.",
+   "p": "dark academia aesthetic, candlelit old library, worn leather books, dark wood and brass, tweed and wool textures, moody autumn palette of brown, burgundy and forest green",
+   "ex": "a student reading at a desk by a tall window"
+  },
+  {
+   "id": "cottagecore",
+   "n": "Cottagecore",
+   "f": "mundo",
+   "d": "Jardim de casa de campo.",
+   "p": "cottagecore aesthetic, sunlit countryside cottage garden, wildflowers, linen and wicker, soft warm morning light, gentle pastel palette, cosy handmade simplicity",
+   "ex": "a girl carrying a basket of bread through a flower garden"
+  },
+  {
+   "id": "y2k",
+   "n": "Y2K",
+   "f": "mundo",
+   "d": "Cromo e plástico translúcido.",
+   "p": "Y2K aesthetic, glossy chrome and translucent plastic, bubbly rounded shapes, icy blue and hot pink, lens flares and star sparkles, optimistic early-2000s digital futurism",
+   "ex": "a flip phone and butterfly hair clips",
+   "al": "anos 2000"
+  },
+  {
+   "id": "frutiger-aero",
+   "n": "Frutiger Aero",
+   "f": "mundo",
+   "d": "Vidro, céu azul e gota d'água.",
+   "p": "Frutiger Aero aesthetic, glossy glass surfaces, bright blue sky and green grass, water droplets and bubbles, clean optimistic gradients, late-2000s tech brightness",
+   "ex": "a glass globe with fish floating above a green meadow",
+   "al": "windows vista"
+  },
+  {
+   "id": "glitch",
+   "n": "Glitch",
+   "f": "mundo",
+   "d": "Sinal corrompido.",
+   "p": "glitch art, displaced horizontal slices, RGB channel separation, digital noise and compression blocks, scanlines, corrupted-signal energy, electric colours on black",
+   "ex": "a classical statue head"
+  },
+  {
+   "id": "espaco-liminar",
+   "n": "Espaço liminar",
+   "f": "mundo",
+   "d": "Lugar vazio, luz fria, estranheza.",
+   "p": "liminal space photograph, empty transitional place with no people, flat fluorescent light, eerie stillness, faded colours, nostalgic and unsettling, wide-angle view",
+   "ex": "an empty hallway beside an indoor swimming pool",
+   "al": "liminal backrooms"
+  },
+  {
+   "id": "capa-de-game-de-crime",
+   "n": "Capa de game de crime",
+   "f": "mundo",
+   "d": "Traço de tinta, pôr do sol e palmeira.",
+   "p": "stylised crime video game cover art, bold inked outlines, cel-shaded realistic illustration, saturated sunset palette, palm trees and city skyline, confident character pose, poster composition",
+   "ex": "a man in sunglasses leaning on a sports car",
+   "al": "gta"
+  },
+  {
+   "id": "tropicalia",
+   "n": "Tropicália",
+   "f": "mundo",
+   "d": "Trópico brasileiro em volume máximo.",
+   "p": "tropicália aesthetic, exuberant Brazilian tropical colours, banana leaves, parrots and fruit, psychedelic 1960s patterns, saturated green, yellow, pink and orange, joyful maximalist energy",
+   "ex": "a toucan among banana leaves and hibiscus",
+   "al": "tropical brasil"
+  },
+  {
+   "id": "japandi",
+   "n": "Japandi",
+   "f": "mundo",
+   "d": "Minimalismo morno de madeira clara.",
+   "p": "japandi interior aesthetic, warm minimalism, pale wood and linen, soft neutral palette, low clean-lined furniture, a single branch in a ceramic vase, diffused daylight, calm uncluttered space",
+   "ex": "a reading corner with a low armchair",
+   "al": "interiores"
+  },
+  {
+   "id": "maximalismo",
+   "n": "Maximalismo",
+   "f": "mundo",
+   "d": "Padrão sobre padrão.",
+   "p": "maximalist aesthetic, every surface layered with pattern and ornament, clashing rich colours, velvet, gold and florals, abundant curated objects, bold theatrical opulence",
+   "ex": "a living room with a velvet sofa"
+  },
+  {
+   "id": "retrofuturismo-anos-50",
+   "n": "Retrofuturismo anos 50",
+   "f": "mundo",
+   "d": "Era atômica, foguete com barbatana.",
+   "p": "1950s retro-futurism, atomic-age optimism, sleek finned rockets and bubble domes, pastel turquoise and coral, googie architecture, smooth airbrushed illustration",
+   "ex": "a family in front of a bubble-domed house with a rocket car",
+   "al": "jetsons atompunk"
+  },
+  {
+   "id": "pos-apocaliptico",
+   "n": "Pós-apocalíptico",
+   "f": "mundo",
+   "d": "Cidade tomada pelo mato.",
+   "p": "post-apocalyptic scene, overgrown ruined city, rusted vehicles, dust-filled shafts of light, muted earthy palette, scavenged makeshift details, quiet desolate mood",
+   "ex": "a wanderer and a dog on a cracked highway",
+   "al": "last of us mad max"
+  },
+  {
+   "id": "bioluminescente",
+   "n": "Bioluminescente",
+   "f": "mundo",
+   "d": "Planta que acende no escuro.",
+   "p": "bioluminescent fantasy scene, glowing cyan and violet plants in deep darkness, floating light particles, soft mist, magical night atmosphere",
+   "ex": "a forest path with giant mushrooms",
+   "al": "avatar"
+  },
+  {
+   "id": "papel-recortado-em-camadas",
+   "n": "Papel recortado em camadas",
+   "f": "mao",
+   "d": "Folhas empilhadas com sombra real.",
+   "p": "layered paper cut art, stacked sheets of coloured paper with real depth, soft shadows between layers, clean scalpel-cut curves, shadow-box diorama, gradient from front to back",
+   "ex": "a deer in a forest at night under the moon",
+   "al": "paper cut"
+  },
+  {
+   "id": "origami",
+   "n": "Origami",
+   "f": "mao",
+   "d": "Dobra precisa, papel fosco.",
+   "p": "origami paper sculpture, crisp precise folds, matte textured paper, soft studio light revealing each facet, subtle shadows, clean minimal background",
+   "ex": "a crane"
+  },
+  {
+   "id": "bordado",
+   "n": "Bordado",
+   "f": "mao",
+   "d": "Ponto cheio em linho, no bastidor.",
+   "p": "hand embroidery on linen, raised satin stitches and french knots, visible thread texture, wooden hoop framing, soft natural light, cosy craft detail",
+   "ex": "a bouquet of wildflowers"
+  },
+  {
+   "id": "amigurumi",
+   "n": "Amigurumi",
+   "f": "mao",
+   "d": "Crochê fofo, ponto à mostra.",
+   "p": "crochet amigurumi figure, chunky yarn stitches clearly visible, soft rounded plush shapes, tiny bead eyes, pastel wool, macro photograph on a plain backdrop",
+   "ex": "a little octopus",
+   "al": "croche"
+  },
+  {
+   "id": "feltro",
+   "n": "Feltro",
+   "f": "mao",
+   "d": "Lã agulhada, forma redonda.",
+   "p": "needle-felted wool scene, fuzzy soft fibres, rounded handmade shapes, warm muted colours, miniature craft set, shallow depth of field",
+   "ex": "a fox family in a woodland"
+  },
+  {
+   "id": "ceramica-esmaltada",
+   "n": "Cerâmica esmaltada",
+   "f": "mao",
+   "d": "Esmalte que escorre na curva.",
+   "p": "glazed ceramic sculpture, hand-thrown form with subtle irregularities, glossy reactive glaze pooling in the curves, speckled clay body, soft daylight, artisanal studio pottery",
+   "ex": "a whale-shaped vase"
+  },
+  {
+   "id": "madeira-entalhada",
+   "n": "Madeira entalhada",
+   "f": "mao",
+   "d": "Marca de formão e veio.",
+   "p": "hand-carved wooden sculpture, visible chisel marks, warm grain and natural knots, oiled finish, soft directional light, folk craftsmanship",
+   "ex": "an owl"
+  },
+  {
+   "id": "estatua-de-marmore",
+   "n": "Estátua de mármore",
+   "f": "mao",
+   "d": "Pedra polida, luz de museu.",
+   "p": "classical white marble statue, finely polished stone with subtle veining, soft museum lighting, deep carved folds of drapery, timeless neoclassical elegance, dark backdrop",
+   "ex": "a bust of a veiled woman",
+   "al": "escultura"
+  },
+  {
+   "id": "balao-metalico",
+   "n": "Balão metálico",
+   "f": "mao",
+   "d": "Mylar inflado e amassado.",
+   "p": "metallic foil balloon sculpture, inflated shiny mylar with crinkled seams, bright mirror reflections, playful rounded form, clean studio backdrop",
+   "ex": "a dolphin"
+  },
+  {
+   "id": "neon",
+   "n": "Néon",
+   "f": "mao",
+   "d": "Tubo de vidro aceso na parede.",
+   "p": "neon tube light art, glowing bent glass tubes forming the shape, pink and blue glow spilling onto a dark brick wall, soft bloom and reflections",
+   "ex": "a flamingo",
+   "al": "neon"
+  },
+  {
+   "id": "pelucia",
+   "n": "Pelúcia",
+   "f": "mao",
+   "d": "Tecido felpudo e costura.",
+   "p": "soft plush toy, short fluffy fabric, embroidered details, rounded huggable proportions, visible stitched seams, gentle studio light",
+   "ex": "a sleepy sloth",
+   "al": "plush"
+  },
+  {
+   "id": "action-figure-na-caixa",
+   "n": "Action figure na caixa",
+   "f": "mao",
+   "d": "O boneco na embalagem, com acessórios.",
+   "p": "collectible action figure in blister packaging, clear plastic bubble over a cardboard backing, figure with tiny themed accessories arranged beside it, glossy toy plastic, studio product photo, front view",
+   "ex": "a barista action figure with a tiny coffee machine and cups",
+   "al": "boneco blister"
+  },
+  {
+   "id": "trico",
+   "n": "Tricô",
+   "f": "mao",
+   "d": "Malha grossa de lã.",
+   "p": "knitted wool artwork, chunky cable-knit texture, visible loops of yarn, cosy warm colours, macro detail",
+   "ex": "a mountain landscape"
+  },
+  {
+   "id": "escultura-de-gelo",
+   "n": "Escultura de gelo",
+   "f": "mao",
+   "d": "Gelo lapidado que refrata.",
+   "p": "ice sculpture, crystal-clear carved ice, light refracting through the facets, cold blue glow, fine frost texture, dark background",
+   "ex": "a swan"
+  },
+  {
+   "id": "plano-fixo",
+   "n": "Plano fixo",
+   "f": "video",
+   "d": "A câmera não se mexe; a cena, sim.",
+   "p": "Locked-off static shot. The camera never moves; only small natural movements happen inside the frame, like wind, breathing and flickering light. Calm and observational.",
+   "ex": "a woman reading at a café window as rain falls outside",
+   "mov": "fixo"
+  },
+  {
+   "id": "aproximacao-lenta",
+   "n": "Aproximação lenta",
+   "f": "video",
+   "d": "Chega devagar até o assunto.",
+   "p": "Slow controlled dolly-in toward the subject, shallow depth of field, subtle parallax in the background, steady and deliberate, one continuous shot with no cuts.",
+   "ex": "an old man at a chessboard deep in thought",
+   "al": "dolly in zoom",
+   "mov": "aproxima"
+  },
+  {
+   "id": "recuo",
+   "n": "Recuo",
+   "f": "video",
+   "d": "Do detalhe para a cena inteira.",
+   "p": "Slow pull-back from a close detail to reveal the surrounding scene, steady dolly-out, depth unfolding gradually, one continuous shot.",
+   "ex": "a single red flower in a vast field of flowers",
+   "al": "dolly out",
+   "mov": "recua"
+  },
+  {
+   "id": "travelling-lateral",
+   "n": "Travelling lateral",
+   "f": "video",
+   "d": "Acompanha de lado, com primeiro plano passando.",
+   "p": "Lateral tracking shot moving left to right alongside the subject, foreground elements passing close to the lens, steady speed, layered depth.",
+   "ex": "a runner on a beach at sunrise",
+   "al": "tracking",
+   "mov": "lateral"
+  },
+  {
+   "id": "orbita",
+   "n": "Órbita",
+   "f": "video",
+   "d": "Meia-volta em torno do assunto.",
+   "p": "Smooth 180-degree orbit around the subject at a constant distance, background sliding past in parallax, subject centred and sharp, stabilised cinematic movement.",
+   "ex": "a sculptor working on a statue in a studio",
+   "al": "orbit",
+   "mov": "orbita"
+  },
+  {
+   "id": "camera-na-mao",
+   "n": "Câmera na mão",
+   "f": "video",
+   "d": "Balanço leve, como documentário.",
+   "p": "Handheld documentary camera with gentle natural sway, following the subject at shoulder height, available light, small focus adjustments, intimate and unstaged, one continuous take.",
+   "ex": "a chef plating a dish in a busy kitchen",
+   "al": "handheld",
+   "mov": "mao"
+  },
+  {
+   "id": "troca-de-foco",
+   "n": "Troca de foco",
+   "f": "video",
+   "d": "O foco sai do primeiro plano e chega ao assunto.",
+   "p": "Rack focus from a sharp foreground object to the subject in the background, camera locked off, creamy bokeh transition, quiet deliberate pacing.",
+   "ex": "a guitar in the foreground and a singer on stage behind",
+   "al": "rack focus",
+   "mov": "foco"
+  },
+  {
+   "id": "drone-revelacao",
+   "n": "Drone, revelação",
+   "f": "video",
+   "d": "Sobe e recua até mostrar tudo.",
+   "p": "Aerial drone shot rising and pulling back to reveal the full landscape, smooth acceleration, vast sense of scale, golden light.",
+   "ex": "a lone hiker on a mountain ridge above the clouds",
+   "mov": "sobe"
+  },
+  {
+   "id": "time-lapse",
+   "n": "Time-lapse",
+   "f": "video",
+   "d": "O dia inteiro em segundos.",
+   "p": "Time-lapse. Clouds race across the sky and shadows sweep over the scene while the light shifts from day to dusk, camera locked off on a tripod.",
+   "ex": "a city skyline",
+   "al": "timelapse",
+   "mov": "lapso"
+  },
+  {
+   "id": "camera-lenta",
+   "n": "Câmera lenta",
+   "f": "video",
+   "d": "Cada gota parada no ar.",
+   "p": "Ultra slow motion at 240 frames per second, every droplet and particle suspended, smooth fluid movement, crisp detail, dramatic backlight.",
+   "ex": "a dancer spinning in a cloud of coloured powder",
+   "al": "slow motion",
+   "mov": "lenta"
+  },
+  {
+   "id": "stop-motion",
+   "n": "Stop motion",
+   "f": "video",
+   "d": "Doze quadros por segundo, feito à mão.",
+   "p": "Stop-motion animation at 12 frames per second, slightly jerky handmade movement, tiny imperfections between frames, tactile miniature set.",
+   "ex": "a tiny clay chef baking in a miniature kitchen",
+   "mov": "stop"
+  },
+  {
+   "id": "loop-continuo",
+   "n": "Loop contínuo",
+   "f": "video",
+   "d": "O último quadro encaixa no primeiro.",
+   "p": "Seamless looping motion where the last frame matches the first, gentle continuous ambient movement, camera fixed.",
+   "ex": "a campfire under a starry sky",
+   "mov": "loop"
+  }
+ ]
+}
